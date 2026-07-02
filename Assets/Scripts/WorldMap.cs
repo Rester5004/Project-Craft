@@ -14,9 +14,11 @@ public class Chunk
     public static Vector2Int GetPlayerChunk(GameObject player)
     {
         Vector3 pos = player != null ? player.transform.position : Vector3.zero;
-        int pcx = Mathf.FloorToInt(pos.x / WorldMap.ChunkSize);
-        int pcy = Mathf.FloorToInt(pos.y / WorldMap.ChunkSize);
-        return new Vector2Int(pcx, pcy);
+        if (player == null)
+        {
+            throw new System.ArgumentNullException(nameof(player), "Player GameObject cannot be null.");
+        }
+        return new Vector2Int((int)((Mathf.FloorToInt(pos.x) & ~15) / 16), (int)(((Mathf.FloorToInt(pos.y)+15) & ~15) / 16));
     }
 
     public int GetTile(int x, int y) => tiles[y, x];
@@ -45,6 +47,9 @@ public class WorldMap
     public static string DefaultSavePath =>
         Path.Combine(Application.persistentDataPath, "worldmap.dat");
 
+    public static string DefaultWorldmapPath =>
+        Path.Combine(Application.streamingAssetsPath, "DefaultWorldmap.dat");
+
     private readonly Dictionary<Vector2Int, Chunk> chunks;
     private readonly string savePath;
 
@@ -54,29 +59,30 @@ public class WorldMap
         chunks = new();
         if (File.Exists(savePath))
             Load(savePath);
+        else if(File.Exists(DefaultWorldmapPath))
+            File.Copy(DefaultWorldmapPath, savePath);
     }
 
-    public Chunk GetOrCreateChunk(int cx, int cy)
+    public Chunk GetOrCreateChunk(Vector2Int chunkId)
     {
-        var key = new Vector2Int(cx, cy);
-        if (!chunks.TryGetValue(key, out Chunk chunk))
+        if (!chunks.TryGetValue(chunkId, out Chunk chunk))
         {
-            chunk = GenerateChunk(cx, cy);
-            chunks[key] = chunk;
+            chunk = GenerateChunk(chunkId);
+            chunks[chunkId] = chunk;
         }
         return chunk;
     }
 
-    Chunk GenerateChunk(int cx, int cy)
+    Chunk GenerateChunk(Vector2Int chunkId) //추후 청크 id에 따라 다른 blockid를 사용하게 수정예정
     {
         Chunk chunk = new();
         for (int ty = 0; ty < ChunkSize; ty++)
             for (int tx = 0; tx < ChunkSize; tx++)
             {
-                int wx = cx * ChunkSize + tx;
-                int wy = cy * ChunkSize + ty;
+                int wx = chunkId.x * ChunkSize + tx;
+                int wy = chunkId.y * ChunkSize + ty;
                 bool inSpawn = wx >= -3 && wx <= 2 && wy >= -2 && wy <= 3;
-                chunk.SetTile(tx, ty, inSpawn ? 0 : 1);
+                chunk.SetTile(tx, ty, inSpawn ? 0 : 10000);
             }
         return chunk;
     }
