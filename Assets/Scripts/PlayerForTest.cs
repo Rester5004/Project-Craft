@@ -7,6 +7,9 @@ public class PlayerForTest : MonoBehaviour
 
     void Update()
     {
+        if (UIManager.Instance != null && UIManager.Instance.IsAnyUIOpen)
+            return; //UI열려있으면 이동차단
+
         Vector2 input = Keyboard.current != null
             ? new Vector2(
                 (Keyboard.current.dKey.isPressed ? 1f : 0f) - (Keyboard.current.aKey.isPressed ? 1f : 0f),
