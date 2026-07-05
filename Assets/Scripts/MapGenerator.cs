@@ -79,16 +79,31 @@ public class MapGenerator : MonoBehaviour
             }
         }
 
-        // 2. 바닥 기본 텍스처 일괄 로드 (전체 바닥 영역 순회)
+        // 2. 바닥 기본 텍스처 일괄 로드
         foreach (var pos in GetFloorTilePositions())
         {
             TilemapTextureLoader.Instance.LoadFloorTexture(pos);
         }
 
-        // 3. [확인] 블록 데이터가 존재하는 좌표만 순회하며 벽(윗면 + 정면) 처리
-        foreach (var pos in GetWallTilePositions())
+        // 3. 탑다운 뷰 특성을 고려하여 위(Y 최고값)에서부터 아래로 순회
+        List<Vector2Int> sortedChunkIds = new List<Vector2Int>(LoadedChunks.Keys);
+        sortedChunkIds.Sort((a, b) => b.y.CompareTo(a.y)); // Y가 큰(위쪽) 청크부터 처리
+
+        // 2. 텍스처 렌더링 (윗면/앞면)
+        foreach (var chunkId in sortedChunkIds)
         {
-            TilemapTextureLoader.Instance.LoadWallTexture(pos);
+            int size = WorldMap.ChunkSize;
+
+            // 청크 내부를 위에서 아래로 순회
+            for (int ty = size - 1; ty >= 0; ty--)
+            {
+                for (int tx = 0; tx < size; tx++)
+                {
+                    Vector2Int worldPos = new Vector2Int(chunkId.x * size + tx, chunkId.y * size + ty);
+
+                    TilemapTextureLoader.Instance.LoadWallTexture(worldPos);
+                }
+            }
         }
     }
 
@@ -124,6 +139,15 @@ public class MapGenerator : MonoBehaviour
 
             }
         }
+
+        for (int ty = 0; ty < size; ty++)
+        {
+            for (int tx = 0; tx < size; tx++)
+            {
+                var pos = new Vector3Int(id.x * size + tx, id.y * size + ty, 0);
+                TilemapTextureLoader.Instance.ClearTileTexture(new Vector2Int(pos.x, pos.y));
+            }
+        }
     }
 
     public IEnumerable<Vector2Int> GetFloorTilePositions()
@@ -151,40 +175,6 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
-    public IEnumerable<Vector2Int> GetWallTilePositions()
-    {
-        // 1. 타일맵의 현재 사각형 영역 영역(Bounds) 확보
-        BoundsInt bounds = blocksTilemap.cellBounds;
-
-        // 2. [현재 작성하신 부분] 모든 타일 배열로 통째로 긁어오기
-        TileBase[] allTiles = blocksTilemap.GetTilesBlock(bounds);
-
-        // 3. 유니티의 GetTilesBlock 내부 정렬 순서(X -> Y -> Z)대로 3중 루프를 돕니다.
-        int sizeX = bounds.size.x;
-        int sizeY = bounds.size.y;
-        int sizeZ = bounds.size.z;
-
-        for (int z = 0; z < sizeZ; z++)
-        {
-            for (int y = 0; y < sizeY; y++)
-            {
-                for (int x = 0; x < sizeX; x++)
-                {
-                    // 유니티 공식: 3차원 바둑판을 1차원 배열로 펼쳤을 때의 인덱스 계산
-                    int index = x + (y * sizeX) + (z * sizeX * sizeY);
-
-                    // 현재 인덱스의 타일이 null이 아니라면
-                    if (allTiles[index] != null)
-                    {
-                        // 원본 타일맵의 실제 월드 그리드 좌표(Vector2Int)를 역산하여 반환
-                        int worldX = bounds.xMin + x;
-                        int worldY = bounds.yMin + y;
-
-                        yield return new Vector2Int(worldX, worldY);
-                    }
-                }
-            }
-        }
-    }
+    
 
 }

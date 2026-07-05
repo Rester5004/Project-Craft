@@ -16,57 +16,57 @@ public class TileAtlasManager : Singleton<TileAtlasManager>
         new Vector2Int(-1, 1),   // NW
     };
 
-    // 아틀라스 이미지의 전체 세로가 8칸(0~7)일 때, 
-    // 왼쪽 아래를 (0,0)으로 삼는 유니티 좌표계 기준으로 완벽 변환된 조견표입니다.
+    // 업로드해주신 CSV의 원본 (Atlas_X, Atlas_Y) 데이터에
+    // 유니티 좌하단 원점 기준 Y축 반전 공식(7 - Atlas_Y)을 전수 적용한 최종 조견표입니다.
     private readonly Dictionary<int, Vector2Int> atlasCoordinates = new Dictionary<int, Vector2Int>()
     {
-        { 0,  new Vector2Int(0, 2) }, // Isolated_1x1         (원래 0, 5 -> 7 - 5 = 2)
-        { 1,  new Vector2Int(2, 3) }, // Dead_End_N            (원래 2, 4 -> 7 - 4 = 3)
-        { 2,  new Vector2Int(0, 5) }, // Dead_End_E            (원래 0, 2 -> 7 - 2 = 5)
-        { 3,  new Vector2Int(2, 7) }, // Dead_End_S            (원래 2, 0 -> 7 - 0 = 7)
-        { 4,  new Vector2Int(4, 5) }, // Dead_End_W            (원래 4, 2 -> 7 - 2 = 5)
-        { 5,  new Vector2Int(0, 0) }, // Horizontal_Bridge     (원래 0, 7 -> 7 - 7 = 0)
-        { 6,  new Vector2Int(1, 0) }, // Vertical_Bridge       (원래 1, 7 -> 7 - 7 = 0)
-        { 7,  new Vector2Int(1, 3) }, // L_Corner_NE           (원래 1, 4 -> 7 - 4 = 3)
-        { 8,  new Vector2Int(1, 7) }, // L_Corner_SE           (원래 1, 0 -> 7 - 0 = 7)
-        { 9,  new Vector2Int(3, 7) }, // L_Corner_SW           (원래 3, 0 -> 7 - 0 = 7)
-        { 10, new Vector2Int(3, 3) }, // L_Corner_NW           (원래 3, 4 -> 7 - 4 = 3)
-        { 11, new Vector2Int(0, 3) }, // L_Corner_NE_Filled    (원래 0, 4 -> 7 - 4 = 3)
-        { 12, new Vector2Int(0, 7) }, // L_Corner_SE_Filled    (원래 0, 0 -> 7 - 0 = 7)
-        { 13, new Vector2Int(4, 7) }, // L_Corner_SW_Filled    (원래 4, 0 -> 7 - 0 = 7)
-        { 14, new Vector2Int(4, 3) }, // L_Corner_NW_Filled    (원래 4, 4 -> 7 - 4 = 3)
-        { 15, new Vector2Int(1, 5) }, // T_Junction_E_Open     (원래 1, 2 -> 7 - 2 = 5)
-        { 16, new Vector2Int(2, 6) }, // T_Junction_S_Open     (원래 2, 1 -> 7 - 1 = 6)
-        { 17, new Vector2Int(3, 5) }, // T_Junction_W_Open     (원래 3, 2 -> 7 - 2 = 5)
-        { 18, new Vector2Int(2, 4) }, // T_Junction_N_Open     (원래 2, 3 -> 7 - 3 = 4)
-        { 19, new Vector2Int(0, 4) }, // T_Junction_E_Half_Top (원래 0, 3 -> 7 - 3 = 4)
-        { 20, new Vector2Int(0, 6) }, // T_Junction_E_Half_Bot (원래 0, 1 -> 7 - 1 = 6)
-        { 21, new Vector2Int(7, 7) }, // T_Junction_S_Half_R   (원래 7, 0 -> 7 - 0 = 7)
-        { 22, new Vector2Int(7, 3) }, // T_Junction_S_Half_L   (원래 7, 4 -> 7 - 4 = 3)
-        { 23, new Vector2Int(4, 6) }, // T_Junction_W_Half_Bot (원래 4, 1 -> 7 - 1 = 6)
-        { 24, new Vector2Int(4, 4) }, // T_Junction_W_Half_Top (원래 4, 3 -> 7 - 3 = 4)
-        { 25, new Vector2Int(1, 4) }, // T_Junction_N_Half_R   (원래 1, 3 -> 7 - 3 = 4)
-        { 26, new Vector2Int(3, 4) }, // T_Junction_N_Half_L   (원래 3, 3 -> 7 - 3 = 4)
-        { 27, new Vector2Int(5, 2) }, // T_Junction_E_Solid    (원래 5, 5 -> 7 - 5 = 2)
-        { 28, new Vector2Int(5, 3) }, // T_Junction_S_Solid    (원래 5, 4 -> 7 - 4 = 3)
-        { 29, new Vector2Int(6, 1) }, // T_Junction_W_Solid    (원래 6, 6 -> 7 - 6 = 1)
-        { 30, new Vector2Int(4, 0) }, // T_Junction_N_Solid    (원래 4, 7 -> 7 - 7 = 0)
-        { 31, new Vector2Int(2, 5) }, // Cross_Junction_Open   (원래 2, 2 -> 7 - 2 = 5)
-        { 32, new Vector2Int(1, 2) }, // Cross_Var_NE_Filled   (원래 1, 5 -> 7 - 5 = 2)
-        { 33, new Vector2Int(1, 6) }, // Cross_Var_SE_Filled   (원래 1, 1 -> 7 - 1 = 6)
-        { 34, new Vector2Int(3, 6) }, // Cross_Var_SW_Filled   (원래 3, 1 -> 7 - 1 = 6)
-        { 35, new Vector2Int(3, 2) }, // Cross_Var_NW_Filled   (원래 3, 5 -> 7 - 5 = 2)
-        { 36, new Vector2Int(0, 1) }, // Cross_Var_Right_Fill  (원래 0, 6 -> 7 - 6 = 1)
-        { 37, new Vector2Int(2, 1) }, // Cross_Var_Bottom_Fill (원래 2, 6 -> 7 - 6 = 1)
-        { 38, new Vector2Int(4, 1) }, // Cross_Var_Left_Filled (원래 4, 6 -> 7 - 6 = 1)
-        { 39, new Vector2Int(2, 0) }, // Cross_Var_Top_Filled  (원래 2, 7 -> 7 - 7 = 0)
-        { 40, new Vector2Int(5, 6) }, // Cross_Var_Diagonal_1  (원래 5, 1 -> 7 - 1 = 6)
-        { 41, new Vector2Int(5, 4) }, // Cross_Var_Diagonal_2  (원래 5, 3 -> 7 - 3 = 4)
-        { 42, new Vector2Int(5, 5) }, // Cross_Var_Three_Fill1 (원래 5, 2 -> 7 - 2 = 5)
-        { 43, new Vector2Int(6, 6) }, // Cross_Var_Three_Fill2 (원래 6, 1 -> 7 - 1 = 6)
-        { 44, new Vector2Int(6, 4) }, // Cross_Var_Three_Fill3 (원래 6, 3 -> 7 - 3 = 4)
-        { 45, new Vector2Int(6, 5) }, // Cross_Var_Three_Fill4 (원래 6, 2 -> 7 - 2 = 5)
-        { 46, new Vector2Int(2, 2) }  // Full_Solid_Wall       (원래 2, 5 -> 7 - 5 = 2)
+        { 0,  new Vector2Int(0, 2) },
+        { 1,  new Vector2Int(2, 3) },
+        { 2,  new Vector2Int(0, 5) },
+        { 3,  new Vector2Int(2, 7) },
+        { 4,  new Vector2Int(4, 5) },
+        { 5,  new Vector2Int(0, 0) },
+        { 6,  new Vector2Int(1, 0) },
+        { 7,  new Vector2Int(6, 3) },
+        { 8,  new Vector2Int(6, 4) },
+        { 9,  new Vector2Int(7, 4) },
+        { 10,  new Vector2Int(7, 3) },
+        { 11,  new Vector2Int(3, 1) },
+        { 12,  new Vector2Int(4, 3) },
+        { 13,  new Vector2Int(6, 2) },
+        { 14,  new Vector2Int(5, 0) },
+        { 15,  new Vector2Int(6, 6) },
+        { 16,  new Vector2Int(8, 7) },
+        { 17,  new Vector2Int(10, 6) },
+        { 18,  new Vector2Int(8, 5) },
+        { 19,  new Vector2Int(6, 7) },
+        { 20,  new Vector2Int(6, 5) },
+        { 21,  new Vector2Int(7, 7) },
+        { 22,  new Vector2Int(9, 7) },
+        { 23,  new Vector2Int(10, 7) },
+        { 24,  new Vector2Int(10, 5) },
+        { 25,  new Vector2Int(7, 5) },
+        { 26,  new Vector2Int(9, 5) },
+        { 27,  new Vector2Int(3, 2) },
+        { 28,  new Vector2Int(5, 3) },
+        { 29,  new Vector2Int(6, 1) },
+        { 30,  new Vector2Int(4, 0) },
+        { 31,  new Vector2Int(2, 5) },
+        { 32,  new Vector2Int(1, 4) },
+        { 33,  new Vector2Int(1, 6) },
+        { 34,  new Vector2Int(3, 6) },
+        { 35,  new Vector2Int(3, 4) },
+        { 36,  new Vector2Int(1, 5) },
+        { 37,  new Vector2Int(2, 6) },
+        { 38,  new Vector2Int(3, 5) },
+        { 39,  new Vector2Int(2, 4) },
+        { 40,  new Vector2Int(0, 1) },
+        { 41,  new Vector2Int(1, 1) },
+        { 42,  new Vector2Int(5, 2) },
+        { 43,  new Vector2Int(5, 1) },
+        { 44,  new Vector2Int(4, 1) },
+        { 45,  new Vector2Int(4, 2) },
+        { 46,  new Vector2Int(1, 2) },
     };
 
     private readonly int[] bitmaskToTileIdTable = new int[256];

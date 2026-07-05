@@ -7,7 +7,7 @@ public class TilemapTextureLoader : Singleton<TilemapTextureLoader>
     [Header("아틀라스 설정")]
     public Texture2D tilemapTexture; // 슬라이스한 타일맵 PNG 파일 등록
     public Vector2Int atlasGridSize = new Vector2Int(16, 16); // 아틀라스의 전체 가로/세로 타일 개수 (예: 16x16칸짜리 이미지)
-    public Vector2Int frontAtlasBase = new Vector2Int(8, 4); // X=8, Y=4
+    public Vector2Int frontAtlasBase = new Vector2Int(8, 0); // X=8, Y=4
     [Range(0f, 1f)]
     public float gemChance = 0.3f; // 보석이 등장할 확률 (8%)
     public Sprite testFloorTexture;
@@ -85,48 +85,52 @@ public class TilemapTextureLoader : Singleton<TilemapTextureLoader>
     {
         Vector3Int currentGridPos = (Vector3Int)pos;
 
-        // [전제 조건] blocksTilemap에 블록 데이터가 있는 칸만 연산합니다.
+        // 1. 데이터 상에 블록이 없으면 패스
         if (blocksTilemap.GetTile(currentGridPos) == null) return;
 
-        // 1단계: 주변 8방향 비트마스크 계산
+        // 2. 현재 pos 기준 8방향 비트마스크 및 조견표(윗면) 아틀라스 좌표 추출
         int bitmask = CalculateBitmask(pos);
+        Vector2Int topAtlas = TileAtlasManager.Instance.GetAtlasCoordinate((byte)bitmask);
 
         // =================================================================
-        // 2단계: 탑다운 정면 벽(Front) 조건 판단
+        // [단계 1] 한 칸 위(Y + 1) 좌표에 "벽 윗면(Top Wall)" 그리기
         // =================================================================
-        // 내 칸(pos)에 블록 데이터가 있고, 
-        // 내 '아래 칸'(pos + Vector2Int.down)이 빈 공간(바닥, null)일 때 
-        // 현재 내 칸에 정면 벽(Front)을 그려서 아래 바닥으로 낭떠러지가 떨어지는 입체감을 만듭니다.
-        Vector2Int belowPos = pos + Vector2Int.down;
-        Vector3Int belowGridPos = (Vector3Int)belowPos;
+        Vector3Int topGridPos = currentGridPos + Vector3Int.up;
+        Tile topWallTile = CreateRuntimeTile(topAtlas);
 
-        if (blocksTilemap.GetTile(belowGridPos) == null)
+        if (topWallTile != null)
         {
-            // 규칙에 따라 정면 벽 아틀라스 좌표 계산 (X홀짝, Y코너 형태)
-            Vector2Int frontAtlas = GetFrontWallAtlasCoordinate(pos, (byte)bitmask);
-
-            if (frontAtlas.x >= 0 && frontAtlas.y >= 0)
-            {
-                Tile frontWallTile = CreateRuntimeTile(frontAtlas);
-                if (frontWallTile != null)
-                {
-                    wallTextureTilemap.SetTile(currentGridPos, frontWallTile);
-                    return; // 정면 벽을 그렸으므로 윗면 연산은 하지 않고 종료합니다.
-                }
-            }
+            wallTextureTilemap.SetTile(topGridPos, topWallTile);
         }
 
         // =================================================================
-        // 3단계: 내 아래 칸도 블록으로 꽉 차 있다면 ➔ 벽 윗면(Top) 및 내부 채우기 그리기
+        // [단계 2] 현재 제자리(pos) 좌표에 "앞면 벽(Front Wall)" 그리기
         // =================================================================
-        // 사방이 꽉 찬 회색 내부 영역은 내 아래 칸도 당연히 블록이므로 
-        // 이 분기로 넘어와 bitmask = 255를 인지하고 46번(Full_Solid_Wall, 검은색 윗면)을 빽빽하게 채우게 됩니다.
-        Vector2Int topAtlas = TileAtlasManager.Instance.GetAtlasCoordinate((byte)bitmask);
-        Tile topTile = CreateRuntimeTile(topAtlas);
+        bool e = (bitmask & 4) != 0;
+        bool w = (bitmask & 64) != 0;
 
-        if (topTile != null)
+        // 동/서 조건에 따른 정면 벽 모양 결정 (yOffset)
+        int yOffset = 0; // 기본 일자형 앞면 벽
+        if (!w && !e) yOffset = 3;      // 고립 벽
+        else if (w && e) yOffset = 2;   // 직선 앞면 벽
+        else if (!w && e) yOffset = 1;  // 왼쪽 끝 칸도 직선 모양으로 유지
+        else if (w && !e) yOffset = 0;  // 오른쪽 끝 칸도 직선 모양으로 유지
+
+        // X축 랜덤 패턴(보석 벽면 등) 연산
+        int xOffset = (Mathf.Abs(pos.x) % 2 == 0) ? 1 : 0;
+        float pseudoRandom = (Mathf.Sin(pos.x * 12.9898f + pos.y * 78.233f) * 43758.5453f) % 1f;
+        if (Mathf.Abs(pseudoRandom) < gemChance)
         {
-            wallTextureTilemap.SetTile(currentGridPos, topTile);
+            xOffset = (Mathf.Abs(pos.x) % 2 == 0) ? 3 : 2;
+        }
+
+        // 최종 앞면 아틀라스 좌표 확정 및 생성
+        Vector2Int frontAtlas = new Vector2Int(frontAtlasBase.x + xOffset, frontAtlasBase.y + yOffset);
+        Tile frontWallTile = CreateRuntimeTile(frontAtlas);
+
+        if (frontWallTile != null)
+        {
+            wallTextureTilemap.SetTile(currentGridPos, frontWallTile);
         }
     }
 
@@ -166,45 +170,31 @@ public class TilemapTextureLoader : Singleton<TilemapTextureLoader>
     private Vector2Int GetFrontWallAtlasCoordinate(Vector2Int wallGridPos, byte topTileBitmask)
     {
         // 1. 윗면 타일의 변 연결성 분해
-        bool s = (topTileBitmask & 16) != 0;
-        bool e = (topTileBitmask & 4) != 0;
-        bool w = (topTileBitmask & 64) != 0;
+        bool e = (topTileBitmask & 4) != 0;  // 오른쪽 블록 존재 여부
+        bool w = (topTileBitmask & 64) != 0; // 왼쪽 블록 존재 여부
 
-        // 2. 윗면 타일의 SE, SW 코너 상태 연산
-        string seC = (!e && !s) ? "outer" : (e && s) ? (((topTileBitmask & 8) != 0) ? "dark" : "inner") : "outer";
-        string swC = (!s && !w) ? "outer" : (s && w) ? (((topTileBitmask & 32) != 0) ? "dark" : "inner") : "outer";
-
-        // 규칙: SE, SW가 둘 다 outer이고 S가 비어있어야(false) 정면 벽이 내려옴
-        if (seC != "outer" || swC != "outer" || s == true)
-        {
-            return new Vector2Int(-1, -1); // 벽 생성 안 함 플래그
-        }
-
-        // 3. Y 좌표 오프셋 결정 (벽의 형태 레이아웃)
+        // 2. Y 좌표 오프셋 결정 (양옆의 연결 상태만 봅니다)
         int yOffset = 0;
-        if (!w && !e) yOffset = 0; // 양쪽 코너 (Isolated)
-        else if (w && e) yOffset = 1; // 코너 없음 (Straight)
-        else if (!w && e) yOffset = 2; // 왼쪽 코너 (Left Corner)
-        else if (w && !e) yOffset = 3; // 오른쪽 코너 (Right Corner)
+        if (!w && !e) yOffset = 0;      // 양쪽이 다 뚫린 고립된 정면 벽 (Isolated)
+        else if (w && e) yOffset = 1;   // 사방이 꽉 찬 내부 및 연속된 정면 벽 (Straight)
+        else if (!w && e) yOffset = 2;  // 왼쪽만 뚫리고 오른쪽은 막힌 정면 벽 (Left Corner)
+        else if (w && !e) yOffset = 3;  // 왼쪽은 막히고 오른쪽이 뚫린 정면 벽 (Right Corner)
 
-        // 4. X 좌표 오프셋 결정 (홀짝 및 보석 여부)
+        // 3. X 좌표 오프셋 결정 (기존의 홀짝 패턴 및 보석 확률 유지)
         int xOffset = 0;
         bool isEvenX = (Mathf.Abs(wallGridPos.x) % 2 == 0);
-
         bool isGem = UnityEngine.Random.value < gemChance;
 
         if (!isGem)
         {
-            // 일반 벽 변형
-            xOffset = isEvenX ? 1 : 0;
+            xOffset = isEvenX ? 1 : 0; // 일반 벽 변형 (X축 홀짝)
         }
         else
         {
-            // 보석 벽 변형
-            xOffset = isEvenX ? 3 : 2;
+            xOffset = isEvenX ? 3 : 2; // 보석 벽 변형
         }
 
-        // 5. 기준 좌표(8, 4)에 오프셋을 더해 최종 아틀라스 좌표 반환
+        // 4. 기준 좌표(8, 4)에 오프셋을 더해 최종 아틀라스 좌표 반환
         return new Vector2Int(frontAtlasBase.x + xOffset, frontAtlasBase.y + yOffset);
     }
 }

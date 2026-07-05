@@ -150,7 +150,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TilemapTextureLoader
   tilemapTexture: {fileID: 2800000, guid: 1e4d0144bdcea464aa4080e176d21d76, type: 3}
   atlasGridSize: {x: 12, y: 8}
-  frontAtlasBase: {x: 8, y: 4}
+  frontAtlasBase: {x: 8, y: 0}
   gemChance: 0.3
   testFloorTexture: {fileID: 200298996, guid: 348522f001a05c04e94de3de4a961a41, type: 3}
   wallTextureTilemap: {fileID: 1962042473}
@@ -358,8 +358,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 352224022ae15fe4a93f0e7efa56b031, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapGenerator
-  tilemapTexture: {fileID: 2800000, guid: 1e4d0144bdcea464aa4080e176d21d76, type: 3}
-  atlasGridSize: {x: 16, y: 16}
   blocksTilemap: {fileID: 1343947947}
   floorTilemap: {fileID: 239383047}
   player: {fileID: 895500066}
@@ -859,8 +857,8 @@ Transform:
   m_Children:
   - {fileID: 239383045}
   - {fileID: 1343947945}
-  - {fileID: 2087985413}
   - {fileID: 1962042471}
+  - {fileID: 2087985413}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1343947944
@@ -1137,7 +1135,7 @@ TilemapRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_MaskInteraction: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
