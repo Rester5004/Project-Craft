@@ -148,7 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a97867e86d447a4b869a4bb36241198, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TilemapTextureLoader
-  tilemapTexture: {fileID: 2800000, guid: 1e4d0144bdcea464aa4080e176d21d76, type: 3}
+  tilemapTexture: {fileID: 2800000, guid: 95f0bf8b3cdece945abff3441bd3b7e6, type: 3}
   atlasGridSize: {x: 12, y: 8}
   frontAtlasBase: {x: 8, y: 0}
   gemChance: 0.3
