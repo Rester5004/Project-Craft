@@ -11,16 +11,17 @@ public class Chunk
         tiles = new int[16, 16];
     }
 
-    public static Vector2Int GetPlayerChunk(GameObject player)
+    //타일맵 transform이 (0,0,0)이고, 셀 사이즈가 1일때만 작동하는 함수. 
+    public static Vector2Int GetChunkId(Vector3 pos)
     {
-        Vector3 pos = player != null ? player.transform.position : Vector3.zero;
-        if (player == null)
-        {
-            throw new System.ArgumentNullException(nameof(player), "Player GameObject cannot be null.");
-        }
-        return new Vector2Int((int)((Mathf.FloorToInt(pos.x) & ~15) / 16), (int)(((Mathf.FloorToInt(pos.y)+15) & ~15) / 16));
+        return new Vector2Int((int)((Mathf.FloorToInt(pos.x) & ~15) / 16), (int)(((Mathf.FloorToInt(pos.y)) & ~15) / 16));
     }
-
+    public static Vector2Int GetLocalCellPositionInChunk(Vector3 pos)
+    {
+        int localX = Mathf.FloorToInt(pos.x) & 15;
+        int localY = Mathf.FloorToInt(pos.y) & 15;
+        return new Vector2Int(localX, localY);
+    }
     public int GetTile(int x, int y) => tiles[y, x];
     public void SetTile(int x, int y, int tileID) => tiles[y, x] = tileID;
 
@@ -41,7 +42,7 @@ public class Chunk
     }
 }
 
-public class WorldMap
+public class WorldMap : Singleton<WorldMap>
 {
     public const int ChunkSize = 16;
     public static string DefaultSavePath =>
@@ -50,16 +51,18 @@ public class WorldMap
     public static string DefaultWorldmapPath =>
         Path.Combine(Application.streamingAssetsPath, "DefaultWorldmap.dat");
 
-    private readonly Dictionary<Vector2Int, Chunk> chunks;
-    private readonly string savePath;
+    private Dictionary<Vector2Int, Chunk> chunks;
+    private string savePath;
 
-    public WorldMap(string path = null)
+    protected override void Awake()
     {
-        savePath = path ?? DefaultSavePath;
+        base.Awake();
+
+        savePath = DefaultSavePath;
         chunks = new();
         if (File.Exists(savePath))
             Load(savePath);
-        else if(File.Exists(DefaultWorldmapPath))
+        else if (File.Exists(DefaultWorldmapPath))
             File.Copy(DefaultWorldmapPath, savePath);
     }
 
@@ -71,6 +74,16 @@ public class WorldMap
             chunks[chunkId] = chunk;
         }
         return chunk;
+    }
+    public bool Mining(Vector2Int chunkId, Vector2Int cellPos)
+    {
+        Chunk chunk = GetOrCreateChunk(chunkId);
+        if(chunk.GetTile(cellPos.x, cellPos.y) > 9999)
+        {
+            chunk.SetTile(cellPos.x, cellPos.y, 0);
+            return true;
+        }
+        return false;
     }
 
     Chunk GenerateChunk(Vector2Int chunkId) //추후 청크 id에 따라 다른 blockid를 사용하게 수정예정

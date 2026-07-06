@@ -11,18 +11,27 @@ public class MachineInteraction : MonoBehaviour
     [SerializeField] private LayerMask machineLayer;
     [SerializeField] private float interactRange = 1.5f;
 
-    void Update()
+    void OnEnable()
+    {
+        if (InputActionManager.Instance != null)
+            InputActionManager.Instance.OnUsePerformed += HandleUsePerformed;
+    }
+
+    void OnDisable()
+    {
+        if (InputActionManager.Instance != null)
+            InputActionManager.Instance.OnUsePerformed -= HandleUsePerformed;
+    }
+
+    private void HandleUsePerformed()
     {
         if (machineUI != null && machineUI.activeSelf)
             return;
 
-        if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
-        {
-            if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
-                return;
+        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+            return;
 
-            TryInteractWithMachine();
-        }
+        TryInteractWithMachine();
     }
 
     private void TryInteractWithMachine()

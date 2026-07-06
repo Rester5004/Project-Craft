@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 1e4d0144bdcea464aa4080e176d21d76
+guid: 95f0bf8b3cdece945abff3441bd3b7e6
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7804292254296407219
-    second: stage2_wall_tilemap_0
+      213: 6098339960048395474
+    second: stage2_wall_tilemap1_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -97,7 +97,7 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 4
-    buildTarget: WebGL
+    buildTarget: WindowsStoreApps
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -113,29 +113,29 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: stage2_wall_tilemap_0
+      name: stage2_wall_tilemap1_0
       rect:
         serializedVersion: 2
         x: 64
         y: 224
         width: 32
         height: 32
-      alignment: 6
-      pivot: {x: 0, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 3bc7ba4d47a6e4c60800000000000000
-      internalID: 7804292254296407219
+      spriteID: 2d4214e12e7a1a450800000000000000
+      internalID: 6098339960048395474
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_1
+      name: stage2_wall_tilemap1_1
       rect:
         serializedVersion: 2
         x: 192
@@ -150,14 +150,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2b73b225ab7af0649b30dbfb632ff50b
-      internalID: -1427090941
+      spriteID: 74c575fb72c413c4bb4725be39a9fb23
+      internalID: -1532001192
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_2
+      name: stage2_wall_tilemap1_2
       rect:
         serializedVersion: 2
         x: 224
@@ -172,14 +172,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c5193a4737cfab14eae6cd4bd9eceb62
-      internalID: -773952188
+      spriteID: 87a7bed29f9a5c043af24bc30b5c1975
+      internalID: -2102163642
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_3
+      name: stage2_wall_tilemap1_3
       rect:
         serializedVersion: 2
         x: 256
@@ -194,14 +194,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1817026c08ef4fc4b871850c19d441ff
-      internalID: 398173995
+      spriteID: 1f2284b14d580b942aa6a5492bdf1535
+      internalID: 1231942457
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_4
+      name: stage2_wall_tilemap1_4
       rect:
         serializedVersion: 2
         x: 288
@@ -216,14 +216,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c10a01b8ed3eeb247b533045de15b462
-      internalID: 1363962868
+      spriteID: c649167333f18094b9924d037ecc6533
+      internalID: 704625887
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_5
+      name: stage2_wall_tilemap1_5
       rect:
         serializedVersion: 2
         x: 320
@@ -238,14 +238,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 03c4915dc6a40344eb6822b0561f3d40
-      internalID: 124486607
+      spriteID: 5fd8915eff4228e4b84443dde63a4dd4
+      internalID: -100640521
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_6
+      name: stage2_wall_tilemap1_6
       rect:
         serializedVersion: 2
         x: 32
@@ -260,14 +260,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 436da210f0718bd4a9cdc8910c5ed1e0
-      internalID: -1744189583
+      spriteID: 2c27d7f5c7a6f74429b695bb5ebe3de7
+      internalID: 630243113
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_7
+      name: stage2_wall_tilemap1_7
       rect:
         serializedVersion: 2
         x: 64
@@ -282,14 +282,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b4d8eee82e02a5b4fa980e4defb84978
-      internalID: 1078930256
+      spriteID: 6e02a968e71399b4b99980cfaadf94ae
+      internalID: -1728311643
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_8
+      name: stage2_wall_tilemap1_8
       rect:
         serializedVersion: 2
         x: 96
@@ -304,14 +304,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 86999f6e6ff2d454b83b45a7b144a77d
-      internalID: -1559311918
+      spriteID: c239f4034738ffd4390dcf9d5a1fc438
+      internalID: -436865062
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_9
+      name: stage2_wall_tilemap1_9
       rect:
         serializedVersion: 2
         x: 192
@@ -326,14 +326,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9404bbef4a062a54f912e36a6ff16e1f
-      internalID: 346131884
+      spriteID: 3b1a3a18571c3514592507a053a340d6
+      internalID: 311191446
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_10
+      name: stage2_wall_tilemap1_10
       rect:
         serializedVersion: 2
         x: 320
@@ -348,14 +348,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d89039b88172b994d897adaa2cd13d8d
-      internalID: -1427036430
+      spriteID: 17130611700f24b41ad9221aff9903b3
+      internalID: 871866696
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_11
+      name: stage2_wall_tilemap1_11
       rect:
         serializedVersion: 2
         x: 0
@@ -370,14 +370,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4438c7da1fb2eb04a9a939cbd61e4b23
-      internalID: 1567154162
+      spriteID: 2dd2250a78adb8f40abb06f23edcdb31
+      internalID: 1674469686
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_12
+      name: stage2_wall_tilemap1_12
       rect:
         serializedVersion: 2
         x: 32
@@ -392,14 +392,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: bde9e1b7716ac0f4bb03114c45896581
-      internalID: -433559069
+      spriteID: 1779d0d746d6e424db19ef8b3304c775
+      internalID: -1407430293
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_13
+      name: stage2_wall_tilemap1_13
       rect:
         serializedVersion: 2
         x: 64
@@ -414,14 +414,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8707a2f31b3a59e4f879e55c24a5aafb
-      internalID: -1062571888
+      spriteID: 404c56d190060c34eb7ca3844f79ddde
+      internalID: 1679675535
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_14
+      name: stage2_wall_tilemap1_14
       rect:
         serializedVersion: 2
         x: 96
@@ -436,14 +436,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ba59a19a38018644987c0839119ec908
-      internalID: 1517963296
+      spriteID: 798ae10c2eff4e448bd70d23db7bc8ef
+      internalID: 1673869972
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_15
+      name: stage2_wall_tilemap1_15
       rect:
         serializedVersion: 2
         x: 128
@@ -458,14 +458,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 184cf63d9ace237488d7248d20958981
-      internalID: 1587803438
+      spriteID: b1d65782e416b6048813ba2a775cebc1
+      internalID: 1881945254
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_16
+      name: stage2_wall_tilemap1_16
       rect:
         serializedVersion: 2
         x: 192
@@ -480,14 +480,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f0868ce10db0970459acf8a48e61ac5c
-      internalID: 1995847186
+      spriteID: 70af0ded8924491459289dab19bc0bb9
+      internalID: -1493338021
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_17
+      name: stage2_wall_tilemap1_17
       rect:
         serializedVersion: 2
         x: 224
@@ -502,14 +502,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3a35dd21b41d15a43943aaf26972355f
-      internalID: -329040043
+      spriteID: 12c14720d11cd504295967f63f47bf6e
+      internalID: -1427444855
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_18
+      name: stage2_wall_tilemap1_18
       rect:
         serializedVersion: 2
         x: 256
@@ -524,14 +524,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e6ecafebf7d6382449c37660264960f3
-      internalID: 991614255
+      spriteID: 52d0ff0d31345e749930a9db0923cffe
+      internalID: -1377831897
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_19
+      name: stage2_wall_tilemap1_19
       rect:
         serializedVersion: 2
         x: 288
@@ -546,14 +546,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 79346743cee12e24e8f49901e6802a6b
-      internalID: -260099841
+      spriteID: 66a5704449f6c5b49800156e20e332db
+      internalID: -1473322435
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_20
+      name: stage2_wall_tilemap1_20
       rect:
         serializedVersion: 2
         x: 320
@@ -568,14 +568,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 245d6b9a3c05b264c93ea53d82397fec
-      internalID: 1456966829
+      spriteID: 67cf952eb4015a14ea2df1049b44a97f
+      internalID: -206764886
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_21
+      name: stage2_wall_tilemap1_21
       rect:
         serializedVersion: 2
         x: 32
@@ -590,14 +590,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c1e88a5a74e473c4fac6588110c2f661
-      internalID: 1541216513
+      spriteID: b73ca8f68d7df1843bb7036a02b300b3
+      internalID: -700756664
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_22
+      name: stage2_wall_tilemap1_22
       rect:
         serializedVersion: 2
         x: 64
@@ -612,14 +612,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c8e0969e0098de24aa1da351effd5e7b
-      internalID: -1158978320
+      spriteID: fecfe199cd780f045a151cf999029b99
+      internalID: -506708537
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_23
+      name: stage2_wall_tilemap1_23
       rect:
         serializedVersion: 2
         x: 96
@@ -634,14 +634,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 447aeee9da6898646b1bb40c7bb3c54b
-      internalID: -1005636192
+      spriteID: ff117afe4fc3f4b49b6d28c191809ce5
+      internalID: -99857053
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_24
+      name: stage2_wall_tilemap1_24
       rect:
         serializedVersion: 2
         x: 192
@@ -656,14 +656,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a2ff01c432237f044809253652cf85f8
-      internalID: -62874416
+      spriteID: e68e72b2f04c0ff4986bbe0f4d06ba51
+      internalID: 1479726472
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_25
+      name: stage2_wall_tilemap1_25
       rect:
         serializedVersion: 2
         x: 224
@@ -678,14 +678,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f791ea9f52fa5034eb51c3cf2a255afc
-      internalID: -89554366
+      spriteID: 545393cc06ac12c46b5298ba9d341e4a
+      internalID: -1912196282
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_26
+      name: stage2_wall_tilemap1_26
       rect:
         serializedVersion: 2
         x: 64
@@ -700,14 +700,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9f175c49d303e4b488b784d3fa84825d
-      internalID: -424325281
+      spriteID: f9a969490075df3408209b069037d535
+      internalID: 275246978
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_27
+      name: stage2_wall_tilemap1_27
       rect:
         serializedVersion: 2
         x: 128
@@ -722,14 +722,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8afe51e33a5fb1542afe0584fa2e78ff
-      internalID: 1965218182
+      spriteID: f0335b538b150dc4ea9a6b6e6a83e93b
+      internalID: 1413137787
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_28
+      name: stage2_wall_tilemap1_28
       rect:
         serializedVersion: 2
         x: 160
@@ -744,14 +744,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a542a50c202031a4bb7bacfa4905055a
-      internalID: 913088507
+      spriteID: 9106326b01487334e81af1e97544fd30
+      internalID: 713367172
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_29
+      name: stage2_wall_tilemap1_29
       rect:
         serializedVersion: 2
         x: 192
@@ -766,14 +766,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6389adb4fbd16c6449588a5dda739f22
-      internalID: -689844376
+      spriteID: ad8ee04c59cd31c49a24f9ba7bdcbb42
+      internalID: -1698742787
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_30
+      name: stage2_wall_tilemap1_30
       rect:
         serializedVersion: 2
         x: 224
@@ -788,14 +788,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f8a708b892593f241aab14c891bc2cd6
-      internalID: 256573182
+      spriteID: f17bf6318a64e5245a8771e0f85052ba
+      internalID: -135864291
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_31
+      name: stage2_wall_tilemap1_31
       rect:
         serializedVersion: 2
         x: 256
@@ -810,14 +810,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9d8f7ef5f72d4cd42b9d71da65ccc46a
-      internalID: 1112698966
+      spriteID: 93da3b805b95ed14baa2e92b637824d7
+      internalID: 1479150665
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_32
+      name: stage2_wall_tilemap1_32
       rect:
         serializedVersion: 2
         x: 288
@@ -832,14 +832,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e7a92e659c0510549a1f034e97cac1c2
-      internalID: -1790637509
+      spriteID: 113fa4f7d7a06c549b5152ff303b409b
+      internalID: 1954837702
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_33
+      name: stage2_wall_tilemap1_33
       rect:
         serializedVersion: 2
         x: 320
@@ -854,14 +854,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1b0ba72165d6bce4980c7d403b5be408
-      internalID: -2045333923
+      spriteID: db7878d102ca88a41af92ec066718af4
+      internalID: -1912264302
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_34
+      name: stage2_wall_tilemap1_34
       rect:
         serializedVersion: 2
         x: 352
@@ -876,14 +876,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 749f51aeac601aa49b7d6d43a1c058b0
-      internalID: 1427870798
+      spriteID: 3066f50d25602894cbfc3054597cb0ad
+      internalID: 2146353404
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_35
+      name: stage2_wall_tilemap1_35
       rect:
         serializedVersion: 2
         x: 0
@@ -898,14 +898,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e38adffb0f87cc046bc282f26b8ed350
-      internalID: -2028960514
+      spriteID: b55463e277998564e8575618dc136898
+      internalID: -1593071165
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_36
+      name: stage2_wall_tilemap1_36
       rect:
         serializedVersion: 2
         x: 32
@@ -920,14 +920,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5fa16219638344e45a798c9386076e57
-      internalID: 2030443086
+      spriteID: 1b7312e830287d245aa01128c328a189
+      internalID: 1454151771
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_37
+      name: stage2_wall_tilemap1_37
       rect:
         serializedVersion: 2
         x: 96
@@ -942,14 +942,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 666dc9e947e4ea447abf118b3cfb3cd2
-      internalID: 1124718578
+      spriteID: db3bdfac897e1f241a3170b66bed721f
+      internalID: -2099728374
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_38
+      name: stage2_wall_tilemap1_38
       rect:
         serializedVersion: 2
         x: 128
@@ -964,14 +964,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 61ae0b7197119ed429fdb4eb81513894
-      internalID: 30537613
+      spriteID: 2791bc4ec6bd5244899ac760b1d6d7d4
+      internalID: 2018807397
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_39
+      name: stage2_wall_tilemap1_39
       rect:
         serializedVersion: 2
         x: 160
@@ -986,14 +986,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: faa7e2e0440ac694ebaf0c52ece2199f
-      internalID: 426264143
+      spriteID: 9928f7f6c1dd8ea45a73cee461472a2a
+      internalID: -530394314
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_40
+      name: stage2_wall_tilemap1_40
       rect:
         serializedVersion: 2
         x: 192
@@ -1008,14 +1008,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1fc4dd62842c7a041bc487b909d23bf1
-      internalID: -216292144
+      spriteID: ee7b8e1c8f8610d4eb8a38f952a87e06
+      internalID: -430540883
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_41
+      name: stage2_wall_tilemap1_41
       rect:
         serializedVersion: 2
         x: 256
@@ -1030,14 +1030,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 64215e9bda672ca4997da96d9d8bb6dc
-      internalID: 2051235231
+      spriteID: 98d4b1752dff1844c89eb33e32069418
+      internalID: -1098151512
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_42
+      name: stage2_wall_tilemap1_42
       rect:
         serializedVersion: 2
         x: 288
@@ -1052,14 +1052,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2a61edbfcabb75d4c923cbca06b5ac86
-      internalID: -1596684166
+      spriteID: 4f8d56b1a0e1f9d438ceb2bf1dc765e3
+      internalID: -425976256
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_43
+      name: stage2_wall_tilemap1_43
       rect:
         serializedVersion: 2
         x: 320
@@ -1074,14 +1074,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3af1fd6428ad98b43bde7106271ec823
-      internalID: 245256312
+      spriteID: 887fa81b26ccd914d925567dbba0e97c
+      internalID: -1987090136
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_44
+      name: stage2_wall_tilemap1_44
       rect:
         serializedVersion: 2
         x: 352
@@ -1096,14 +1096,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 63d2a5789f519db42aecb4e0481c7d04
-      internalID: -146102687
+      spriteID: d51b66a5d8f450447971902a6da2c7e9
+      internalID: -1070241471
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_45
+      name: stage2_wall_tilemap1_45
       rect:
         serializedVersion: 2
         x: 0
@@ -1118,14 +1118,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 628ccea56c1eebd40a7c6e2b03d4ed86
-      internalID: -1252559944
+      spriteID: 78959b0c89f2aa14eaba7a90bc1fba8a
+      internalID: -958185858
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_46
+      name: stage2_wall_tilemap1_46
       rect:
         serializedVersion: 2
         x: 32
@@ -1140,14 +1140,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: bdfe74e24153b9248a6a6444130db498
-      internalID: 569517130
+      spriteID: aa4c52ea2d29ad3459d2c3bc1243b708
+      internalID: 553560128
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_47
+      name: stage2_wall_tilemap1_47
       rect:
         serializedVersion: 2
         x: 96
@@ -1162,14 +1162,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 60a236d423fb3b845b3e6ec4b7cb59c1
-      internalID: 1300152670
+      spriteID: f558199bde3e7774297e82ff8f052565
+      internalID: -673661348
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_48
+      name: stage2_wall_tilemap1_48
       rect:
         serializedVersion: 2
         x: 128
@@ -1184,14 +1184,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b15ec89dbbfd04d448b26852ad86683d
-      internalID: -759672182
+      spriteID: 82a6665474d8a734398f5609593c6505
+      internalID: 2047333445
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_49
+      name: stage2_wall_tilemap1_49
       rect:
         serializedVersion: 2
         x: 160
@@ -1206,14 +1206,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c94d471c5f7801d4a8d1e9f3a51ced72
-      internalID: 653918937
+      spriteID: 1f3e51a9870851045aa9a15aa230534c
+      internalID: -1432161794
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_50
+      name: stage2_wall_tilemap1_50
       rect:
         serializedVersion: 2
         x: 192
@@ -1228,14 +1228,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a17b17bb58c726c41829f313f7324347
-      internalID: -170580067
+      spriteID: 9a7c09787ec2eea408ce9a317e6e6349
+      internalID: 1560376229
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_51
+      name: stage2_wall_tilemap1_51
       rect:
         serializedVersion: 2
         x: 256
@@ -1250,14 +1250,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4c21e152a1b41e148b9fc09281d9eb82
-      internalID: 365533902
+      spriteID: db0ae57b948b047439ba93bf350ab2eb
+      internalID: 817205620
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_52
+      name: stage2_wall_tilemap1_52
       rect:
         serializedVersion: 2
         x: 288
@@ -1272,14 +1272,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5d1100e430e1d9248ab5b71138852b31
-      internalID: 431105049
+      spriteID: 90b04845ae16d794b910bbaa2c2e5468
+      internalID: -385886166
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_53
+      name: stage2_wall_tilemap1_53
       rect:
         serializedVersion: 2
         x: 320
@@ -1294,14 +1294,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 677f0e13d3140fa46b5cd5799dcd3e3a
-      internalID: -917377084
+      spriteID: a5764560c0ce3494ca26add1d3ca0cdb
+      internalID: 734090399
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_54
+      name: stage2_wall_tilemap1_54
       rect:
         serializedVersion: 2
         x: 352
@@ -1316,14 +1316,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 071cc8dc14fd87b488b33b81bde39bca
-      internalID: -1668487702
+      spriteID: 8c57919c93d0bb9448affaf9eb534062
+      internalID: -743314629
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_55
+      name: stage2_wall_tilemap1_55
       rect:
         serializedVersion: 2
         x: 0
@@ -1338,14 +1338,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 36a4c5d7b7bbfa94c8465af91babefaa
-      internalID: 551569393
+      spriteID: ef30b662582d1e2429c92bf39a1e915e
+      internalID: -1142750664
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_56
+      name: stage2_wall_tilemap1_56
       rect:
         serializedVersion: 2
         x: 32
@@ -1360,14 +1360,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3154cd46a8dd51a4fba5427a7d81bab5
-      internalID: -184021639
+      spriteID: afe8234d2b70984458e662230765d12b
+      internalID: 295018545
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_57
+      name: stage2_wall_tilemap1_57
       rect:
         serializedVersion: 2
         x: 128
@@ -1382,14 +1382,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: bed9ea2058ca03f4285babf78420c34d
-      internalID: -511986520
+      spriteID: 7dc0cb4a3aff5cb41ade31c3d0a4b300
+      internalID: 834073464
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_58
+      name: stage2_wall_tilemap1_58
       rect:
         serializedVersion: 2
         x: 160
@@ -1404,14 +1404,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2a66a82b83a86024a86723ca4a72a633
-      internalID: 1020218612
+      spriteID: 1ddb546ed3cbd394d9ad27c30cc44d0f
+      internalID: 1933385305
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_59
+      name: stage2_wall_tilemap1_59
       rect:
         serializedVersion: 2
         x: 256
@@ -1426,14 +1426,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: acc82b1484b67cd419c68c0a960eafaf
-      internalID: 743948830
+      spriteID: 9de7ba09e9f867c42b2602bbaded1282
+      internalID: -1670218797
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_60
+      name: stage2_wall_tilemap1_60
       rect:
         serializedVersion: 2
         x: 288
@@ -1448,14 +1448,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d54d55c0dcaf8334590dea81ffffc891
-      internalID: -233960894
+      spriteID: fe9bc34eb498b9444bc4eecb87717482
+      internalID: 1574484532
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_61
+      name: stage2_wall_tilemap1_61
       rect:
         serializedVersion: 2
         x: 320
@@ -1470,14 +1470,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 65ac00954fab55848a8c683c1af57c0d
-      internalID: -2041493469
+      spriteID: c840a2bc6141b8642bc8cfae2eb57921
+      internalID: -1679582830
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stage2_wall_tilemap_62
+      name: stage2_wall_tilemap1_62
       rect:
         serializedVersion: 2
         x: 352
@@ -1492,8 +1492,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 799147aee3d98ba48aeffc8190e24ba7
-      internalID: 847622764
+      spriteID: 688daa40459efda498cb472d55d44564
+      internalID: -784897974
       vertices: []
       indices: 
       edges: []
@@ -1502,7 +1502,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 89439b9e7ef14624e9d8274519b7afe6
+    spriteID: 4e2030ae799f38742a52d198aa79165f
     internalID: 0
     vertices: []
     indices: 
@@ -1514,69 +1514,69 @@ TextureImporter:
       - key: SpriteEditor.SliceSettings
         value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":32.0,"y":32.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      stage2_wall_tilemap_0: 7804292254296407219
-      stage2_wall_tilemap_1: -1427090941
-      stage2_wall_tilemap_10: -1427036430
-      stage2_wall_tilemap_11: 1567154162
-      stage2_wall_tilemap_12: -433559069
-      stage2_wall_tilemap_13: -1062571888
-      stage2_wall_tilemap_14: 1517963296
-      stage2_wall_tilemap_15: 1587803438
-      stage2_wall_tilemap_16: 1995847186
-      stage2_wall_tilemap_17: -329040043
-      stage2_wall_tilemap_18: 991614255
-      stage2_wall_tilemap_19: -260099841
-      stage2_wall_tilemap_2: -773952188
-      stage2_wall_tilemap_20: 1456966829
-      stage2_wall_tilemap_21: 1541216513
-      stage2_wall_tilemap_22: -1158978320
-      stage2_wall_tilemap_23: -1005636192
-      stage2_wall_tilemap_24: -62874416
-      stage2_wall_tilemap_25: -89554366
-      stage2_wall_tilemap_26: -424325281
-      stage2_wall_tilemap_27: 1965218182
-      stage2_wall_tilemap_28: 913088507
-      stage2_wall_tilemap_29: -689844376
-      stage2_wall_tilemap_3: 398173995
-      stage2_wall_tilemap_30: 256573182
-      stage2_wall_tilemap_31: 1112698966
-      stage2_wall_tilemap_32: -1790637509
-      stage2_wall_tilemap_33: -2045333923
-      stage2_wall_tilemap_34: 1427870798
-      stage2_wall_tilemap_35: -2028960514
-      stage2_wall_tilemap_36: 2030443086
-      stage2_wall_tilemap_37: 1124718578
-      stage2_wall_tilemap_38: 30537613
-      stage2_wall_tilemap_39: 426264143
-      stage2_wall_tilemap_4: 1363962868
-      stage2_wall_tilemap_40: -216292144
-      stage2_wall_tilemap_41: 2051235231
-      stage2_wall_tilemap_42: -1596684166
-      stage2_wall_tilemap_43: 245256312
-      stage2_wall_tilemap_44: -146102687
-      stage2_wall_tilemap_45: -1252559944
-      stage2_wall_tilemap_46: 569517130
-      stage2_wall_tilemap_47: 1300152670
-      stage2_wall_tilemap_48: -759672182
-      stage2_wall_tilemap_49: 653918937
-      stage2_wall_tilemap_5: 124486607
-      stage2_wall_tilemap_50: -170580067
-      stage2_wall_tilemap_51: 365533902
-      stage2_wall_tilemap_52: 431105049
-      stage2_wall_tilemap_53: -917377084
-      stage2_wall_tilemap_54: -1668487702
-      stage2_wall_tilemap_55: 551569393
-      stage2_wall_tilemap_56: -184021639
-      stage2_wall_tilemap_57: -511986520
-      stage2_wall_tilemap_58: 1020218612
-      stage2_wall_tilemap_59: 743948830
-      stage2_wall_tilemap_6: -1744189583
-      stage2_wall_tilemap_60: -233960894
-      stage2_wall_tilemap_61: -2041493469
-      stage2_wall_tilemap_62: 847622764
-      stage2_wall_tilemap_7: 1078930256
-      stage2_wall_tilemap_8: -1559311918
-      stage2_wall_tilemap_9: 346131884
+      stage2_wall_tilemap1_0: 6098339960048395474
+      stage2_wall_tilemap1_1: -1532001192
+      stage2_wall_tilemap1_10: 871866696
+      stage2_wall_tilemap1_11: 1674469686
+      stage2_wall_tilemap1_12: -1407430293
+      stage2_wall_tilemap1_13: 1679675535
+      stage2_wall_tilemap1_14: 1673869972
+      stage2_wall_tilemap1_15: 1881945254
+      stage2_wall_tilemap1_16: -1493338021
+      stage2_wall_tilemap1_17: -1427444855
+      stage2_wall_tilemap1_18: -1377831897
+      stage2_wall_tilemap1_19: -1473322435
+      stage2_wall_tilemap1_2: -2102163642
+      stage2_wall_tilemap1_20: -206764886
+      stage2_wall_tilemap1_21: -700756664
+      stage2_wall_tilemap1_22: -506708537
+      stage2_wall_tilemap1_23: -99857053
+      stage2_wall_tilemap1_24: 1479726472
+      stage2_wall_tilemap1_25: -1912196282
+      stage2_wall_tilemap1_26: 275246978
+      stage2_wall_tilemap1_27: 1413137787
+      stage2_wall_tilemap1_28: 713367172
+      stage2_wall_tilemap1_29: -1698742787
+      stage2_wall_tilemap1_3: 1231942457
+      stage2_wall_tilemap1_30: -135864291
+      stage2_wall_tilemap1_31: 1479150665
+      stage2_wall_tilemap1_32: 1954837702
+      stage2_wall_tilemap1_33: -1912264302
+      stage2_wall_tilemap1_34: 2146353404
+      stage2_wall_tilemap1_35: -1593071165
+      stage2_wall_tilemap1_36: 1454151771
+      stage2_wall_tilemap1_37: -2099728374
+      stage2_wall_tilemap1_38: 2018807397
+      stage2_wall_tilemap1_39: -530394314
+      stage2_wall_tilemap1_4: 704625887
+      stage2_wall_tilemap1_40: -430540883
+      stage2_wall_tilemap1_41: -1098151512
+      stage2_wall_tilemap1_42: -425976256
+      stage2_wall_tilemap1_43: -1987090136
+      stage2_wall_tilemap1_44: -1070241471
+      stage2_wall_tilemap1_45: -958185858
+      stage2_wall_tilemap1_46: 553560128
+      stage2_wall_tilemap1_47: -673661348
+      stage2_wall_tilemap1_48: 2047333445
+      stage2_wall_tilemap1_49: -1432161794
+      stage2_wall_tilemap1_5: -100640521
+      stage2_wall_tilemap1_50: 1560376229
+      stage2_wall_tilemap1_51: 817205620
+      stage2_wall_tilemap1_52: -385886166
+      stage2_wall_tilemap1_53: 734090399
+      stage2_wall_tilemap1_54: -743314629
+      stage2_wall_tilemap1_55: -1142750664
+      stage2_wall_tilemap1_56: 295018545
+      stage2_wall_tilemap1_57: 834073464
+      stage2_wall_tilemap1_58: 1933385305
+      stage2_wall_tilemap1_59: -1670218797
+      stage2_wall_tilemap1_6: 630243113
+      stage2_wall_tilemap1_60: 1574484532
+      stage2_wall_tilemap1_61: -1679582830
+      stage2_wall_tilemap1_62: -784897974
+      stage2_wall_tilemap1_7: -1728311643
+      stage2_wall_tilemap1_8: -436865062
+      stage2_wall_tilemap1_9: 311191446
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
