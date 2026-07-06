@@ -8,16 +8,16 @@ public class PlayerMining : MonoBehaviour
     void OnEnable()
     {
         if (InputActionManager.Instance != null)
-            InputActionManager.Instance.OnUsePerformed += HandleUsePerformed;
+            InputActionManager.Instance.OnHitPerformed += HandleHitPerformed;
     }
 
     void OnDisable()
     {
         if (InputActionManager.Instance != null)
-            InputActionManager.Instance.OnUsePerformed -= HandleUsePerformed;
+            InputActionManager.Instance.OnHitPerformed -= HandleHitPerformed;
     }
 
-    private void HandleUsePerformed()
+    private void HandleHitPerformed()
     {
         // 1. 인벤토리나 기계 UI 등이 열려있으면 광질 시도 자체를 차단!
         if (UIManager.Instance != null && UIManager.Instance.IsAnyUIOpen){

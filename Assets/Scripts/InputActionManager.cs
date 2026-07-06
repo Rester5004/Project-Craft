@@ -9,10 +9,12 @@ public class InputActionManager : Singleton<InputActionManager>
     private InputActionMap playerMap;
     private InputAction moveAction;
     private InputAction useAction;
+    private InputAction hitAction;
     private InputAction toggleInventoryAction;
 
     public event Action<Vector2> OnMove;
     public event Action OnUsePerformed;
+    public event Action OnHitPerformed;
     public event Action OnToggleInventoryPerformed;
 
     public Vector2 MoveValue => moveAction?.ReadValue<Vector2>() ?? Vector2.zero;
@@ -43,17 +45,21 @@ public class InputActionManager : Singleton<InputActionManager>
             .With("Left", "<Keyboard>/a")
             .With("Right", "<Keyboard>/d");
 
-        useAction = playerMap.AddAction("Use", type: InputActionType.Button, binding: "<Mouse>/leftButton");
+        hitAction = playerMap.AddAction("Hit", type: InputActionType.Button, binding: "<Mouse>/leftButton");
+        useAction = playerMap.AddAction("Use", type: InputActionType.Button, binding: "<Mouse>/rightButton");
+
         toggleInventoryAction = playerMap.AddAction("ToggleInventory", type: InputActionType.Button, binding: "<Keyboard>/i");
 
         moveAction.performed += HandleMovePerformed;
         moveAction.canceled += HandleMovePerformed;
         useAction.performed += HandleUsePerformed;
+        hitAction.performed += HandleHitPerformed;
         toggleInventoryAction.performed += HandleToggleInventoryPerformed;
     }
 
     private void HandleMovePerformed(InputAction.CallbackContext ctx) => OnMove?.Invoke(ctx.ReadValue<Vector2>());
     private void HandleUsePerformed(InputAction.CallbackContext ctx) => OnUsePerformed?.Invoke();
+    private void HandleHitPerformed(InputAction.CallbackContext ctx) => OnHitPerformed?.Invoke();
     private void HandleToggleInventoryPerformed(InputAction.CallbackContext ctx) => OnToggleInventoryPerformed?.Invoke();
 
     public InputAction GetAction(string actionName) => playerMap?.FindAction(actionName);
