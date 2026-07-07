@@ -180,24 +180,14 @@ public class MapGenerator : MonoBehaviour
 
     public IEnumerable<Vector2Int> GetFloorTilePositions()
     {
-        BoundsInt bounds = floorTilemap.cellBounds;
-        TileBase[] allTiles = floorTilemap.GetTilesBlock(bounds);
-        int sizeX = bounds.size.x;
-        int sizeY = bounds.size.y;
-        int sizeZ = bounds.size.z;
-        for (int z = 0; z < sizeZ; z++)
+        foreach (var chunkId in LoadedChunks.Keys)
         {
-            for (int y = 0; y < sizeY; y++)
+            for (int tx = 0; tx < WorldMap.ChunkSize; tx++)
             {
-                for (int x = 0; x < sizeX; x++)
+                for (int ty = 0; ty < WorldMap.ChunkSize; ty++)
                 {
-                    int index = x + (y * sizeX) + (z * sizeX * sizeY);
-                    if (allTiles[index] != null)
-                    {
-                        int worldX = bounds.xMin + x;
-                        int worldY = bounds.yMin + y;
-                        yield return new Vector2Int(worldX, worldY);
-                    }
+                    Vector2Int worldPos = new Vector2Int(chunkId.x * WorldMap.ChunkSize + tx, chunkId.y * WorldMap.ChunkSize + ty);
+                    yield return worldPos;
                 }
             }
         }
