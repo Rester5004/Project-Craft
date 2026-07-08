@@ -4,8 +4,7 @@ using UnityEngine;
 // 항상 활성화되어 있는 별도의 오브젝트(플레이어 등)에 붙여서 토글 키를 감지합니다.
 public class InventoryToggle : MonoBehaviour
 {
-    [SerializeField] private GameObject inventoryUI;
-
+    private bool isOpen = false;
     void OnEnable()
     {
         if (InputActionManager.Instance != null)
@@ -20,11 +19,17 @@ public class InventoryToggle : MonoBehaviour
 
     private void Toggle()
     {
-        if (inventoryUI == null || UIManager.Instance == null) return;
-
-        if (inventoryUI.activeSelf)
-            UIManager.Instance.CloseUI(inventoryUI);
+        if (UIManager.Instance == null) 
+            return;
+        if(isOpen)
+        {
+            UIManager.Instance.CloseUI("Inventory");
+            isOpen = false;
+        }
         else
-            UIManager.Instance.OpenUI(inventoryUI);
+        {
+            UIManager.Instance.OpenUI("Inventory");
+            isOpen = true;
+        }
     }
 }

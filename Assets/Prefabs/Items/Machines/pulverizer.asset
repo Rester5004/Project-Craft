@@ -9,10 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f0aa270e77a10f843b1b6fe8950719d0, type: 3}
-  m_Name: Items
-  m_EditorClassIdentifier: Assembly-CSharp::Items
-  itemName: 
-  itemIcon: {fileID: 0}
+  m_Script: {fileID: 0}
+  m_Name: pulverizer
+  m_EditorClassIdentifier: Assembly-CSharp::machine
+  itemName: pulverizer
+  Icon: {fileID: 2377217749489558504, guid: 1c2c475598576b74684240e2949206f0, type: 3}
   itemID: 0
   maxStack: 0
+  machineType: 0
+  machineLevel: 0
+  voltageLevel: 0

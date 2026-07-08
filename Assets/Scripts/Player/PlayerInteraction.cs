@@ -2,25 +2,27 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.EventSystems; // UI 클릭 방지를 위해 추가
 
-public class PlayerMining : MonoBehaviour
+public class PlayerInteraction : MonoBehaviour
 {
     [SerializeField] private MapGenerator mapGenerator;
+    [SerializeField] private Inventory inventory;
     void OnEnable()
     {
-        if (InputActionManager.Instance != null)
+        if (InputActionManager.Instance != null){
             InputActionManager.Instance.OnHitPerformed += HandleHitPerformed;
+        }
     }
 
     void OnDisable()
     {
-        if (InputActionManager.Instance != null)
+        if (InputActionManager.Instance != null){
             InputActionManager.Instance.OnHitPerformed -= HandleHitPerformed;
+        }
     }
-
     private void HandleHitPerformed()
     {
         // 1. 인벤토리나 기계 UI 등이 열려있으면 광질 시도 자체를 차단!
-        if (UIManager.Instance != null && UIManager.Instance.IsAnyUIOpen){
+        if (UIManager.Instance != null && UIManager.Instance.isAnyUIOpen && UIManager.Instance.OpenUICount > 0){
             Debug.Log("UI가 열려있으므로 광질을 시도하지 않습니다.");
             return;
         }

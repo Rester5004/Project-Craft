@@ -4,7 +4,7 @@ using UnityEngine;
 public class Items : ScriptableObject
 {
     public string itemName;
-    public Sprite itemIcon;
+    public Sprite Icon;
     public int itemID;
     public int maxStack;
 
@@ -14,4 +14,5 @@ public class machine : Items
 {
     public int machineType;
     public int machineLevel;
+    public int voltageLevel;
 }

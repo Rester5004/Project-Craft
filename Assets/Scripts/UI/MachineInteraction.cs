@@ -63,7 +63,7 @@ public class MachineInteraction : MonoBehaviour
         // UIManager를 통해서 UI를 열어달라고 요청!
         if (UIManager.Instance != null)
         {
-            UIManager.Instance.OpenUI(machineUI);
+            UIManager.Instance.OpenUI("Machine");
             Debug.Log("기계 UI 열렸음");
         }
     }
@@ -73,7 +73,7 @@ public class MachineInteraction : MonoBehaviour
         // UIManager를 통해서 UI를 닫아달라고 요청!
         if (UIManager.Instance != null)
         {
-            UIManager.Instance.CloseUI(machineUI);
+            UIManager.Instance.CloseUI("Machine");
         }
     }
 }

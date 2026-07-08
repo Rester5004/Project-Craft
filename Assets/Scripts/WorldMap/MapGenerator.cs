@@ -8,6 +8,7 @@ public class MapGenerator : MonoBehaviour
     [Header("타일맵")]
     [SerializeField] Tilemap blocksTilemap;
     [SerializeField] Tilemap floorTilemap;
+    [SerializeField] Tilemap placeableObjectsTilemap;
     [SerializeField] Transform player;
     [SerializeField] int renderDistance = 2;
 
