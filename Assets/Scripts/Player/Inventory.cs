@@ -54,12 +54,5 @@ public class Inventory : Singleton<Inventory>
     }
     void Update()
     {
-        for (int i = 0; i < size; i++)
-        {
-            if (slots[i].item != null)
-            {
-                Debug.Log($"슬롯 {i} : {slots[i].item.name} x {slots[i].count}");
-            }
-        }
     }
 }
