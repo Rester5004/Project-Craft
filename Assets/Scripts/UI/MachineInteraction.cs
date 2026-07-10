@@ -11,18 +11,27 @@ public class MachineInteraction : MonoBehaviour
     [SerializeField] private LayerMask machineLayer;
     [SerializeField] private float interactRange = 1.5f;
 
-    void Update()
+    void OnEnable()
+    {
+        if (InputActionManager.Instance != null)
+            InputActionManager.Instance.OnUsePerformed += HandleUsePerformed;
+    }
+
+    void OnDisable()
+    {
+        if (InputActionManager.Instance != null)
+            InputActionManager.Instance.OnUsePerformed -= HandleUsePerformed;
+    }
+
+    private void HandleUsePerformed()
     {
         if (machineUI != null && machineUI.activeSelf)
             return;
 
-        if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
-        {
-            if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
-                return;
+        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+            return;
 
-            TryInteractWithMachine();
-        }
+        TryInteractWithMachine();
     }
 
     private void TryInteractWithMachine()
@@ -54,7 +63,7 @@ public class MachineInteraction : MonoBehaviour
         // UIManager를 통해서 UI를 열어달라고 요청!
         if (UIManager.Instance != null)
         {
-            UIManager.Instance.OpenUI(machineUI);
+            UIManager.Instance.OpenUI("Machine");
             Debug.Log("기계 UI 열렸음");
         }
     }
@@ -64,7 +73,7 @@ public class MachineInteraction : MonoBehaviour
         // UIManager를 통해서 UI를 닫아달라고 요청!
         if (UIManager.Instance != null)
         {
-            UIManager.Instance.CloseUI(machineUI);
+            UIManager.Instance.CloseUI("Machine");
         }
     }
 }

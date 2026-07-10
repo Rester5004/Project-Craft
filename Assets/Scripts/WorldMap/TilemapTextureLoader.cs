@@ -9,11 +9,12 @@ public class TilemapTextureLoader : Singleton<TilemapTextureLoader>
     public Vector2Int atlasGridSize = new Vector2Int(16, 16); // 아틀라스의 전체 가로/세로 타일 개수 (예: 16x16칸짜리 이미지)
     public Vector2Int frontAtlasBase = new Vector2Int(8, 0); // X=8, Y=4
     [Range(0f, 1f)]
-    public float gemChance = 0.3f; // 보석이 등장할 확률 (8%)
+    public float gemChance = 0.3f; // 보석이 등장할 확률 (8%) 
     public Sprite testFloorTexture;
 
     [Header("타일맵")]
-    [SerializeField] Tilemap wallTextureTilemap; // 타일맵 컴포넌트 연결
+    [SerializeField] Tilemap wallBottomTilemap; // 벽 "앞면" 전용 - 항상 플레이어보다 뒤에 고정 정렬
+    [SerializeField] Tilemap wallTopTilemap; // 벽 "윗면" 전용 - 플레이어와 같은 Order in Layer로 Y-sort
     [SerializeField] Tilemap floorTextureTilemap; // 타일맵 컴포넌트 연결
     [SerializeField] Tilemap blocksTilemap;
     [SerializeField] Tilemap floorTilemap;
@@ -25,6 +26,28 @@ public class TilemapTextureLoader : Singleton<TilemapTextureLoader>
     {
         base.Awake();
         CacheAtlasSprites();
+        ConfigureYSorting();
+    }
+
+    /// <summary>
+    /// 플레이어가 벽 뒤로 가면 가려지도록, 벽 윗면 타일맵(wallTopTilemap)만 개별 타일 단위로 그리게 하고
+    /// 카메라가 Y좌표 기준으로 그리기 순서를 정하게 설정합니다.
+    /// (플레이어 SpriteRenderer의 Order in Layer가 wallTopTilemap과 같아야 Y-sort가 적용됨.
+    ///  wallTextureTilemap(앞면)은 플레이어보다 낮은 고정 Order in Layer를 쓰면 되므로 Y-sort 불필요.)
+    /// </summary>
+    private void ConfigureYSorting()
+    {
+        TilemapRenderer wallTopRenderer = wallTopTilemap.GetComponent<TilemapRenderer>();
+        if (wallTopRenderer != null)
+        {
+            wallTopRenderer.mode = TilemapRenderer.Mode.Individual;
+        }
+
+        if (Camera.main != null)
+        {
+            Camera.main.transparencySortMode = TransparencySortMode.CustomAxis;
+            Camera.main.transparencySortAxis = new Vector3(0f, 1f, 0f);
+        }
     }
 
     private void CacheAtlasSprites()
@@ -100,7 +123,7 @@ public class TilemapTextureLoader : Singleton<TilemapTextureLoader>
 
         if (topWallTile != null)
         {
-            wallTextureTilemap.SetTile(topGridPos, topWallTile);
+            wallTopTilemap.SetTile(topGridPos, topWallTile);
         }
 
         // =================================================================
@@ -130,7 +153,7 @@ public class TilemapTextureLoader : Singleton<TilemapTextureLoader>
 
         if (frontWallTile != null)
         {
-            wallTextureTilemap.SetTile(currentGridPos, frontWallTile);
+            wallBottomTilemap.SetTile(currentGridPos, frontWallTile);
         }
     }
 
@@ -159,42 +182,8 @@ public class TilemapTextureLoader : Singleton<TilemapTextureLoader>
     public void ClearTileTexture(Vector2Int pos)
     {
         floorTextureTilemap.SetTile((Vector3Int)pos, null);
-        wallTextureTilemap.SetTile((Vector3Int)pos, null);
+        wallBottomTilemap.SetTile((Vector3Int)pos, null);
+        wallTopTilemap.SetTile((Vector3Int)pos, null);
     }
 
-    /// <summary>
-    /// 윗면 타일의 비트마스크와 배치될 벽의 그리드 좌표를 기반으로 
-    /// 정면 벽의 아틀라스 좌표(Vector2Int)를 계산하여 반환합니다.
-    /// 벽을 생성하지 않아야 하는 경우 Vector2Int(-1, -1)을 반환합니다.
-    /// </summary>
-    private Vector2Int GetFrontWallAtlasCoordinate(Vector2Int wallGridPos, byte topTileBitmask)
-    {
-        // 1. 윗면 타일의 변 연결성 분해
-        bool e = (topTileBitmask & 4) != 0;  // 오른쪽 블록 존재 여부
-        bool w = (topTileBitmask & 64) != 0; // 왼쪽 블록 존재 여부
-
-        // 2. Y 좌표 오프셋 결정 (양옆의 연결 상태만 봅니다)
-        int yOffset = 0;
-        if (!w && !e) yOffset = 0;      // 양쪽이 다 뚫린 고립된 정면 벽 (Isolated)
-        else if (w && e) yOffset = 1;   // 사방이 꽉 찬 내부 및 연속된 정면 벽 (Straight)
-        else if (!w && e) yOffset = 2;  // 왼쪽만 뚫리고 오른쪽은 막힌 정면 벽 (Left Corner)
-        else if (w && !e) yOffset = 3;  // 왼쪽은 막히고 오른쪽이 뚫린 정면 벽 (Right Corner)
-
-        // 3. X 좌표 오프셋 결정 (기존의 홀짝 패턴 및 보석 확률 유지)
-        int xOffset = 0;
-        bool isEvenX = (Mathf.Abs(wallGridPos.x) % 2 == 0);
-        bool isGem = UnityEngine.Random.value < gemChance;
-
-        if (!isGem)
-        {
-            xOffset = isEvenX ? 1 : 0; // 일반 벽 변형 (X축 홀짝)
-        }
-        else
-        {
-            xOffset = isEvenX ? 3 : 2; // 보석 벽 변형
-        }
-
-        // 4. 기준 좌표(8, 4)에 오프셋을 더해 최종 아틀라스 좌표 반환
-        return new Vector2Int(frontAtlasBase.x + xOffset, frontAtlasBase.y + yOffset);
-    }
 }

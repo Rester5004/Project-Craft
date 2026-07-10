@@ -1,0 +1,30 @@
+[33m5725418[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m HEAD@{0}: pull --ff --recurse-submodules --progress origin: Merge made by the 'ort' strategy.
+[33mae96b49[m HEAD@{1}: commit: 인벤토리 UI + 인벤토리 핫바
+[33ma3dc5f5[m[33m ([m[1;31morigin/UI[m[33m, [m[1;32mUI[m[33m)[m HEAD@{2}: commit: 오브젝트 이름변경
+[33me4ba326[m HEAD@{3}: pull --ff --recurse-submodules --progress origin: Merge made by the 'ort' strategy.
+[33mb5952d5[m HEAD@{4}: commit: 맵 수정
+[33m75bac42[m HEAD@{5}: commit: mining
+[33m901ae8d[m HEAD@{6}: rebase (finish): returning to refs/heads/main
+[33m901ae8d[m HEAD@{7}: rebase (start): checkout origin/main
+[33m3adb63c[m HEAD@{8}: checkout: moving from UI to main
+[33m60e1ce1[m HEAD@{9}: commit: 11
+[33m3dde22d[m HEAD@{10}: commit (merge): Merge remote-tracking branch 'origin/main' into UI
+[33m3adb63c[m HEAD@{11}: checkout: moving from main to UI
+[33m3adb63c[m HEAD@{12}: merge UI: Fast-forward
+[33mc4fe030[m HEAD@{13}: checkout: moving from UI to main
+[33m3adb63c[m HEAD@{14}: commit: 1
+[33mab0eab4[m HEAD@{15}: checkout: moving from main to UI
+[33mc4fe030[m HEAD@{16}: checkout: moving from UI to main
+[33mab0eab4[m HEAD@{17}: commit: 머지가 안돼 ㅠㅠ
+[33mfed00fc[m HEAD@{18}: checkout: moving from map to UI
+[33mc4fe030[m HEAD@{19}: checkout: moving from main to map
+[33mc4fe030[m HEAD@{20}: checkout: moving from map to main
+[33mc4fe030[m HEAD@{21}: checkout: moving from main to map
+[33mc4fe030[m HEAD@{22}: merge map: Fast-forward
+[33m191e04b[m HEAD@{23}: checkout: moving from map to main
+[33mc4fe030[m HEAD@{24}: checkout: moving from UI to map
+[33mfed00fc[m HEAD@{25}: commit: UItest1
+[33mc4fe030[m HEAD@{26}: checkout: moving from map to UI
+[33mc4fe030[m HEAD@{27}: commit: map2
+[33m5cda95f[m HEAD@{28}: commit: 맵
+[33m191e04b[m HEAD@{29}: checkout: moving from main to map

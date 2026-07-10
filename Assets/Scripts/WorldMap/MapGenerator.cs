@@ -8,11 +8,11 @@ public class MapGenerator : MonoBehaviour
     [Header("타일맵")]
     [SerializeField] Tilemap blocksTilemap;
     [SerializeField] Tilemap floorTilemap;
+    [SerializeField] Tilemap placeableObjectsTilemap;
     [SerializeField] Transform player;
     [SerializeField] int renderDistance = 2;
 
 
-    WorldMap worldMap;
     Vector2Int lastChunk = Vector2Int.zero;
     private bool isFirstUpdate = true;
     private Dictionary<Vector2Int,Chunk> LoadedChunks = new Dictionary<Vector2Int,Chunk>();
@@ -20,7 +20,6 @@ public class MapGenerator : MonoBehaviour
 
     void Start()
     {
-        worldMap = new WorldMap();
         UpdateChunks();
     }
     private TileBase LoadTile(int Tileid) //floor : 0~9999 , blocks :10000 ~ 
@@ -37,7 +36,7 @@ public class MapGenerator : MonoBehaviour
 
     void UpdateChunks()
     {
-        Vector2Int playerChunk = Chunk.GetPlayerChunk(player.gameObject);
+        Vector2Int playerChunk = Chunk.GetChunkId(player.gameObject.transform.position);
 
         if (playerChunk == lastChunk && !isFirstUpdate)
             return;
@@ -46,10 +45,10 @@ public class MapGenerator : MonoBehaviour
         isFirstUpdate = false;
 
         LoadChunksAround(playerChunk);
-        worldMap.Save();
+        WorldMap.Instance.Save();
     }
 
-    void LoadChunksAround(Vector2Int playerChunk)
+    public void LoadChunksAround(Vector2Int playerChunk)
     {
         var toUnload = new List<Vector2Int>();
         foreach (var id in LoadedChunks.Keys)
@@ -72,24 +71,33 @@ public class MapGenerator : MonoBehaviour
                 var id = new Vector2Int(x, y);
                 if (!LoadedChunks.ContainsKey(id))
                 {
-                    Chunk chunk = worldMap.GetOrCreateChunk(id);
+                    Chunk chunk = WorldMap.Instance.GetOrCreateChunk(id);
                     RenderChunk(id, chunk);
                     LoadedChunks[id] = chunk;
                 }
             }
         }
 
-        // 2. 바닥 기본 텍스처 일괄 로드
+        RefreshAllTileTextures();
+    }
+
+    /// <summary>
+    /// 로드된 모든 청크의 바닥/벽 텍스처를 처음부터 다시 계산해서 그립니다.
+    /// LoadChunksAround가 청크 이동 시 항상 하던 것과 동일한 전체 재계산이라,
+    /// 채굴 등으로 블록 데이터가 바뀐 뒤에도 이걸 호출하면 청크를 넘어간 것과 같은 결과를 보장합니다.
+    /// </summary>
+    private void RefreshAllTileTextures()
+    {
+        // 바닥 기본 텍스처 일괄 로드
         foreach (var pos in GetFloorTilePositions())
         {
             TilemapTextureLoader.Instance.LoadFloorTexture(pos);
         }
 
-        // 3. 탑다운 뷰 특성을 고려하여 위(Y 최고값)에서부터 아래로 순회
+        // 탑다운 뷰 특성을 고려하여 위(Y 최고값)에서부터 아래로 순회
         List<Vector2Int> sortedChunkIds = new List<Vector2Int>(LoadedChunks.Keys);
         sortedChunkIds.Sort((a, b) => b.y.CompareTo(a.y)); // Y가 큰(위쪽) 청크부터 처리
 
-        // 2. 텍스처 렌더링 (윗면/앞면)
         foreach (var chunkId in sortedChunkIds)
         {
             int size = WorldMap.ChunkSize;
@@ -107,7 +115,7 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
-    void RenderChunk(Vector2Int id, Chunk chunk)
+    public void RenderChunk(Vector2Int id, Chunk chunk)
     {
         int size = WorldMap.ChunkSize;
         for (int ty = 0; ty < size; ty++){
@@ -115,16 +123,18 @@ public class MapGenerator : MonoBehaviour
             {
                 var pos = new Vector3Int(id.x * size + tx, id.y * size + ty, 0);
                 int tileId = chunk.GetTile(tx, ty);
-                if(tileId <= 9999)
+                if(tileId <= 9999){
+                    blocksTilemap.SetTile(pos, null);
                     floorTilemap.SetTile(pos, LoadTile(tileId));
-                else
-                    blocksTilemap.SetTile(pos, LoadTile(tileId));
-
-                
+                }
+                else{
+                    floorTilemap.SetTile(pos, null);
+                    blocksTilemap.SetTile(pos, LoadTile(tileId));       
+                }
             }
         }
     }
-    void UnLoadChunk(Vector2Int id, Chunk chunk)
+    public void UnLoadChunk(Vector2Int id, Chunk chunk)
     {
         int size = WorldMap.ChunkSize;
         for (int ty = 0; ty < size; ty++){
@@ -150,26 +160,35 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 채굴로 블록이 제거된 위치의 데이터 타일맵(blocks/floor)과
+    /// 벽 오토타일링(자신 + 8방향 이웃)을 즉시 갱신합니다.
+    /// </summary>
+    public void RefreshMinedTile(Vector2Int worldPos)
+    {
+        Vector3Int pos = (Vector3Int)worldPos;
+
+        blocksTilemap.SetTile(pos, null);
+        floorTilemap.SetTile(pos, LoadTile(0));
+
+        // 캔 블록이 자신(앞면)과 한 칸 위(윗면)에 그려뒀던 예전 벽 텍스처를 먼저 지운다.
+        // LoadWallTexture는 블록이 있을 때만 새로 그릴 뿐, 없어진 블록의 흔적을 지우지는 않기 때문.
+        TilemapTextureLoader.Instance.ClearTileTexture(worldPos);
+        TilemapTextureLoader.Instance.ClearTileTexture(worldPos + Vector2Int.up);
+
+        RefreshAllTileTextures();
+    }
+
     public IEnumerable<Vector2Int> GetFloorTilePositions()
     {
-        BoundsInt bounds = floorTilemap.cellBounds;
-        TileBase[] allTiles = floorTilemap.GetTilesBlock(bounds);
-        int sizeX = bounds.size.x;
-        int sizeY = bounds.size.y;
-        int sizeZ = bounds.size.z;
-        for (int z = 0; z < sizeZ; z++)
+        foreach (var chunkId in LoadedChunks.Keys)
         {
-            for (int y = 0; y < sizeY; y++)
+            for (int tx = 0; tx < WorldMap.ChunkSize; tx++)
             {
-                for (int x = 0; x < sizeX; x++)
+                for (int ty = 0; ty < WorldMap.ChunkSize; ty++)
                 {
-                    int index = x + (y * sizeX) + (z * sizeX * sizeY);
-                    if (allTiles[index] != null)
-                    {
-                        int worldX = bounds.xMin + x;
-                        int worldY = bounds.yMin + y;
-                        yield return new Vector2Int(worldX, worldY);
-                    }
+                    Vector2Int worldPos = new Vector2Int(chunkId.x * WorldMap.ChunkSize + tx, chunkId.y * WorldMap.ChunkSize + ty);
+                    yield return worldPos;
                 }
             }
         }
