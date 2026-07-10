@@ -11,6 +11,7 @@ public class PlayerForTest : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        rb.gravityScale = 0f;
     }
 
     void Update()
