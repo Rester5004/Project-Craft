@@ -320,13 +320,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b09e8e502974ddc87d41f6bdc7523e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MachinePlacement
-  inventory: {fileID: 0}
   occupiedLayers:
     serializedVersion: 2
     m_Bits: 192
   occupancyCheckSize: 0.8
-  testSelectedMachine: {fileID: 11400000, guid: cdcb3306c8e3479cabee431565edfa22, type: 2}
-  testMachineSprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
+  placementFlag: 0
 --- !u!1 &656517842
 GameObject:
   m_ObjectHideFlags: 0

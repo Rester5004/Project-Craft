@@ -14,5 +14,4 @@ public class machine : Items
 {
     public int machineType;
     public int machineLevel;
-    public GameObject worldPrefab;
 }
