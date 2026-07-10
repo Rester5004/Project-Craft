@@ -11,7 +11,7 @@ public class MachinePlacement : MonoBehaviour
 
     private void Update()
     {
-        if (UIManager.Instance != null && UIManager.Instance.IsAnyUIOpen) return;
+        if (UIManager.Instance != null && UIManager.Instance.isAnyUIOpen) return;
         if (Mouse.current == null || !Mouse.current.rightButton.wasPressedThisFrame) return;
         if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject()) return;
 

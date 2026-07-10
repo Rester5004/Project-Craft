@@ -1,16 +1,6 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
-public class PlaceableObject
-{
-    public int id;
-    public Vector2Int positionToPlace;
-    public PlaceableObject(int id, Vector2Int positionToPlace)
-    {
-        this.id = id;
-        this.positionToPlace = positionToPlace;
-    }
-}
 public class InputActionManager : Singleton<InputActionManager>
 {
     private const string BindingOverridesKey = "InputBindingOverrides";
@@ -27,7 +17,6 @@ public class InputActionManager : Singleton<InputActionManager>
     public event Action OnUsePerformed;
     public event Action OnHitPerformed;
     public event Action OnToggleInventoryPerformed;
-    public event Action<PlaceableObject> OnPlaceObject;
     public event Action<int> OnHotbarSlotSelected; // 0~9 (핫바 내 슬롯 인덱스)
 
     public Vector2 MoveValue => moveAction?.ReadValue<Vector2>() ?? Vector2.zero;
