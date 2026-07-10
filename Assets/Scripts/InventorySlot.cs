@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 using TMPro;
 
 public class InventorySlot : MonoBehaviour,
-    IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler
+    IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler, IPointerClickHandler
 {
     public Image iconImage;      // 인스펙터에서 Icon 연결
     public TMP_Text countText;   // 인스펙터에서 Count 연결
@@ -67,5 +67,10 @@ public class InventorySlot : MonoBehaviour,
         // 양쪽 새로고침
         draggedFrom.inventory.OnChanged?.Invoke();
         inventory.OnChanged?.Invoke();
+    }
+    public void OnPointerClick(PointerEventData e)
+    {
+        if (e.button == PointerEventData.InputButton.Left)
+            inventory.SelectSlot(index);
     }
 }

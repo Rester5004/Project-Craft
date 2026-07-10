@@ -12,6 +12,7 @@ public class Inventory : MonoBehaviour
 {
     public int size = 20;
     public List<ItemStack> slots = new List<ItemStack>();
+    public int selectedSlotIndex { get; private set; } = -1;
 
     // UI가 "바뀌었으니 다시 그려!"를 알 수 있게 알림
     public System.Action OnChanged;
@@ -47,5 +48,31 @@ public class Inventory : MonoBehaviour
             }
         }
         return false; // 인벤토리 가득 참
+    }
+    public ItemStack GetSelectedStack()
+    {
+        if (selectedSlotIndex < 0 || selectedSlotIndex >= slots.Count) return null;
+
+        ItemStack stack = slots[selectedSlotIndex];
+        return stack.item != null && stack.count > 0 ? stack : null;
+    }
+
+    public void SelectSlot(int index)
+    {
+        if (index >= 0 && index < slots.Count) selectedSlotIndex = index;
+    }
+
+    public void ConsumeSelectedItem()
+    {
+        ItemStack stack = GetSelectedStack();
+        if (stack == null) return;
+
+        stack.count--;
+        if (stack.count == 0)
+        {
+            stack.item = null;
+            selectedSlotIndex = -1;
+        }
+        OnChanged?.Invoke();
     }
 }
