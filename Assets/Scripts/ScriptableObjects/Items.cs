@@ -7,8 +7,8 @@ public class Items : ScriptableObject
     public Sprite Icon;
     public int itemID;
     public int maxStack;
-
 }
+
 [CreateAssetMenu(fileName = "machine", menuName = "Items/machines")]
 public class machine : Items
 {

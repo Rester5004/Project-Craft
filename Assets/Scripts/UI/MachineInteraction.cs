@@ -10,6 +10,7 @@ public class MachineInteraction : MonoBehaviour
     [Header("Interaction Settings")]
     [SerializeField] private LayerMask machineLayer;
     [SerializeField] private float interactRange = 1.5f;
+    private bool useRequested;
 
     void OnEnable()
     {
@@ -25,6 +26,16 @@ public class MachineInteraction : MonoBehaviour
 
     private void HandleUsePerformed()
     {
+        useRequested = true;
+    }
+
+    private void Update()
+    {
+        if (!useRequested)
+            return;
+
+        useRequested = false;
+
         if (machineUI != null && machineUI.activeSelf)
             return;
 
