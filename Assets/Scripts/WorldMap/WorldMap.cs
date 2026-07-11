@@ -66,6 +66,18 @@ public class WorldMap : Singleton<WorldMap>
             File.Copy(DefaultWorldmapPath, savePath);
     }
 
+    protected override void OnApplicationQuit()
+    {
+        base.OnApplicationQuit();
+        Save();
+    }
+
+    private void OnApplicationPause(bool pauseStatus)
+    {
+        if (pauseStatus)
+            Save();
+    }
+
     public Chunk GetOrCreateChunk(Vector2Int chunkId)
     {
         if (!chunks.TryGetValue(chunkId, out Chunk chunk))

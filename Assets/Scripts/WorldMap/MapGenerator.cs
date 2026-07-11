@@ -11,10 +11,12 @@ public class MapGenerator : MonoBehaviour
     [SerializeField] Tilemap placeableObjectsTilemap;
     [SerializeField] Transform player;
     [SerializeField] int renderDistance = 2;
+    [SerializeField] float saveCooldown = 10f; // 이 시간(초)이 지난 뒤에만 청크 이동 시 저장
 
 
     Vector2Int lastChunk = Vector2Int.zero;
     private bool isFirstUpdate = true;
+    private float lastSaveTime = -Mathf.Infinity;
     private Dictionary<Vector2Int,Chunk> LoadedChunks = new Dictionary<Vector2Int,Chunk>();
 
 
@@ -45,7 +47,12 @@ public class MapGenerator : MonoBehaviour
         isFirstUpdate = false;
 
         LoadChunksAround(playerChunk);
-        WorldMap.Instance.Save();
+
+        if (Time.time - lastSaveTime >= saveCooldown)
+        {
+            WorldMap.Instance.Save();
+            lastSaveTime = Time.time;
+        }
     }
 
     public void LoadChunksAround(Vector2Int playerChunk)
@@ -173,10 +180,33 @@ public class MapGenerator : MonoBehaviour
 
         // 캔 블록이 자신(앞면)과 한 칸 위(윗면)에 그려뒀던 예전 벽 텍스처를 먼저 지운다.
         // LoadWallTexture는 블록이 있을 때만 새로 그릴 뿐, 없어진 블록의 흔적을 지우지는 않기 때문.
+        // (ClearTileTexture가 floorTextureTilemap도 같이 지우므로, 바닥 텍스처는 반드시 이 다음에 그려야 함)
         TilemapTextureLoader.Instance.ClearTileTexture(worldPos);
         TilemapTextureLoader.Instance.ClearTileTexture(worldPos + Vector2Int.up);
 
-        RefreshAllTileTextures();
+        // 지운 두 자리 중 실제로 바닥 데이터가 있는 칸은 바닥 텍스처를 다시 그려준다.
+        // (worldPos + up이 원래 바닥이었다면, 캔 블록의 "윗면" 텍스처를 지우면서
+        //  그 자리의 바닥 텍스처까지 같이 지워졌기 때문에 복원이 필요함)
+        if (floorTilemap.GetTile(pos) != null)
+            TilemapTextureLoader.Instance.LoadFloorTexture(worldPos);
+
+        Vector3Int upPos = pos + Vector3Int.up;
+        if (floorTilemap.GetTile(upPos) != null)
+            TilemapTextureLoader.Instance.LoadFloorTexture(worldPos + Vector2Int.up);
+
+        // 영향받는 범위(자신 + 8방향 이웃)만 갱신 - LoadChunksAround와 동일하게
+        // Y가 큰(위쪽) 칸부터 순서대로 다시 그려야 아래 블록의 윗면이 위 블록의 앞면을 올바르게 덮어쓴다.
+        List<Vector2Int> affected = new() { worldPos };
+        foreach (Vector2Int dir in TileAtlasManager.All8Directions)
+        {
+            affected.Add(worldPos + dir);
+        }
+        affected.Sort((a, b) => b.y.CompareTo(a.y));
+
+        foreach (Vector2Int p in affected)
+        {
+            TilemapTextureLoader.Instance.LoadWallTexture(p);
+        }
     }
 
     public IEnumerable<Vector2Int> GetFloorTilePositions()
@@ -188,7 +218,8 @@ public class MapGenerator : MonoBehaviour
                 for (int ty = 0; ty < WorldMap.ChunkSize; ty++)
                 {
                     Vector2Int worldPos = new Vector2Int(chunkId.x * WorldMap.ChunkSize + tx, chunkId.y * WorldMap.ChunkSize + ty);
-                    yield return worldPos;
+                    if (floorTilemap.GetTile((Vector3Int)worldPos) != null)
+                        yield return worldPos;
                 }
             }
         }
