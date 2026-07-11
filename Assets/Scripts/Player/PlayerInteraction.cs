@@ -62,4 +62,25 @@ public class PlayerInteraction : MonoBehaviour
         if (WorldMap.Instance.Mining(targetChunk, targetCell))
             mapGenerator.RefreshMinedTile(targetGlobalCell);
     }
+    void Update()
+    {
+        Vector2 mouseScreenPos = Mouse.current.position.ReadValue(); 
+        Vector2 mousePos = Camera.main.ScreenToWorldPoint(mouseScreenPos);
+
+        Vector2Int chunkToMining = Chunk.GetChunkId(mousePos);
+        Vector2Int toMining = Chunk.GetLocalCellPositionInChunk(mousePos);
+
+        Vector2Int playerChunk = Chunk.GetChunkId(transform.position);
+        Vector2Int playerCell = Chunk.GetLocalCellPositionInChunk(transform.position);
+
+        Vector2Int targetGlobalCell = chunkToMining * WorldMap.ChunkSize + toMining;
+        Vector2Int playerGlobalCell = playerChunk * WorldMap.ChunkSize + playerCell;
+        Vector2Int delta = targetGlobalCell - playerGlobalCell;
+
+        bool isCardinalAdjacent = Mathf.Abs(delta.x) + Mathf.Abs(delta.y) == 1;
+        if(isCardinalAdjacent)
+        {
+            TilemapTextureLoader.Instance.ShowOutline(targetGlobalCell);
+        }
+    }
 }
