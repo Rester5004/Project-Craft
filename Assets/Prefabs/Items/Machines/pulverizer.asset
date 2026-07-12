@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: pulverizer
   m_EditorClassIdentifier: Assembly-CSharp::machine
   itemName: pulverizer
+  placeable: 1
   Icon: {fileID: 2377217749489558504, guid: 1c2c475598576b74684240e2949206f0, type: 3}
   itemID: 0
   maxStack: 0

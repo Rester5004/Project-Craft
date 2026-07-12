@@ -13,7 +13,7 @@ public class Inventory : Singleton<Inventory>
 {
     public int size;
     public List<ItemStack> slots;
-    public int selectedSlotIndex { get; private set; } = -1;
+    private int selectedSlotIndex=30;
     public System.Action OnChanged;
 
     protected override void Awake()
@@ -23,7 +23,24 @@ public class Inventory : Singleton<Inventory>
         for (int i = 0; i < size; i++)
             slots.Add(new ItemStack());
     }
-
+    public void SetSeclectedSlotIndex(int index)
+    {
+        if (index<=39 && index>=0){
+            selectedSlotIndex = index+30;
+        }
+        else
+        {
+            Debug.LogError("Selected slot index out of range. Must be between 0 and 9.");
+        }
+    }
+    public ItemStack GetSelectedItem()
+    {
+        if (selectedSlotIndex < 0 || selectedSlotIndex >= slots.Count)
+        {
+            throw new System.IndexOutOfRangeException("Selected slot index is out of range.");
+        }
+        return slots[selectedSlotIndex];
+    }
     public bool AddItem(Items item, int amount)
     {
         foreach (ItemStack stack in slots)

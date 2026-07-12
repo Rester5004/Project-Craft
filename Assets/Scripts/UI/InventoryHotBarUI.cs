@@ -26,6 +26,7 @@ public class InventoryHotBarUI : MonoBehaviour
         inventory.OnChanged += Refresh; // 데이터 바뀌면 자동으로 다시 그림
         Refresh();
         slots[selectedSlot].SetSelected(true); // 기본으로 1번 키 슬롯이 선택된 상태로 시작
+        inventory.SetSeclectedSlotIndex(selectedSlot); // 인벤토리에도 선택된 슬롯 인덱스 전달
     }
 
     void Refresh() { foreach (var s in slots) s.Refresh(); }
@@ -48,6 +49,7 @@ public class InventoryHotBarUI : MonoBehaviour
         slots[selectedSlot].SetSelected(false);
         selectedSlot = slot;
         slots[selectedSlot].SetSelected(true);
+        inventory.SetSeclectedSlotIndex(slot);
     }
 
     void OnDestroy()

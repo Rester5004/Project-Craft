@@ -417,6 +417,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TilemapTextureLoader
   tilemapTexture: {fileID: 2800000, guid: 95f0bf8b3cdece945abff3441bd3b7e6, type: 3}
+  floorOutLine: {fileID: 11400000, guid: 3b40fd614395bf84689eed118520c487, type: 2}
   outlineTexture: {fileID: 2800000, guid: 7a6c39590bd37fe4a81cf94956623ae1, type: 3}
   atlasGridSize: {x: 12, y: 8}
   frontAtlasBase: {x: 8, y: 0}
@@ -1554,7 +1555,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMining
   mapGenerator: {fileID: 509693330}
-  inventory: {fileID: 0}
+  occupiedLayers:
+    serializedVersion: 2
+    m_Bits: 192
+  occupancyCheckSize: 0.8
+  placementFlag: 0
 --- !u!70 &895500070
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

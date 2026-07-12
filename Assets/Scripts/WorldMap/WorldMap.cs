@@ -53,6 +53,7 @@ public class WorldMap : Singleton<WorldMap>
 
     private Dictionary<Vector2Int, Chunk> chunks;
     private string savePath;
+    private bool isLoaded;
 
     protected override void Awake()
     {
@@ -63,7 +64,12 @@ public class WorldMap : Singleton<WorldMap>
         if (File.Exists(savePath))
             Load(savePath);
         else if (File.Exists(DefaultWorldmapPath))
+        {
             File.Copy(DefaultWorldmapPath, savePath);
+            Load(savePath);
+        }
+        else
+            isLoaded = true;
     }
 
     protected override void OnApplicationQuit()
@@ -116,6 +122,7 @@ public class WorldMap : Singleton<WorldMap>
 
     public void Save(string path)
     {
+        if (!isLoaded) return;
         using BinaryWriter writer = new(File.Open(path, FileMode.Create));
         writer.Write(chunks.Count);
         foreach (var kvp in chunks)
@@ -129,13 +136,24 @@ public class WorldMap : Singleton<WorldMap>
     public void Load(string path)
     {
         chunks.Clear();
-        using BinaryReader reader = new(File.Open(path, FileMode.Open));
-        int count = reader.ReadInt32();
-        for (int i = 0; i < count; i++)
+        try
         {
-            int cx = reader.ReadInt32();
-            int cy = reader.ReadInt32();
-            chunks[new Vector2Int(cx, cy)] = Chunk.Load(reader);
+            using BinaryReader reader = new(File.Open(path, FileMode.Open));
+            int count = reader.ReadInt32();
+            for (int i = 0; i < count; i++)
+            {
+                int cx = reader.ReadInt32();
+                int cy = reader.ReadInt32();
+                chunks[new Vector2Int(cx, cy)] = Chunk.Load(reader);
+            }
+            isLoaded = true;
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogWarning($"[WorldMap] 세이브 파일 로드 실패, 새로 생성합니다: {e.Message}");
+            chunks.Clear();
+            File.Delete(path);
+            isLoaded = true;
         }
     }
 }

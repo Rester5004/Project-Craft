@@ -6,6 +6,7 @@ public class TilemapTextureLoader : Singleton<TilemapTextureLoader>
 {
     [Header("아틀라스 설정")]
     public Texture2D tilemapTexture;
+    public Tile floorOutLine;
     public Texture2D outlineTexture; // 슬라이스한 타일맵 PNG 파일 등록
     public Vector2Int atlasGridSize = new Vector2Int(16, 16); // 아틀라스의 전체 가로/세로 타일 개수 (예: 16x16칸짜리 이미지)
     public Vector2Int frontAtlasBase = new Vector2Int(8, 0); // X=8, Y=4
@@ -34,6 +35,7 @@ public class TilemapTextureLoader : Singleton<TilemapTextureLoader>
     // 현재 outline이 표시되어 있는 위치 (ShowOutline 재호출 시 이전 outline을 지우기 위해 추적)
     private Vector2Int? currentOutlinePos;
 
+    private bool isFloorOutLine;
     protected override void Awake()
     {
         base.Awake();
@@ -265,9 +267,15 @@ public class TilemapTextureLoader : Singleton<TilemapTextureLoader>
     {
         ClearOutline();
 
-        if (blocksTilemap.GetTile((Vector3Int)pos) == null)
+        if (blocksTilemap.GetTile((Vector3Int)pos) == null){
+            if(floorTilemap.GetTile((Vector3Int)pos)!=null)
+            {
+                isFloorOutLine = true;
+                outlineTilemap.SetTile((Vector3Int)pos, floorOutLine);
+                currentOutlinePos = pos;
+            }
             return;
-
+        }
         var (topAtlas, frontAtlas) = CalculateWallAtlasCoords(pos);
 
         Tile topOutline = CreateRuntimeOutlineTile(topAtlas);
@@ -284,7 +292,13 @@ public class TilemapTextureLoader : Singleton<TilemapTextureLoader>
     public void ClearOutline()
     {
         if (currentOutlinePos == null) return;
-
+        if(isFloorOutLine)
+        {
+            outlineTilemap.SetTile((Vector3Int)currentOutlinePos.Value, null);
+            isFloorOutLine = false;
+            currentOutlinePos = null;
+            return;
+        }
         Vector2Int pos = currentOutlinePos.Value;
         outlineTilemap.SetTile((Vector3Int)pos, null);
         outlineTilemap.SetTile((Vector3Int)(pos + Vector2Int.up), null);
