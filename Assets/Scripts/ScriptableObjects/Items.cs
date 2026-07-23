@@ -6,7 +6,6 @@ public class Items : ScriptableObject
     public string itemName;
     public bool placeable;
     public Sprite Icon;
-    public int itemID;
     public int maxStack;
 }
 

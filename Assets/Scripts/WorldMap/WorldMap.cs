@@ -1,17 +1,19 @@
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
-
 public class Chunk
 {
-    private int[,] tiles;
+    private string[,] tiles;
 
     public Chunk()
     {
-        tiles = new int[16, 16];
+        tiles = new string[16, 16];
     }
 
-    //타일맵 transform이 (0,0,0)이고, 셀 사이즈가 1일때만 작동하는 함수. 
+    public static bool IsWall(string tileId)  => tileId != null && tileId.StartsWith("wall:");
+    public static bool IsFloor(string tileId) => tileId != null && tileId.StartsWith("floor:");
+
+    //타일맵 transform이 (0,0,0)이고, 셀 사이즈가 1일때만 작동하는 함수.
     public static Vector2Int GetChunkId(Vector3 pos)
     {
         return new Vector2Int((int)((Mathf.FloorToInt(pos.x) & ~15) / 16), (int)(((Mathf.FloorToInt(pos.y)) & ~15) / 16));
@@ -22,14 +24,14 @@ public class Chunk
         int localY = Mathf.FloorToInt(pos.y) & 15;
         return new Vector2Int(localX, localY);
     }
-    public int GetTile(int x, int y) => tiles[y, x];
-    public void SetTile(int x, int y, int tileID) => tiles[y, x] = tileID;
+    public string GetTile(int x, int y) => tiles[y, x];
+    public void SetTile(int x, int y, string tileId) => tiles[y, x] = tileId;
 
     public void Save(BinaryWriter writer)
     {
         for (int y = 0; y < 16; y++)
             for (int x = 0; x < 16; x++)
-                writer.Write(tiles[y, x]);
+                writer.Write(tiles[y, x] ?? "");
     }
 
     public static Chunk Load(BinaryReader reader)
@@ -37,7 +39,7 @@ public class Chunk
         Chunk chunk = new();
         for (int y = 0; y < 16; y++)
             for (int x = 0; x < 16; x++)
-                chunk.tiles[y, x] = reader.ReadInt32();
+                chunk.tiles[y, x] = reader.ReadString();
         return chunk;
     }
 }
@@ -96,9 +98,9 @@ public class WorldMap : Singleton<WorldMap>
     public bool Mining(Vector2Int chunkId, Vector2Int cellPos)
     {
         Chunk chunk = GetOrCreateChunk(chunkId);
-        if(chunk.GetTile(cellPos.x, cellPos.y) > 9999)
+        if (Chunk.IsWall(chunk.GetTile(cellPos.x, cellPos.y)))
         {
-            chunk.SetTile(cellPos.x, cellPos.y, 0);
+            chunk.SetTile(cellPos.x, cellPos.y, "floor:dirt");
             return true;
         }
         return false;
@@ -113,7 +115,7 @@ public class WorldMap : Singleton<WorldMap>
                 int wx = chunkId.x * ChunkSize + tx;
                 int wy = chunkId.y * ChunkSize + ty;
                 bool inSpawn = wx >= -3 && wx <= 2 && wy >= -2 && wy <= 3;
-                chunk.SetTile(tx, ty, inSpawn ? 0 : 10000);
+                chunk.SetTile(tx, ty, inSpawn ? "floor:dirt" : "wall:stone");
             }
         return chunk;
     }

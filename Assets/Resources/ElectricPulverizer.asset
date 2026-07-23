@@ -10,12 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 0}
-  m_Name: pulverizer
-  m_EditorClassIdentifier: Assembly-CSharp::machine
-  itemName: Machine:ElectricPulverizer
-  placeable: 1
-  Icon: {fileID: 2377217749489558504, guid: 1c2c475598576b74684240e2949206f0, type: 3}
-  maxStack: 64
-  machineType: 0
-  machineLevel: 0
-  voltageLevel: 0
+  m_Name: ElectricPulverizer
+  m_EditorClassIdentifier: Assembly-CSharp::MachineBlock
+  blockName: Machine:ElectricPulverizer
+  machinePrefab: {fileID: 2401623937405327994, guid: 787fbed919a8b05458dfc1727af4f62a, type: 3}

@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.Tilemaps;
 
 public class PlayerInteraction : MonoBehaviour
 {
@@ -15,7 +16,6 @@ public class PlayerInteraction : MonoBehaviour
 
     [SerializeField] private LayerMask occupiedLayers = (1 << 6) | (1 << 7);
     [SerializeField, Range(0.1f, 1f)] private float occupancyCheckSize = 0.8f;
-    [SerializeField] private int placementFlag;
 
     private void OnEnable()
     {
@@ -56,11 +56,14 @@ public class PlayerInteraction : MonoBehaviour
         if(selectedItemStack == null || selectedItemStack.item == null || !selectedItemStack.item.placeable)
             return;
         Vector2 mouseWorldPosition = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-        Vector2Int playerCell = Vector2Int.RoundToInt(transform.position);
-        Vector2Int targetCell = Vector2Int.RoundToInt(mouseWorldPosition);
+        Vector2Int playerCell = new Vector2Int(mapGenerator.blocksTilemap.WorldToCell(transform.position).x,mapGenerator.blocksTilemap.WorldToCell(transform.position).y);
+        Vector2Int targetCell = new Vector2Int(mapGenerator.blocksTilemap.WorldToCell(mouseWorldPosition).x,mapGenerator.blocksTilemap.WorldToCell(mouseWorldPosition).y);
         Vector2Int difference = targetCell - playerCell;
-
-        if (Mathf.Abs(difference.x) + Mathf.Abs(difference.y) != 1) return;
+        if (Mathf.Abs(difference.x) + Mathf.Abs(difference.y) > 1)
+        {
+            Debug.Log($"errer: Difference is {Mathf.Abs(difference.x) + Mathf.Abs(difference.y)}");
+            return;
+        }
         /*
         Collider2D occupiedCollider = Physics2D.OverlapBox(
             targetCell,
@@ -70,9 +73,13 @@ public class PlayerInteraction : MonoBehaviour
 
         if (occupiedCollider != null) return;
         */
-        
-        placementFlag = 1;
-        Debug.Log($"[MachinePlacement] 설치 요청 성공. placementFlag = {placementFlag}, 위치: {targetCell}");
+        Debug.Log($"[MachinePlacement] 설치 요청 성공. placeitem = {selectedItemStack.item.itemName}, 위치: {targetCell}");
+        Tile t= ScriptableObject.CreateInstance<Tile>();
+        t.gameObject= ItemDictionary.Instance.GetGameObjectFromBlockDictionary(selectedItemStack.item.itemName);
+        t.gameObject.GetComponent<SpriteRenderer>().sortingOrder=2;
+        mapGenerator.placeableObjectsTilemap.SetTile(new Vector3Int(targetCell.x,targetCell.y,0),t);
+        selectedItemStack.count--;
+        Inventory.Instance.OnChanged?.Invoke();
     }
     private bool GetIsCardinalAdjacent(Vector2Int targetGlobalCell, Vector2Int playerGlobalCell)
     {

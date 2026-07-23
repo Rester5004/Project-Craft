@@ -10,12 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 0}
-  m_Name: pulverizer
-  m_EditorClassIdentifier: Assembly-CSharp::machine
-  itemName: Machine:ElectricPulverizer
-  placeable: 1
-  Icon: {fileID: 2377217749489558504, guid: 1c2c475598576b74684240e2949206f0, type: 3}
-  maxStack: 64
-  machineType: 0
-  machineLevel: 0
-  voltageLevel: 0
+  m_Name: StoneObject
+  m_EditorClassIdentifier: Assembly-CSharp::MainBlock
+  blockName: wall:stone
+  assetPath: {fileID: 11400000, guid: 7feeda1a31b3f2f449dc49455a2f285e, type: 2}

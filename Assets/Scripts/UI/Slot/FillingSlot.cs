@@ -8,9 +8,10 @@ public class FillingSlot : MonoBehaviour
     [SerializeField] Image _fillImage;
     [SerializeField] Image _particleImage;
     [SerializeField] Image _overImage;
-
     [Range(0f, 1f)]
     [SerializeField] float _fillAmount = 0f;
+
+    private Color originalParticleColor;
     public float FillAmount
     {
         get
@@ -25,7 +26,10 @@ public class FillingSlot : MonoBehaviour
             UpdateLayout(newValue);
         }
     }
-
+    private void Start()
+    {
+        originalParticleColor = _particleImage.color;
+    }
     private void Update()
     {
         UpdateLayout(_fillAmount);
@@ -46,11 +50,11 @@ public class FillingSlot : MonoBehaviour
         // 많이 차있다면 particle 이미지 투명화
         if (_fillAmount > 0.9f || _fillAmount < 0.05f)
         {
-            _particleImage.color = new Color(1, 1, 1, 0);
+            _particleImage.color = new Color(originalParticleColor.r, originalParticleColor.g, originalParticleColor.b, 0);
         }
         else
         {
-            _particleImage.color = new Color(1, 1, 1, 1);
+            _particleImage.color = new Color(originalParticleColor.r, originalParticleColor.g, originalParticleColor.b, 1);
         }
     }
 

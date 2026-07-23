@@ -6,9 +6,9 @@ public class MapGenerator : MonoBehaviour
 {
 
     [Header("타일맵")]
-    [SerializeField] Tilemap blocksTilemap;
-    [SerializeField] Tilemap floorTilemap;
-    [SerializeField] Tilemap placeableObjectsTilemap;
+    [SerializeField] public Tilemap blocksTilemap;
+    [SerializeField] public Tilemap floorTilemap;
+    [SerializeField] public Tilemap placeableObjectsTilemap;
     [SerializeField] Transform player;
     [SerializeField] int renderDistance = 2;
     [SerializeField] float saveCooldown = 10f; // 이 시간(초)이 지난 뒤에만 청크 이동 시 저장
@@ -24,11 +24,12 @@ public class MapGenerator : MonoBehaviour
     {
         UpdateChunks();
     }
-    private TileBase LoadTile(int Tileid) //floor : 0~9999 , blocks :10000 ~ 
+    private TileBase LoadTile(string blockId)
     {
-        TileBase tile = Resources.Load<TileBase>(Tileid.ToString());
-        if (tile == null)
-            Debug.LogError($"Tile at id '{Tileid}' not found.");
+        if (string.IsNullOrEmpty(blockId)) return null;
+        TileBase tile = ItemDictionary.Instance.GetTileFromBlockDictionary(blockId);
+        if(tile == null)
+            Debug.LogError($"Tile '{blockId}' not found.");
         return tile;
     }
     void Update()
@@ -129,14 +130,14 @@ public class MapGenerator : MonoBehaviour
             for (int tx = 0; tx < size; tx++)
             {
                 var pos = new Vector3Int(id.x * size + tx, id.y * size + ty, 0);
-                int tileId = chunk.GetTile(tx, ty);
-                if(tileId <= 9999){
-                    blocksTilemap.SetTile(pos, null);
-                    floorTilemap.SetTile(pos, LoadTile(tileId));
+                string tileId = chunk.GetTile(tx, ty);
+                if (Chunk.IsWall(tileId)){
+                    floorTilemap.SetTile(pos, null);
+                    blocksTilemap.SetTile(pos, LoadTile(tileId));
                 }
                 else{
-                    floorTilemap.SetTile(pos, null);
-                    blocksTilemap.SetTile(pos, LoadTile(tileId));       
+                    blocksTilemap.SetTile(pos, null);
+                    floorTilemap.SetTile(pos, LoadTile(tileId));
                 }
             }
         }
@@ -148,12 +149,11 @@ public class MapGenerator : MonoBehaviour
             for (int tx = 0; tx < size; tx++)
             {
                 var pos = new Vector3Int(id.x * size + tx, id.y * size + ty, 0);
-                int tileId = chunk.GetTile(tx, ty);
-                if(tileId <= 9999)
-                    floorTilemap.SetTile(pos, null);
-                else
+                string tileId = chunk.GetTile(tx, ty);
+                if (Chunk.IsWall(tileId))
                     blocksTilemap.SetTile(pos, null);
-
+                else
+                    floorTilemap.SetTile(pos, null);
             }
         }
 
@@ -176,7 +176,7 @@ public class MapGenerator : MonoBehaviour
         Vector3Int pos = (Vector3Int)worldPos;
 
         blocksTilemap.SetTile(pos, null);
-        floorTilemap.SetTile(pos, LoadTile(0));
+        floorTilemap.SetTile(pos, LoadTile("floor:dirt"));
 
         // 캔 블록이 자신(앞면)과 한 칸 위(윗면)에 그려뒀던 예전 벽 텍스처를 먼저 지운다.
         // LoadWallTexture는 블록이 있을 때만 새로 그릴 뿐, 없어진 블록의 흔적을 지우지는 않기 때문.

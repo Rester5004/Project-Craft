@@ -1,19 +1,19 @@
 fileFormatVersion: 2
-guid: 42fccb39c80605e4c8f4d67afa4c9bf5
+guid: 7ae82a58573105e42972c4b3aa9835c4
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -3027114427693065897
-    second: ui_electricity_slot_0
+      213: 8694651943097949942
+    second: ui_electricity_slot 1_0
   - first:
-      213: 2293801183540688290
-    second: ui_electricity_slot_1
+      213: 3129745561154087562
+    second: ui_electricity_slot 1_1
   - first:
-      213: -8583858393449737627
-    second: ui_electricity_slot_2
+      213: -2902984040716256362
+    second: ui_electricity_slot 1_2
   - first:
-      213: 6835277808455757718
-    second: ui_electricity_slot_3
+      213: 2842286848439353896
+    second: ui_electricity_slot 1_3
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -56,7 +56,7 @@ TextureImporter:
   lightmap: 0
   compressionQuality: 50
   spriteMode: 2
-  spriteExtrude: 0
+  spriteExtrude: 1
   spriteMeshType: 0
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
@@ -106,7 +106,7 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 4
-    buildTarget: WebGL
+    buildTarget: WindowsStoreApps
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -118,24 +118,11 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: WindowsStoreApps
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 0
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: ui_electricity_slot_upper
+      name: ui_electricity_slot 1_0
       rect:
         serializedVersion: 2
         x: 0
@@ -150,14 +137,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 75915e267778df5d0800000000000000
-      internalID: -3027114427693065897
+      spriteID: 6fe530240eb99a870800000000000000
+      internalID: 8694651943097949942
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ui_electricity_slot_under
+      name: ui_electricity_slot 1_1
       rect:
         serializedVersion: 2
         x: 32
@@ -172,14 +159,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 2a5305af50835df10800000000000000
-      internalID: 2293801183540688290
+      spriteID: a8ae1f971071f6b20800000000000000
+      internalID: 3129745561154087562
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ui_electricity_slot_body
+      name: ui_electricity_slot 1_2
       rect:
         serializedVersion: 2
         x: 64
@@ -194,30 +181,30 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 5625c28354200e880800000000000000
-      internalID: -8583858393449737627
+      spriteID: 69bba78456786b7d0800000000000000
+      internalID: -2902984040716256362
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ui_electricity_slot_particle
+      name: ui_electricity_slot 1_3
       rect:
         serializedVersion: 2
         x: 96
         y: 96
         width: 32
         height: 32
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 69fad12b3f8cbde50800000000000000
-      internalID: 6835277808455757718
+      spriteID: 8220efe54d4d17720800000000000000
+      internalID: 2842286848439353896
       vertices: []
       indices: 
       edges: []
@@ -226,7 +213,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5a7fa1a1cad930b4cae897e853ff4d9f
+    spriteID: 64001b52e21335049baa2405cc950e9b
     internalID: 0
     vertices: []
     indices: 
@@ -236,10 +223,10 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      ui_electricity_slot_body: -8583858393449737627
-      ui_electricity_slot_particle: 6835277808455757718
-      ui_electricity_slot_under: 2293801183540688290
-      ui_electricity_slot_upper: -3027114427693065897
+      ui_electricity_slot 1_0: 8694651943097949942
+      ui_electricity_slot 1_1: 3129745561154087562
+      ui_electricity_slot 1_2: -2902984040716256362
+      ui_electricity_slot 1_3: 2842286848439353896
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
