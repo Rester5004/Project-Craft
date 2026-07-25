@@ -10,12 +10,14 @@ public class InputActionManager : Singleton<InputActionManager>
     private InputAction useAction;
     private InputAction hitAction;
     private InputAction toggleInventoryAction;
+    private InputAction interactAction;
 
     private readonly InputAction[] hotbarSlotActions = new InputAction[10];
 
     public event Action<Vector2> OnMove;
     public event Action OnUsePerformed;
     public event Action OnHitPerformed;
+    public event Action OnInteractPerformed;
     public event Action OnToggleInventoryPerformed;
     public event Action<int> OnHotbarSlotSelected; // 0~9 (핫바 내 슬롯 인덱스)
 
@@ -49,6 +51,7 @@ public class InputActionManager : Singleton<InputActionManager>
 
         hitAction = playerMap.AddAction("Hit", type: InputActionType.Button, binding: "<Mouse>/leftButton");
         useAction = playerMap.AddAction("Use", type: InputActionType.Button, binding: "<Mouse>/rightButton");
+        interactAction = playerMap.AddAction("Interact", type: InputActionType.Button, binding: "<Keyboard>/e");
         
 
         toggleInventoryAction = playerMap.AddAction("ToggleInventory", type: InputActionType.Button, binding: "<Keyboard>/i");
@@ -57,6 +60,7 @@ public class InputActionManager : Singleton<InputActionManager>
         moveAction.canceled += HandleMovePerformed;
         useAction.performed += HandleUsePerformed;
         hitAction.performed += HandleHitPerformed;
+        interactAction.performed += HandleInteractPerformed;
         toggleInventoryAction.performed += HandleToggleInventoryPerformed;
 
         for (int i = 0; i < 10; i++)
@@ -72,6 +76,7 @@ public class InputActionManager : Singleton<InputActionManager>
     private void HandleMovePerformed(InputAction.CallbackContext ctx) => OnMove?.Invoke(ctx.ReadValue<Vector2>());
     private void HandleUsePerformed(InputAction.CallbackContext ctx) => OnUsePerformed?.Invoke();
     private void HandleHitPerformed(InputAction.CallbackContext ctx) => OnHitPerformed?.Invoke();
+    private void HandleInteractPerformed(InputAction.CallbackContext ctx) => OnInteractPerformed?.Invoke();
     private void HandleToggleInventoryPerformed(InputAction.CallbackContext ctx) => OnToggleInventoryPerformed?.Invoke();
 
     public InputAction GetAction(string actionName) => playerMap?.FindAction(actionName);

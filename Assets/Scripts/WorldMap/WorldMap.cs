@@ -104,6 +104,24 @@ public class WorldMap : Singleton<WorldMap>
         return false;
     }
 
+    public bool IsMineable(Vector2Int chunkId, Vector2Int cellPos)
+    {
+        return GetOrCreateChunk(chunkId).GetTile(cellPos.x, cellPos.y) > 9999;
+    }
+
+    public void EnsurePrototypeUndergroundRoom()
+    {
+        for (int y = -67; y <= -61; y++)
+        {
+            for (int x = -3; x <= 3; x++)
+            {
+                Vector2Int chunkId = Chunk.GetChunkId(new Vector3(x, y, 0f));
+                Vector2Int localCell = Chunk.GetLocalCellPositionInChunk(new Vector3(x, y, 0f));
+                GetOrCreateChunk(chunkId).SetTile(localCell.x, localCell.y, 0);
+            }
+        }
+    }
+
     Chunk GenerateChunk(Vector2Int chunkId) //추후 청크 id에 따라 다른 blockid를 사용하게 수정예정
     {
         Chunk chunk = new();
@@ -112,8 +130,9 @@ public class WorldMap : Singleton<WorldMap>
             {
                 int wx = chunkId.x * ChunkSize + tx;
                 int wy = chunkId.y * ChunkSize + ty;
-                bool inSpawn = wx >= -3 && wx <= 2 && wy >= -2 && wy <= 3;
-                chunk.SetTile(tx, ty, inSpawn ? 0 : 10000);
+                bool inSurfaceSpawn = wx >= -3 && wx <= 3 && wy >= -2 && wy <= 3;
+                bool inUndergroundRoom = wx >= -3 && wx <= 3 && wy >= -67 && wy <= -61;
+                chunk.SetTile(tx, ty, (inSurfaceSpawn || inUndergroundRoom) ? 0 : 10000);
             }
         return chunk;
     }
