@@ -1,90 +1,33 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.EventSystems;
 
+/// <summary>
+/// 기계 UI 오픈/클로즈 함수만 제공한다. 입력(우클릭) 판별은 PlayerInteraction 이 전담하며,
+/// 판별 결과로 이 컴포넌트의 <see cref="OpenMachine"/>/<see cref="Close"/> 를 호출한다.
+/// </summary>
 public class MachineInteraction : MonoBehaviour
 {
     [Header("UI Settings")]
-    [SerializeField] private GameObject machineUI;
+    [SerializeField] private DefaultMachineUI machineUI;
 
-    [Header("Interaction Settings")]
-    [SerializeField] private LayerMask machineLayer;
-    [SerializeField] private float interactRange = 1.5f;
-    private bool useRequested;
+    public MachineInstance CurrentMachine { get; private set; }
+    public bool IsOpen => CurrentMachine != null;
 
-    void OnEnable()
+    /// <summary>지정한 기계의 인벤토리로 UI를 열고, 인벤토리 패널도 함께 활성화한다.</summary>
+    public void OpenMachine(MachineInstance instance)
     {
-        if (InputActionManager.Instance != null)
-            InputActionManager.Instance.OnUsePerformed += HandleUsePerformed;
-    }
-
-    void OnDisable()
-    {
-        if (InputActionManager.Instance != null)
-            InputActionManager.Instance.OnUsePerformed -= HandleUsePerformed;
-    }
-
-    private void HandleUsePerformed()
-    {
-        useRequested = true;
-    }
-
-    private void Update()
-    {
-        if (!useRequested)
-            return;
-
-        useRequested = false;
-
-        if (machineUI != null && machineUI.activeSelf)
-            return;
-
-        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
-            return;
-
-        TryInteractWithMachine();
-    }
-
-    private void TryInteractWithMachine()
-    {
-        Vector2 mouseScreenPos = Mouse.current.position.ReadValue();
-        Vector2 mousePos = Camera.main.ScreenToWorldPoint(mouseScreenPos);
-
-        Collider2D hitCollider = Physics2D.OverlapPoint(mousePos, machineLayer);
-
-        if (hitCollider != null)
-        {
-            Vector2 playerPos = transform.position;
-            Vector2 machinePos = hitCollider.transform.position;
-
-            float diffX = Mathf.Abs(playerPos.x - machinePos.x);
-            float diffY = Mathf.Abs(playerPos.y - machinePos.y);
-
-            bool isAdjacent = (diffX <= interactRange && diffY < 0.5f) || (diffY <= interactRange && diffX < 0.5f);
-
-            if (isAdjacent)
-            {
-                OpenUI();
-            }
-        }
-    }
-
-    private void OpenUI()
-    {
-        // UIManager를 통해서 UI를 열어달라고 요청!
+        if (instance == null || machineUI == null) return;
+        CurrentMachine = instance;
+        machineUI.Open(instance);
         if (UIManager.Instance != null)
-        {
-            UIManager.Instance.OpenUI("Machine");
-            Debug.Log("기계 UI 열렸음");
-        }
+            UIManager.Instance.OpenUI("Inventory"); // 기계 UI 동안 인벤토리 항상 활성(핫바는 자동 숨김)
     }
 
-    public void CloseUI() 
+    /// <summary>기계 UI와 인벤토리를 함께 닫는다.</summary>
+    public void CloseView()
     {
-        // UIManager를 통해서 UI를 닫아달라고 요청!
+        if (machineUI != null) machineUI.Close();
         if (UIManager.Instance != null)
-        {
-            UIManager.Instance.CloseUI("Machine");
-        }
+            UIManager.Instance.CloseUI("Inventory");
+        CurrentMachine = null;
     }
 }

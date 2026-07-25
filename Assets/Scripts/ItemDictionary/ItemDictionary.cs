@@ -38,6 +38,20 @@ public class ItemDictionary : Singleton<ItemDictionary>
             }
         }
     }
+    /// <summary>itemName 으로 Items 를 조회한다(placeable 인벤토리 복원 등에 사용).</summary>
+    public Items GetItem(string itemName)
+    {
+        if (!string.IsNullOrEmpty(itemName) && itemDictionary.TryGetValue(itemName, out Items item))
+            return item;
+        return null;
+    }
+    /// <summary>blockId(=blockName) 로 기계 정보(MachineBlock)를 조회한다. 없거나 기계가 아니면 null.</summary>
+    public MachineBlock GetMachineInfo(string blockId)
+    {
+        if (!string.IsNullOrEmpty(blockId) && blockDictionary.TryGetValue(blockId, out BlockBase block))
+            return block as MachineBlock;
+        return null;
+    }
     public TileBase GetTileFromBlockDictionary(string name)
     {
         if (blockDictionary.ContainsKey(name))

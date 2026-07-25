@@ -289,6 +289,10 @@ public class TilemapTextureLoader : Singleton<TilemapTextureLoader>
         currentOutlinePos = pos;
     }
 
+    /// <summary>해당 셀이 현재 표시 중인 윤곽선(outlineTilemap)에 속하는지 여부.</summary>
+    public bool IsOutlined(Vector2Int cell)
+        => outlineTilemap != null && outlineTilemap.GetTile((Vector3Int)cell) != null;
+
     public void ClearOutline()
     {
         if (currentOutlinePos == null) return;

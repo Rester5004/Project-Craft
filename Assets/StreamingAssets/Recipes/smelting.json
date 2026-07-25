@@ -1,0 +1,17 @@
+{
+  "recipeType": "smelting",
+  "machine": "용광로",
+  "description": "금속 조각을 주괴로 제련한다. 0티어는 석탄 직접 연소, 1티어 저전압 전기로, 2티어 고전압 전기로(고효율).",
+  "fuel": "석탄",
+  "recipes": [
+    { "id": "smelt_iron",     "output": "철 주괴",   "inputs": [ { "item": "철 조각",   "qty": 4 } ] },
+    { "id": "smelt_copper",   "output": "구리 주괴", "inputs": [ { "item": "구리 조각", "qty": 4 } ] },
+    { "id": "smelt_gold",     "output": "금 주괴",   "inputs": [ { "item": "금 조각",   "qty": 4 } ] },
+    { "id": "smelt_silver",   "output": "은 주괴",   "inputs": [ { "item": "은 조각",   "qty": 4 } ] },
+    { "id": "smelt_lead",     "output": "납 주괴",   "inputs": [ { "item": "납 조각",   "qty": 4 } ] },
+    { "id": "smelt_nickel",   "output": "니켈 주괴", "inputs": [ { "item": "니켈 조각", "qty": 4 } ] },
+    { "id": "smelt_tin",      "output": "주석 주괴", "inputs": [ { "item": "주석 조각", "qty": 4 } ] },
+    { "id": "smelt_titanium", "output": "티타늄 주괴","inputs": [ { "item": "티타늄 조각","qty": 4 } ] },
+    { "id": "smelt_lime",     "output": "석회",     "inputs": [ { "item": "뼈 가루",   "qty": 2 } ] }
+  ]
+}

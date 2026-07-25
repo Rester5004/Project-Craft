@@ -1,20 +1,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
-public class ItemStack
-{
-    public Items item;
-    public int count;
-}
-
 // Hotbar: inventory slots 30 through 39.
-public class Inventory : Singleton<Inventory>
+public class Inventory : Singleton<Inventory>, IItemContainer
 {
     public int size;
     public List<ItemStack> slots;
     private int selectedSlotIndex=30;
     public System.Action OnChanged;
+
+    // ── IItemContainer (슬롯 UI 바인딩용) ──────────────────────────────
+    public int Capacity => slots.Count;
+    public ItemStack GetStack(int index) => slots[index];
+    public void NotifyChanged() => OnChanged?.Invoke();
 
     protected override void Awake()
     {

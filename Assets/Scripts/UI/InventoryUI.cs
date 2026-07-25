@@ -17,7 +17,7 @@ public class InventoryUI : MonoBehaviour
         for (int i = 0; i < inventory.size; i++)
         {
             var s = Instantiate(slotPrefab, UI);
-            s.index = i;
+            s.Bind(inventory, i);
             slots[i] = s;
         }
         inventory.OnChanged += Refresh; // 데이터 바뀌면 자동으로 다시 그림

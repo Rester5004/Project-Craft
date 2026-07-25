@@ -14,3 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MachineBlock
   blockName: Machine:ElectricPulverizer
   machinePrefab: {fileID: 2401623937405327994, guid: 787fbed919a8b05458dfc1727af4f62a, type: 3}
+  inputSlotCount: 1
+  outputSlotCount: 1
+  gasSlotCount: 0
+  maxGasAmountForSlot1: 0
+  maxGasAmountForSlot2: 0
+  maxEnergyAmount: 100
+  isUseEnergy: 1

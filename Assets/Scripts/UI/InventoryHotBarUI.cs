@@ -20,7 +20,7 @@ public class InventoryHotBarUI : MonoBehaviour
         for (int i = hotBarStartIndex; i < hotBarStartIndex + hotBarSize; i++)
         {
             var s = Instantiate(slotPrefab, UI);
-            s.index = i;
+            s.Bind(inventory, i);
             slots[i - hotBarStartIndex] = s;
         }
         inventory.OnChanged += Refresh; // 데이터 바뀌면 자동으로 다시 그림

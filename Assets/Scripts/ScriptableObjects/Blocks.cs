@@ -19,4 +19,13 @@ public class Block : BlockBase
 public class MachineBlock : BlockBase
 {
     public GameObject machinePrefab;
+
+    [Header("Machine UI 설정")]
+    public int inputSlotCount = 3;
+    public int outputSlotCount = 6;
+    public int gasSlotCount = 0;
+    public float maxGasAmountForSlot1 = 0f;
+    public float maxGasAmountForSlot2 = 0f;
+    public float maxEnergyAmount = 0f;
+    public bool isUseEnergy = false;
 }

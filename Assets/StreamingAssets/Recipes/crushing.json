@@ -1,0 +1,107 @@
+{
+  "recipeType": "crushing",
+  "machine": "분쇄기",
+  "description": "직렬 누적 가공. 분쇄기를 거칠 때마다 독립적인 중간재가 생성되며, 각 중간재는 그 자체로 추출기/분쇄기에 재투입 가능하다. 주 산출물은 100%, 부산물은 등급별 확률로 산출된다.",
+  "byproductGrades": {
+    "common": { "ko": "일반", "chance": 0.10 },
+    "uncommon": { "ko": "고급", "chance": 0.05 },
+    "rare": { "ko": "희귀", "chance": 0.01 }
+  },
+  "note": "부산물 확률은 상대적 희귀도이며 향후 플레이테스트로 조정 예정. 실선=주 산출물(100%), 점선=부산물(확률).",
+  "finalStageItems": ["모래", "반짝이는 가루", "마법 가루"],
+  "recipes": [
+    {
+      "id": "crush_rock",
+      "tier": 0,
+      "input": "암석",
+      "outputs": [
+        { "item": "돌", "qty": 1, "chance": 1.0, "role": "main" },
+        { "item": "철 조각", "qty": 1, "chance": 0.10, "grade": "common" },
+        { "item": "석탄", "qty": 1, "chance": 0.05, "grade": "uncommon" },
+        { "item": "구리 조각", "qty": 1, "chance": 0.01, "grade": "rare" }
+      ]
+    },
+    {
+      "id": "crush_stone",
+      "tier": 0,
+      "input": "돌",
+      "outputs": [
+        { "item": "자갈", "qty": 1, "chance": 1.0, "role": "main" },
+        { "item": "갈탄", "qty": 1, "chance": 0.10, "grade": "common" },
+        { "item": "석탄", "qty": 1, "chance": 0.05, "grade": "uncommon" },
+        { "item": "은 조각", "qty": 1, "chance": 0.01, "grade": "rare" }
+      ]
+    },
+    {
+      "id": "crush_gravel",
+      "tier": 0,
+      "input": "자갈",
+      "outputs": [
+        { "item": "모래", "qty": 1, "chance": 1.0, "role": "main" },
+        { "item": "뼈 가루", "qty": 1, "chance": 0.10, "grade": "common" },
+        { "item": "석영 가루", "qty": 1, "chance": 0.05, "grade": "uncommon" },
+        { "item": "금 조각", "qty": 1, "chance": 0.01, "grade": "rare" }
+      ]
+    },
+    {
+      "id": "crush_ore",
+      "tier": 1,
+      "input": "광석",
+      "outputs": [
+        { "item": "파쇄 광석", "qty": 1, "chance": 1.0, "role": "main" },
+        { "item": "유황석", "qty": 1, "chance": 0.10, "grade": "common" },
+        { "item": "반짝이는 돌", "qty": 1, "chance": 0.05, "grade": "uncommon" },
+        { "item": "미가공 우라늄", "qty": 1, "chance": 0.01, "grade": "rare" }
+      ]
+    },
+    {
+      "id": "crush_crushed_ore",
+      "tier": 1,
+      "input": "파쇄 광석",
+      "outputs": [
+        { "item": "광석 알갱이", "qty": 1, "chance": 1.0, "role": "main" },
+        { "item": "납 조각", "qty": 1, "chance": 0.10, "grade": "common" },
+        { "item": "니켈 조각", "qty": 1, "chance": 0.05, "grade": "uncommon" },
+        { "item": "티타늄 조각", "qty": 1, "chance": 0.01, "grade": "rare" }
+      ]
+    },
+    {
+      "id": "crush_ore_grains",
+      "tier": 1,
+      "input": "광석 알갱이",
+      "outputs": [
+        { "item": "반짝이는 가루", "qty": 1, "chance": 1.0, "role": "main" },
+        { "item": "주석 조각", "qty": 1, "chance": 0.10, "grade": "common" },
+        { "item": "알루미늄 조각", "qty": 1, "chance": 0.05, "grade": "uncommon" },
+        { "item": "리튬 조각", "qty": 1, "chance": 0.01, "grade": "rare" }
+      ]
+    },
+    {
+      "id": "crush_meteorite",
+      "tier": 2,
+      "input": "운석",
+      "outputs": [
+        { "item": "에너지 결정", "qty": 1, "chance": 1.0, "role": "main" }
+      ],
+      "note": "부산물 미정"
+    },
+    {
+      "id": "crush_energy_crystal",
+      "tier": 2,
+      "input": "에너지 결정",
+      "outputs": [
+        { "item": "마력 결정", "qty": 1, "chance": 1.0, "role": "main" }
+      ],
+      "note": "부산물 미정"
+    },
+    {
+      "id": "crush_mana_crystal",
+      "tier": 2,
+      "input": "마력 결정",
+      "outputs": [
+        { "item": "마법 가루", "qty": 1, "chance": 1.0, "role": "main" }
+      ],
+      "note": "부산물 미정"
+    }
+  ]
+}

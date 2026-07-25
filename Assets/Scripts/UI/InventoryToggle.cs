@@ -4,7 +4,13 @@ using UnityEngine;
 // 항상 활성화되어 있는 별도의 오브젝트(플레이어 등)에 붙여서 토글 키를 감지합니다.
 public class InventoryToggle : MonoBehaviour
 {
-    private bool isOpen = false;
+    private MachineInteraction machineInteraction;
+
+    void Start()
+    {
+        machineInteraction = FindAnyObjectByType<MachineInteraction>();
+    }
+
     void OnEnable()
     {
         if (InputActionManager.Instance != null)
@@ -19,17 +25,20 @@ public class InventoryToggle : MonoBehaviour
 
     private void Toggle()
     {
-        if (UIManager.Instance == null) 
+        if (UIManager.Instance == null)
             return;
-        if(isOpen)
+
+        // 기계 UI가 열려 있으면 i 키는 기계 뷰(기계+인벤토리)를 닫는다.
+        if (machineInteraction != null && machineInteraction.IsOpen)
         {
+            machineInteraction.CloseView();
+            return;
+        }
+
+        // 그 외에는 인벤토리 패널만 토글(실제 열림 상태 기준으로 판단해 desync 방지).
+        if (UIManager.Instance.IsOpen("Inventory"))
             UIManager.Instance.CloseUI("Inventory");
-            isOpen = false;
-        }
         else
-        {
             UIManager.Instance.OpenUI("Inventory");
-            isOpen = true;
-        }
     }
 }

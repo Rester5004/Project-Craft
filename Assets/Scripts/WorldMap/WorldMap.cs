@@ -1,9 +1,37 @@
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+
+/// <summary>
+/// 배치된 placeable(기계) 하나의 영속 데이터. blockId 는 머신 타입(=Items.itemName),
+/// 입력/출력 슬롯 인벤토리를 분리해 (name, count) 배열로 보관한다(빈 슬롯은 name="").
+/// 배열 크기(슬롯 개수)는 MachineInstance.WriteBack 시 기계 설정에 따라 확정된다.
+/// </summary>
+public class PlaceableRecord
+{
+    public string blockId;
+    public string[] inputItemNames;
+    public int[] inputCounts;
+    public string[] outputItemNames;
+    public int[] outputCounts;
+
+    public PlaceableRecord() { }
+
+    public PlaceableRecord(string blockId)
+    {
+        this.blockId = blockId;
+        inputItemNames = new string[0];
+        inputCounts = new int[0];
+        outputItemNames = new string[0];
+        outputCounts = new int[0];
+    }
+}
+
 public class Chunk
 {
     private string[,] tiles;
+    // 지역 셀 좌표(0~15) → placeable 레코드
+    private readonly Dictionary<Vector2Int, PlaceableRecord> placeables = new();
 
     public Chunk()
     {
@@ -27,11 +55,52 @@ public class Chunk
     public string GetTile(int x, int y) => tiles[y, x];
     public void SetTile(int x, int y, string tileId) => tiles[y, x] = tileId;
 
+    // ── placeable 접근자 ────────────────────────────────────────────────
+    public PlaceableRecord GetPlaceable(Vector2Int local)
+        => placeables.TryGetValue(local, out PlaceableRecord r) ? r : null;
+    public void SetPlaceable(Vector2Int local, PlaceableRecord record) => placeables[local] = record;
+    public void RemovePlaceable(Vector2Int local) => placeables.Remove(local);
+    public IEnumerable<KeyValuePair<Vector2Int, PlaceableRecord>> Placeables => placeables;
+
     public void Save(BinaryWriter writer)
     {
         for (int y = 0; y < 16; y++)
             for (int x = 0; x < 16; x++)
                 writer.Write(tiles[y, x] ?? "");
+
+        writer.Write(placeables.Count);
+        foreach (KeyValuePair<Vector2Int, PlaceableRecord> kvp in placeables)
+        {
+            writer.Write(kvp.Key.x);
+            writer.Write(kvp.Key.y);
+            PlaceableRecord rec = kvp.Value;
+            writer.Write(rec.blockId ?? "");
+            WriteSlotArray(writer, rec.inputItemNames, rec.inputCounts);
+            WriteSlotArray(writer, rec.outputItemNames, rec.outputCounts);
+        }
+    }
+
+    private static void WriteSlotArray(BinaryWriter writer, string[] names, int[] counts)
+    {
+        int cap = names != null ? names.Length : 0;
+        writer.Write(cap);
+        for (int i = 0; i < cap; i++)
+        {
+            writer.Write(names[i] ?? "");
+            writer.Write(counts[i]);
+        }
+    }
+
+    private static void ReadSlotArray(BinaryReader reader, out string[] names, out int[] counts)
+    {
+        int cap = reader.ReadInt32();
+        names = new string[cap];
+        counts = new int[cap];
+        for (int i = 0; i < cap; i++)
+        {
+            names[i] = reader.ReadString();
+            counts[i] = reader.ReadInt32();
+        }
     }
 
     public static Chunk Load(BinaryReader reader)
@@ -40,6 +109,17 @@ public class Chunk
         for (int y = 0; y < 16; y++)
             for (int x = 0; x < 16; x++)
                 chunk.tiles[y, x] = reader.ReadString();
+
+        int placeableCount = reader.ReadInt32();
+        for (int p = 0; p < placeableCount; p++)
+        {
+            int lx = reader.ReadInt32();
+            int ly = reader.ReadInt32();
+            PlaceableRecord rec = new() { blockId = reader.ReadString() };
+            ReadSlotArray(reader, out rec.inputItemNames, out rec.inputCounts);
+            ReadSlotArray(reader, out rec.outputItemNames, out rec.outputCounts);
+            chunk.placeables[new Vector2Int(lx, ly)] = rec;
+        }
         return chunk;
     }
 }
@@ -53,9 +133,16 @@ public class WorldMap : Singleton<WorldMap>
     public static string DefaultWorldmapPath =>
         Path.Combine(Application.streamingAssetsPath, "DefaultWorldmap.dat");
 
+    // 세이브 포맷 식별/버전. v2: placeable 레코드 포함. v3: placeable 인벤토리를 input/output 분리.
+    private const int SaveMagic = 0x50435730; // 'PCW0'
+    private const int SaveVersion = 3;
+
     private Dictionary<Vector2Int, Chunk> chunks;
     private string savePath;
     private bool isLoaded;
+
+    /// <summary>Save 직전에 호출되는 훅. MapGenerator가 로드된 기계 인벤토리를 레코드로 flush 한다.</summary>
+    public System.Action OnBeforeSave;
 
     protected override void Awake()
     {
@@ -125,7 +212,10 @@ public class WorldMap : Singleton<WorldMap>
     public void Save(string path)
     {
         if (!isLoaded) return;
+        OnBeforeSave?.Invoke(); // 로드된 기계 인벤토리를 레코드로 동기화한 뒤 직렬화
         using BinaryWriter writer = new(File.Open(path, FileMode.Create));
+        writer.Write(SaveMagic);
+        writer.Write(SaveVersion);
         writer.Write(chunks.Count);
         foreach (var kvp in chunks)
         {
@@ -141,6 +231,12 @@ public class WorldMap : Singleton<WorldMap>
         try
         {
             using BinaryReader reader = new(File.Open(path, FileMode.Open));
+            int magic = reader.ReadInt32();
+            if (magic != SaveMagic)
+                throw new IOException("Unsupported or legacy save format (magic mismatch).");
+            int version = reader.ReadInt32();
+            if (version != SaveVersion)
+                throw new IOException($"Unsupported save version {version} (expected {SaveVersion}).");
             int count = reader.ReadInt32();
             for (int i = 0; i < count; i++)
             {

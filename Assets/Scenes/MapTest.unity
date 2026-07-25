@@ -988,8 +988,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -138, y: 359}
-  m_SizeDelta: {x: 557.9711, y: 50}
+  m_AnchoredPosition: {x: -76, y: 326}
+  m_SizeDelta: {x: 1296.959, y: 112.2306}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &373632493
 MonoBehaviour:
@@ -2381,6 +2381,7 @@ GameObject:
   - component: {fileID: 895500069}
   - component: {fileID: 895500068}
   - component: {fileID: 895500070}
+  - component: {fileID: 895500071}
   m_Layer: 0
   m_Name: TestPlayer
   m_TagString: Untagged
@@ -2515,6 +2516,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMining
   mapGenerator: {fileID: 509693330}
+  machineInteraction: {fileID: 895500071}
   occupiedLayers:
     serializedVersion: 2
     m_Bits: 192
@@ -2556,6 +2558,19 @@ CapsuleCollider2D:
   m_Offset: {x: -0.003875792, y: -0.22812603}
   m_Size: {x: 0.80621284, y: 0.5437486}
   m_Direction: 0
+--- !u!114 &895500071
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 895500063}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d9b1284439aa2e4689436c5e3e78d85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MachineInteraction
+  machineUI: {fileID: 1821253146}
 --- !u!1 &942907832 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 886056269094517969, guid: bf4460d1bf73de1459c10f09fcc11506, type: 3}
@@ -5109,8 +5124,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f347eb7d82b045478b8762034bb5a6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIManager
-  isAnyUIOpen: 0
-  OpenUICount: 0
 --- !u!1 &2042181468 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 886056269094517969, guid: bf4460d1bf73de1459c10f09fcc11506, type: 3}

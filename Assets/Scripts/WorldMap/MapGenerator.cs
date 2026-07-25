@@ -19,10 +19,32 @@ public class MapGenerator : MonoBehaviour
     private float lastSaveTime = -Mathf.Infinity;
     private Dictionary<Vector2Int,Chunk> LoadedChunks = new Dictionary<Vector2Int,Chunk>();
 
+    // 로드된 청크에 스폰된 기계들(월드 셀 → 인스턴스)
+    private readonly Dictionary<Vector2Int, MachineInstance> loadedMachines = new();
+    private Transform placeableContainer;
+
 
     void Start()
     {
+        EnsurePlaceableContainer();
+        if (WorldMap.Instance != null)
+            WorldMap.Instance.OnBeforeSave += FlushAll;
         UpdateChunks();
+    }
+
+    void OnDestroy()
+    {
+        if (WorldMap.Instance != null)
+            WorldMap.Instance.OnBeforeSave -= FlushAll;
+    }
+
+    private void EnsurePlaceableContainer()
+    {
+        if (placeableContainer != null) return;
+        GameObject go = new GameObject("Placeables");
+        placeableContainer = go.transform;
+        if (placeableObjectsTilemap != null)
+            placeableContainer.SetParent(placeableObjectsTilemap.transform.parent, false);
     }
     private TileBase LoadTile(string blockId)
     {
@@ -141,10 +163,69 @@ public class MapGenerator : MonoBehaviour
                 }
             }
         }
+
+        // 이 청크에 저장된 placeable(기계) 스폰
+        foreach (var kvp in chunk.Placeables)
+        {
+            Vector2Int local = kvp.Key;
+            Vector2Int worldCell = new Vector2Int(id.x * size + local.x, id.y * size + local.y);
+            SpawnPlaceable(worldCell, kvp.Value);
+        }
+    }
+
+    // ── placeable 스폰/디스폰/조회 ──────────────────────────────────────
+    public void SpawnPlaceableAt(Vector2Int worldCell, PlaceableRecord record) => SpawnPlaceable(worldCell, record);
+
+    private void SpawnPlaceable(Vector2Int worldCell, PlaceableRecord record)
+    {
+        if (record == null || loadedMachines.ContainsKey(worldCell)) return;
+        EnsurePlaceableContainer();
+
+        GameObject prefab = ItemDictionary.Instance.GetGameObjectFromBlockDictionary(record.blockId);
+        if (prefab == null)
+        {
+            Debug.LogError($"[MapGenerator] placeable 프리팹 '{record.blockId}' 를 찾을 수 없습니다.");
+            return;
+        }
+
+        GameObject go = Instantiate(prefab, placeableContainer);
+        go.transform.position = placeableObjectsTilemap.GetCellCenterWorld(new Vector3Int(worldCell.x, worldCell.y, 0));
+
+        MachineInstance inst = go.GetComponent<MachineInstance>();
+        if (inst == null) inst = go.AddComponent<MachineInstance>();
+        inst.Bind(record, worldCell);
+
+        SpriteRenderer sr = go.GetComponent<SpriteRenderer>();
+        if (sr != null) sr.sortingOrder = 2; // 인스턴스에만 설정(공유 프리팹 오염 방지)
+
+        loadedMachines[worldCell] = inst;
+    }
+
+    public bool TryGetMachineAt(Vector2Int worldCell, out MachineInstance instance)
+        => loadedMachines.TryGetValue(worldCell, out instance);
+
+    /// <summary>로드된 모든 기계의 인벤토리를 레코드로 동기화(저장 직전 호출).</summary>
+    public void FlushAll()
+    {
+        foreach (MachineInstance inst in loadedMachines.Values)
+            if (inst != null) inst.Flush();
     }
     public void UnLoadChunk(Vector2Int id, Chunk chunk)
     {
         int size = WorldMap.ChunkSize;
+
+        // 이 청크의 기계들을 레코드로 동기화 후 디스폰
+        foreach (var kvp in chunk.Placeables)
+        {
+            Vector2Int local = kvp.Key;
+            Vector2Int worldCell = new Vector2Int(id.x * size + local.x, id.y * size + local.y);
+            if (loadedMachines.TryGetValue(worldCell, out MachineInstance inst))
+            {
+                if (inst != null) { inst.Flush(); Destroy(inst.gameObject); }
+                loadedMachines.Remove(worldCell);
+            }
+        }
+
         for (int ty = 0; ty < size; ty++){
             for (int tx = 0; tx < size; tx++)
             {
