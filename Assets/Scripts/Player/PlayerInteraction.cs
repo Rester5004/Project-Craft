@@ -17,17 +17,26 @@ public class PlayerInteraction : MonoBehaviour
 
     [SerializeField] private LayerMask occupiedLayers = (1 << 6) | (1 << 7);
     [SerializeField, Range(0.1f, 1f)] private float occupancyCheckSize = 0.8f;
+    [SerializeField] private int placementFlag;
+    [Header("Mining")]
+    [SerializeField, Min(0.1f)] private float miningHoldDuration = 0.75f;
+
+    private Vector2Int miningTarget;
+    private float miningProgress;
+    private bool isMining;
 
     private void OnEnable()
     {
         if (InputActionManager.Instance != null){
             InputActionManager.Instance.OnHitPerformed += HandleHitPerformed;
             InputActionManager.Instance.OnUsePerformed += HandleUsePerformed;
+            InputActionManager.Instance.OnInteractPerformed += HandleInteractPerformed;
         }
     }
     void Start()
     {
         inventory = Inventory.Instance;
+        PrototypeMapTransitions.Initialize();
     }
 
     private void OnDisable()
@@ -35,6 +44,7 @@ public class PlayerInteraction : MonoBehaviour
         if (InputActionManager.Instance != null){
             InputActionManager.Instance.OnHitPerformed -= HandleHitPerformed;
             InputActionManager.Instance.OnUsePerformed -= HandleUsePerformed;
+            InputActionManager.Instance.OnInteractPerformed -= HandleInteractPerformed;
         }
     }
 
@@ -64,6 +74,7 @@ public class PlayerInteraction : MonoBehaviour
             mapGenerator.RefreshMinedTile(mineCell);
     }
     // 우클릭(Use)에 대한 단일 판별 지점: 기계 위면 그 기계 UI 오픈, 빈 칸이면 placeable 배치.
+    
     private void HandleUsePerformed()
     {
         if (Camera.main == null) return;
@@ -130,9 +141,63 @@ public class PlayerInteraction : MonoBehaviour
     {
         SetGlobalCellPositions();
         isPointerOverUI = EventSystem.current != null && EventSystem.current.IsPointerOverGameObject();
+        UpdateMining();
         if(GetIsCardinalAdjacent(targetGlobalCell, playerGlobalCell))
         {
             TilemapTextureLoader.Instance.ShowOutline(targetGlobalCell);
         } 
+    }
+
+    private void UpdateMining()
+    {
+        bool canMine = !isPointerOverUI
+            && (UIManager.Instance == null || !UIManager.Instance.isAnyUIOpen || UIManager.Instance.OpenUICount == 0)
+            && Mouse.current != null
+            && Mouse.current.leftButton.isPressed
+            && GetIsCardinalAdjacent(targetGlobalCell, playerGlobalCell)
+            && WorldMap.Instance != null
+            && WorldMap.Instance.IsMineable(Chunk.GetChunkId(mousePosition), Chunk.GetLocalCellPositionInChunk(mousePosition));
+
+        if (!canMine)
+        {
+            CancelMining();
+            return;
+        }
+
+        if (!isMining || miningTarget != targetGlobalCell)
+        {
+            miningTarget = targetGlobalCell;
+            miningProgress = 0f;
+            isMining = true;
+        }
+
+        miningProgress += Time.deltaTime;
+        if (miningProgress < miningHoldDuration)
+            return;
+
+        if (WorldMap.Instance.Mining(Chunk.GetChunkId(mousePosition), Chunk.GetLocalCellPositionInChunk(mousePosition)))
+            mapGenerator.RefreshMinedTile(targetGlobalCell);
+        CancelMining();
+    }
+
+    private void CancelMining()
+    {
+        isMining = false;
+        miningProgress = 0f;
+    }
+
+    private void OnGUI()
+    {
+        if (!isMining || miningHoldDuration <= 0f)
+            return;
+
+        const float width = 170f;
+        const float height = 14f;
+        Rect background = new Rect((Screen.width - width) * 0.5f, Screen.height * 0.72f, width, height);
+        GUI.Box(background, GUIContent.none);
+        Color previous = GUI.color;
+        GUI.color = new Color(0.25f, 0.9f, 1f, 1f);
+        GUI.DrawTexture(new Rect(background.x + 2f, background.y + 2f, (width - 4f) * Mathf.Clamp01(miningProgress / miningHoldDuration), height - 4f), Texture2D.whiteTexture);
+        GUI.color = previous;
     }
 }
