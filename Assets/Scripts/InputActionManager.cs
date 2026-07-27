@@ -58,7 +58,8 @@ public class InputActionManager : Singleton<InputActionManager>
 
         toggleInventoryAction = playerMap.AddAction("ToggleInventory", type: InputActionType.Button, binding: "<Keyboard>/i");
 
-        consoleAction = playerMap.AddAction("Console", type: InputActionType.Button, binding: "<Keyboard>/F12");
+        consoleAction = playerMap.AddAction("Console", type: InputActionType.Button, binding: "<Keyboard>/enter");
+        consoleAction.AddBinding("<Keyboard>/numpadEnter");
         consoleAction.performed += HandleConsolePerformed;
 
         moveAction.performed += HandleMovePerformed;

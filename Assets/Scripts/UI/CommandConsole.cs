@@ -22,6 +22,7 @@ public class CommandConsole : MonoBehaviour
     private TMP_Text resultText;
     private bool isOpen;
     private int lastCloseFrame = -1;
+    private int focusAtFrame = -1;   // >=0 이면 "아직 입력창을 선택하지 않은 지연 활성화 대기 상태"
 
     private void Start()
     {
@@ -51,10 +52,8 @@ public class CommandConsole : MonoBehaviour
 
     public void Open()
     {
-        if (isOpen || panel == null){
-            Debug.Log("error1");
-            return;
-        }
+        if (isOpen || panel == null) return;
+
         // 매번 등록을 보장한다. 등록이 안 돼 있으면 OpenUI 가 조용히 실패하는데,
         // 그 상태로 isOpen 을 세우면 이후 Enter 가 영구히 막힌다.
         if (UIManager.Instance != null)
@@ -77,15 +76,20 @@ public class CommandConsole : MonoBehaviour
             InputActionManager.Instance.SetPlayerInputEnabled(false);
 
         inputField.text = "";
-        FocusInput();
+
+        // 창을 연 Enter 는 아직 이 프레임의 IMGUI 이벤트 큐에 KeyDown 으로 남아 있다.
+        // 지금 입력창을 선택하면 EventSystem 이 같은 프레임에 그 Enter 를 제출로 소비해
+        // 창이 열리자마자 닫힌다. 그래서 선택/활성화만 다음 프레임으로 미룬다.
+        focusAtFrame = Time.frameCount + 1;
     }
 
     /// <summary>isOpen 여부와 무관하게 항상 정리한다(수동 활성화 등으로 상태가 어긋나도 복구되도록).</summary>
     public void Close()
     {
         isOpen = false;
-        Debug.Log("Close");
+        focusAtFrame = -1;
         lastCloseFrame = Time.frameCount;
+
         if (inputField != null)
         {
             inputField.DeactivateInputField();
@@ -123,17 +127,26 @@ public class CommandConsole : MonoBehaviour
             // 열려 있는 동안 ESC 로 취소
             if (keyboard.escapeKey.wasPressedThisFrame) { Close(); return; }
 
+            // 지연 활성화 대기 중에는 아래 포커스 회복을 돌리지 않는다.
+            // (돌리면 창을 연 프레임에 결국 입력창이 선택되어 같은 문제가 재현된다)
+            if (focusAtFrame >= 0)
+            {
+                if (Time.frameCount >= focusAtFrame) { focusAtFrame = -1; FocusInput(); }
+                return;
+            }
+
             // 인게임 클릭 등으로 포커스를 잃으면 Enter(제출)가 죽으므로 다시 잡아준다.
             if (EventSystem.current != null &&
                 EventSystem.current.currentSelectedGameObject != inputField.gameObject)
                 FocusInput();
             return;
         }
-
     }
 
     private void OnSubmit(string raw)
     {
+        if (focusAtFrame >= 0) return; // 아직 의도적으로 활성화하지 않았다 = 창을 연 Enter 가 새어 들어온 것
+
         string message = Execute(raw);
         if (!string.IsNullOrEmpty(message))
         {
