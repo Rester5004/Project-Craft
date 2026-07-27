@@ -21,6 +21,9 @@ public class Inventory : Singleton<Inventory>, IItemContainer
         for (int i = 0; i < size; i++)
             slots.Add(new ItemStack());
     }
+    /// <summary>현재 선택된 슬롯의 전체 인덱스(핫바는 30~39). 저장/복원에 사용.</summary>
+    public int SelectedSlotIndex => selectedSlotIndex;
+
     public void SetSeclectedSlotIndex(int index)
     {
         if (index<=39 && index>=0){

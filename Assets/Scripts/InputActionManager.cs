@@ -11,6 +11,7 @@ public class InputActionManager : Singleton<InputActionManager>
     private InputAction hitAction;
     private InputAction toggleInventoryAction;
     private InputAction interactAction;
+    private InputAction consoleAction;
 
     private readonly InputAction[] hotbarSlotActions = new InputAction[10];
 
@@ -19,6 +20,7 @@ public class InputActionManager : Singleton<InputActionManager>
     public event Action OnHitPerformed;
     public event Action OnInteractPerformed;
     public event Action OnToggleInventoryPerformed;
+    public event Action OnConsolePerformed;         // Enter: 명령어 입력창 열기
     public event Action<int> OnHotbarSlotSelected; // 0~9 (핫바 내 슬롯 인덱스)
 
     public Vector2 MoveValue => moveAction?.ReadValue<Vector2>() ?? Vector2.zero;
@@ -56,6 +58,9 @@ public class InputActionManager : Singleton<InputActionManager>
 
         toggleInventoryAction = playerMap.AddAction("ToggleInventory", type: InputActionType.Button, binding: "<Keyboard>/i");
 
+        consoleAction = playerMap.AddAction("Console", type: InputActionType.Button, binding: "<Keyboard>/F12");
+        consoleAction.performed += HandleConsolePerformed;
+
         moveAction.performed += HandleMovePerformed;
         moveAction.canceled += HandleMovePerformed;
         useAction.performed += HandleUsePerformed;
@@ -78,6 +83,18 @@ public class InputActionManager : Singleton<InputActionManager>
     private void HandleHitPerformed(InputAction.CallbackContext ctx) => OnHitPerformed?.Invoke();
     private void HandleInteractPerformed(InputAction.CallbackContext ctx) => OnInteractPerformed?.Invoke();
     private void HandleToggleInventoryPerformed(InputAction.CallbackContext ctx) => OnToggleInventoryPerformed?.Invoke();
+    private void HandleConsolePerformed(InputAction.CallbackContext ctx) => OnConsolePerformed?.Invoke();
+
+    /// <summary>
+    /// 플레이어 입력 전체를 켜고 끈다. 명령어 입력창처럼 텍스트를 입력받는 동안에는
+    /// 꺼서 i/숫자키/마우스 조작이 게임에 전달되지 않도록 한다(UI 입력은 EventSystem 이 따로 처리).
+    /// </summary>
+    public void SetPlayerInputEnabled(bool enabled)
+    {
+        if (playerMap == null) return;
+        if (enabled) playerMap.Enable();
+        else playerMap.Disable();
+    }
 
     public InputAction GetAction(string actionName) => playerMap?.FindAction(actionName);
 

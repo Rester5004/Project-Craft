@@ -45,6 +45,22 @@ public class ItemDictionary : Singleton<ItemDictionary>
             return item;
         return null;
     }
+    /// <summary>등록된 모든 아이템 이름(명령어 자동완성·오타 안내용).</summary>
+    public IEnumerable<string> ItemNames => itemDictionary.Keys;
+
+    /// <summary>정확히 일치하는 이름이 없으면 대소문자를 무시하고 다시 찾는다.</summary>
+    public Items FindItem(string itemName)
+    {
+        Items item = GetItem(itemName);
+        if (item != null) return item;
+        if (string.IsNullOrEmpty(itemName)) return null;
+
+        foreach (KeyValuePair<string, Items> pair in itemDictionary)
+            if (string.Equals(pair.Key, itemName, System.StringComparison.OrdinalIgnoreCase))
+                return pair.Value;
+        return null;
+    }
+
     /// <summary>blockId(=blockName) 로 기계 정보(MachineBlock)를 조회한다. 없거나 기계가 아니면 null.</summary>
     public MachineBlock GetMachineInfo(string blockId)
     {
