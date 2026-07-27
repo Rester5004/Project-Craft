@@ -9,12 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: pulverizer
-  m_EditorClassIdentifier: Assembly-CSharp::machine
-  itemName: Machine:ElectricPulverizer
+  m_Script: {fileID: 11500000, guid: c7bb06f29567b444a95ec1ddc3173b24, type: 3}
+  m_Name: AlloySmelter
+  m_EditorClassIdentifier: Assembly-CSharp::Machine
+  itemName: Machine:AlloySmelter
   placeable: 1
-  Icon: {fileID: 2377217749489558504, guid: 1c2c475598576b74684240e2949206f0, type: 3}
+  Icon: {fileID: 5648444647660155779, guid: 8c8abafd1cffa6c4e8d7eb9309478e38, type: 3}
   maxStack: 64
   machineType: 0
   machineLevel: 0

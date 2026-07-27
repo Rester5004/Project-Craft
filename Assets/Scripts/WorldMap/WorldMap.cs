@@ -195,7 +195,7 @@ public class WorldMap : Singleton<WorldMap>
 
     public bool IsMineable(Vector2Int chunkId, Vector2Int cellPos)
     {
-        return GetOrCreateChunk(chunkId).GetTile(cellPos.x, cellPos.y) > 9999;
+        return GetOrCreateChunk(chunkId).GetTile(cellPos.x, cellPos.y) == "wall:stone"; //나중에 모든 블록 타입에 적용 가능하게 변경예정.
     }
 
     public void EnsurePrototypeUndergroundRoom()
@@ -206,7 +206,7 @@ public class WorldMap : Singleton<WorldMap>
             {
                 Vector2Int chunkId = Chunk.GetChunkId(new Vector3(x, y, 0f));
                 Vector2Int localCell = Chunk.GetLocalCellPositionInChunk(new Vector3(x, y, 0f));
-                GetOrCreateChunk(chunkId).SetTile(localCell.x, localCell.y, 0);
+                GetOrCreateChunk(chunkId).SetTile(localCell.x, localCell.y, "floor:dirt");
             }
         }
     }

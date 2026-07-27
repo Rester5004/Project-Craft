@@ -8,11 +8,3 @@ public class Items : ScriptableObject
     public Sprite Icon;
     public int maxStack;
 }
-
-[CreateAssetMenu(fileName = "machine", menuName = "Items/machines")]
-public class machine : Items
-{
-    public int machineType;
-    public int machineLevel;
-    public int voltageLevel;
-}

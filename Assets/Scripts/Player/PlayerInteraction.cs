@@ -28,7 +28,7 @@ public class PlayerInteraction : MonoBehaviour
     private void OnEnable()
     {
         if (InputActionManager.Instance != null){
-            InputActionManager.Instance.OnHitPerformed += HandleHitPerformed;
+            // 채굴은 좌클릭 홀드(UpdateMining)로 처리하므로 OnHitPerformed(클릭 즉시 채굴)는 구독하지 않는다.
             InputActionManager.Instance.OnUsePerformed += HandleUsePerformed;
             InputActionManager.Instance.OnInteractPerformed += HandleInteractPerformed;
         }
@@ -42,39 +42,26 @@ public class PlayerInteraction : MonoBehaviour
     private void OnDisable()
     {
         if (InputActionManager.Instance != null){
-            InputActionManager.Instance.OnHitPerformed -= HandleHitPerformed;
             InputActionManager.Instance.OnUsePerformed -= HandleUsePerformed;
             InputActionManager.Instance.OnInteractPerformed -= HandleInteractPerformed;
         }
     }
 
-    private void HandleHitPerformed()
+    /// <summary>커서 셀이 벽 윤곽선의 윗면이면 아래 벽 셀을 채굴 대상으로 보정해 반환한다.</summary>
+    private Vector2Int ResolveMineCell()
     {
-        if (UIManager.Instance != null && UIManager.Instance.isAnyUIOpen && UIManager.Instance.OpenUICount > 0)
-            return;
-
-        if (isPointerOverUI)
-            return;
-
-        // 클릭 셀이 윤곽선 안이면: 그 아래 셀도 윤곽선에 속하면 아래 셀을, 아니면 클릭 셀을 채굴 대상으로 한다.
-        Vector2Int mineCell = targetGlobalCell;
+        Vector2Int cell = targetGlobalCell;
         TilemapTextureLoader loader = TilemapTextureLoader.Instance;
-        if (loader != null && loader.IsOutlined(targetGlobalCell))
-        {
-            mineCell = loader.IsOutlined(targetGlobalCell + Vector2Int.down)
-                ? targetGlobalCell + Vector2Int.down
-                : targetGlobalCell;
-        }
-
-        if (!GetIsCardinalAdjacent(mineCell, playerGlobalCell))
-            return;
-
-        Vector3 cell = new Vector3(mineCell.x, mineCell.y, 0f);
-        if (WorldMap.Instance.Mining(Chunk.GetChunkId(cell), Chunk.GetLocalCellPositionInChunk(cell)))
-            mapGenerator.RefreshMinedTile(mineCell);
+        if (loader != null && loader.IsOutlined(cell))
+            cell = loader.IsOutlined(cell + Vector2Int.down) ? cell + Vector2Int.down : cell;
+        return cell;
     }
     // 우클릭(Use)에 대한 단일 판별 지점: 기계 위면 그 기계 UI 오픈, 빈 칸이면 placeable 배치.
-    
+    private void HandleInteractPerformed()
+    {
+        if(PrototypeMapTransitions.TryUseNearest(gameObject.transform))
+            PrototypeMapTransitions.Initialize();
+    }
     private void HandleUsePerformed()
     {
         if (Camera.main == null) return;
@@ -150,13 +137,19 @@ public class PlayerInteraction : MonoBehaviour
 
     private void UpdateMining()
     {
+        // 커서 셀을 윤곽선 기준으로 보정(벽 윗면 클릭 → 아래 벽)해 대상 셀을 정한다.
+        Vector2Int mineCell = ResolveMineCell();
+        Vector3 cellPos = new Vector3(mineCell.x, mineCell.y, 0f);
+        Vector2Int chunkId = Chunk.GetChunkId(cellPos);
+        Vector2Int localCell = Chunk.GetLocalCellPositionInChunk(cellPos);
+
         bool canMine = !isPointerOverUI
             && (UIManager.Instance == null || !UIManager.Instance.isAnyUIOpen || UIManager.Instance.OpenUICount == 0)
             && Mouse.current != null
             && Mouse.current.leftButton.isPressed
-            && GetIsCardinalAdjacent(targetGlobalCell, playerGlobalCell)
+            && GetIsCardinalAdjacent(mineCell, playerGlobalCell)
             && WorldMap.Instance != null
-            && WorldMap.Instance.IsMineable(Chunk.GetChunkId(mousePosition), Chunk.GetLocalCellPositionInChunk(mousePosition));
+            && WorldMap.Instance.IsMineable(chunkId, localCell);
 
         if (!canMine)
         {
@@ -164,9 +157,9 @@ public class PlayerInteraction : MonoBehaviour
             return;
         }
 
-        if (!isMining || miningTarget != targetGlobalCell)
+        if (!isMining || miningTarget != mineCell)
         {
-            miningTarget = targetGlobalCell;
+            miningTarget = mineCell;
             miningProgress = 0f;
             isMining = true;
         }
@@ -175,8 +168,8 @@ public class PlayerInteraction : MonoBehaviour
         if (miningProgress < miningHoldDuration)
             return;
 
-        if (WorldMap.Instance.Mining(Chunk.GetChunkId(mousePosition), Chunk.GetLocalCellPositionInChunk(mousePosition)))
-            mapGenerator.RefreshMinedTile(targetGlobalCell);
+        if (WorldMap.Instance.Mining(chunkId, localCell))
+            mapGenerator.RefreshMinedTile(mineCell);
         CancelMining();
     }
 

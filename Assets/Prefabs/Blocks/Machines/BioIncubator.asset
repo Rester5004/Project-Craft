@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9e72bd956b65294a846c4174caf0f0f, type: 3}
+  m_Name: BioIncubator
+  m_EditorClassIdentifier: Assembly-CSharp::MachineBlock
+  blockName: Machine:BioIncubator
+  machinePrefab: {fileID: 8381249328980302204, guid: b20191f51767ac94ca03d9968c27d7eb, type: 3}
+  uiPrefab: {fileID: 1651831456170303087, guid: 2eff4a043fa8d9f43af0f9a1ecf166f6, type: 3}
+  inputSlotCount: 3
+  outputSlotCount: 3
+  inputGasSlotCount: 1
+  outputGasSlotCount: 0
+  maxGasAmount: 100
+  maxEnergyAmount: 100
+  isUseEnergy: 1

@@ -9,15 +9,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: ElectricPulverizer
+  m_Script: {fileID: 11500000, guid: e9e72bd956b65294a846c4174caf0f0f, type: 3}
+  m_Name: Compressor
   m_EditorClassIdentifier: Assembly-CSharp::MachineBlock
-  blockName: Machine:ElectricPulverizer
-  machinePrefab: {fileID: 2401623937405327994, guid: 787fbed919a8b05458dfc1727af4f62a, type: 3}
+  blockName: Machine:Compressor
+  machinePrefab: {fileID: 7844537751369292244, guid: ae2858d0fd1aa4846bd4e732759d0589, type: 3}
+  uiPrefab: {fileID: 1872696084802925076, guid: fbde8ee6bcf30d14bb807cff2d63689d, type: 3}
   inputSlotCount: 1
   outputSlotCount: 1
-  gasSlotCount: 0
-  maxGasAmountForSlot1: 0
-  maxGasAmountForSlot2: 0
+  inputGasSlotCount: 0
+  outputGasSlotCount: 0
+  maxGasAmount: 0
   maxEnergyAmount: 100
   isUseEnergy: 1

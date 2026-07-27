@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9e72bd956b65294a846c4174caf0f0f, type: 3}
+  m_Name: Extractor
+  m_EditorClassIdentifier: Assembly-CSharp::MachineBlock
+  blockName: Machine:Extractor
+  machinePrefab: {fileID: 6169806128200484634, guid: a59c0e3c04a70f34284bebec9c43dfff, type: 3}
+  uiPrefab: {fileID: 7770727432205689101, guid: d1117a1aa7f3c474289df91e3132553d, type: 3}
+  inputSlotCount: 1
+  outputSlotCount: 1
+  inputGasSlotCount: 0
+  outputGasSlotCount: 0
+  maxGasAmount: 0
+  maxEnergyAmount: 100
+  isUseEnergy: 1

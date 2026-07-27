@@ -13,9 +13,9 @@ public class MachineInstance : MonoBehaviour
 
     private int inputSlotCount;
     private int outputSlotCount;
-    private int GasSlotCount;
-    private float MaxGasAmountForSlot1;
-    private float MaxGasAmountForSlot2;
+    private int InputGasSlotCount;
+    private int OutputGasSlotCount;
+    private float MaxGasAmount;   // 모든 가스 슬롯(입력/출력)이 공유하는 최대치
     private float MaxEnergyAmount;
     private bool IsUseEnergy;
 
@@ -27,10 +27,11 @@ public class MachineInstance : MonoBehaviour
     // UI가 읽는 공개 설정값
     public int InputCount => inputSlotCount;
     public int OutputCount => outputSlotCount;
-    public int GasCount => GasSlotCount;
+    public int InputGasCount => InputGasSlotCount;
+    public int OutputGasCount => OutputGasSlotCount;
     public bool UsesEnergy => IsUseEnergy;
-    public float MaxGas1 => MaxGasAmountForSlot1;
-    public float MaxGas2 => MaxGasAmountForSlot2;
+    /// <summary>모든 가스 슬롯(입력/출력)이 공유하는 최대 저장량.</summary>
+    public float MaxGas => MaxGasAmount;
     public float MaxEnergy => MaxEnergyAmount;
 
     public void Bind(PlaceableRecord record, Vector2Int worldCell)
@@ -52,9 +53,9 @@ public class MachineInstance : MonoBehaviour
         {
             inputSlotCount = info.inputSlotCount;
             outputSlotCount = info.outputSlotCount;
-            GasSlotCount = info.gasSlotCount;
-            MaxGasAmountForSlot1 = info.maxGasAmountForSlot1;
-            MaxGasAmountForSlot2 = info.maxGasAmountForSlot2;
+            InputGasSlotCount = info.inputGasSlotCount;
+            OutputGasSlotCount = info.outputGasSlotCount;
+            MaxGasAmount = info.maxGasAmount;
             MaxEnergyAmount = info.maxEnergyAmount;
             IsUseEnergy = info.isUseEnergy;
         }
@@ -62,9 +63,9 @@ public class MachineInstance : MonoBehaviour
         {
             inputSlotCount = DefaultInputCount;
             outputSlotCount = DefaultOutputCount;
-            GasSlotCount = 0;
-            MaxGasAmountForSlot1 = 0f;
-            MaxGasAmountForSlot2 = 0f;
+            InputGasSlotCount = 0;
+            OutputGasSlotCount = 0;
+            MaxGasAmount = 0f;
             MaxEnergyAmount = 0f;
             IsUseEnergy = false;
         }

@@ -1,14 +1,16 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class TestItemGiver : MonoBehaviour
 {
     private Inventory inventory;   
-    public Items itemToGive;   
+    public List<Items> itemToGive;   
     public int amount = 10;
 
     void Start()
     {
         inventory = Inventory.Instance;
-        inventory.AddItem(itemToGive, amount);
+        foreach(Items i in itemToGive)
+            inventory.AddItem(i, amount);
     }
 }

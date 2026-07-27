@@ -1,0 +1,108 @@
+{
+  "recipeType": "machine_processing",
+  "source": "Obsidian Vault/레시피.md",
+  "description": "기계(및 수동 도구)가 수행하는 가공 레시피. machine 필드가 처리 주체다. inputs 가 비어 있으면 레시피 미정.",
+  "globalNotes": [
+    "석탄은 갈탄을 대체할 수 있다(역은 성립하지 않음).",
+    "'수동' 키워드가 없는 기계는 기본적으로 전력 등을 사용한다.",
+    "수량이 표기되지 않은 재료는 qty=null + note 로 남겼다."
+  ],
+  "recipes": [
+    { "id": "hammer_metal_plate", "machine": "망치", "tier": 0, "manual": true,
+      "output": "금속판", "outputQty": 1,
+      "inputs": [ { "item": "금속", "qty": 2 } ],
+      "tools": [ "망치" ],
+      "note": "망치는 소모되지 않음(소모X)" },
+
+    { "id": "furnace_silicon", "machine": "화로", "tier": 0,
+      "output": "실리콘",
+      "inputs": [ { "item": "석영 가루", "qty": null } ],
+      "note": "화로의 특이 사항. 원문에 수량 미표기" },
+
+    { "id": "manual_crusher_chipped_stone", "machine": "수동 분쇄기", "tier": 0, "manual": true,
+      "output": "조각난 돌덩이", "outputQty": 1,
+      "inputs": [ { "item": "돌", "qty": 1 } ] },
+
+    { "id": "manual_crusher_broken_stone", "machine": "수동 분쇄기", "tier": 0, "manual": true,
+      "output": "부숴진 돌덩이", "outputQty": 1,
+      "inputs": [ { "item": "조각난 돌덩이", "qty": 1 } ] },
+
+    { "id": "manual_crusher_crumbled_stone", "machine": "수동 분쇄기", "tier": 0, "manual": true,
+      "output": "바스라진 돌덩이", "outputQty": 1,
+      "inputs": [ { "item": "조각난 돌덩이", "qty": 1 } ],
+      "note": "원문 그대로. '부숴진 돌덩이'의 오기 가능성 있음(확인 필요)" },
+
+    { "id": "manual_extractor_t00", "machine": "수동 0-0티어 추출기", "tier": 0, "manual": true,
+      "inputs": [],
+      "note": "자원과 그 가공 방식 참조 (extraction.json)" },
+
+    { "id": "thermal_gen_lignite", "machine": "화력 발전기", "tier": 0, "category": "fuel",
+      "inputs": [ { "item": "갈탄", "qty": 1 } ],
+      "outputs": [ { "item": "Energy", "type": "power", "amount": 200 } ] },
+
+    { "id": "thermal_gen_coal", "machine": "화력 발전기", "tier": 0, "category": "fuel",
+      "inputs": [ { "item": "석탄", "qty": 1 } ],
+      "outputs": [ { "item": "Energy", "type": "power", "amount": 400 } ] },
+
+    { "id": "thermal_gen_hydrogen", "machine": "화력 발전기", "tier": 0, "category": "fuel",
+      "inputs": [ { "item": "수소", "qty": 1, "unit": "양동이", "fluid": true } ],
+      "outputs": [ { "item": "Energy", "type": "power", "amount": 1000 } ] },
+
+    { "id": "electrolyzer_water", "machine": "전기 분해기", "tier": 1,
+      "inputs": [ { "item": "물", "qty": 1, "fluid": true } ],
+      "outputs": [ { "item": "수소", "qty": 2, "fluid": true }, { "item": "산소", "qty": 1, "fluid": true } ],
+      "note": "가스 파이프로 이송 가능. 물 수량 미표기(1로 가정)" },
+
+    { "id": "compressor_metal_plate", "machine": "압축기", "tier": 1,
+      "output": "금속 판", "outputQty": 1,
+      "inputs": [ { "item": "금속 주괴", "qty": 1 } ] },
+
+    { "id": "alloy_bronze", "machine": "합금 재련기", "tier": 1,
+      "output": "청동", "outputQty": 4,
+      "inputs": [ { "item": "구리", "qty": 3 }, { "item": "주석", "qty": 1 } ],
+      "note": "광석/주괴 상관 없음" },
+
+    { "id": "alloy_invar", "machine": "합금 재련기", "tier": 1,
+      "output": "인바(invar)", "outputQty": 2,
+      "inputs": [ { "item": "니켈", "qty": 1 }, { "item": "철", "qty": 2 } ] },
+
+    { "id": "bio_soil", "machine": "유기물 배양기", "tier": 1,
+      "output": "흙", "outputQty": 1, "chance": 0.10,
+      "inputs": [ { "item": "돌", "qty": 1 } ],
+      "note": "10% 확률로 생성" },
+
+    { "id": "laser_computer_chip", "machine": "레이저 가공기", "tier": 1,
+      "output": "컴퓨터 칩", "outputQty": 1,
+      "inputs": [ { "item": "실리콘 판", "qty": 1 }, { "item": "구리판", "qty": 1 }, { "item": "철판", "qty": 1 }, { "item": "전도체 가루", "qty": 1 } ],
+      "note": "수동 조합(crafting.json) 대비 1/10 재료" },
+
+    { "id": "laser_cavity_scanner", "machine": "레이저 가공기", "tier": 1,
+      "output": "공동 탐색기", "outputQty": 1,
+      "inputs": [ { "item": "컴퓨터 칩", "qty": 1 }, { "item": "다우징 로드", "qty": 1 } ] },
+
+    { "id": "laser_extractor_t02", "machine": "레이저 가공기", "tier": 1,
+      "output": "0-2티어 추출기", "outputQty": 1,
+      "inputs": [ { "item": "컴퓨터 칩", "qty": 2 }, { "item": "0-1티어 추출기", "qty": 1 }, { "item": "니켈 주괴", "qty": 1 } ] },
+
+    { "id": "mana_from_crystal", "machine": "마나 용해기", "tier": 1,
+      "output": "마나", "outputQty": 100, "outputFluid": true,
+      "inputs": [ { "item": "마력 결정", "qty": 1 } ],
+      "note": "마나는 액체 취급" },
+
+    { "id": "mana_from_shard", "machine": "마나 용해기", "tier": 1,
+      "output": "마나", "outputQty": 1, "outputFluid": true,
+      "inputs": [ { "item": "마력 파편", "qty": 1 } ],
+      "note": "마나는 액체 취급" },
+
+    { "id": "enchant", "machine": "마법부여기", "tier": 1,
+      "output": null,
+      "inputs": [],
+      "note": "마법부여 추후 추가 예정. 도구는 막대 종류별로 효율이 다르며 마나를 사용함" },
+
+    { "id": "precision_motor", "machine": "정밀 세공기", "tier": 2, "output": "모터", "inputs": [], "note": "레시피 미정" },
+    { "id": "precision_bearing", "machine": "정밀 세공기", "tier": 2, "output": "베어링", "inputs": [], "note": "레시피 미정" },
+    { "id": "precision_propeller", "machine": "정밀 세공기", "tier": 2, "output": "프로펠러", "inputs": [], "note": "레시피 미정" },
+    { "id": "blast_steel", "machine": "용광로", "tier": 2, "output": "강철", "inputs": [], "note": "레시피 미정" },
+    { "id": "blast_titanium", "machine": "용광로", "tier": 2, "output": "티타늄", "inputs": [], "note": "레시피 미정" }
+  ]
+}

@@ -15,17 +15,4 @@ public class Block : BlockBase
 {
     public Tile assetPath;
 }
-[CreateAssetMenu(fileName = "MachineBlock", menuName = "Blocks/MachineBlock")]
-public class MachineBlock : BlockBase
-{
-    public GameObject machinePrefab;
-
-    [Header("Machine UI 설정")]
-    public int inputSlotCount = 3;
-    public int outputSlotCount = 6;
-    public int gasSlotCount = 0;
-    public float maxGasAmountForSlot1 = 0f;
-    public float maxGasAmountForSlot2 = 0f;
-    public float maxEnergyAmount = 0f;
-    public bool isUseEnergy = false;
-}
+// MachineBlock 은 MachineBlock.cs 로 분리됨(에셋의 m_Script 참조가 잡히도록 파일명=클래스명 유지).

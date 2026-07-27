@@ -1,0 +1,1174 @@
+fileFormatVersion: 2
+guid: aa9d507c382e03646868e7afb18980dc
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -8344025593901002095
+    second: 20260625_project_craft_ores_0
+  - first:
+      213: -7361560028921433001
+    second: 20260625_project_craft_ores_1
+  - first:
+      213: 6361654829009889244
+    second: 20260625_project_craft_ores_2
+  - first:
+      213: 1785546224670634139
+    second: 20260625_project_craft_ores_3
+  - first:
+      213: -6938477031759485609
+    second: 20260625_project_craft_ores_4
+  - first:
+      213: -441370719076935077
+    second: 20260625_project_craft_ores_5
+  - first:
+      213: 3659523072438472551
+    second: 20260625_project_craft_ores_6
+  - first:
+      213: 6024796513916488504
+    second: 20260625_project_craft_ores_7
+  - first:
+      213: 6788698560846805995
+    second: 20260625_project_craft_ores_8
+  - first:
+      213: 8770445256439287363
+    second: 20260625_project_craft_ores_9
+  - first:
+      213: -2145595899002379085
+    second: 20260625_project_craft_ores_10
+  - first:
+      213: -9129908140325851132
+    second: 20260625_project_craft_ores_11
+  - first:
+      213: -3162121163814891315
+    second: 20260625_project_craft_ores_12
+  - first:
+      213: -864266873032633229
+    second: 20260625_project_craft_ores_13
+  - first:
+      213: -7105024186748502510
+    second: 20260625_project_craft_ores_14
+  - first:
+      213: 2708624912880796164
+    second: 20260625_project_craft_ores_15
+  - first:
+      213: 3613959582423085352
+    second: 20260625_project_craft_ores_16
+  - first:
+      213: -8819141099167917374
+    second: 20260625_project_craft_ores_17
+  - first:
+      213: 6853436888923354259
+    second: 20260625_project_craft_ores_18
+  - first:
+      213: 3946652768721684514
+    second: 20260625_project_craft_ores_19
+  - first:
+      213: -19359791219331252
+    second: 20260625_project_craft_ores_20
+  - first:
+      213: -3066054166537088637
+    second: 20260625_project_craft_ores_21
+  - first:
+      213: -3554763474309666896
+    second: 20260625_project_craft_ores_22
+  - first:
+      213: -6824469122261057667
+    second: 20260625_project_craft_ores_23
+  - first:
+      213: 7119075417612004735
+    second: 20260625_project_craft_ores_24
+  - first:
+      213: 3965589966396917871
+    second: 20260625_project_craft_ores_25
+  - first:
+      213: -4591315581682995782
+    second: 20260625_project_craft_ores_26
+  - first:
+      213: 6578968639108270661
+    second: 20260625_project_craft_ores_27
+  - first:
+      213: -821027903219340206
+    second: 20260625_project_craft_ores_28
+  - first:
+      213: -2166453564942254128
+    second: 20260625_project_craft_ores_29
+  - first:
+      213: -8389802582672418328
+    second: 20260625_project_craft_ores_30
+  - first:
+      213: 4297961677465193830
+    second: 20260625_project_craft_ores_31
+  - first:
+      213: 2813817313752391192
+    second: 20260625_project_craft_ores_32
+  - first:
+      213: -6850481227071436309
+    second: 20260625_project_craft_ores_33
+  - first:
+      213: -7367477424237034452
+    second: 20260625_project_craft_ores_34
+  - first:
+      213: -3679564455860197352
+    second: 20260625_project_craft_ores_35
+  - first:
+      213: -5898901900833562747
+    second: 20260625_project_craft_ores_36
+  - first:
+      213: 869388601382133943
+    second: 20260625_project_craft_ores_37
+  - first:
+      213: -6971706514803530254
+    second: 20260625_project_craft_ores_38
+  - first:
+      213: -6493291390322322759
+    second: 20260625_project_craft_ores_39
+  - first:
+      213: -3736049489421323777
+    second: 20260625_project_craft_ores_40
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WindowsStoreApps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: raw_iron_ore
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 230
+        width: 25
+        height: 21
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 19253ce4ee0143c80800000000000000
+      internalID: -8344025593901002095
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: raw_copper_ore
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 230
+        width: 28
+        height: 20
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7547c6b282c76d990800000000000000
+      internalID: -7361560028921433001
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: raw_gold_ore
+      rect:
+        serializedVersion: 2
+        x: 67
+        y: 230
+        width: 25
+        height: 21
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cd768ca8c53294850800000000000000
+      internalID: 6361654829009889244
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: raw_tin_ore
+      rect:
+        serializedVersion: 2
+        x: 99
+        y: 230
+        width: 26
+        height: 21
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b907883c4d887c810800000000000000
+      internalID: 1785546224670634139
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: quartz_crystal
+      rect:
+        serializedVersion: 2
+        x: 133
+        y: 227
+        width: 23
+        height: 25
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 755e4c7b6e395bf90800000000000000
+      internalID: -6938477031759485609
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: raw_nikel_ore
+      rect:
+        serializedVersion: 2
+        x: 163
+        y: 230
+        width: 25
+        height: 21
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b5a19236bafefd9f0800000000000000
+      internalID: -441370719076935077
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: raw_osmium_ore
+      rect:
+        serializedVersion: 2
+        x: 195
+        y: 230
+        width: 25
+        height: 21
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 76f8a0c68dc39c230800000000000000
+      internalID: 3659523072438472551
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: raw_silver_ore
+      rect:
+        serializedVersion: 2
+        x: 227
+        y: 230
+        width: 25
+        height: 21
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 83b010832806c9350800000000000000
+      internalID: 6024796513916488504
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: iron_ingot
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 196
+        width: 28
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bebba7e7f5d463e50800000000000000
+      internalID: 6788698560846805995
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: copper_ingot
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 196
+        width: 28
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 34ec2103e71e6b970800000000000000
+      internalID: 8770445256439287363
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gold_ingot
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 196
+        width: 28
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3b4ad60d5ef4932e0800000000000000
+      internalID: -2145595899002379085
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tin_ingot
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 196
+        width: 28
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4003eef2bec0c4180800000000000000
+      internalID: -9129908140325851132
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: quartz_powder
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 198
+        width: 30
+        height: 17
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dc0911e1e83ed14d0800000000000000
+      internalID: -3162121163814891315
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: nikel_ingot
+      rect:
+        serializedVersion: 2
+        x: 162
+        y: 196
+        width: 28
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 37490c9abd18104f0800000000000000
+      internalID: -864266873032633229
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: osmium_ingot
+      rect:
+        serializedVersion: 2
+        x: 194
+        y: 196
+        width: 28
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 21efb4c6522e56d90800000000000000
+      internalID: -7105024186748502510
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: silver_ingot
+      rect:
+        serializedVersion: 2
+        x: 226
+        y: 196
+        width: 28
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4028802e108f69520800000000000000
+      internalID: 2708624912880796164
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: raw_lead_ore
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 166
+        width: 25
+        height: 21
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 82172f6b71d572230800000000000000
+      internalID: 3613959582423085352
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: raw_titanium_ore
+      rect:
+        serializedVersion: 2
+        x: 35
+        y: 166
+        width: 25
+        height: 21
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2ca5c0865ed1c9580800000000000000
+      internalID: -8819141099167917374
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: raw_aluminum_ore
+      rect:
+        serializedVersion: 2
+        x: 67
+        y: 166
+        width: 25
+        height: 21
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 394b5d61a8c4c1f50800000000000000
+      internalID: 6853436888923354259
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: raw_uranium_ore
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 165
+        width: 27
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 228c77b68c355c630800000000000000
+      internalID: 3946652768721684514
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: uranium_powder
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 165
+        width: 32
+        height: 19
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c4f22795f583bbff0800000000000000
+      internalID: -19359791219331252
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: raw_lithium_ore
+      rect:
+        serializedVersion: 2
+        x: 163
+        y: 166
+        width: 25
+        height: 21
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 381537deaff2375d0800000000000000
+      internalID: -3066054166537088637
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: raw_thorium_ore
+      rect:
+        serializedVersion: 2
+        x: 195
+        y: 166
+        width: 25
+        height: 21
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0b72d3d3471faaec0800000000000000
+      internalID: -3554763474309666896
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lead_ingot
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 132
+        width: 28
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d7ff10bad7d9a41a0800000000000000
+      internalID: -6824469122261057667
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: titanium_ingot
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 132
+        width: 28
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f7daaf3bf590cc260800000000000000
+      internalID: 7119075417612004735
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aluminum_ingot
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 132
+        width: 28
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f6801f7501b980730800000000000000
+      internalID: 3965589966396917871
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: uranium_ingot
+      rect:
+        serializedVersion: 2
+        x: 97
+        y: 131
+        width: 30
+        height: 25
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: abda116edce5840c0800000000000000
+      internalID: -4591315581682995782
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lithium_ingot
+      rect:
+        serializedVersion: 2
+        x: 162
+        y: 132
+        width: 28
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 54acb72de113d4b50800000000000000
+      internalID: 6578968639108270661
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: thorium_ingot
+      rect:
+        serializedVersion: 2
+        x: 194
+        y: 132
+        width: 28
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 25c6de5d87f1b94f0800000000000000
+      internalID: -821027903219340206
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: brown_coal
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 101
+        width: 25
+        height: 22
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0dffc3706f53fe1e0800000000000000
+      internalID: -2166453564942254128
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: coal
+      rect:
+        serializedVersion: 2
+        x: 35
+        y: 101
+        width: 25
+        height: 22
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8e9d72c800f619b80800000000000000
+      internalID: -8389802582672418328
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bone_meal
+      rect:
+        serializedVersion: 2
+        x: 65
+        y: 102
+        width: 30
+        height: 19
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 66d0e83cf5d65ab30800000000000000
+      internalID: 4297961677465193830
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: redstone_powder
+      rect:
+        serializedVersion: 2
+        x: 97
+        y: 102
+        width: 30
+        height: 17
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 81e1e0940ffac0720800000000000000
+      internalID: 2813817313752391192
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: surface_powder
+      rect:
+        serializedVersion: 2
+        x: 129
+        y: 102
+        width: 30
+        height: 17
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: be9ccef8e933ee0a0800000000000000
+      internalID: -6850481227071436309
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ruby
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 101
+        width: 22
+        height: 22
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c2444a5315671c990800000000000000
+      internalID: -7367477424237034452
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sapphire
+      rect:
+        serializedVersion: 2
+        x: 199
+        y: 99
+        width: 18
+        height: 26
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 818ac406f9f8fecc0800000000000000
+      internalID: -3679564455860197352
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: redstone_crystal
+      rect:
+        serializedVersion: 2
+        x: 229
+        y: 99
+        width: 23
+        height: 25
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 58f50f399f3e22ea0800000000000000
+      internalID: -5898901900833562747
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: diamond
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 69
+        width: 26
+        height: 21
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7b0e725a350b01c00800000000000000
+      internalID: 869388601382133943
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: energy_crystal
+      rect:
+        serializedVersion: 2
+        x: 33
+        y: 66
+        width: 30
+        height: 27
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2f5ebdaccd58f3f90800000000000000
+      internalID: -6971706514803530254
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: magic_crystal
+      rect:
+        serializedVersion: 2
+        x: 68
+        y: 66
+        width: 25
+        height: 27
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ff133c7a8c2e62cc0800000000000000
+      internalID: -3736049489421323777
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 904166cdb65c77547b8c888c74452bfa
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      20260625_project_craft_ores_39: -6493291390322322759
+      aluminum_ingot: 3965589966396917871
+      bone_meal: 4297961677465193830
+      brown_coal: -2166453564942254128
+      coal: -8389802582672418328
+      copper_ingot: 8770445256439287363
+      diamond: 869388601382133943
+      energy_crystal: -6971706514803530254
+      gold_ingot: -2145595899002379085
+      iron_ingot: 6788698560846805995
+      lead_ingot: -6824469122261057667
+      lithium_ingot: 6578968639108270661
+      magic_crystal: -3736049489421323777
+      nikel_ingot: -864266873032633229
+      osmium_ingot: -7105024186748502510
+      quartz_crystal: -6938477031759485609
+      quartz_powder: -3162121163814891315
+      raw_aluminum_ore: 6853436888923354259
+      raw_copper_ore: -7361560028921433001
+      raw_gold_ore: 6361654829009889244
+      raw_iron_ore: -8344025593901002095
+      raw_lead_ore: 3613959582423085352
+      raw_lithium_ore: -3066054166537088637
+      raw_nikel_ore: -441370719076935077
+      raw_osmium_ore: 3659523072438472551
+      raw_silver_ore: 6024796513916488504
+      raw_thorium_ore: -3554763474309666896
+      raw_tin_ore: 1785546224670634139
+      raw_titanium_ore: -8819141099167917374
+      raw_uranium_ore: 3946652768721684514
+      redstone_crystal: -5898901900833562747
+      redstone_powder: 2813817313752391192
+      ruby: -7367477424237034452
+      sapphire: -3679564455860197352
+      silver_ingot: 2708624912880796164
+      surface_powder: -6850481227071436309
+      thorium_ingot: -821027903219340206
+      tin_ingot: -9129908140325851132
+      titanium_ingot: 7119075417612004735
+      uranium_ingot: -4591315581682995782
+      uranium_powder: -19359791219331252
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

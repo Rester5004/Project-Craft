@@ -1,0 +1,175 @@
+{
+  "recipeType": "crafting",
+  "source": "Obsidian Vault/레시피.md",
+  "description": "제작(조합) 레시피. tools 는 조합 시 내구도를 소모하는 도구이며 재료로 소모되지 않는다. inputs 가 비어 있으면 조합법 미정.",
+  "globalNotes": [
+    "모든 도구는 조합 시 내구도를 소모한다.",
+    "석탄은 갈탄을 대체할 수 있다(역은 성립하지 않음).",
+    "'수동' 키워드가 없는 기계는 기본적으로 전력 등을 사용한다.",
+    "1티어 진입: '마법이 부여된 전도체 가루' 1개로 코어를 업그레이드한다.",
+    "0티어 마법은 초급 재단 이상, 1티어 마법은 중급 재단 이상에서 조합한다.",
+    "수량이 표기되지 않은 재료는 1개로 간주했다(불명확한 경우 qty=null + note)."
+  ],
+  "recipes": [
+    { "id": "stick", "tier": 0, "output": "막대", "outputQty": 1,
+      "inputs": [ { "item": "돌", "qty": 1 } ],
+      "note": "다른 자원 막대, 칼날, 망치머리 추가 예정" },
+
+    { "id": "blade", "tier": 0, "output": "칼날", "outputQty": 1,
+      "inputs": [ { "item": "돌", "qty": 2 } ] },
+
+    { "id": "hammer_head", "tier": 0, "output": "망치 머리", "outputQty": 1,
+      "inputs": [ { "item": "돌", "qty": 2 } ] },
+
+    { "id": "knife", "tier": 0, "output": "칼", "outputQty": 1,
+      "inputs": [ { "item": "막대", "qty": 1 }, { "item": "칼날", "qty": 1 } ] },
+
+    { "id": "hammer", "tier": 0, "output": "망치", "outputQty": 1,
+      "inputs": [ { "item": "막대", "qty": 1 }, { "item": "망치 머리", "qty": 1 } ] },
+
+    { "id": "dowsing_rod_t0", "tier": 0, "output": "0티어 다우징 로드", "outputQty": 1,
+      "tools": [ "칼", "망치" ],
+      "inputs": [ { "item": "돌", "qty": 5 } ] },
+
+    { "id": "bucket", "tier": 0, "output": "양동이", "outputQty": 1,
+      "tools": [ "망치" ],
+      "inputs": [ { "item": "철판", "qty": 3 } ] },
+
+    { "id": "furnace", "tier": 0, "output": "화로", "outputQty": 1,
+      "inputs": [ { "item": "갈탄", "qty": 1 }, { "item": "철판", "qty": 4 }, { "item": "돌", "qty": 8 } ],
+      "note": "석영 가루를 구우면 실리콘이 나옴 (가공 레시피는 machine_processing.json 참조)" },
+
+    { "id": "crank", "tier": 0, "output": "크랭크", "outputQty": 1,
+      "tools": [ "칼" ],
+      "inputs": [ { "item": "돌", "qty": 2 } ] },
+
+    { "id": "manual_crusher", "tier": 0, "output": "수동 분쇄기", "outputQty": 1,
+      "inputs": [ { "item": "크랭크", "qty": 1 }, { "item": "철 주괴", "qty": 2 }, { "item": "철판", "qty": 2 }, { "item": "돌", "qty": 4 } ] },
+
+    { "id": "manual_extractor_t00", "tier": 0, "output": "수동 0-0티어 추출기", "outputQty": 1,
+      "inputs": [ { "item": "크랭크", "qty": 1 }, { "item": "구리 주괴", "qty": 2 }, { "item": "구리판", "qty": 2 }, { "item": "돌", "qty": 4 } ] },
+
+    { "id": "thermal_generator", "tier": 0, "output": "화력 발전기", "outputQty": 1,
+      "inputs": [ { "item": "화로", "qty": 2 }, { "item": "마력 파편", "qty": 1 }, { "item": "철 주괴", "qty": 4 }, { "item": "전도체 가루", "qty": 4 } ],
+      "note": "연료별 발전량은 machine_processing.json 참조" },
+
+    { "id": "tailoring_basic", "tier": 0, "output": "초급 재단", "outputQty": 1,
+      "inputs": [ { "item": "마력 파편", "qty": 5 }, { "item": "돌", "qty": 2 } ] },
+
+    { "id": "mana_shard_duplicate", "tier": 0, "category": "magic", "station": "초급 재단",
+      "output": "마력 파편", "outputQty": 2,
+      "tools": [ "망치" ],
+      "inputs": [ { "item": "마력 파편", "qty": 1 }, { "item": "구리", "qty": 10 } ] },
+
+    { "id": "water", "tier": 0, "category": "magic", "station": "초급 재단",
+      "output": "물", "outputQty": 1,
+      "inputs": [ { "item": "양동이", "qty": 1 }, { "item": "마력 파편", "qty": 2 } ],
+      "note": "양동이는 조합하면 채워짐" },
+
+    { "id": "lava", "tier": 0, "category": "magic", "station": "초급 재단",
+      "output": "용암", "outputQty": 1,
+      "inputs": [ { "item": "양동이", "qty": 1 }, { "item": "마력 파편", "qty": 2 } ],
+      "note": "양동이는 조합하면 채워짐" },
+
+    { "id": "resource_generator_t0", "tier": 0, "category": "magic", "station": "초급 재단",
+      "output": "0티어 자원 생성기", "outputQty": 1,
+      "inputs": [ { "item": "마력 파편", "qty": 5 }, { "item": "돌", "qty": 5 } ] },
+
+    { "id": "enchanted_conductor_powder", "tier": 0, "category": "magic", "station": "초급 재단",
+      "output": "마법이 부여된 전도체 가루", "outputQty": 1,
+      "inputs": [ { "item": "마력 파편", "qty": 2 }, { "item": "전도체 가루", "qty": 1 } ],
+      "note": "1개로 코어를 1티어로 업그레이드" },
+
+    { "id": "tailoring_intermediate", "tier": 0, "category": "magic", "station": "초급 재단",
+      "output": "중급 재단", "outputQty": 1,
+      "inputs": [ { "item": "초급 재단", "qty": 1 }, { "item": "금 주괴", "qty": 10 } ] },
+
+    { "id": "screwdriver", "tier": 1, "output": "드라이버", "outputQty": 1,
+      "tools": [ "망치", "칼" ],
+      "inputs": [ { "item": "금속판", "qty": 2 } ] },
+
+    { "id": "crusher", "tier": 1, "output": "분쇄기", "outputQty": 1,
+      "tools": [ "드라이버" ],
+      "inputs": [ { "item": "철 주괴", "qty": 3 }, { "item": "철판", "qty": 3 }, { "item": "돌", "qty": 4 }, { "item": "전도체 가루", "qty": 4 } ] },
+
+    { "id": "extractor_t01", "tier": 1, "output": "0-1티어 추출기", "outputQty": 1,
+      "tools": [ "드라이버" ],
+      "inputs": [ { "item": "구리 주괴", "qty": 3 }, { "item": "구리판", "qty": 3 }, { "item": "돌", "qty": 4 }, { "item": "전도체 가루", "qty": 4 } ] },
+
+    { "id": "computer_chip", "tier": 1, "output": "컴퓨터 칩", "outputQty": 1,
+      "inputs": [ { "item": "실리콘 판", "qty": 10 }, { "item": "구리판", "qty": 10 }, { "item": "철판", "qty": 10 }, { "item": "전도체 가루", "qty": 20 } ],
+      "note": "레이저 가공기에서는 1/10 재료로 생산 가능(machine_processing.json 참조)" },
+
+    { "id": "electrolyzer", "tier": 1, "output": "전기 분해기", "outputQty": 1,
+      "tools": [ "드라이버" ],
+      "inputs": [ { "item": "금 판", "qty": 1 }, { "item": "청동 판", "qty": 3 }, { "item": "철 주괴", "qty": 4 }, { "item": "전도체 가루", "qty": 8 } ] },
+
+    { "id": "compressor", "tier": 1, "output": "압축기", "outputQty": 1,
+      "tools": [ "드라이버" ],
+      "inputs": [ { "item": "철판", "qty": 8 }, { "item": "전도체 가루", "qty": 4 } ] },
+
+    { "id": "alloy_smelter", "tier": 1, "output": "합금 재련기", "outputQty": 1,
+      "inputs": [ { "item": "화로", "qty": 1 }, { "item": "철판", "qty": 4 }, { "item": "전도체 가루", "qty": 4 } ] },
+
+    { "id": "bio_incubator", "tier": 1, "output": "유기물 배양기", "outputQty": 1,
+      "tools": [ "드라이버" ],
+      "inputs": [ { "item": "마력 파편", "qty": 2 }, { "item": "금 판", "qty": 2 }, { "item": "전도체 가루", "qty": 4 } ] },
+
+    { "id": "laser_processor", "tier": 1, "output": "레이저 가공기", "outputQty": 1,
+      "tools": [ "드라이버" ],
+      "inputs": [ { "item": "컴퓨터 칩", "qty": 1 }, { "item": "인바(invar) 판", "qty": 4 }, { "item": "전도체 가루", "qty": 4 } ] },
+
+    { "id": "item_pipe", "tier": 1, "category": "pipe", "output": "아이템 파이프", "outputQty": 1,
+      "tools": [ "망치" ],
+      "inputs": [ { "item": "돌", "qty": 2 } ] },
+
+    { "id": "liquid_pipe", "tier": 1, "category": "pipe", "output": "액체 파이프", "outputQty": 1,
+      "tools": [ "망치" ],
+      "inputs": [ { "item": "구리 주괴", "qty": 2 } ] },
+
+    { "id": "gas_pipe", "tier": 1, "category": "pipe", "output": "기체 파이프", "outputQty": 1,
+      "tools": [ "망치" ],
+      "inputs": [ { "item": "철 주괴", "qty": 2 } ] },
+
+    { "id": "auto_crafter", "tier": 1, "output": "자동 조합기", "outputQty": 1,
+      "tools": [ "드라이버" ],
+      "inputs": [ { "item": "컴퓨터 칩", "qty": 5 }, { "item": "인바 판", "qty": 2 } ] },
+
+    { "id": "mana_crystal", "tier": 1, "category": "magic", "station": "중급 재단",
+      "output": "마력 결정", "outputQty": 1,
+      "inputs": [ { "item": "마력 파편", "qty": 100 } ] },
+
+    { "id": "resource_generator_t0_enhanced", "tier": 1, "category": "magic", "station": "중급 재단",
+      "output": "0티어 자원 생성기(강화)", "outputQty": 1,
+      "inputs": [ { "item": "마력 결정", "qty": 1 }, { "item": "0티어 자원 생성기", "qty": 1 } ] },
+
+    { "id": "mana_chip", "tier": 1, "category": "magic", "station": "중급 재단",
+      "output": "마력 칩", "outputQty": 1,
+      "inputs": [ { "item": "컴퓨터 칩", "qty": 1 }, { "item": "마력 결정", "qty": 1 } ] },
+
+    { "id": "mana_dissolver", "tier": 1, "category": "magic", "station": "중급 재단",
+      "output": "마나 용해기", "outputQty": 1,
+      "inputs": [ { "item": "마력 결정", "qty": null }, { "item": "화로", "qty": null }, { "item": "금", "qty": null } ],
+      "note": "원문에 수량 미표기" },
+
+    { "id": "enchanter", "tier": 1, "category": "magic", "station": "중급 재단",
+      "output": "마법부여기", "outputQty": 1,
+      "inputs": [ { "item": "금 주괴", "qty": 10 }, { "item": "마력 결정", "qty": 2 }, { "item": "은 판", "qty": 5 } ] },
+
+    { "id": "apple_tree_seed", "tier": 1, "category": "magic", "station": "중급 재단",
+      "output": "사과 나무 씨앗", "outputQty": 1,
+      "inputs": [ { "item": "나무 씨앗", "qty": 1 }, { "item": "마력 파편", "qty": 10 } ] },
+
+    { "id": "pump", "tier": 2, "output": "펌프", "inputs": [], "note": "조합법 미정" },
+    { "id": "precision_machining", "tier": 2, "output": "정밀 세공기", "inputs": [], "note": "조합법 미정" },
+    { "id": "distiller", "tier": 2, "output": "증류기", "inputs": [], "note": "조합법 미정" },
+    { "id": "gas_generator", "tier": 2, "output": "가스 발전기", "inputs": [], "note": "조합법 미정" },
+    { "id": "hydroponics", "tier": 2, "output": "수경 재배기", "inputs": [], "note": "조합법 미정" },
+    { "id": "upgrade_module_speed", "tier": 2, "output": "업그레이드 모듈 - 속도", "inputs": [], "note": "조합법 미정" },
+    { "id": "upgrade_module_efficiency", "tier": 2, "output": "업그레이드 모듈 - 효율", "inputs": [], "note": "조합법 미정" },
+    { "id": "blast_furnace", "tier": 2, "output": "용광로", "inputs": [], "note": "조합법 미정" },
+    { "id": "extractor_t03", "tier": 2, "output": "0-3티어 추출기", "inputs": [], "note": "조합법 미정" },
+    { "id": "advanced_crafter", "tier": 2, "output": "고급 조합기", "inputs": [], "note": "조합법 미정" },
+    { "id": "item_enhancer", "tier": 2, "output": "아이템 강화기", "inputs": [], "note": "조합법 미정" }
+  ]
+}
