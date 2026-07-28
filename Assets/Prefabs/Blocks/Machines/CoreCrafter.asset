@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a24973a23734aa4b91a9495052645a0, type: 3}
+  m_Name: CoreCrafter
+  m_EditorClassIdentifier: Assembly-CSharp::CraftingTableBlock
+  blockName: CoreCrafter
+  machinePrefab: {fileID: 3893713344455811406, guid: 36ddf6ef812fb7542a908ab599cecdd1, type: 3}
+  uiPrefab: {fileID: 779414532576868518, guid: 06eab2c4533376848ad7a643051ba2cf, type: 3}
+  inputSlotCount: 3
+  outputSlotCount: 6
+  inputGasSlotCount: 0
+  outputGasSlotCount: 0
+  maxGasAmount: 0
+  maxEnergyAmount: 0
+  isUseEnergy: 0
+  tier: 0

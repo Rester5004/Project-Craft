@@ -134,7 +134,6 @@ public class CommandConsole : MonoBehaviour
                 if (Time.frameCount >= focusAtFrame) { focusAtFrame = -1; FocusInput(); }
                 return;
             }
-
             // 인게임 클릭 등으로 포커스를 잃으면 Enter(제출)가 죽으므로 다시 잡아준다.
             if (EventSystem.current != null &&
                 EventSystem.current.currentSelectedGameObject != inputField.gameObject)

@@ -23,4 +23,10 @@ public class MachineBlock : BlockBase
     public float maxGasAmount = 0f;
     public float maxEnergyAmount = 0f;
     public bool isUseEnergy = false;
+
+    /// <summary>
+    /// 입력/출력 슬롯이 둘 다 0 이어도 "미설정"으로 보지 않고 그대로 적용할지.
+    /// 조합대처럼 슬롯이 없는 기계가 기본값(3/6)으로 폴백되지 않게 한다.
+    /// </summary>
+    public virtual bool AllowsZeroSlots => false;
 }

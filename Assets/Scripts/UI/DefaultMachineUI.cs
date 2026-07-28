@@ -32,7 +32,11 @@ public class DefaultMachineUI : MonoBehaviour
 
     private MachineInventory sharedInventory;            // 인스턴스 없이 열 때 폴백
     private readonly List<ItemSlot> boundSlots = new();  // 현재 바인딩된(활성) 슬롯
+    private MachineInstance boundInstance;               // 현재 표시 중인 기계(진행도를 밀어 넣는 주체)
     private bool initialized;
+
+    /// <summary>현재 이 패널이 표시 중인 기계(없으면 null).</summary>
+    public MachineInstance BoundInstance => boundInstance;
 
     /// <summary>프리팹이 가진 요소 수(레이아웃 상한).</summary>
     public int InputElementCount => inputs.Count;
@@ -124,7 +128,7 @@ public class DefaultMachineUI : MonoBehaviour
     }
 
     /// <summary>지정한 기계의 설정/인벤토리에 맞춰 슬롯·가스·에너지 UI를 구성하고 패널을 연다.</summary>
-    public void Open(MachineInstance instance)
+    public virtual void Open(MachineInstance instance)
     {
         EnsureInitialized();
 
@@ -200,12 +204,33 @@ public class DefaultMachineUI : MonoBehaviour
 
         gameObject.SetActive(true);
         RefreshAll();
+
+        // 진행도 갱신은 기계 인스턴스가 직접 밀어 넣는다.
+        if (boundInstance != null && boundInstance != instance) boundInstance.DetachUI(this);
+        boundInstance = instance;
+        if (instance != null) instance.AttachUI(this);
+        else SetProgress(0f);
     }
 
     /// <summary>폴백 오픈(레이아웃 확인·드래그 회귀 테스트용 공용 저장소).</summary>
     public void Open() => Open(null);
 
-    public void Close() => gameObject.SetActive(false);
+    public virtual void Close()
+    {
+        if (boundInstance != null) { boundInstance.DetachUI(this); boundInstance = null; }
+        gameObject.SetActive(false);
+    }
+
+    /// <summary>기계가 사라질 때(청크 언로드 등) 인스턴스 쪽에서 연결을 끊는다.</summary>
+    public void DetachInstance(MachineInstance instance)
+    {
+        if (boundInstance != instance) return;
+        boundInstance = null;
+        SetProgress(0f);
+    }
+
+    /// <summary>바인딩된 슬롯 뷰를 다시 그린다(기계가 아이템을 생산/소모했을 때 호출).</summary>
+    public void RefreshSlots() => RefreshAll();
 
     /// <summary>진행도(0~1) 표시.</summary>
     public void SetProgress(float ratio)
