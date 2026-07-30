@@ -135,6 +135,9 @@ public class PlayerInteraction : MonoBehaviour
         } 
     }
 
+    /// <summary>좌클릭 홀드로 캘 수 있는 대상의 종류.</summary>
+    private enum MineTarget { None, Wall, Machine }
+
     private void UpdateMining()
     {
         // 커서 셀을 윤곽선 기준으로 보정(벽 윗면 클릭 → 아래 벽)해 대상 셀을 정한다.
@@ -143,15 +146,22 @@ public class PlayerInteraction : MonoBehaviour
         Vector2Int chunkId = Chunk.GetChunkId(cellPos);
         Vector2Int localCell = Chunk.GetLocalCellPositionInChunk(cellPos);
 
-        bool canMine = !isPointerOverUI
+        bool inputAllowed = !isPointerOverUI
             && (UIManager.Instance == null || !UIManager.Instance.isAnyUIOpen || UIManager.Instance.OpenUICount == 0)
             && Mouse.current != null
             && Mouse.current.leftButton.isPressed
             && GetIsCardinalAdjacent(mineCell, playerGlobalCell)
-            && WorldMap.Instance != null
-            && WorldMap.Instance.IsMineable(chunkId, localCell);
+            && WorldMap.Instance != null;
 
-        if (!canMine)
+        // 기계가 놓인 칸은 그 아래 바닥이 아니라 기계를 캔다.
+        MineTarget target = MineTarget.None;
+        if (inputAllowed)
+        {
+            if (mapGenerator.TryGetMachineAt(mineCell, out _)) target = MineTarget.Machine;
+            else if (WorldMap.Instance.IsMineable(chunkId, localCell)) target = MineTarget.Wall;
+        }
+
+        if (target == MineTarget.None)
         {
             CancelMining();
             return;
@@ -168,9 +178,34 @@ public class PlayerInteraction : MonoBehaviour
         if (miningProgress < miningHoldDuration)
             return;
 
-        if (WorldMap.Instance.Mining(chunkId, localCell))
-            mapGenerator.RefreshMinedTile(mineCell);
+        if (target == MineTarget.Machine) MineMachine(mineCell);
+        else MineWall(mineCell, chunkId, localCell);
+
         CancelMining();
+    }
+
+    /// <summary>벽을 캐고 그 블록에 지정된 아이템을 필드에 떨어뜨린다.</summary>
+    private void MineWall(Vector2Int mineCell, Vector2Int chunkId, Vector2Int localCell)
+    {
+        if (!WorldMap.Instance.Mining(chunkId, localCell, out string minedTileId)) return;
+
+        BlockBase block = ItemDictionary.Instance != null ? ItemDictionary.Instance.GetBlock(minedTileId) : null;
+        if (block != null && block.dropItem != null)
+            mapGenerator.SpawnDrop(mineCell, new ItemStack { item = block.dropItem, count = block.dropCount });
+
+        mapGenerator.RefreshMinedTile(mineCell);
+    }
+
+    /// <summary>기계를 캔다. 내부 아이템은 필드로 쏟아지고 에너지·가스·연소 상태는 사라진다.</summary>
+    private void MineMachine(Vector2Int mineCell)
+    {
+        if (!mapGenerator.TryGetMachineAt(mineCell, out MachineInstance machine)) return;
+
+        // 이 기계를 보고 있던 UI 를 먼저 닫는다. 안 닫으면 파괴된 인스턴스를 계속 붙들고 있게 된다.
+        if (machineInteraction != null && machineInteraction.CurrentMachine == machine)
+            machineInteraction.CloseView();
+
+        mapGenerator.RemoveMachineAt(mineCell);
     }
 
     private void CancelMining()

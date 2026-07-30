@@ -46,11 +46,27 @@ public class PlaceableRecord
     }
 }
 
+/// <summary>
+/// 필드에 떨어져 있는 아이템 하나. 청크에 저장되므로 청크를 벗어났다 돌아와도,
+/// 게임을 껐다 켜도 그대로 남아 있다.
+/// </summary>
+public class DropRecord
+{
+    public float x, y;              // 월드 좌표(셀 중심에서 살짝 흩뿌린 자리)
+    public string itemName;
+    public int count;
+    public ItemInstance instance;   // 커스텀 도구의 재질·내구도
+
+    public Vector2 Position => new Vector2(x, y);
+}
+
 public class Chunk
 {
     private string[,] tiles;
     // 지역 셀 좌표(0~15) → placeable 레코드
     private readonly Dictionary<Vector2Int, PlaceableRecord> placeables = new();
+    // 이 청크 안에 떨어져 있는 아이템들
+    private readonly List<DropRecord> drops = new();
 
     public Chunk()
     {
@@ -81,6 +97,11 @@ public class Chunk
     public void RemovePlaceable(Vector2Int local) => placeables.Remove(local);
     public IEnumerable<KeyValuePair<Vector2Int, PlaceableRecord>> Placeables => placeables;
 
+    // ── 드랍 접근자 ─────────────────────────────────────────────────────
+    public IReadOnlyList<DropRecord> Drops => drops;
+    public void AddDrop(DropRecord drop) { if (drop != null) drops.Add(drop); }
+    public void RemoveDrop(DropRecord drop) { if (drop != null) drops.Remove(drop); }
+
     public void Save(BinaryWriter writer)
     {
         for (int y = 0; y < 16; y++)
@@ -99,6 +120,16 @@ public class Chunk
             WriteSlotArray(writer, rec.fuelItemNames, rec.fuelCounts, rec.fuelInstances);
             writer.Write(rec.burnRemaining);
             writer.Write(rec.burnTotal);
+        }
+
+        writer.Write(drops.Count);
+        foreach (DropRecord drop in drops)
+        {
+            writer.Write(drop.x);
+            writer.Write(drop.y);
+            writer.Write(drop.itemName ?? "");
+            writer.Write(drop.count);
+            ItemInstanceSerializer.Write(writer, drop.instance);
         }
     }
 
@@ -160,6 +191,26 @@ public class Chunk
 
             chunk.placeables[new Vector2Int(lx, ly)] = rec;
         }
+
+        if (version >= 6)
+        {
+            int dropCount = reader.ReadInt32();
+            for (int d = 0; d < dropCount; d++)
+            {
+                DropRecord drop = new()
+                {
+                    x = reader.ReadSingle(),
+                    y = reader.ReadSingle(),
+                    itemName = reader.ReadString(),
+                    count = reader.ReadInt32(),
+                };
+                drop.instance = ItemInstanceSerializer.Read(reader);
+
+                // 아이템이 사라졌거나 개수가 0이면 되살릴 근거가 없다.
+                if (!string.IsNullOrEmpty(drop.itemName) && drop.count > 0) chunk.drops.Add(drop);
+            }
+        }
+
         return chunk;
     }
 }
@@ -175,9 +226,10 @@ public class WorldMap : Singleton<WorldMap>
 
     // 세이브 포맷 식별/버전. v2: placeable 레코드 포함. v3: placeable 인벤토리를 input/output 분리.
     // v4: 슬롯마다 ItemInstance(커스텀 도구의 재질·내구도)를 덧붙였다.
-    // v5: 연료 슬롯과 연소 잔량을 추가했다. v3·v4 도 계속 읽는다.
+    // v5: 연료 슬롯과 연소 잔량을 추가했다.
+    // v6: 필드에 떨어진 아이템(DropRecord)을 청크마다 저장한다. v3~v5 도 계속 읽는다.
     private const int SaveMagic = 0x50435730; // 'PCW0'
-    private const int SaveVersion = 5;
+    private const int SaveVersion = 6;
     private const int MinReadableVersion = 3;
 
     private Dictionary<Vector2Int, Chunk> chunks;
@@ -225,20 +277,31 @@ public class WorldMap : Singleton<WorldMap>
         }
         return chunk;
     }
-    public bool Mining(Vector2Int chunkId, Vector2Int cellPos)
+    public bool Mining(Vector2Int chunkId, Vector2Int cellPos) => Mining(chunkId, cellPos, out _);
+
+    /// <summary>
+    /// 벽을 캐고 바닥으로 바꾼다. <paramref name="minedTileId"/> 로 <b>캐기 전</b> 타일 ID 를 돌려주는데,
+    /// 캔 뒤에는 무엇이었는지 알 수 없어 드랍을 정할 수 없기 때문이다.
+    /// </summary>
+    public bool Mining(Vector2Int chunkId, Vector2Int cellPos, out string minedTileId)
     {
         Chunk chunk = GetOrCreateChunk(chunkId);
-        if (Chunk.IsWall(chunk.GetTile(cellPos.x, cellPos.y)))
-        {
-            chunk.SetTile(cellPos.x, cellPos.y, "floor:dirt");
-            return true;
-        }
-        return false;
+        minedTileId = chunk.GetTile(cellPos.x, cellPos.y);
+
+        if (!Chunk.IsWall(minedTileId)) return false;
+
+        chunk.SetTile(cellPos.x, cellPos.y, "floor:dirt");
+        return true;
     }
 
+    /// <summary>드랍이 정해진 벽 블록만 캘 수 있다(블록 종류는 가리지 않는다).</summary>
     public bool IsMineable(Vector2Int chunkId, Vector2Int cellPos)
     {
-        return GetOrCreateChunk(chunkId).GetTile(cellPos.x, cellPos.y) == "wall:stone"; //나중에 모든 블록 타입에 적용 가능하게 변경예정.
+        string tileId = GetOrCreateChunk(chunkId).GetTile(cellPos.x, cellPos.y);
+        if (!Chunk.IsWall(tileId)) return false;
+
+        BlockBase block = ItemDictionary.Instance != null ? ItemDictionary.Instance.GetBlock(tileId) : null;
+        return block != null && block.dropItem != null;
     }
 
     public void EnsurePrototypeUndergroundRoom()

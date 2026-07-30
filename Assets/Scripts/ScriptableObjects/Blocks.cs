@@ -9,6 +9,13 @@ public class BlockBase : ScriptableObject
     [Tooltip("화면에 표시할 이름(한글). 비우면 blockName 을 그대로 쓴다.")]
     public string displayName;
 
+    [Header("채굴")]
+    [Tooltip("캐면 필드에 떨어지는 아이템. 비우면 이 블록은 캘 수 없다.")]
+    public Items dropItem;
+
+    [Tooltip("한 번 캘 때 떨어지는 개수.")]
+    [Min(1)] public int dropCount = 1;
+
     /// <summary>UI 표시용 이름. displayName 이 비어 있으면 ID 로 폴백한다.</summary>
     public string DisplayName => string.IsNullOrEmpty(displayName) ? blockName : displayName;
 }

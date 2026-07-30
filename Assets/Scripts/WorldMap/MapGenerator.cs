@@ -23,6 +23,13 @@ public class MapGenerator : MonoBehaviour
     private readonly Dictionary<Vector2Int, MachineInstance> loadedMachines = new();
     private Transform placeableContainer;
 
+    // 로드된 청크에 스폰된 필드 드랍들(레코드 → 표시 오브젝트)
+    private readonly Dictionary<DropRecord, DroppedItem> loadedDrops = new();
+    private Transform dropContainer;
+
+    /// <summary>드랍이 한 자리에 겹쳐 보이지 않게 셀 중심에서 흩뿌리는 반경.</summary>
+    private const float DropScatter = 0.3f;
+
 
     void Start()
     {
@@ -46,6 +53,15 @@ public class MapGenerator : MonoBehaviour
         if (placeableObjectsTilemap != null)
             placeableContainer.SetParent(placeableObjectsTilemap.transform.parent, false);
     }
+    private void EnsureDropContainer()
+    {
+        if (dropContainer != null) return;
+        GameObject go = new GameObject("Drops");
+        dropContainer = go.transform;
+        if (placeableObjectsTilemap != null)
+            dropContainer.SetParent(placeableObjectsTilemap.transform.parent, false);
+    }
+
     private TileBase LoadTile(string blockId)
     {
         if (string.IsNullOrEmpty(blockId)) return null;
@@ -171,6 +187,49 @@ public class MapGenerator : MonoBehaviour
             Vector2Int worldCell = new Vector2Int(id.x * size + local.x, id.y * size + local.y);
             SpawnPlaceable(worldCell, kvp.Value);
         }
+
+        // 이 청크에 떨어져 있던 아이템 스폰
+        foreach (DropRecord drop in chunk.Drops) SpawnDropObject(drop, chunk);
+    }
+
+    // ── 필드 드랍 ──────────────────────────────────────────────────────
+    private void SpawnDropObject(DropRecord record, Chunk chunk)
+    {
+        if (record == null || loadedDrops.ContainsKey(record)) return;
+        EnsureDropContainer();
+
+        DroppedItem drop = DroppedItem.Create(dropContainer, record, chunk);
+        if (drop != null) loadedDrops[record] = drop;
+    }
+
+    /// <summary>필드에 아이템을 떨어뜨린다. 청크에 기록되므로 세이브에도 남는다.</summary>
+    public void SpawnDrop(Vector2 worldPos, Items item, int count, ItemInstance instance = null)
+    {
+        if (item == null || count <= 0) return;
+
+        Vector2 scattered = worldPos + Random.insideUnitCircle * DropScatter;
+        Vector2Int chunkId = Chunk.GetChunkId(scattered);
+        Chunk chunk = WorldMap.Instance.GetOrCreateChunk(chunkId);
+
+        DropRecord record = new()
+        {
+            x = scattered.x,
+            y = scattered.y,
+            itemName = item.itemName,
+            count = count,
+            instance = instance,
+        };
+        chunk.AddDrop(record);
+        SpawnDropObject(record, chunk);
+    }
+
+    /// <summary>스택 하나를 통째로 떨어뜨린다(기계를 캘 때 슬롯 내용을 쏟는 용도).</summary>
+    public void SpawnDrop(Vector2Int cell, ItemStack stack)
+    {
+        if (stack == null || stack.item == null || stack.count <= 0) return;
+
+        Vector3 center = placeableObjectsTilemap.GetCellCenterWorld(new Vector3Int(cell.x, cell.y, 0));
+        SpawnDrop(center, stack.item, stack.count, stack.instance);
     }
 
     // ── placeable 스폰/디스폰/조회 ──────────────────────────────────────
@@ -204,6 +263,56 @@ public class MapGenerator : MonoBehaviour
     public bool TryGetMachineAt(Vector2Int worldCell, out MachineInstance instance)
         => loadedMachines.TryGetValue(worldCell, out instance);
 
+    /// <summary>
+    /// 기계를 캔다. 기계 자신과 내부 슬롯(입력·출력·연료)의 아이템을 전부 필드에 떨어뜨리고 제거한다.
+    /// 에너지·가스·연소 잔량은 <see cref="PlaceableRecord"/> 가 사라지면서 함께 없어진다.
+    ///
+    /// UI 가 이 기계를 보고 있다면 호출자가 먼저 닫아야 한다(입력 판별은 PlayerInteraction 이 전담).
+    /// </summary>
+    public bool RemoveMachineAt(Vector2Int worldCell)
+    {
+        Vector3 cellPos = new Vector3(worldCell.x, worldCell.y, 0f);
+        Vector2Int chunkId = Chunk.GetChunkId(cellPos);
+        Vector2Int local = Chunk.GetLocalCellPositionInChunk(cellPos);
+
+        Chunk chunk = WorldMap.Instance.GetOrCreateChunk(chunkId);
+        PlaceableRecord record = chunk.GetPlaceable(local);
+        if (record == null) return false;
+
+        loadedMachines.TryGetValue(worldCell, out MachineInstance inst);
+
+        // 1) 내부 슬롯을 쏟는다. 개체 데이터를 그대로 넘겨 도구의 재질·내구도가 보존된다.
+        if (inst != null && inst.inventory != null)
+        {
+            DropSlots(worldCell, inst.inventory.inputSlots);
+            DropSlots(worldCell, inst.inventory.outputSlots);
+            DropSlots(worldCell, inst.inventory.fuelSlots);
+        }
+
+        // 2) 기계 자신도 떨어뜨린다(아이템 ID 는 blockName 과 같다는 규약).
+        Items machineItem = ItemDictionary.Instance != null ? ItemDictionary.Instance.GetItem(record.blockId) : null;
+        if (machineItem != null) SpawnDrop(worldCell, new ItemStack { item = machineItem, count = 1 });
+        else Debug.LogWarning($"[MapGenerator] '{record.blockId}' 에 대응하는 아이템이 없어 기계를 회수하지 못했습니다.");
+
+        // 3) 레코드와 인스턴스를 없앤다.
+        chunk.RemovePlaceable(local);
+        loadedMachines.Remove(worldCell);
+        if (inst != null) Destroy(inst.gameObject);
+        return true;
+    }
+
+    private void DropSlots(Vector2Int worldCell, List<ItemStack> slots)
+    {
+        if (slots == null) return;
+
+        foreach (ItemStack stack in slots)
+        {
+            if (stack == null || stack.item == null || stack.count <= 0) continue;
+            SpawnDrop(worldCell, stack);
+            stack.Clear();
+        }
+    }
+
     /// <summary>로드된 모든 기계의 인벤토리를 레코드로 동기화(저장 직전 호출).</summary>
     public void FlushAll()
     {
@@ -224,6 +333,14 @@ public class MapGenerator : MonoBehaviour
                 if (inst != null) { inst.Flush(); Destroy(inst.gameObject); }
                 loadedMachines.Remove(worldCell);
             }
+        }
+
+        // 드랍은 표시 오브젝트만 없앤다. 레코드는 청크에 남아 다시 오면 그대로 보인다.
+        foreach (DropRecord drop in chunk.Drops)
+        {
+            if (!loadedDrops.TryGetValue(drop, out DroppedItem obj)) continue;
+            if (obj != null) Destroy(obj.gameObject);
+            loadedDrops.Remove(drop);
         }
 
         for (int ty = 0; ty < size; ty++){

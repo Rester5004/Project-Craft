@@ -202,15 +202,23 @@ public static class RecipeSolver
 
     /// <summary>아이템을 슬롯에 넣는다(기존 스택 우선, 그 다음 빈 칸). 전부 넣었으면 true.</summary>
     public static bool TryAdd(IList<ItemStack> slots, Items item, int amount)
-        => TryAdd(slots, item, amount, null);
+        => AddItems(slots, item, amount, null) == amount;
 
     /// <summary>
     /// 개체 데이터를 가진 아이템(커스텀 도구 등)을 넣는다.
     /// 개체마다 내용이 달라 기존 스택과 합칠 수 없으므로 <b>빈 칸만</b> 찾는다.
     /// </summary>
     public static bool TryAdd(IList<ItemStack> slots, Items item, int amount, ItemInstance instance)
+        => AddItems(slots, item, amount, instance) == amount;
+
+    /// <summary>
+    /// 넣을 수 있는 만큼만 넣고 <b>실제로 넣은 개수</b>를 돌려준다.
+    /// 다 못 넣어도 나머지를 호출자가 알 수 있으므로, 필드 드랍 줍기처럼
+    /// "일부만 주워지는" 상황에서 남은 것이 증발하지 않는다.
+    /// </summary>
+    public static int AddItems(IList<ItemStack> slots, Items item, int amount, ItemInstance instance = null)
     {
-        if (slots == null || item == null || amount <= 0) return false;
+        if (slots == null || item == null || amount <= 0) return 0;
 
         int remaining = amount;
         int max = MaxStackOf(item);
@@ -240,6 +248,6 @@ public static class RecipeSolver
             first = false;
             remaining -= moved;
         }
-        return remaining == 0;
+        return amount - remaining;
     }
 }

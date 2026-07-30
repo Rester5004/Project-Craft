@@ -103,6 +103,14 @@ public class ItemDictionary : Singleton<ItemDictionary>
         return null;
     }
 
+    /// <summary>blockId(=blockName) 로 블록을 조회한다(종류 무관). 없으면 null.</summary>
+    public BlockBase GetBlock(string blockId)
+    {
+        if (!string.IsNullOrEmpty(blockId) && blockDictionary.TryGetValue(blockId, out BlockBase block))
+            return block;
+        return null;
+    }
+
     /// <summary>blockId(=blockName) 로 기계 정보(MachineBlock)를 조회한다. 없거나 기계가 아니면 null.</summary>
     public MachineBlock GetMachineInfo(string blockId)
     {

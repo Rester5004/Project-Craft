@@ -14,4 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MainBlock
   blockName: wall:stone
   displayName: "\uB3CC"
+  dropItem: {fileID: 11400000, guid: a377e0a4d5d6c8d4aa8d532ab54dcba5, type: 2}
+  dropCount: 1
   assetPath: {fileID: 11400000, guid: 7feeda1a31b3f2f449dc49455a2f285e, type: 2}

@@ -47,12 +47,19 @@ public class Inventory : Singleton<Inventory>, IItemContainer
     /// 개체마다 내용이 달라 병합할 수 없으므로 빈 칸에만 들어간다.
     /// </summary>
     public bool AddItem(Items item, int amount, ItemInstance instance)
-    {
-        if (item == null || amount <= 0) return false;
-        if (!RecipeSolver.TryAdd(slots, item, amount, instance)) return false;
+        => AddPartial(item, amount, instance) == amount;
 
-        OnChanged?.Invoke();
-        return true;
+    /// <summary>
+    /// 넣을 수 있는 만큼만 넣고 실제로 넣은 개수를 돌려준다.
+    /// 필드 드랍을 주울 때처럼 다 못 담아도 나머지를 필드에 남겨야 하는 경우에 쓴다.
+    /// </summary>
+    public int AddPartial(Items item, int amount, ItemInstance instance = null)
+    {
+        if (item == null || amount <= 0) return 0;
+
+        int added = RecipeSolver.AddItems(slots, item, amount, instance);
+        if (added > 0) OnChanged?.Invoke();
+        return added;
     }
 
     public bool AddItem(Items item, int amount)
