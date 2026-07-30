@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d1635fa976c21145835b252e45d6313, type: 3}
+  m_Name: electro_water
+  m_EditorClassIdentifier: Assembly-CSharp::Recipe
+  machine: {fileID: 11400000, guid: 322eae672e502b74da9ead827c3deded, type: 2}
+  category: {fileID: 0}
+  tier: 1
+  inputs:
+  - item: {fileID: 11400000, guid: 42b880701ef0fe14aad6a13a71f3ba2a, type: 2}
+    count: 2
+  outputs: []
+  craftTime: 1
+  importNote: "[\uCD9C\uCC98] notion_factory.json / id=electro_water\r\n[\uC720\uCCB4
+    \uC0B0\uCD9C] \uC218\uC18C x2\r\n[\uC720\uCCB4 \uC0B0\uCD9C] \uC0B0\uC18C x1\r\n[\uC804\uB825]
+    \uACE0\uC804\uC555\r\n[\uBE44\uACE0] \uC218\uC804\uD574\uAE30\uAC00 \uC804\uAE30
+    \uBD84\uD574\uAE30\uB85C \uD1B5\uD569\uB428\r\n[\uC6D0\uBB38] {\"id\":\"electro_water\",\"machine\":\"\uC804\uAE30
+    \uBD84\uD574\uAE30\",\"tier\":1,\"power\":\"\uACE0\uC804\uC555\",\"inputs\":[{\"item\":\"\uBB3C\",\"qty\":2}],\"outputs\":[{\"item\":\"\uC218\uC18C\",\"qty\":2,\"fluid\":true},{\"item\":\"\uC0B0\uC18C\",\"qty\":1,\"fluid\":true}],\"note\":\"\uC218\uC804\uD574\uAE30\uAC00
+    \uC804\uAE30 \uBD84\uD574\uAE30\uB85C \uD1B5\uD569\uB428\"}\r\n"

@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d1635fa976c21145835b252e45d6313, type: 3}
+  m_Name: craft_brick
+  m_EditorClassIdentifier: Assembly-CSharp::Recipe
+  machine: {fileID: 11400000, guid: ea55fe72f9315554a8ffdcf795dd1b7e, type: 2}
+  category: {fileID: 11400000, guid: a63365af4ccd3904a91ebf59b6456c84, type: 2}
+  tier: 0
+  inputs:
+  - item: {fileID: 11400000, guid: 4df3ae1290e85d346a34ede0f4a5c053, type: 2}
+    count: 2
+  - item: {fileID: 11400000, guid: 42b880701ef0fe14aad6a13a71f3ba2a, type: 2}
+    count: 1
+  outputs:
+  - item: {fileID: 11400000, guid: 3d2032d6931bd614c88734a7b8e2983e, type: 2}
+    count: 1
+  requiredTools: []
+  craftTime: 1
+  importNote: "[\uBCD1\uD569] Assets/Prefabs/Recipes/Incomplete/crafting_table/craft_brick.asset
+    \uB97C \uD761\uC218\uD568\r\n[\uCD9C\uCC98] notion_crafting.json / id=brick\r\n[\uAE30\uACC4]
+    '\uC870\uD569\uB300' \u2014 \uB300\uC751\uD558\uB294 MachineBlock \uC774 \uC5C6\uC5B4
+    \uBE44\uC6CC \uB460\r\n[\uBE44\uACE0] \uC555\uC5F0\uAE30\uC5D0\uC11C \uB9CC\uB4E4\uBA74
+    \uACE0\uD6A8\uC728\r\n[\uC6D0\uBB38] {\"id\":\"brick\",\"tier\":0,\"output\":\"\uBCBD\uB3CC\",\"outputQty\":1,\"inputs\":[{\"item\":\"\uBAA8\uB798\",\"qty\":2},{\"item\":\"\uBB3C\",\"qty\":1}],\"note\":\"\uC555\uC5F0\uAE30\uC5D0\uC11C
+    \uB9CC\uB4E4\uBA74 \uACE0\uD6A8\uC728\"}\r\n\r\n--- \uD761\uC218\uB41C \uC6D0\uBCF8
+    ---\r\n[\uCD9C\uCC98] crafting_table.json / id=craft_brick\r\n[\uAE30\uACC4]
+    '\uAC00\uACF5\uB300' \u2014 \uB300\uC751\uD558\uB294 MachineBlock \uC774 \uC5C6\uC5B4
+    \uBE44\uC6CC \uB460\r\n[\uC720\uCCB4 \uC7AC\uB8CC] \uBB3C x1 (\uC544\uC774\uD15C\uC774
+    \uC544\uB2C8\uB77C \uC62E\uAE30\uC9C0 \uC54A\uC74C)\r\n[\uC6D0\uBB38] {\"id\":\"craft_brick\",\"output\":\"\uBCBD\uB3CC\",\"inputs\":[{\"item\":\"\uBAA8\uB798\",\"qty\":2},{\"item\":\"\uBB3C\",\"qty\":1,\"fluid\":true}]}\r\n"

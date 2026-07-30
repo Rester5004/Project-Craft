@@ -13,10 +13,15 @@ MonoBehaviour:
   m_Name: Electrolyzer
   m_EditorClassIdentifier: Assembly-CSharp::MachineBlock
   blockName: Machine:Electrolyzer
+  displayName: "\uC804\uAE30 \uBD84\uD574\uAE30"
   machinePrefab: {fileID: 294556655845549275, guid: eb414131f3dd6cf42a50d051ce644ca6, type: 3}
   uiPrefab: {fileID: 1630192388603133487, guid: 45a4fb8bdc8ec6f4f95279927eeef2f6, type: 3}
+  tier: 1
+  recipeGroupId: 
   inputSlotCount: 1
   outputSlotCount: 0
+  fuelSlotCount: 0
+  fuelBurnRate: 20
   inputGasSlotCount: 2
   outputGasSlotCount: 2
   maxGasAmount: 100

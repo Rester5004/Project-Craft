@@ -7,7 +7,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "RecipeCategory", menuName = "Recipes/Recipe Category")]
 public class RecipeCategory : ScriptableObject
 {
-    [Tooltip("탭에 표시할 이름. 현재 UI 폰트가 한글을 지원하지 않으므로 영어를 권장한다.")]
+    [Tooltip("탭에 표시할 이름(한글).")]
     public string displayName;
 
     [Tooltip("탭 아이콘. 지정하면 아이콘 탭, 비우면 이름 텍스트만 표시한다.")]

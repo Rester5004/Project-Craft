@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d1635fa976c21145835b252e45d6313, type: 3}
+  m_Name: craft_stone_knife
+  m_EditorClassIdentifier: Assembly-CSharp::Recipe
+  machine: {fileID: 11400000, guid: ea55fe72f9315554a8ffdcf795dd1b7e, type: 2}
+  category: {fileID: 11400000, guid: a63365af4ccd3904a91ebf59b6456c84, type: 2}
+  tier: 0
+  inputs:
+  - item: {fileID: 11400000, guid: 6f7af4118ca4d5b47801fbc434629ef3, type: 2}
+    count: 1
+  - item: {fileID: 11400000, guid: 6db74cf172675664faf744f646835763, type: 2}
+    count: 1
+  outputs:
+  - item: {fileID: 11400000, guid: 1f4392515d912464d91e4d3e2b80f9e6, type: 2}
+    count: 1
+  requiredTools: []
+  craftTime: 1
+  importNote: "[\uBCD1\uD569] Assets/Prefabs/Recipes/Incomplete/crafting_table/craft_stone_knife.asset
+    \uB97C \uD761\uC218\uD568\r\n[\uCD9C\uCC98] notion_crafting.json / id=stone_knife\r\n[\uAE30\uACC4]
+    '\uC870\uD569\uB300' \u2014 \uB300\uC751\uD558\uB294 MachineBlock \uC774 \uC5C6\uC5B4
+    \uBE44\uC6CC \uB460\r\n[\uC6D0\uBB38] {\"id\":\"stone_knife\",\"tier\":0,\"output\":\"\uB3CC
+    \uCE7C\",\"outputQty\":1,\"inputs\":[{\"item\":\"\uB9C9\uB300\",\"qty\":1},{\"item\":\"\uB3CC
+    \uCE7C\uB0A0\",\"qty\":1}]}\r\n\r\n--- \uD761\uC218\uB41C \uC6D0\uBCF8 ---\r\n[\uCD9C\uCC98]
+    crafting_table.json / id=craft_stone_knife\r\n[\uAE30\uACC4] '\uAC00\uACF5\uB300'
+    \u2014 \uB300\uC751\uD558\uB294 MachineBlock \uC774 \uC5C6\uC5B4 \uBE44\uC6CC
+    \uB460\r\n[\uC6D0\uBB38] {\"id\":\"craft_stone_knife\",\"output\":\"\uB3CC \uCE7C\",\"inputs\":[{\"item\":\"\uB9C9\uB300\",\"qty\":1},{\"item\":\"\uB3CC
+    \uCE7C\uB0A0\",\"qty\":1}]}\r\n"

@@ -167,65 +167,74 @@ public class CommandConsole : MonoBehaviour
         {
             case "give": return CommandGive(tokens);
             case "remove": return CommandRemove(tokens);
-            case "help": return "/give <item> <count>  |  /remove <slotIndex>";
-            default: return $"Unknown command: '{command}' (try /help)";
+            case "help": return "/give <아이템명> <개수>  |  /remove <슬롯인덱스>";
+            default: return $"알 수 없는 명령어: '{command}' (/help 참고)";
         }
     }
 
     private string CommandGive(string[] tokens)
     {
-        if (tokens.Length < 3) return "Usage: /give <item> <count>";
+        if (tokens.Length < 3) return "사용법: /give <아이템명> <개수>";
 
-        // 아이템 이름에 공백이 있을 수 있으므로 마지막 토큰만 개수로 본다.
+        // 아이템 이름에 공백이 있을 수 있으므로(예: '철 조각') 마지막 토큰만 개수로 본다.
         string countToken = tokens[tokens.Length - 1];
         if (!int.TryParse(countToken, out int count) || count <= 0)
-            return $"Invalid count: '{countToken}'";
+            return $"개수가 올바르지 않습니다: '{countToken}'";
 
         string itemName = string.Join(" ", tokens, 1, tokens.Length - 2);
-        if (ItemDictionary.Instance == null) return "ItemDictionary not found.";
+        if (ItemDictionary.Instance == null) return "ItemDictionary 를 찾을 수 없습니다.";
 
         Items item = ItemDictionary.Instance.FindItem(itemName);
-        if (item == null) return $"Item not found: '{itemName}'" + SuggestNames(itemName);
+        if (item == null) return $"아이템을 찾을 수 없습니다: '{itemName}'" + SuggestNames(itemName);
 
         Inventory inventory = Inventory.Instance;
-        if (inventory == null) return "Inventory not found.";
+        if (inventory == null) return "Inventory 를 찾을 수 없습니다.";
 
-        if (!inventory.AddItem(item, count)) return $"Inventory full: could not add '{item.itemName}'.";
-        return $"Gave {item.itemName} x{count}";
+        if (!inventory.AddItem(item, count)) return $"인벤토리가 가득 차 '{item.DisplayName}' 을(를) 넣지 못했습니다.";
+        return $"{item.DisplayName} x{count} 지급 완료";
     }
 
     private string CommandRemove(string[] tokens)
     {
-        if (tokens.Length < 2) return "Usage: /remove <slotIndex>";
+        if (tokens.Length < 2) return "사용법: /remove <슬롯인덱스>";
         if (!int.TryParse(tokens[1], out int index))
-            return $"Invalid slot index: '{tokens[1]}'";
+            return $"슬롯 인덱스가 올바르지 않습니다: '{tokens[1]}'";
 
         Inventory inventory = Inventory.Instance;
-        if (inventory == null || inventory.slots == null) return "Inventory not found.";
+        if (inventory == null || inventory.slots == null) return "Inventory 를 찾을 수 없습니다.";
         if (index < 0 || index >= inventory.slots.Count)
-            return $"Slot index out of range: {index} (0-{inventory.slots.Count - 1})";
+            return $"슬롯 인덱스 범위를 벗어났습니다: {index} (0~{inventory.slots.Count - 1})";
 
         ItemStack stack = inventory.slots[index];
-        if (stack.item == null || stack.count <= 0) return $"Slot {index} is already empty.";
+        if (stack.item == null || stack.count <= 0) return $"슬롯 {index} 는 이미 비어 있습니다.";
 
-        string removed = $"{stack.item.itemName} x{stack.count}";
-        stack.item = null;
-        stack.count = 0;
+        string removed = $"{stack.item.DisplayName} x{stack.count}";
+        stack.Clear();
         inventory.NotifyChanged();
-        return $"Removed {removed} from slot {index}";
+        return $"슬롯 {index} 에서 {removed} 제거 완료";
     }
 
-    /// <summary>오타 시 비슷한 이름 몇 개를 알려준다.</summary>
+    /// <summary>오타 시 비슷한 이름 몇 개를 알려준다(한글 표시 이름 우선).</summary>
     private static string SuggestNames(string typed)
     {
         if (ItemDictionary.Instance == null || string.IsNullOrEmpty(typed)) return "";
+
+        string query = ItemDictionary.NormalizeName(typed);
         List<string> hits = new();
-        foreach (string name in ItemDictionary.Instance.ItemNames)
+        Collect(ItemDictionary.Instance.DisplayNames, query, hits);
+        Collect(ItemDictionary.Instance.ItemNames, query, hits);
+
+        return hits.Count > 0 ? "\n비슷한 이름: " + string.Join(", ", hits) : "";
+    }
+
+    private static void Collect(IEnumerable<string> names, string query, List<string> hits)
+    {
+        foreach (string name in names)
         {
-            if (name.IndexOf(typed, System.StringComparison.OrdinalIgnoreCase) >= 0) hits.Add(name);
-            if (hits.Count >= 5) break;
+            if (hits.Count >= 5) return;
+            if (name.IndexOf(query, System.StringComparison.OrdinalIgnoreCase) >= 0 && !hits.Contains(name))
+                hits.Add(name);
         }
-        return hits.Count > 0 ? "\nDid you mean: " + string.Join(", ", hits) : "";
     }
 
     // ── UI 구성 ─────────────────────────────────────────────────
@@ -278,7 +287,7 @@ public class CommandConsole : MonoBehaviour
         viewport.AddComponent<RectMask2D>();
 
         TextMeshProUGUI placeholder = CreateText("Placeholder", viewport.transform, font);
-        placeholder.text = "/give <item> <count>   |   /remove <slotIndex>";
+        placeholder.text = "/give <아이템명> <개수>   |   /remove <슬롯인덱스>";
         placeholder.color = new Color(1f, 1f, 1f, 0.4f);
 
         TextMeshProUGUI text = CreateText("Text", viewport.transform, font);

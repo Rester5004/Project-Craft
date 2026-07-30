@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: uranium_ingot
   m_EditorClassIdentifier: Assembly-CSharp::Items
   itemName: uranium_ingot
+  displayName: "\uC6B0\uB77C\uB284 \uC8FC\uAD34"
   placeable: 0
   Icon: {fileID: -4591315581682995782, guid: aa9d507c382e03646868e7afb18980dc, type: 3}
   maxStack: 64

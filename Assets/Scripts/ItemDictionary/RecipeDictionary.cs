@@ -54,6 +54,10 @@ public class RecipeDictionary : Singleton<RecipeDictionary>
         return Empty;
     }
 
+    private static bool Contains(string source, string query)
+        => !string.IsNullOrEmpty(source)
+           && ItemDictionary.NormalizeName(source).IndexOf(query, System.StringComparison.OrdinalIgnoreCase) >= 0;
+
     /// <summary>등록된 전체 레시피 수(진단용).</summary>
     public int RecipeCount => recipesList.Count;
 
@@ -66,13 +70,22 @@ public class RecipeDictionary : Singleton<RecipeDictionary>
         if (results == null) return;
         results.Clear();
 
+        int uncategorized = 0;
+
         IReadOnlyList<Recipe> all = GetRecipesFor(blockId);
         for (int i = 0; i < all.Count; i++)
         {
             Recipe recipe = all[i];
-            if (recipe == null || recipe.category == null || recipe.tier > maxTier) continue;
+            if (recipe == null || recipe.tier > maxTier) continue;
+            if (recipe.category == null) { uncategorized++; continue; }
             if (!results.Contains(recipe.category)) results.Add(recipe.category);
         }
+
+        // 카테고리가 없으면 어느 탭에도 못 들어가 목록에서 통째로 사라진다.
+        // 조용히 없어지면 원인을 찾기 어려우므로 알려 준다(Assign Recipe Categories 로 채울 수 있다).
+        if (uncategorized > 0)
+            Debug.LogWarning($"[RecipeDictionary] '{blockId}' 의 레시피 {uncategorized}개가 카테고리가 없어 탭에 나타나지 않습니다. "
+                + "Tools/Project Craft/Recipes/Assign Recipe Categories 를 실행하세요.");
 
         results.Sort(CompareCategories);
     }
@@ -92,7 +105,7 @@ public class RecipeDictionary : Singleton<RecipeDictionary>
         results.Clear();
 
         bool hasSearch = !string.IsNullOrWhiteSpace(search);
-        string query = hasSearch ? search.Trim() : null;
+        string query = hasSearch ? ItemDictionary.NormalizeName(search.Trim()) : null;
 
         IReadOnlyList<Recipe> all = GetRecipesFor(blockId);
         for (int i = 0; i < all.Count; i++)
@@ -104,8 +117,9 @@ public class RecipeDictionary : Singleton<RecipeDictionary>
             if (hasSearch)
             {
                 Items output = recipe.PrimaryOutput;
-                if (output == null || output.itemName == null) continue;
-                if (output.itemName.IndexOf(query, System.StringComparison.OrdinalIgnoreCase) < 0) continue;
+                if (output == null) continue;
+                // 한글 표시 이름과 영어 ID 양쪽으로 검색되게 한다.
+                if (!Contains(output.DisplayName, query) && !Contains(output.itemName, query)) continue;
             }
 
             results.Add(recipe);

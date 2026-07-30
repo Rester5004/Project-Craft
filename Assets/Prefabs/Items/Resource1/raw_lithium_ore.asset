@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: raw_lithium_ore
   m_EditorClassIdentifier: Assembly-CSharp::Items
   itemName: raw_lithium_ore
+  displayName: "\uB9AC\uD2AC \uC870\uAC01"
   placeable: 0
   Icon: {fileID: -3066054166537088637, guid: aa9d507c382e03646868e7afb18980dc, type: 3}
   maxStack: 64

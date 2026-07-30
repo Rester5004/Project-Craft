@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d1635fa976c21145835b252e45d6313, type: 3}
+  m_Name: thermal_gen_coal
+  m_EditorClassIdentifier: Assembly-CSharp::Recipe
+  machine: {fileID: 11400000, guid: 766ba04896b277645ada272bae27fda7, type: 2}
+  category: {fileID: 0}
+  tier: 0
+  inputs:
+  - item: {fileID: 11400000, guid: b175ffb5a38990f48955a831de7a3b1d, type: 2}
+    count: 1
+  outputs: []
+  requiredTools: []
+  craftTime: 1
+  importNote: "[\uCD9C\uCC98] machine_processing.json / id=thermal_gen_coal\r\n[\uAE30\uACC4]
+    '\uD654\uB825 \uBC1C\uC804\uAE30' \u2014 \uB300\uC751\uD558\uB294 MachineBlock
+    \uC774 \uC5C6\uC5B4 \uBE44\uC6CC \uB460\r\n[\uC804\uB825 \uC0B0\uCD9C] {\"item\":\"Energy\",\"type\":\"power\",\"amount\":400}\r\n[\uC6D0\uBB38
+    \uBD84\uB958] fuel\r\n[\uC6D0\uBB38] {\"id\":\"thermal_gen_coal\",\"machine\":\"\uD654\uB825
+    \uBC1C\uC804\uAE30\",\"tier\":0,\"category\":\"fuel\",\"inputs\":[{\"item\":\"\uC11D\uD0C4\",\"qty\":1}],\"outputs\":[{\"item\":\"Energy\",\"type\":\"power\",\"amount\":400}]}\r\n"

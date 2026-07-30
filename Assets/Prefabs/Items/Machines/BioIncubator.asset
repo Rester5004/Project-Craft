@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: BioIncubator
   m_EditorClassIdentifier: Assembly-CSharp::Machine
   itemName: Machine:BioIncubator
+  displayName: "\uC720\uAE30\uBB3C \uBC30\uC591\uAE30"
   placeable: 1
   Icon: {fileID: 2667733234635348843, guid: 8c8abafd1cffa6c4e8d7eb9309478e38, type: 3}
   maxStack: 64

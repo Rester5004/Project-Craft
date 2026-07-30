@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: tin_ingot
   m_EditorClassIdentifier: Assembly-CSharp::Items
   itemName: tin_ingot
+  displayName: "\uC8FC\uC11D \uC8FC\uAD34"
   placeable: 0
   Icon: {fileID: -9129908140325851132, guid: aa9d507c382e03646868e7afb18980dc, type: 3}
   maxStack: 64

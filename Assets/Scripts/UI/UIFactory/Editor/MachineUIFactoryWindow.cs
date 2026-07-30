@@ -145,6 +145,7 @@ namespace ProjectCraft.UIFactory.EditorTools
                 {
                     if (GUILayout.Button("입력 슬롯")) AddElement(layout, MachineUIRole.InputSlot);
                     if (GUILayout.Button("출력 슬롯")) AddElement(layout, MachineUIRole.OutputSlot);
+                    if (GUILayout.Button("연료 슬롯")) AddElement(layout, MachineUIRole.FuelSlot);
                 }
                 using (new EditorGUILayout.HorizontalScope())
                 {
@@ -154,6 +155,7 @@ namespace ProjectCraft.UIFactory.EditorTools
                 using (new EditorGUILayout.HorizontalScope())
                 {
                     if (GUILayout.Button("에너지 바")) AddElement(layout, MachineUIRole.EnergyBar);
+                    if (GUILayout.Button("연료 바")) AddElement(layout, MachineUIRole.FuelBar);
                     if (GUILayout.Button("진행도 바")) AddElement(layout, MachineUIRole.ProgressBar);
                 }
                 if (GUILayout.Button("기계 이름")) AddElement(layout, MachineUIRole.MachineName);
@@ -274,6 +276,10 @@ namespace ProjectCraft.UIFactory.EditorTools
                 PlaceElement(panel, MachineUIRole.OutputGasBar, i, new Vector2(260f + i * 70f, 0f));
             if (target.isUseEnergy)
                 PlaceElement(panel, MachineUIRole.EnergyBar, 0, new Vector2(-360f, 0f));
+            for (int i = 0; i < target.fuelSlotCount; i++)
+                PlaceElement(panel, MachineUIRole.FuelSlot, i, new Vector2(-300f + i * 140f, 10f));
+            if (target.UsesFuel)
+                PlaceElement(panel, MachineUIRole.FuelBar, 0, new Vector2(-360f, 0f));
             PlaceElement(panel, MachineUIRole.ProgressBar, 0, new Vector2(0f, 10f));
             PlaceElement(panel, MachineUIRole.MachineName, 0, new Vector2(0f, 210f));
 

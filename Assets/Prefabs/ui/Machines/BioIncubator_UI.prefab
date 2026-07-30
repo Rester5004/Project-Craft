@@ -1029,11 +1029,11 @@ PrefabInstance:
     - target: {fileID: 3304013146260832941, guid: c83a19388d956eb4bbe690a7840e0785, type: 3}
       propertyPath: m_fontAsset
       value: 
-      objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+      objectReference: {fileID: 11400000, guid: 558b1d5b0d7d41b40b7bdea79fb80262, type: 2}
     - target: {fileID: 3304013146260832941, guid: c83a19388d956eb4bbe690a7840e0785, type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+      objectReference: {fileID: 8524955266499369447, guid: 558b1d5b0d7d41b40b7bdea79fb80262, type: 2}
     - target: {fileID: 3304013146260832941, guid: c83a19388d956eb4bbe690a7840e0785, type: 3}
       propertyPath: m_hasFontAssetChanged
       value: 0

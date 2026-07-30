@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d1635fa976c21145835b252e45d6313, type: 3}
+  m_Name: enchant
+  m_EditorClassIdentifier: Assembly-CSharp::Recipe
+  machine: {fileID: 11400000, guid: 1a4350766378a1a4d96898589f8f5256, type: 2}
+  category: {fileID: 0}
+  tier: 1
+  inputs: []
+  outputs: []
+  requiredTools: []
+  craftTime: 1
+  importNote: "[\uCD9C\uCC98] machine_processing.json / id=enchant\r\n[\uAE30\uACC4]
+    '\uB9C8\uBC95\uBD80\uC5EC\uAE30' \u2014 \uB300\uC751\uD558\uB294 MachineBlock
+    \uC774 \uC5C6\uC5B4 \uBE44\uC6CC \uB460\r\n[\uBE44\uACE0] \uB9C8\uBC95\uBD80\uC5EC
+    \uCD94\uD6C4 \uCD94\uAC00 \uC608\uC815. \uB3C4\uAD6C\uB294 \uB9C9\uB300 \uC885\uB958\uBCC4\uB85C
+    \uD6A8\uC728\uC774 \uB2E4\uB974\uBA70 \uB9C8\uB098\uB97C \uC0AC\uC6A9\uD568\r\n[\uC6D0\uBB38]
+    {\"id\":\"enchant\",\"machine\":\"\uB9C8\uBC95\uBD80\uC5EC\uAE30\",\"tier\":1,\"output\":null,\"inputs\":[],\"note\":\"\uB9C8\uBC95\uBD80\uC5EC
+    \uCD94\uD6C4 \uCD94\uAC00 \uC608\uC815. \uB3C4\uAD6C\uB294 \uB9C9\uB300 \uC885\uB958\uBCC4\uB85C
+    \uD6A8\uC728\uC774 \uB2E4\uB974\uBA70 \uB9C8\uB098\uB97C \uC0AC\uC6A9\uD568\"}\r\n"

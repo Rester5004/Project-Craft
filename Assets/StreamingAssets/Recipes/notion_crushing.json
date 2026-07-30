@@ -1,0 +1,69 @@
+{
+  "recipeType": "crushing",
+  "source": "Notion 기획 백로그 (1) — 1. 분쇄 시스템",
+  "machine": "분쇄기",
+  "description": "직렬 누적 가공. 분쇄기를 거칠 때마다 독립적인 중간재가 생성되며, 각 중간재는 그 자체로 추출기에 재투입 가능하다. 주 산출물 100%, 부산물은 일반 10% / 고급 5% / 희귀 1%.",
+  "recipes": [
+    { "id": "crush_rock", "tier": 0, "input": "암석",
+      "outputs": [
+        { "item": "돌", "qty": 1, "chance": 1.0, "role": "main" },
+        { "item": "철 조각", "qty": 1, "chance": 0.10, "grade": "일반" },
+        { "item": "석탄", "qty": 1, "chance": 0.05, "grade": "고급" },
+        { "item": "구리 조각", "qty": 1, "chance": 0.01, "grade": "희귀" }
+      ] },
+
+    { "id": "crush_stone", "tier": 0, "input": "돌",
+      "outputs": [
+        { "item": "자갈", "qty": 1, "chance": 1.0, "role": "main" },
+        { "item": "갈탄", "qty": 1, "chance": 0.10, "grade": "일반" },
+        { "item": "석탄", "qty": 1, "chance": 0.05, "grade": "고급" },
+        { "item": "은 조각", "qty": 1, "chance": 0.01, "grade": "희귀" }
+      ] },
+
+    { "id": "crush_gravel", "tier": 0, "input": "자갈",
+      "outputs": [
+        { "item": "모래", "qty": 1, "chance": 1.0, "role": "main" },
+        { "item": "뼈 가루", "qty": 1, "chance": 0.10, "grade": "일반" },
+        { "item": "석영 가루", "qty": 1, "chance": 0.05, "grade": "고급" },
+        { "item": "금 조각", "qty": 1, "chance": 0.01, "grade": "희귀" }
+      ],
+      "note": "모래는 최종 단계라 추가 분쇄 불가" },
+
+    { "id": "crush_ore", "tier": 1, "input": "광석",
+      "outputs": [
+        { "item": "파쇄 광석", "qty": 1, "chance": 1.0, "role": "main" },
+        { "item": "유황석", "qty": 1, "chance": 0.10, "grade": "일반" },
+        { "item": "반짝이는 돌", "qty": 1, "chance": 0.05, "grade": "고급" },
+        { "item": "미가공 우라늄", "qty": 1, "chance": 0.01, "grade": "희귀" }
+      ] },
+
+    { "id": "crush_crushed_ore", "tier": 1, "input": "파쇄 광석",
+      "outputs": [
+        { "item": "광석 알갱이", "qty": 1, "chance": 1.0, "role": "main" },
+        { "item": "납 조각", "qty": 1, "chance": 0.10, "grade": "일반" },
+        { "item": "니켈 조각", "qty": 1, "chance": 0.05, "grade": "고급" },
+        { "item": "티타늄 조각", "qty": 1, "chance": 0.01, "grade": "희귀" }
+      ] },
+
+    { "id": "crush_ore_grain", "tier": 1, "input": "광석 알갱이",
+      "outputs": [
+        { "item": "반짝이는 가루", "qty": 1, "chance": 1.0, "role": "main" },
+        { "item": "주석 조각", "qty": 1, "chance": 0.10, "grade": "일반" },
+        { "item": "알루미늄 조각", "qty": 1, "chance": 0.05, "grade": "고급" },
+        { "item": "리튬 조각", "qty": 1, "chance": 0.01, "grade": "희귀" }
+      ],
+      "note": "반짝이는 가루는 최종 단계라 추가 분쇄 불가" },
+
+    { "id": "crush_meteorite", "tier": 2, "input": "운석",
+      "outputs": [ { "item": "에너지 결정", "qty": 1, "chance": 1.0, "role": "main" } ],
+      "note": "부산물 3종 미정" },
+
+    { "id": "crush_energy_crystal", "tier": 2, "input": "에너지 결정",
+      "outputs": [ { "item": "마력 결정", "qty": 1, "chance": 1.0, "role": "main" } ],
+      "note": "부산물 3종 미정" },
+
+    { "id": "crush_magic_crystal", "tier": 2, "input": "마력 결정",
+      "outputs": [ { "item": "마법 가루", "qty": 1, "chance": 1.0, "role": "main" } ],
+      "note": "마법 가루는 최종 단계라 추가 분쇄 불가. 부산물 3종 미정" }
+  ]
+}

@@ -13,10 +13,14 @@ MonoBehaviour:
   m_Name: Pulverize_QuartzCrystal
   m_EditorClassIdentifier: Assembly-CSharp::Recipe
   machine: {fileID: 11400000, guid: 2290bdb0a27272d4eb44b866581bb18e, type: 2}
+  category: {fileID: 11400000, guid: a63365af4ccd3904a91ebf59b6456c84, type: 2}
+  tier: 0
   inputs:
   - item: {fileID: 11400000, guid: 6319e82acacb544498d01f18781af620, type: 2}
     count: 1
   outputs:
   - item: {fileID: 11400000, guid: a3855fd0454f0964ab3f42c22f3c301c, type: 2}
     count: 2
+  requiredTools: []
   craftTime: 2
+  importNote: 

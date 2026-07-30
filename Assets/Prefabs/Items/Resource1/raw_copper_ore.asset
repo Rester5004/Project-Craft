@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: raw_copper_ore
   m_EditorClassIdentifier: Assembly-CSharp::Items
   itemName: raw_copper_ore
+  displayName: "\uAD6C\uB9AC \uC870\uAC01"
   placeable: 0
   Icon: {fileID: -7361560028921433001, guid: aa9d507c382e03646868e7afb18980dc, type: 3}
   maxStack: 64

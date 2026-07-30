@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: quartz_crystal
   m_EditorClassIdentifier: Assembly-CSharp::Items
   itemName: quartz_crystal
+  displayName: "\uC11D\uC601 \uACB0\uC815"
   placeable: 0
   Icon: {fileID: -6938477031759485609, guid: aa9d507c382e03646868e7afb18980dc, type: 3}
   maxStack: 64

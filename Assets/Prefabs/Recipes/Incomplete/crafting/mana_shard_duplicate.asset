@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d1635fa976c21145835b252e45d6313, type: 3}
+  m_Name: mana_shard_duplicate
+  m_EditorClassIdentifier: Assembly-CSharp::Recipe
+  machine: {fileID: 11400000, guid: ea55fe72f9315554a8ffdcf795dd1b7e, type: 2}
+  category: {fileID: 11400000, guid: a63365af4ccd3904a91ebf59b6456c84, type: 2}
+  tier: 0
+  inputs:
+  - item: {fileID: 11400000, guid: e1648015ff586bd4f8acecff314c4abb, type: 2}
+    count: 1
+  - item: {fileID: 11400000, guid: f3303932c33708443bcce46c16f8642c, type: 2}
+    count: 10
+  outputs:
+  - item: {fileID: 11400000, guid: e1648015ff586bd4f8acecff314c4abb, type: 2}
+    count: 2
+  requiredTools: []
+  craftTime: 1
+  importNote: "[\uCD9C\uCC98] crafting.json / id=mana_shard_duplicate\r\n[\uB3C4\uAD6C]
+    \uB9DD\uCE58 (\uB0B4\uAD6C\uB3C4\uB9CC \uC18C\uBAA8, \uC7AC\uB8CC \uC544\uB2D8)\r\n[\uC870\uD569
+    \uC7A5\uC18C] \uCD08\uAE09 \uC7AC\uB2E8\r\n[\uC6D0\uBB38 \uBD84\uB958] magic\r\n[\uC6D0\uBB38]
+    {\"id\":\"mana_shard_duplicate\",\"tier\":0,\"category\":\"magic\",\"station\":\"\uCD08\uAE09
+    \uC7AC\uB2E8\",\"output\":\"\uB9C8\uB825 \uD30C\uD3B8\",\"outputQty\":2,\"tools\":[\"\uB9DD\uCE58\"],\"inputs\":[{\"item\":\"\uB9C8\uB825
+    \uD30C\uD3B8\",\"qty\":1},{\"item\":\"\uAD6C\uB9AC\",\"qty\":10}]}\r\n"

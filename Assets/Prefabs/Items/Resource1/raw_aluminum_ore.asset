@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: raw_aluminum_ore
   m_EditorClassIdentifier: Assembly-CSharp::Items
   itemName: raw_aluminum_ore
+  displayName: "\uC54C\uB8E8\uBBF8\uB284 \uC870\uAC01"
   placeable: 0
   Icon: {fileID: 6853436888923354259, guid: aa9d507c382e03646868e7afb18980dc, type: 3}
   maxStack: 64

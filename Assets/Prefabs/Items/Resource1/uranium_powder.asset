@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: uranium_powder
   m_EditorClassIdentifier: Assembly-CSharp::Items
   itemName: uranium_powder
+  displayName: "\uC6B0\uB77C\uB284 \uAC00\uB8E8"
   placeable: 0
   Icon: {fileID: -19359791219331252, guid: aa9d507c382e03646868e7afb18980dc, type: 3}
   maxStack: 64

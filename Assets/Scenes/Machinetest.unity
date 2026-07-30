@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 172719742}
   - component: {fileID: 172719747}
   - component: {fileID: 172719748}
+  - component: {fileID: 172719749}
   m_Layer: 0
   m_Name: player
   m_TagString: Untagged
@@ -199,11 +200,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d9b1284439aa2e4689436c5e3e78d85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MachineInteraction
-  machineUI: {fileID: 2131220576}
-  machineLayer:
-    serializedVersion: 2
-    m_Bits: 64
-  interactRange: 1.5
+  machineUIHost: {fileID: 0}
 --- !u!114 &172719744
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -303,11 +300,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e54e65394946ba948bc96335d6730577, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMining
-  flag: 0
-  blockLayer:
+  mapGenerator: {fileID: 0}
+  machineInteraction: {fileID: 0}
+  occupiedLayers:
     serializedVersion: 2
-    m_Bits: 128
-  mineRange: 1.5
+    m_Bits: 192
+  occupancyCheckSize: 0.8
+  placementFlag: 0
+  miningHoldDuration: 0.75
 --- !u!114 &172719748
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -325,6 +325,33 @@ MonoBehaviour:
     m_Bits: 192
   occupancyCheckSize: 0.8
   placementFlag: 0
+--- !u!50 &172719749
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 172719741}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &656517842
 GameObject:
   m_ObjectHideFlags: 0
@@ -596,8 +623,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Button
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 558b1d5b0d7d41b40b7bdea79fb80262, type: 2}
+  m_sharedMaterial: {fileID: 8524955266499369447, guid: 558b1d5b0d7d41b40b7bdea79fb80262, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

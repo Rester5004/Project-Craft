@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: sapphire
   m_EditorClassIdentifier: Assembly-CSharp::Items
   itemName: sapphire
+  displayName: "\uC0AC\uD30C\uC774\uC5B4"
   placeable: 0
   Icon: {fileID: -3679564455860197352, guid: aa9d507c382e03646868e7afb18980dc, type: 3}
   maxStack: 64

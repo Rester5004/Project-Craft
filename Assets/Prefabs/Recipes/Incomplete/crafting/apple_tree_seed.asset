@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d1635fa976c21145835b252e45d6313, type: 3}
+  m_Name: apple_tree_seed
+  m_EditorClassIdentifier: Assembly-CSharp::Recipe
+  machine: {fileID: 11400000, guid: ea55fe72f9315554a8ffdcf795dd1b7e, type: 2}
+  category: {fileID: 11400000, guid: a63365af4ccd3904a91ebf59b6456c84, type: 2}
+  tier: 1
+  inputs:
+  - item: {fileID: 11400000, guid: 34a2579754a75264e8befb907d4c2ef6, type: 2}
+    count: 1
+  - item: {fileID: 11400000, guid: e1648015ff586bd4f8acecff314c4abb, type: 2}
+    count: 10
+  outputs:
+  - item: {fileID: 11400000, guid: 1616fc33903f047419b57a32d01e6c70, type: 2}
+    count: 1
+  requiredTools: []
+  craftTime: 1
+  importNote: "[\uCD9C\uCC98] crafting.json / id=apple_tree_seed\r\n[\uC870\uD569
+    \uC7A5\uC18C] \uC911\uAE09 \uC7AC\uB2E8\r\n[\uC6D0\uBB38 \uBD84\uB958] magic\r\n[\uC6D0\uBB38]
+    {\"id\":\"apple_tree_seed\",\"tier\":1,\"category\":\"magic\",\"station\":\"\uC911\uAE09
+    \uC7AC\uB2E8\",\"output\":\"\uC0AC\uACFC \uB098\uBB34 \uC528\uC557\",\"outputQty\":1,\"inputs\":[{\"item\":\"\uB098\uBB34
+    \uC528\uC557\",\"qty\":1},{\"item\":\"\uB9C8\uB825 \uD30C\uD3B8\",\"qty\":10}]}\r\n"

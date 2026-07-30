@@ -13,10 +13,15 @@ MonoBehaviour:
   m_Name: AlloySmelter
   m_EditorClassIdentifier: Assembly-CSharp::MachineBlock
   blockName: Machine:AlloySmelter
+  displayName: "\uD569\uAE08 \uC7AC\uB828\uAE30"
   machinePrefab: {fileID: 2613032363430261748, guid: 86f19f5eb0b5a5842bc539210c0c3500, type: 3}
   uiPrefab: {fileID: 723616340984963795, guid: 5222efefda342f24993262ad4387165e, type: 3}
+  tier: 1
+  recipeGroupId: 
   inputSlotCount: 3
   outputSlotCount: 1
+  fuelSlotCount: 0
+  fuelBurnRate: 20
   inputGasSlotCount: 0
   outputGasSlotCount: 0
   maxGasAmount: 0

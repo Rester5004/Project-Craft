@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: surface_powder
   m_EditorClassIdentifier: Assembly-CSharp::Items
   itemName: surface_powder
+  displayName: "\uD45C\uD1A0 \uAC00\uB8E8"
   placeable: 0
   Icon: {fileID: -6850481227071436309, guid: aa9d507c382e03646868e7afb18980dc, type: 3}
   maxStack: 64

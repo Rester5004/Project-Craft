@@ -1,0 +1,42 @@
+{
+  "recipeType": "smelting",
+  "source": "Notion 기획 백로그 (1) — 6. 레시피 / 제련 레시피 (화로)",
+  "machine": "화로",
+  "description": "0티어에서는 갈탄/석탄을 직접 연소해 무전력으로 돌아간다. 1티어 저전압 전기로 / 2티어 고전압 전기로로 업그레이드. 유리 제조기가 통합되었다.",
+  "recipes": [
+    { "id": "smelt_iron", "tier": 0, "output": "철 주괴", "outputQty": 1,
+      "inputs": [ { "item": "철 조각", "qty": 4 } ] },
+
+    { "id": "smelt_copper", "tier": 0, "output": "구리 주괴", "outputQty": 1,
+      "inputs": [ { "item": "구리 조각", "qty": 4 } ] },
+
+    { "id": "smelt_gold", "tier": 0, "output": "금 주괴", "outputQty": 1,
+      "inputs": [ { "item": "금 조각", "qty": 4 } ] },
+
+    { "id": "smelt_silver", "tier": 0, "output": "은 주괴", "outputQty": 1,
+      "inputs": [ { "item": "은 조각", "qty": 4 } ] },
+
+    { "id": "smelt_lead", "tier": 1, "output": "납 주괴", "outputQty": 1,
+      "inputs": [ { "item": "납 조각", "qty": 4 } ] },
+
+    { "id": "smelt_nickel", "tier": 1, "output": "니켈 주괴", "outputQty": 1,
+      "inputs": [ { "item": "니켈 조각", "qty": 4 } ] },
+
+    { "id": "smelt_tin", "tier": 1, "output": "주석 주괴", "outputQty": 1,
+      "inputs": [ { "item": "주석 조각", "qty": 4 } ] },
+
+    { "id": "smelt_titanium", "tier": 1, "output": "티타늄 주괴", "outputQty": 1,
+      "inputs": [ { "item": "티타늄 조각", "qty": 4 } ] },
+
+    { "id": "smelt_lime", "tier": 0, "output": "석회", "outputQty": 1,
+      "inputs": [ { "item": "뼈 가루", "qty": 2 } ] },
+
+    { "id": "smelt_glass", "tier": 0, "output": "유리", "outputQty": 1,
+      "inputs": [ { "item": "모래", "qty": 3 }, { "item": "물", "qty": 1 } ],
+      "note": "유리 제조기가 화로로 통합됨" },
+
+    { "id": "smelt_silicon", "tier": 0, "output": "실리콘", "outputQty": 1,
+      "inputs": [ { "item": "석영 가루", "qty": 1 } ],
+      "note": "석영 가루를 구우면 실리콘이 나온다" }
+  ]
+}

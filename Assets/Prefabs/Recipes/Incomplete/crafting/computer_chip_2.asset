@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d1635fa976c21145835b252e45d6313, type: 3}
+  m_Name: computer_chip_2
+  m_EditorClassIdentifier: Assembly-CSharp::Recipe
+  machine: {fileID: 11400000, guid: ea55fe72f9315554a8ffdcf795dd1b7e, type: 2}
+  category: {fileID: 11400000, guid: a63365af4ccd3904a91ebf59b6456c84, type: 2}
+  tier: 1
+  inputs:
+  - item: {fileID: 11400000, guid: 3ada4b9c07978ef4a83f859677400bc6, type: 2}
+    count: 10
+  - item: {fileID: 11400000, guid: 82d16607b0770b44480852df91bd41b9, type: 2}
+    count: 10
+  - item: {fileID: 11400000, guid: c9392aeebd648724fa65fd8e7b65dcef, type: 2}
+    count: 10
+  - item: {fileID: 11400000, guid: e28e21cfbb23d8c42869f75d13aba7e5, type: 2}
+    count: 20
+  outputs:
+  - item: {fileID: 11400000, guid: cb5fecda99ffdb74382a0c1f5e8bef4d, type: 2}
+    count: 1
+  requiredTools: []
+  craftTime: 1
+  importNote: "[\uBCD1\uD569] Assets/Prefabs/Recipes/Incomplete/crafting/computer_chip.asset
+    \uB97C \uD761\uC218\uD568\r\n[\uCD9C\uCC98] notion_crafting.json / id=computer_chip\r\n[\uAE30\uACC4]
+    '\uC870\uD569\uB300' \u2014 \uB300\uC751\uD558\uB294 MachineBlock \uC774 \uC5C6\uC5B4
+    \uBE44\uC6CC \uB460\r\n[\uBE44\uACE0] \uB808\uC774\uC800 \uAC00\uACF5\uAE30\uC5D0\uC11C
+    \uB9CC\uB4E4\uBA74 \uC7AC\uB8CC\uAC00 1/10\r\n[\uC6D0\uBB38] {\"id\":\"computer_chip\",\"tier\":1,\"output\":\"\uCEF4\uD4E8\uD130
+    \uCE69\",\"outputQty\":1,\"inputs\":[{\"item\":\"\uC2E4\uB9AC\uCF58 \uD310\",\"qty\":10},{\"item\":\"\uAD6C\uB9AC\uD310\",\"qty\":10},{\"item\":\"\uCCA0\uD310\",\"qty\":10},{\"item\":\"\uC804\uB3C4\uCCB4
+    \uAC00\uB8E8\",\"qty\":20}],\"note\":\"\uB808\uC774\uC800 \uAC00\uACF5\uAE30\uC5D0\uC11C
+    \uB9CC\uB4E4\uBA74 \uC7AC\uB8CC\uAC00 1/10\"}\r\n\r\n--- \uD761\uC218\uB41C \uC6D0\uBCF8
+    ---\r\n[\uCD9C\uCC98] crafting.json / id=computer_chip\r\n[\uBE44\uACE0] \uB808\uC774\uC800
+    \uAC00\uACF5\uAE30\uC5D0\uC11C\uB294 1/10 \uC7AC\uB8CC\uB85C \uC0DD\uC0B0 \uAC00\uB2A5(machine_processing.json
+    \uCC38\uC870)\r\n[\uC6D0\uBB38] {\"id\":\"computer_chip\",\"tier\":1,\"output\":\"\uCEF4\uD4E8\uD130
+    \uCE69\",\"outputQty\":1,\"inputs\":[{\"item\":\"\uC2E4\uB9AC\uCF58 \uD310\",\"qty\":10},{\"item\":\"\uAD6C\uB9AC\uD310\",\"qty\":10},{\"item\":\"\uCCA0\uD310\",\"qty\":10},{\"item\":\"\uC804\uB3C4\uCCB4
+    \uAC00\uB8E8\",\"qty\":20}],\"note\":\"\uB808\uC774\uC800 \uAC00\uACF5\uAE30\uC5D0\uC11C\uB294
+    1/10 \uC7AC\uB8CC\uB85C \uC0DD\uC0B0 \uAC00\uB2A5(machine_processing.json \uCC38\uC870)\"}\r\n"

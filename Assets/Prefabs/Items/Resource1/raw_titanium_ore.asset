@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: raw_titanium_ore
   m_EditorClassIdentifier: Assembly-CSharp::Items
   itemName: raw_titanium_ore
+  displayName: "\uD2F0\uD0C0\uB284 \uC870\uAC01"
   placeable: 0
   Icon: {fileID: -8819141099167917374, guid: aa9d507c382e03646868e7afb18980dc, type: 3}
   maxStack: 64

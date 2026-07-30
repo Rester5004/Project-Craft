@@ -21,6 +21,7 @@ public class CraftRecipeSlot : MonoBehaviour, IPointerClickHandler, IPointerEnte
 
     private Sprite defaultSlotSprite;
     private bool craftable;
+    private bool selected;
 
     /// <summary>이 칸이 표시 중인 레시피(없으면 null).</summary>
     public Recipe Recipe { get; private set; }
@@ -47,12 +48,8 @@ public class CraftRecipeSlot : MonoBehaviour, IPointerClickHandler, IPointerEnte
         int amount = recipe != null ? recipe.PrimaryOutputAmount : 0;
         float alpha = isCraftable ? 1f : dimmedAlpha;
 
-        if (iconImage != null)
-        {
-            iconImage.enabled = output != null;
-            if (output != null) iconImage.sprite = output.Icon;
-            iconImage.color = new Color(1f, 1f, 1f, alpha);
-        }
+        // 재료가 부족하면 흐리게. 겹침 레이어가 있는 아이템도 같은 투명도로 맞춰진다.
+        ItemIconView.Apply(iconImage, output, null, alpha);
 
         if (countText != null)
         {
@@ -69,19 +66,38 @@ public class CraftRecipeSlot : MonoBehaviour, IPointerClickHandler, IPointerEnte
         Bind(Recipe, isCraftable);
     }
 
+    /// <summary>이 칸이 상세 패널에 표시되도록 선택된 상태인지.</summary>
+    public void SetSelected(bool value)
+    {
+        selected = value;
+        ApplyHighlight(false);
+    }
+
+    private void ApplyHighlight(bool hovered)
+    {
+        if (slotImage == null) return;
+        bool lit = (hovered || selected) && selectedSlotSprite != null;
+        slotImage.sprite = lit ? selectedSlotSprite : defaultSlotSprite;
+    }
+
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (!craftable || Recipe == null) return;
+        // 재료가 부족해도 선택은 되게 한다. 무엇이 모자란지 상세 패널에서 봐야 하기 때문.
+        if (Recipe == null) return;
         OnClicked?.Invoke(Recipe);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (slotImage != null && selectedSlotSprite != null) slotImage.sprite = selectedSlotSprite;
+        ApplyHighlight(true);
+
+        Items output = Recipe != null ? Recipe.PrimaryOutput : null;
+        if (TooltipUI.Instance != null) TooltipUI.Instance.Show(output != null ? output.DisplayName : "");
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        if (slotImage != null) slotImage.sprite = defaultSlotSprite;
+        ApplyHighlight(false);   // 선택된 칸은 커서가 빠져도 강조를 유지
+        if (TooltipUI.Instance != null) TooltipUI.Instance.Hide();
     }
 }

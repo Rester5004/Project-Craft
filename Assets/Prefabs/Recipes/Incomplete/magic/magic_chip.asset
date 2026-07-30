@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d1635fa976c21145835b252e45d6313, type: 3}
+  m_Name: magic_chip
+  m_EditorClassIdentifier: Assembly-CSharp::Recipe
+  machine: {fileID: 11400000, guid: b34db018d1ff1954fbe7a9e48a6bf25b, type: 2}
+  category: {fileID: 11400000, guid: a63365af4ccd3904a91ebf59b6456c84, type: 2}
+  tier: 1
+  inputs:
+  - item: {fileID: 11400000, guid: cb5fecda99ffdb74382a0c1f5e8bef4d, type: 2}
+    count: 1
+  - item: {fileID: 11400000, guid: 36673d165a5f895419b19e358bce9cea, type: 2}
+    count: 1
+  outputs:
+  - item: {fileID: 11400000, guid: 3e6b4b50970983042bd81272d06210f1, type: 2}
+    count: 1
+  requiredTools: []
+  craftTime: 1
+  importNote: "[\uCD9C\uCC98] notion_magic.json / id=magic_chip\r\n[\uAE30\uACC4]
+    '\uC911\uAE09 \uC7AC\uB2E8' \u2014 \uB300\uC751\uD558\uB294 MachineBlock \uC774
+    \uC5C6\uC5B4 \uBE44\uC6CC \uB460\r\n[\uC870\uD569 \uC7A5\uC18C] \uC911\uAE09
+    \uC7AC\uB2E8\r\n[\uC6D0\uBB38] {\"id\":\"magic_chip\",\"machine\":\"\uC911\uAE09
+    \uC7AC\uB2E8\",\"tier\":1,\"output\":\"\uB9C8\uB825 \uCE69\",\"outputQty\":1,\"inputs\":[{\"item\":\"\uCEF4\uD4E8\uD130
+    \uCE69\",\"qty\":1},{\"item\":\"\uB9C8\uB825 \uACB0\uC815\",\"qty\":1}],\"station\":\"\uC911\uAE09
+    \uC7AC\uB2E8\"}\r\n"

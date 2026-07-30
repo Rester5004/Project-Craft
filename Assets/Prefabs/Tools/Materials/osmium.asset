@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bdfe9082976cbf45809466487e98d12, type: 3}
+  m_Name: osmium
+  m_EditorClassIdentifier: Assembly-CSharp::ToolMaterial
+  materialId: osmium
+  displayName: "\uC624\uC2A4\uBBB4"
+  isMetal: 1
+  tint: {r: 0.67847675, g: 0.776015, b: 0.8216144, a: 1}
+  durabilityFactor: 2.2
+  handleFactor: 1.3
+  miningTier: 4

@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: ElectricPulverizer
   m_EditorClassIdentifier: Assembly-CSharp::Machine
   itemName: Machine:ElectricPulverizer
+  displayName: "\uC804\uAE30 \uBD84\uC1C4\uAE30"
   placeable: 1
   Icon: {fileID: -9073610669669677612, guid: 1c2c475598576b74684240e2949206f0, type: 3}
   maxStack: 64

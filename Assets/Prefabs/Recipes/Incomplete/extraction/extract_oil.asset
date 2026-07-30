@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d1635fa976c21145835b252e45d6313, type: 3}
+  m_Name: extract_oil
+  m_EditorClassIdentifier: Assembly-CSharp::Recipe
+  machine: {fileID: 11400000, guid: 0632430f755ac2e47b015fdc9d19d9e0, type: 2}
+  category: {fileID: 11400000, guid: a63365af4ccd3904a91ebf59b6456c84, type: 2}
+  tier: 1
+  inputs: []
+  outputs:
+  - item: {fileID: 11400000, guid: f2a712589b2ce6a4ab70bf9183fcd655, type: 2}
+    count: 1
+  requiredTools: []
+  craftTime: 1
+  importNote: "[\uBCD1\uD569] Assets/Prefabs/Recipes/Incomplete/extraction/extract_oil.asset
+    \uB97C \uD761\uC218\uD568\r\n[\uCD9C\uCC98] notion_extraction.json / id=extract_crude_oil\r\n[\uD544\uC694
+    \uC9C0\uD615] \uC11D\uC720 \uC9C0\uD615\r\n[\uC720\uCCB4] true\r\n[\uBE44\uACE0]
+    \uD2B9\uC218 \uC9C0\uD615. \uC6D0\uC720 \uCC44\uAD74\uAE30\uB3C4 \uAC19\uC740
+    \uC9C0\uD615\uC744 \uC4F4\uB2E4\r\n[\uC6D0\uBB38] {\"id\":\"extract_crude_oil\",\"tier\":1,\"terrain\":\"\uC11D\uC720
+    \uC9C0\uD615\",\"output\":\"\uC6D0\uC720\",\"outputQty\":1,\"fluid\":true,\"note\":\"\uD2B9\uC218
+    \uC9C0\uD615. \uC6D0\uC720 \uCC44\uAD74\uAE30\uB3C4 \uAC19\uC740 \uC9C0\uD615\uC744
+    \uC4F4\uB2E4\"}\r\n\r\n--- \uD761\uC218\uB41C \uC6D0\uBCF8 ---\r\n[\uCD9C\uCC98]
+    extraction.json / id=extract_oil\r\n[\uD544\uC694 \uC9C0\uD615] \uC11D\uC720
+    \uC9C0\uD615\r\n[\uC720\uCCB4] true\r\n[\uBE44\uACE0] \uD2B9\uC218 \uC9C0\uD615,
+    \uC6D0\uC720 \uCC44\uAD74\uAE30 \uC0AC\uC6A9\r\n[\uC6D0\uBB38] {\"id\":\"extract_oil\",\"terrain\":\"\uC11D\uC720
+    \uC9C0\uD615\",\"output\":\"\uC6D0\uC720\",\"fluid\":true,\"note\":\"\uD2B9\uC218
+    \uC9C0\uD615, \uC6D0\uC720 \uCC44\uAD74\uAE30 \uC0AC\uC6A9\"}\r\n"

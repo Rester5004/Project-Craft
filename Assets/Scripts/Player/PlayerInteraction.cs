@@ -101,7 +101,7 @@ public class PlayerInteraction : MonoBehaviour
 
         selectedItemStack.count--;
         if (selectedItemStack.count <= 0)
-            selectedItemStack.item = null;
+            selectedItemStack.Clear();
         Inventory.Instance.OnChanged?.Invoke();
     }
     private bool GetIsCardinalAdjacent(Vector2Int targetGlobalCell, Vector2Int playerGlobalCell)

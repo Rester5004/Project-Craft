@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: iron_ingot
   m_EditorClassIdentifier: Assembly-CSharp::Items
   itemName: iron_ingot
+  displayName: "\uCCA0 \uC8FC\uAD34"
   placeable: 0
   Icon: {fileID: 6788698560846805995, guid: aa9d507c382e03646868e7afb18980dc, type: 3}
   maxStack: 64

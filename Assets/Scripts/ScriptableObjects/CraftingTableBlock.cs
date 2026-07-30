@@ -11,10 +11,14 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "CraftingTableBlock", menuName = "Blocks/CraftingTableBlock")]
 public class CraftingTableBlock : MachineBlock
 {
-    [Header("조합대 설정")]
-    [Tooltip("이 조합대의 티어. recipe.tier 가 이 값 이하인 레시피만 목록에 나타난다.")]
-    [Min(0)] public int tier;
+    // 티어는 MachineBlock 으로 올라갔다(모든 기계가 티어로 레시피를 거른다). 필드 이름이 같아 기존 에셋은 그대로 읽힌다.
 
     /// <summary>조합대는 입출력 슬롯이 0 인 것이 정상이므로 기본값으로 폴백하지 않는다.</summary>
     public override bool AllowsZeroSlots => true;
+
+    /// <summary>
+    /// 조합대는 자동으로 가공하지 않는다. 입력 슬롯은 도구 부품을 놓는 자리이고,
+    /// 제작은 플레이어가 조합 버튼을 눌러야 일어난다.
+    /// </summary>
+    public override bool AutoProcess => false;
 }

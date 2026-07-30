@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: AlloySmelter
   m_EditorClassIdentifier: Assembly-CSharp::Machine
   itemName: Machine:AlloySmelter
+  displayName: "\uD569\uAE08 \uC7AC\uB828\uAE30"
   placeable: 1
   Icon: {fileID: 5648444647660155779, guid: 8c8abafd1cffa6c4e8d7eb9309478e38, type: 3}
   maxStack: 64

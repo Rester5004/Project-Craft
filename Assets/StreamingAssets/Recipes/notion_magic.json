@@ -1,0 +1,71 @@
+{
+  "recipeType": "magic",
+  "source": "Notion 기획 백로그 (1) — 4. 마법 체계",
+  "description": "마법 조합은 재단에서만 가능하다. 0티어 마법은 초급 재단 이상, 1티어 마법은 중급 재단 이상이 필요하다.",
+  "recipes": [
+    { "id": "altar_basic", "machine": "조합대", "tier": 0, "output": "초급 재단", "outputQty": 1,
+      "inputs": [ { "item": "마력 파편", "qty": 5 }, { "item": "돌", "qty": 2 } ],
+      "note": "0티어 마법 조합용 설비" },
+
+    { "id": "altar_intermediate", "machine": "초급 재단", "tier": 1, "output": "중급 재단", "outputQty": 1,
+      "inputs": [ { "item": "초급 재단", "qty": 1 }, { "item": "금 주괴", "qty": 10 } ],
+      "note": "1티어 마법 조합용 설비" },
+
+    { "id": "magic_shard_duplicate", "machine": "초급 재단", "tier": 0,
+      "output": "마력 파편", "outputQty": 2,
+      "inputs": [ { "item": "마력 파편", "qty": 1 }, { "item": "구리", "qty": 10 } ],
+      "tools": [ "망치" ],
+      "station": "초급 재단",
+      "note": "마력 파편 증식" },
+
+    { "id": "magic_water", "machine": "초급 재단", "tier": 0, "output": "물", "outputQty": 1,
+      "outputFluid": true,
+      "inputs": [ { "item": "양동이", "qty": 1 }, { "item": "마력 파편", "qty": 2 } ],
+      "station": "초급 재단",
+      "note": "조합하면 양동이가 채워짐" },
+
+    { "id": "magic_lava", "machine": "초급 재단", "tier": 0, "output": "용암", "outputQty": 1,
+      "outputFluid": true,
+      "inputs": [ { "item": "양동이", "qty": 1 }, { "item": "마력 파편", "qty": 2 } ],
+      "station": "초급 재단",
+      "note": "조합하면 양동이가 채워짐" },
+
+    { "id": "resource_generator_t0", "machine": "초급 재단", "tier": 0,
+      "output": "0티어 자원 생성기", "outputQty": 1,
+      "inputs": [ { "item": "마력 파편", "qty": 5 }, { "item": "돌", "qty": 5 } ],
+      "station": "초급 재단" },
+
+    { "id": "enchanted_conductor_powder", "machine": "초급 재단", "tier": 0,
+      "output": "마법이 부여된 전도체 가루", "outputQty": 1,
+      "inputs": [ { "item": "마력 파편", "qty": 2 }, { "item": "전도체 가루", "qty": 1 } ],
+      "station": "초급 재단",
+      "note": "1티어 진입: 이것 1개로 중앙 코어를 업그레이드" },
+
+    { "id": "magic_crystal", "machine": "중급 재단", "tier": 1, "output": "마력 결정", "outputQty": 1,
+      "inputs": [ { "item": "마력 파편", "qty": 100 } ],
+      "station": "중급 재단",
+      "note": "분쇄 경로(에너지 결정 분쇄)로도 얻을 수 있다" },
+
+    { "id": "resource_generator_t0_enhanced", "machine": "중급 재단", "tier": 1,
+      "output": "0티어 자원 생성기(강화)", "outputQty": 1,
+      "inputs": [ { "item": "마력 결정", "qty": 1 }, { "item": "0티어 자원 생성기", "qty": 1 } ],
+      "station": "중급 재단" },
+
+    { "id": "magic_chip", "machine": "중급 재단", "tier": 1, "output": "마력 칩", "outputQty": 1,
+      "inputs": [ { "item": "컴퓨터 칩", "qty": 1 }, { "item": "마력 결정", "qty": 1 } ],
+      "station": "중급 재단" },
+
+    { "id": "apple_tree_seed", "machine": "중급 재단", "tier": 1, "output": "사과 나무 씨앗", "outputQty": 1,
+      "inputs": [ { "item": "나무 씨앗", "qty": 1 }, { "item": "마력 파편", "qty": 10 } ],
+      "station": "중급 재단" },
+
+    { "id": "enchanter", "machine": "중급 재단", "tier": 1, "output": "마법부여기", "outputQty": 1,
+      "inputs": [
+        { "item": "금 주괴", "qty": 10 },
+        { "item": "마력 결정", "qty": 2 },
+        { "item": "은 판", "qty": 5 }
+      ],
+      "station": "중급 재단",
+      "note": "도구에 마법 부여. 마나를 사용하며 막대 종류별 효율 차이 (추후 추가 예정)" }
+  ]
+}

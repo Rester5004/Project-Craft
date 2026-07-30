@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: energy_crystal
   m_EditorClassIdentifier: Assembly-CSharp::Items
   itemName: energy_crystal
+  displayName: "\uC5D0\uB108\uC9C0 \uACB0\uC815"
   placeable: 0
   Icon: {fileID: -6971706514803530254, guid: aa9d507c382e03646868e7afb18980dc, type: 3}
   maxStack: 64

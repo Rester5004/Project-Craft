@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d1635fa976c21145835b252e45d6313, type: 3}
+  m_Name: smelt_silver
+  m_EditorClassIdentifier: Assembly-CSharp::Recipe
+  machine: {fileID: 11400000, guid: 63f0a8bb17e98434a90c04565e332cf7, type: 2}
+  category: {fileID: 11400000, guid: a63365af4ccd3904a91ebf59b6456c84, type: 2}
+  tier: 0
+  inputs:
+  - item: {fileID: 11400000, guid: f68e3fb21c853704e81fa139f05d37d0, type: 2}
+    count: 4
+  outputs:
+  - item: {fileID: 11400000, guid: d4577079fe0cb3d4095f7e3802de4ec4, type: 2}
+    count: 1
+  requiredTools: []
+  craftTime: 1
+  importNote: "[\uBCD1\uD569] Assets/Prefabs/Recipes/Incomplete/smelting/smelt_silver.asset
+    \uB97C \uD761\uC218\uD568\r\n[\uCD9C\uCC98] notion_smelting.json / id=smelt_silver\r\n[\uAE30\uACC4]
+    '\uD654\uB85C' \u2014 \uB300\uC751\uD558\uB294 MachineBlock \uC774 \uC5C6\uC5B4
+    \uBE44\uC6CC \uB460\r\n[\uC6D0\uBB38] {\"id\":\"smelt_silver\",\"tier\":0,\"output\":\"\uC740
+    \uC8FC\uAD34\",\"outputQty\":1,\"inputs\":[{\"item\":\"\uC740 \uC870\uAC01\",\"qty\":4}]}\r\n\r\n---
+    \uD761\uC218\uB41C \uC6D0\uBCF8 ---\r\n[\uCD9C\uCC98] smelting.json / id=smelt_silver\r\n[\uAE30\uACC4]
+    '\uC6A9\uAD11\uB85C' \u2014 \uB300\uC751\uD558\uB294 MachineBlock \uC774 \uC5C6\uC5B4
+    \uBE44\uC6CC \uB460\r\n[\uC6D0\uBB38] {\"id\":\"smelt_silver\",\"output\":\"\uC740
+    \uC8FC\uAD34\",\"inputs\":[{\"item\":\"\uC740 \uC870\uAC01\",\"qty\":4}]}\r\n"

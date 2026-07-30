@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d1635fa976c21145835b252e45d6313, type: 3}
+  m_Name: alloy_invar
+  m_EditorClassIdentifier: Assembly-CSharp::Recipe
+  machine: {fileID: 11400000, guid: 27865eac80f75274282bdf370a705a09, type: 2}
+  category: {fileID: 11400000, guid: a63365af4ccd3904a91ebf59b6456c84, type: 2}
+  tier: 1
+  inputs:
+  - item: {fileID: 11400000, guid: d18d224dc7f833d49b47f7b7fcf32950, type: 2}
+    count: 1
+  - item: {fileID: 11400000, guid: 956eb8dcb573269499f30f7c84b58ecb, type: 2}
+    count: 2
+  outputs:
+  - item: {fileID: 11400000, guid: abc3bf44eb96daa4288c41abbcc73d12, type: 2}
+    count: 2
+  requiredTools: []
+  craftTime: 1
+  importNote: "[\uBCD1\uD569] Assets/Prefabs/Recipes/Incomplete/machine_processing/alloy_invar.asset
+    \uB97C \uD761\uC218\uD568\r\n[\uCD9C\uCC98] notion_factory.json / id=alloy_invar\r\n[\uBE44\uACE0]
+    \uAD11\uC11D\xB7\uC8FC\uAD34 \uC0C1\uAD00 \uC5C6\uC774 \uD22C\uC785 \uAC00\uB2A5\r\n[\uC6D0\uBB38]
+    {\"id\":\"alloy_invar\",\"machine\":\"\uD569\uAE08 \uC7AC\uB828\uAE30\",\"tier\":1,\"output\":\"\uC778\uBC14(invar)\",\"outputQty\":2,\"inputs\":[{\"item\":\"\uB2C8\uCF08\",\"qty\":1},{\"item\":\"\uCCA0\",\"qty\":2}],\"note\":\"\uAD11\uC11D\xB7\uC8FC\uAD34
+    \uC0C1\uAD00 \uC5C6\uC774 \uD22C\uC785 \uAC00\uB2A5\"}\r\n\r\n--- \uD761\uC218\uB41C
+    \uC6D0\uBCF8 ---\r\n[\uCD9C\uCC98] machine_processing.json / id=alloy_invar\r\n[\uC6D0\uBB38]
+    {\"id\":\"alloy_invar\",\"machine\":\"\uD569\uAE08 \uC7AC\uB828\uAE30\",\"tier\":1,\"output\":\"\uC778\uBC14(invar)\",\"outputQty\":2,\"inputs\":[{\"item\":\"\uB2C8\uCF08\",\"qty\":1},{\"item\":\"\uCCA0\",\"qty\":2}]}\r\n"

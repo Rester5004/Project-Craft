@@ -20,11 +20,13 @@ namespace ProjectCraft.UIFactory.EditorTools
             {
                 case MachineUIRole.InputSlot:
                 case MachineUIRole.OutputSlot:
+                case MachineUIRole.FuelSlot:
                     if (element.GetComponent<ItemSlot>() == null)
                         EditorGUILayout.HelpBox("이 역할에는 ItemSlot 컴포넌트가 필요합니다.", MessageType.Error);
                     break;
                 case MachineUIRole.ProgressBar:
                 case MachineUIRole.EnergyBar:
+                case MachineUIRole.FuelBar:
                 case MachineUIRole.InputGasBar:
                 case MachineUIRole.OutputGasBar:
                     if (element.GetComponent<FillingSlot>() == null)

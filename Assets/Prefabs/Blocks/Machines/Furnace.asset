@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9e72bd956b65294a846c4174caf0f0f, type: 3}
+  m_Name: Furnace
+  m_EditorClassIdentifier: Assembly-CSharp::MachineBlock
+  blockName: Machine:Furnace
+  displayName: "\uD654\uB85C"
+  machinePrefab: {fileID: 2613032363430261748, guid: d608571be94a6124d98abf627a85000a, type: 3}
+  uiPrefab: {fileID: 723616340984963795, guid: 4adcfcf7c46b42f498142de21fe71bf5, type: 3}
+  tier: 0
+  recipeGroupId: Furnace
+  inputSlotCount: 1
+  outputSlotCount: 1
+  fuelSlotCount: 1
+  fuelBurnRate: 20
+  inputGasSlotCount: 0
+  outputGasSlotCount: 0
+  maxGasAmount: 0
+  maxEnergyAmount: 0
+  isUseEnergy: 0

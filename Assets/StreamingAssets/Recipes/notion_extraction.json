@@ -1,0 +1,26 @@
+{
+  "recipeType": "extraction",
+  "source": "Notion 기획 백로그 (1) — 2. 자원 생성기 시스템",
+  "machine": "추출기",
+  "description": "추출기는 설치된 타일의 지형에 따라 자동으로 다른 자원을 추출한다. 투입 자원이 없으며 설치 위치가 곧 산출 자원을 결정한다. N티어 추출기는 0~N-1티어의 결과물을 모두 포함하는 슈퍼셋.",
+  "recipes": [
+    { "id": "extract_normal", "tier": 0, "terrain": "일반 지형 (0티어 구역)",
+      "output": "암석", "outputQty": 1, "note": "코어 주변 기본 구역" },
+
+    { "id": "extract_water", "tier": 0, "terrain": "수상 지형",
+      "output": "물", "outputQty": 1, "fluid": true, "note": "강, 호수 등" },
+
+    { "id": "extract_crude_oil", "tier": 1, "terrain": "석유 지형",
+      "output": "원유", "outputQty": 1, "fluid": true, "note": "특수 지형. 원유 채굴기도 같은 지형을 쓴다" },
+
+    { "id": "extract_ore", "tier": 1, "terrain": "광석 지형 (1티어 구역)",
+      "output": "광석", "outputQty": 1, "note": "코어에서 멀어질수록 등장" },
+
+    { "id": "extract_meteorite", "tier": 2, "terrain": "운석 지형 (2티어 구역)",
+      "output": "운석", "outputQty": 1, "note": "외곽 구역" },
+
+    { "id": "extract_conductor_powder", "tier": 0, "terrain": "모래",
+      "output": "전도체 가루", "outputQty": 1,
+      "note": "자원 목록 기준: 모래 → 0티어 추출기 산출물" }
+  ]
+}

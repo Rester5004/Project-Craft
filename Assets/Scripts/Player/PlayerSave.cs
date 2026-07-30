@@ -12,8 +12,9 @@ using UnityEngine;
 [DefaultExecutionOrder(100)]
 public class PlayerSave : MonoBehaviour
 {
+    // v2: 슬롯마다 ItemInstance(커스텀 도구의 재질·내구도)를 덧붙였다. v1 도 계속 읽는다.
     private const int SaveMagic = 0x50435031; // 'PCP1'
-    private const int SaveVersion = 1;
+    private const int SaveVersion = 2;
 
     public static string DefaultSavePath =>
         Path.Combine(Application.persistentDataPath, "player.dat");
@@ -73,6 +74,7 @@ public class PlayerSave : MonoBehaviour
                 bool has = stack.item != null && stack.count > 0;
                 writer.Write(has ? stack.item.itemName : "");
                 writer.Write(has ? stack.count : 0);
+                ItemInstanceSerializer.Write(writer, has ? stack.instance : null);
             }
         }
         catch (System.Exception e)
@@ -96,8 +98,8 @@ public class PlayerSave : MonoBehaviour
             if (reader.ReadInt32() != SaveMagic)
                 throw new IOException("Unsupported player save format (magic mismatch).");
             int version = reader.ReadInt32();
-            if (version != SaveVersion)
-                throw new IOException($"Unsupported player save version {version} (expected {SaveVersion}).");
+            if (version < 1 || version > SaveVersion)
+                throw new IOException($"Unsupported player save version {version} (expected 1..{SaveVersion}).");
 
             float x = reader.ReadSingle();
             float y = reader.ReadSingle();
@@ -108,6 +110,8 @@ public class PlayerSave : MonoBehaviour
             {
                 string itemName = reader.ReadString();
                 int itemCount = reader.ReadInt32();
+                // 스트림 위치를 맞춰야 하므로 슬롯 범위를 벗어나도 읽기는 끝까지 한다.
+                ItemInstance instance = version >= 2 ? ItemInstanceSerializer.Read(reader) : null;
                 if (i >= inventory.slots.Count) continue;
 
                 ItemStack stack = inventory.slots[i];
@@ -118,6 +122,7 @@ public class PlayerSave : MonoBehaviour
                 bool has = item != null && itemCount > 0;
                 stack.item = has ? item : null;
                 stack.count = has ? itemCount : 0;
+                stack.instance = has ? instance : null;
 
                 if (!has && !string.IsNullOrEmpty(itemName))
                     Debug.LogWarning($"[PlayerSave] 아이템 '{itemName}' 을 찾을 수 없어 슬롯 {i} 를 비웠습니다(딕셔너리 미등록).");

@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b5e22365c0f82046b66394496dd4ecc, type: 3}
   m_Name: resource
   m_EditorClassIdentifier: Assembly-CSharp::RecipeCategory
-  displayName: Resource
+  displayName: "\uC790\uC6D0"
   icon: {fileID: 6578968639108270661, guid: aa9d507c382e03646868e7afb18980dc, type: 3}
   sortOrder: 0

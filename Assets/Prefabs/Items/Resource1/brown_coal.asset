@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: brown_coal
   m_EditorClassIdentifier: Assembly-CSharp::Items
   itemName: brown_coal
+  displayName: "\uAC08\uD0C4"
   placeable: 0
   Icon: {fileID: -2166453564942254128, guid: aa9d507c382e03646868e7afb18980dc, type: 3}
   maxStack: 64
+  burnEnergy: 200

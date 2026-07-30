@@ -13,10 +13,15 @@ MonoBehaviour:
   m_Name: ElectricPulverizer
   m_EditorClassIdentifier: Assembly-CSharp::MachineBlock
   blockName: Machine:ElectricPulverizer
+  displayName: "\uC804\uAE30 \uBD84\uC1C4\uAE30"
   machinePrefab: {fileID: 2401623937405327994, guid: 787fbed919a8b05458dfc1727af4f62a, type: 3}
   uiPrefab: {fileID: 7616947571060291691, guid: 5ba53f04f8f8a4a47ad0285fdd003b13, type: 3}
+  tier: 1
+  recipeGroupId: 
   inputSlotCount: 1
   outputSlotCount: 1
+  fuelSlotCount: 0
+  fuelBurnRate: 20
   inputGasSlotCount: 0
   outputGasSlotCount: 0
   maxGasAmount: 0

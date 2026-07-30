@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: redstone_powder
   m_EditorClassIdentifier: Assembly-CSharp::Items
   itemName: redstone_powder
+  displayName: "\uB808\uB4DC\uC2A4\uD1A4 \uAC00\uB8E8"
   placeable: 0
   Icon: {fileID: 2813817313752391192, guid: aa9d507c382e03646868e7afb18980dc, type: 3}
   maxStack: 64

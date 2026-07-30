@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: magic_crystal
   m_EditorClassIdentifier: Assembly-CSharp::Items
   itemName: magic_crystal
+  displayName: "\uB9C8\uB825 \uACB0\uC815"
   placeable: 0
   Icon: {fileID: -3736049489421323777, guid: aa9d507c382e03646868e7afb18980dc, type: 3}
   maxStack: 64

@@ -61,15 +61,12 @@ public abstract class ItemSlot : MonoBehaviour,
         if (container == null) return;
         ItemStack stack = container.GetStack(index);
         bool hasItem = stack != null && stack.item != null && stack.count > 0;
-        iconImage.enabled = hasItem;
-        if (hasItem)
+
+        ItemIconView.Apply(iconImage, stack);   // 도구는 자루 + 머리를 겹쳐 그린다
+        if (countText != null)
         {
-            iconImage.sprite = stack.item.Icon;
-            countText.text = stack.count > 1 ? stack.count.ToString() : "";
-        }
-        else
-        {
-            countText.text = "";
+            countText.text = hasItem && stack.count > 1 ? stack.count.ToString() : "";
+            countText.transform.SetAsLastSibling();   // 겹침 레이어보다 위에 유지
         }
     }
 
@@ -111,10 +108,11 @@ public abstract class ItemSlot : MonoBehaviour,
 
         ItemStack source = draggedFrom.container.GetStack(draggedFrom.index);
         ItemStack target = container.GetStack(index);
+        if (!Accepts(source)) return;   // 종류 제한이 있는 슬롯(도구 부품 칸 등)
 
-        if (source.item != null && target.item == source.item)
+        if (source.item != null && target.CanStackWith(source))
         {
-            // 같은 아이템(동일 메타데이터): 교환 대신 합쳐서 개수를 늘린다(maxStack 한도까지).
+            // 같은 아이템(개체 데이터까지 동일): 교환 대신 합쳐서 개수를 늘린다(maxStack 한도까지).
             int max = source.item.maxStack > 0 ? source.item.maxStack : int.MaxValue;
             int space = max - target.count;
             if (space > 0)
@@ -122,19 +120,16 @@ public abstract class ItemSlot : MonoBehaviour,
                 int moved = Mathf.Min(space, source.count);
                 target.count += moved;
                 source.count -= moved;
-                if (source.count <= 0)
-                {
-                    source.item = null;
-                    source.count = 0;
-                }
+                if (source.count <= 0) source.Clear();
             }
             // space <= 0 이면 대상이 가득 차 있으므로 아무것도 이동하지 않는다.
         }
         else
         {
-            // 다른 아이템(또는 빈 칸): 두 슬롯을 교환한다.
+            // 다른 아이템(또는 빈 칸): 두 슬롯을 교환한다. 개체 데이터도 아이템을 따라간다.
             (source.item, target.item) = (target.item, source.item);
             (source.count, target.count) = (target.count, source.count);
+            (source.instance, target.instance) = (target.instance, source.instance);
         }
 
         // 두 슬롯 뷰를 즉시 갱신(컨테이너 종류/구독 여부와 무관하게 확실히 반영)
@@ -149,10 +144,32 @@ public abstract class ItemSlot : MonoBehaviour,
     public virtual void OnPointerEnter(PointerEventData eventData)
     {
         if (slotImage != null) slotImage.sprite = selectedSlotSprite;
+        if (TooltipUI.Instance != null) TooltipUI.Instance.Show(TooltipText());
     }
 
     public virtual void OnPointerExit(PointerEventData eventData)
     {
         if (slotImage != null) slotImage.sprite = defaultSlotSprite;
+        if (TooltipUI.Instance != null) TooltipUI.Instance.Hide();
+    }
+
+    /// <summary>
+    /// 이 슬롯이 받아 줄 수 있는 아이템인가. 기본은 무엇이든 허용.
+    /// 종류를 제한하는 슬롯(도구 부품 칸 등)이 재정의한다.
+    /// </summary>
+    protected virtual bool Accepts(ItemStack source) => true;
+
+    /// <summary>호버 시 보여줄 내용. 빈 슬롯이면 빈 문자열이라 툴팁이 뜨지 않는다.</summary>
+    protected virtual string TooltipText()
+    {
+        if (container == null) return "";
+
+        ItemStack stack = container.GetStack(index);
+        if (stack == null || stack.item == null || stack.count <= 0) return "";
+        if (stack.instance == null) return stack.item.DisplayName;
+
+        string extra = stack.instance.TooltipExtra();
+        string name = stack.instance.DecorateName(stack.item);
+        return string.IsNullOrEmpty(extra) ? name : name + "\n" + extra;
     }
 }

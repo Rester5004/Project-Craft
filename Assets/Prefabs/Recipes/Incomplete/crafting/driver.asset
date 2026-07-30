@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d1635fa976c21145835b252e45d6313, type: 3}
+  m_Name: driver
+  m_EditorClassIdentifier: Assembly-CSharp::Recipe
+  machine: {fileID: 11400000, guid: ea55fe72f9315554a8ffdcf795dd1b7e, type: 2}
+  category: {fileID: 0}
+  tier: 1
+  inputs:
+  - item: {fileID: 11400000, guid: cbd0323ed9da4ff41a690b00ea1586d4, type: 2}
+    count: 2
+  outputs:
+  - item: {fileID: 0}
+    count: 1
+  requiredTools: []
+  craftTime: 1
+  importNote: "[\uCD9C\uCC98] notion_crafting.json / id=driver\r\n[\uAE30\uACC4]
+    '\uC870\uD569\uB300' \u2014 \uB300\uC751\uD558\uB294 MachineBlock \uC774 \uC5C6\uC5B4
+    \uBE44\uC6CC \uB460\r\n[\uB3C4\uAD6C] \uB9DD\uCE58, \uCE7C (\uB0B4\uAD6C\uB3C4\uB9CC
+    \uC18C\uBAA8, \uC7AC\uB8CC \uC544\uB2D8)\r\n[\uC6D0\uBB38] {\"id\":\"driver\",\"tier\":1,\"output\":\"\uB4DC\uB77C\uC774\uBC84\",\"outputQty\":1,\"inputs\":[{\"item\":\"\uAE08\uC18D\uD310\",\"qty\":2}],\"tools\":[\"\uB9DD\uCE58\",\"\uCE7C\"]}\r\n"

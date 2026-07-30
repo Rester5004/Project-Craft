@@ -1,0 +1,134 @@
+{
+  "recipeType": "factory",
+  "source": "Notion 기획 백로그 (1) — 6. 레시피 / 가공 레시피 (전용 공장)",
+  "description": "전용 공장 레시피. 전력만 산출하는 항목(화력 발전기·변압기·핵발전소)은 아이템이 아니라 note 로만 남긴다.",
+  "recipes": [
+    { "id": "roll_iron_plate", "machine": "압연기", "tier": 0, "output": "철판", "outputQty": 1,
+      "inputs": [ { "item": "철 주괴", "qty": 1 } ],
+      "note": "조합대보다 고효율" },
+
+    { "id": "roll_brick", "machine": "압연기", "tier": 0, "output": "벽돌", "outputQty": 1,
+      "inputs": [ { "item": "모래", "qty": 2 }, { "item": "물", "qty": 1 } ],
+      "note": "벽돌 공장이 압연기로 통합됨. 조합대보다 고효율" },
+
+    { "id": "roll_silicon_plate", "machine": "압연기", "tier": 0, "output": "실리콘 판", "outputQty": 1,
+      "inputs": [ { "item": "실리콘", "qty": 1 } ],
+      "note": "자원 목록 기준: 실리콘 → 압연기 → 실리콘 판" },
+
+    { "id": "cement", "machine": "시멘트 공장", "tier": 1, "output": "시멘트", "outputQty": 1,
+      "inputs": [ { "item": "석회", "qty": 1 }, { "item": "자갈", "qty": null }, { "item": "물", "qty": null } ],
+      "note": "자갈·물 수량 미정. 벽돌 공장이 압연기로 통합되면서 독립 공장이 됨" },
+
+    { "id": "glass_pipe", "machine": "유리 가공기", "tier": 1, "output": "유리 파이프", "outputQty": 1,
+      "inputs": [ { "item": "유리", "qty": 2 } ],
+      "note": "산성 용액 수송용" },
+
+    { "id": "glass_container", "machine": "유리 가공기", "tier": 1, "output": "유리 용기", "outputQty": 1,
+      "inputs": [ { "item": "유리", "qty": 1 } ] },
+
+    { "id": "acid_pipe", "machine": "유리 가공기", "tier": 1, "output": "산성 파이프", "outputQty": 1,
+      "inputs": [ { "item": "유리 파이프", "qty": 1 } ],
+      "note": "산성 용액 수송 전용" },
+
+    { "id": "appraise_gems", "machine": "감별기", "tier": 0,
+      "inputs": [ { "item": "반짝이는 돌", "qty": 1 } ],
+      "outputs": [
+        { "item": "루비", "chance": null },
+        { "item": "사파이어", "chance": null },
+        { "item": "다이아몬드", "chance": null }
+      ],
+      "note": "확률적 분류, 비율 미정" },
+
+    { "id": "sulfur_powder", "machine": "화학 처리기", "tier": 1, "output": "황 가루", "outputQty": 1,
+      "inputs": [ { "item": "유황석", "qty": 2 } ] },
+
+    { "id": "acid_solution", "machine": "화학 처리기", "tier": 1, "output": "산성 용액", "outputQty": 1,
+      "inputs": [ { "item": "황 가루", "qty": 1 }, { "item": "물", "qty": 2 } ] },
+
+    { "id": "uranium_concentrate", "machine": "화학 처리기", "tier": 1, "output": "우라늄 농축물", "outputQty": 1,
+      "inputs": [ { "item": "미가공 우라늄", "qty": 1 }, { "item": "산성 용액", "qty": 2 } ] },
+
+    { "id": "electro_aluminum", "machine": "전기 분해기", "tier": 1, "power": "고전압",
+      "output": "알루미늄 주괴", "outputQty": 1,
+      "inputs": [ { "item": "알루미늄 조각", "qty": 4 } ] },
+
+    { "id": "electro_lithium", "machine": "전기 분해기", "tier": 1, "power": "고전압",
+      "output": "리튬 주괴", "outputQty": 1,
+      "inputs": [ { "item": "리튬 조각", "qty": 4 } ] },
+
+    { "id": "electro_water", "machine": "전기 분해기", "tier": 1, "power": "고전압",
+      "inputs": [ { "item": "물", "qty": 2 } ],
+      "outputs": [
+        { "item": "수소", "qty": 2, "fluid": true },
+        { "item": "산소", "qty": 1, "fluid": true }
+      ],
+      "note": "수전해기가 전기 분해기로 통합됨" },
+
+    { "id": "drill_crude_oil", "machine": "원유 채굴기", "tier": 1, "output": "원유", "outputQty": 1,
+      "fluid": true, "terrain": "석유 지형", "note": "석유 지형 설치 필수" },
+
+    { "id": "refine_oil", "machine": "정유기", "tier": 1, "output": "석유", "outputQty": 1,
+      "inputs": [ { "item": "원유", "qty": 1, "fluid": true } ] },
+
+    { "id": "compress_metal_plate", "machine": "압축기", "tier": 1, "output": "금속 판", "outputQty": 1,
+      "inputs": [ { "item": "금속 주괴", "qty": 1 } ] },
+
+    { "id": "alloy_bronze", "machine": "합금 재련기", "tier": 1, "output": "청동", "outputQty": 4,
+      "inputs": [ { "item": "구리", "qty": 3 }, { "item": "주석", "qty": 1 } ],
+      "note": "광석·주괴 상관 없이 투입 가능" },
+
+    { "id": "alloy_invar", "machine": "합금 재련기", "tier": 1, "output": "인바(invar)", "outputQty": 2,
+      "inputs": [ { "item": "니켈", "qty": 1 }, { "item": "철", "qty": 2 } ],
+      "note": "광석·주괴 상관 없이 투입 가능" },
+
+    { "id": "bio_soil", "machine": "유기물 배양기", "tier": 1, "output": "흙", "outputQty": 1,
+      "chance": 0.1, "inputs": [ { "item": "돌", "qty": 1 } ],
+      "note": "10% 확률로 생성" },
+
+    { "id": "laser_computer_chip", "machine": "레이저 가공기", "tier": 1, "output": "컴퓨터 칩", "outputQty": 1,
+      "inputs": [
+        { "item": "실리콘 판", "qty": 1 },
+        { "item": "구리판", "qty": 1 },
+        { "item": "철판", "qty": 1 },
+        { "item": "전도체 가루", "qty": 1 }
+      ],
+      "note": "조합대보다 고효율(재료 1/10). 루비 사용" },
+
+    { "id": "laser_cavity_scanner", "machine": "레이저 가공기", "tier": 1, "output": "공동 탐색기", "outputQty": 1,
+      "inputs": [ { "item": "컴퓨터 칩", "qty": 1 }, { "item": "다우징 로드", "qty": 1 } ] },
+
+    { "id": "laser_extractor_t2", "machine": "레이저 가공기", "tier": 1, "output": "0-2티어 추출기", "outputQty": 1,
+      "inputs": [
+        { "item": "컴퓨터 칩", "qty": 2 },
+        { "item": "0-1티어 추출기", "qty": 1 },
+        { "item": "니켈 주괴", "qty": 1 }
+      ] },
+
+    { "id": "mana_from_crystal", "machine": "마나 용해기", "tier": 1, "output": "마나", "outputQty": 100,
+      "outputFluid": true, "inputs": [ { "item": "마력 결정", "qty": 1 } ],
+      "note": "마나는 액체 취급" },
+
+    { "id": "mana_from_shard", "machine": "마나 용해기", "tier": 1, "output": "마나", "outputQty": 1,
+      "outputFluid": true, "inputs": [ { "item": "마력 파편", "qty": 1 } ],
+      "note": "마나는 액체 취급" },
+
+    { "id": "power_thermal_t0", "machine": "화력 발전기", "tier": 0,
+      "inputs": [ { "item": "석탄 or 갈탄", "qty": 1 } ],
+      "outputs": [ { "type": "power", "item": "저전압 전력", "amount": null } ],
+      "note": "갈탄 1 = 200 Energy / 석탄 1 = 400 Energy / 수소 1양동이 = 1000 Energy. 갈탄은 저효율" },
+
+    { "id": "power_thermal_t1", "machine": "화력 발전기", "tier": 1,
+      "inputs": [ { "item": "석탄 / 갈탄 / 석유", "qty": 1 } ],
+      "outputs": [ { "type": "power", "item": "저전압 전력", "amount": null } ],
+      "note": "1티어 업그레이드로 석유 연료 추가" },
+
+    { "id": "power_transformer", "machine": "변압기", "tier": 1,
+      "outputs": [ { "type": "power", "item": "고전압 전력", "amount": null } ],
+      "note": "저전압 소모 → 고전압 변환. 변환 손실 발생 (예: 1000W → 900W)" },
+
+    { "id": "power_nuclear", "machine": "핵발전소", "tier": 1,
+      "inputs": [ { "item": "핵연료봉", "qty": null }, { "item": "물", "qty": null, "fluid": true } ],
+      "outputs": [ { "type": "power", "item": "고전압 전력", "amount": null } ],
+      "note": "물 대량 필요. 방사성 폐기물 처리 필요 (미정)" }
+  ]
+}

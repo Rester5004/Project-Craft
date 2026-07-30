@@ -12,7 +12,11 @@ public enum MachineUIRole
     OutputGasBar = 6,
     ProgressBar = 2,
     EnergyBar = 3,
-    MachineName = 5
+    MachineName = 5,
+    /// <summary>연료를 넣는 칸(화로 등). 컨테이너 평면 인덱스는 [입력][출력][연료] 순서다.</summary>
+    FuelSlot = 7,
+    /// <summary>지금 타고 있는 연료의 잔량(0~1).</summary>
+    FuelBar = 8
 }
 
 /// <summary>

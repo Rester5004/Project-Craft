@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: ruby
   m_EditorClassIdentifier: Assembly-CSharp::Items
   itemName: ruby
+  displayName: "\uB8E8\uBE44"
   placeable: 0
   Icon: {fileID: -7367477424237034452, guid: aa9d507c382e03646868e7afb18980dc, type: 3}
   maxStack: 64

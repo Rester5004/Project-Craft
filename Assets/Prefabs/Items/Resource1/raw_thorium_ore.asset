@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: raw_thorium_ore
   m_EditorClassIdentifier: Assembly-CSharp::Items
   itemName: raw_thorium_ore
+  displayName: "\uD1A0\uB968 \uC870\uAC01"
   placeable: 0
   Icon: {fileID: -3554763474309666896, guid: aa9d507c382e03646868e7afb18980dc, type: 3}
   maxStack: 64

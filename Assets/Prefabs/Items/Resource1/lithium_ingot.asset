@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: lithium_ingot
   m_EditorClassIdentifier: Assembly-CSharp::Items
   itemName: lithium_ingot
+  displayName: "\uB9AC\uD2AC \uC8FC\uAD34"
   placeable: 0
   Icon: {fileID: 6578968639108270661, guid: aa9d507c382e03646868e7afb18980dc, type: 3}
   maxStack: 64

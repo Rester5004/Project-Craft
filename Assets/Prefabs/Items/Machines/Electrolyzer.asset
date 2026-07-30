@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Electrolyzer
   m_EditorClassIdentifier: Assembly-CSharp::Machine
   itemName: Machine:Electrolyzer
+  displayName: "\uC804\uAE30 \uBD84\uD574\uAE30"
   placeable: 1
   Icon: {fileID: 7946675484145194923, guid: 8c8abafd1cffa6c4e8d7eb9309478e38, type: 3}
   maxStack: 64

@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d1635fa976c21145835b252e45d6313, type: 3}
+  m_Name: geothermal
+  m_EditorClassIdentifier: Assembly-CSharp::Recipe
+  machine: {fileID: 11400000, guid: 0632430f755ac2e47b015fdc9d19d9e0, type: 2}
+  category: {fileID: 0}
+  tier: 0
+  inputs: []
+  outputs: []
+  craftTime: 1
+  importNote: "[\uCD9C\uCC98] extraction.json / id=geothermal\r\n[\uD544\uC694 \uC9C0\uD615]
+    \uC9C0\uC5F4 \uC9C0\uD615\r\n[\uBE44\uACE0] \uC9C0\uC5F4 \uBC1C\uC804\uAE30 \uC804\uC6A9
+    (\uC790\uC6D0 \uCD94\uCD9C \uC544\uB2D8)\r\n[\uC6D0\uBB38] {\"id\":\"geothermal\",\"terrain\":\"\uC9C0\uC5F4
+    \uC9C0\uD615\",\"output\":null,\"note\":\"\uC9C0\uC5F4 \uBC1C\uC804\uAE30 \uC804\uC6A9
+    (\uC790\uC6D0 \uCD94\uCD9C \uC544\uB2D8)\"}\r\n"

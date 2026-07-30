@@ -52,11 +52,13 @@ namespace ProjectCraft.UIFactory.EditorTools
                 {
                     case MachineUIRole.InputSlot:
                     case MachineUIRole.OutputSlot:
+                    case MachineUIRole.FuelSlot:
                         if (e.GetComponent<ItemSlot>() == null)
                             issues.Add(Err($"'{e.name}' ({e.role}) 에 ItemSlot 컴포넌트가 없습니다.", e));
                         break;
                     case MachineUIRole.ProgressBar:
                     case MachineUIRole.EnergyBar:
+                    case MachineUIRole.FuelBar:
                     case MachineUIRole.InputGasBar:
                     case MachineUIRole.OutputGasBar:
                         if (e.GetComponent<FillingSlot>() == null)
@@ -72,6 +74,7 @@ namespace ProjectCraft.UIFactory.EditorTools
             // index 중복/누락 (여러 개를 쓰는 역할만)
             CheckIndices(byRole, MachineUIRole.InputSlot, issues);
             CheckIndices(byRole, MachineUIRole.OutputSlot, issues);
+            CheckIndices(byRole, MachineUIRole.FuelSlot, issues);
             CheckIndices(byRole, MachineUIRole.InputGasBar, issues);
             CheckIndices(byRole, MachineUIRole.OutputGasBar, issues);
 
@@ -85,6 +88,7 @@ namespace ProjectCraft.UIFactory.EditorTools
             {
                 CompareCount(issues, "입력 슬롯", Count(byRole, MachineUIRole.InputSlot), target.inputSlotCount);
                 CompareCount(issues, "출력 슬롯", Count(byRole, MachineUIRole.OutputSlot), target.outputSlotCount);
+                CompareCount(issues, "연료 슬롯", Count(byRole, MachineUIRole.FuelSlot), target.fuelSlotCount);
                 CompareCount(issues, "입력 가스 바", Count(byRole, MachineUIRole.InputGasBar), target.inputGasSlotCount);
                 CompareCount(issues, "출력 가스 바", Count(byRole, MachineUIRole.OutputGasBar), target.outputGasSlotCount);
 

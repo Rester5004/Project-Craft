@@ -13,10 +13,15 @@ MonoBehaviour:
   m_Name: LasorProcessor
   m_EditorClassIdentifier: Assembly-CSharp::MachineBlock
   blockName: Machine:LasorProcessor
+  displayName: "\uB808\uC774\uC800 \uAC00\uACF5\uAE30"
   machinePrefab: {fileID: 5511969497523617241, guid: 07a54667c6fd810409ccd252dca4bc9a, type: 3}
   uiPrefab: {fileID: 449385401667448120, guid: 050511f23b7b4cd40b3391c1bec81ef9, type: 3}
+  tier: 1
+  recipeGroupId: 
   inputSlotCount: 6
   outputSlotCount: 1
+  fuelSlotCount: 0
+  fuelBurnRate: 20
   inputGasSlotCount: 2
   outputGasSlotCount: 0
   maxGasAmount: 0

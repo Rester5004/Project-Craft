@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: CoreCrafter
   m_EditorClassIdentifier: Assembly-CSharp::CraftingTableBlock
   blockName: CoreCrafter
+  displayName: "\uCF54\uC5B4 \uC870\uD569\uAE30"
   machinePrefab: {fileID: 3893713344455811406, guid: 36ddf6ef812fb7542a908ab599cecdd1, type: 3}
   uiPrefab: {fileID: 779414532576868518, guid: 06eab2c4533376848ad7a643051ba2cf, type: 3}
   inputSlotCount: 3

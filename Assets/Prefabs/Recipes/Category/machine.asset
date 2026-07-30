@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b5e22365c0f82046b66394496dd4ecc, type: 3}
   m_Name: machine
   m_EditorClassIdentifier: Assembly-CSharp::RecipeCategory
-  displayName: Machine
+  displayName: "\uAE30\uACC4"
   icon: {fileID: 2975862532218041731, guid: 8c8abafd1cffa6c4e8d7eb9309478e38, type: 3}
   sortOrder: 1

@@ -1,0 +1,563 @@
+fileFormatVersion: 2
+guid: 5ab3a60aec2d55642a5629756ed2b112
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 1222971526109760969
+    second: pickaxe_head_0
+  - first:
+      213: -7382260767309294186
+    second: pickaxe_head_1
+  - first:
+      213: 2714365446335583516
+    second: pickaxe_head_2
+  - first:
+      213: 8536069933924339819
+    second: pickaxe_head_3
+  - first:
+      213: -1722055900178885121
+    second: pickaxe_head_4
+  - first:
+      213: 8585328694096037411
+    second: pickaxe_head_5
+  - first:
+      213: -7020677054998815125
+    second: pickaxe_head_6
+  - first:
+      213: -1072261859579335206
+    second: pickaxe_head_7
+  - first:
+      213: -5699127308347034984
+    second: pickaxe_head_8
+  - first:
+      213: -7312373841115308766
+    second: pickaxe_head_9
+  - first:
+      213: 7170091618112493073
+    second: pickaxe_head_10
+  - first:
+      213: -4561267907623885714
+    second: pickaxe_head_11
+  - first:
+      213: 4727525606002354939
+    second: pickaxe_head_12
+  - first:
+      213: -8216109358323090138
+    second: pickaxe_head_13
+  - first:
+      213: 1876159354429641194
+    second: pickaxe_head_14
+  - first:
+      213: 2591947924518378179
+    second: pickaxe_head_15
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WindowsStoreApps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: wood_pickaxe_head
+      rect:
+        serializedVersion: 2
+        x: 5
+        y: 5
+        width: 23
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9cd80389f1ed8f010800000000000000
+      internalID: 1222971526109760969
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: stone_pickaxe_head
+      rect:
+        serializedVersion: 2
+        x: 37
+        y: 5
+        width: 23
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6951a3de1f0fc8990800000000000000
+      internalID: -7382260767309294186
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: iron_pickaxe_head
+      rect:
+        serializedVersion: 2
+        x: 69
+        y: 5
+        width: 23
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c155d6bfdfc5ba520800000000000000
+      internalID: 2714365446335583516
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: copper_pickaxe_head
+      rect:
+        serializedVersion: 2
+        x: 101
+        y: 5
+        width: 23
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b60d37df066367670800000000000000
+      internalID: 8536069933924339819
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gold_pickaxe_head
+      rect:
+        serializedVersion: 2
+        x: 133
+        y: 5
+        width: 23
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ff5d87a58470a18e0800000000000000
+      internalID: -1722055900178885121
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tin_pickaxe_head
+      rect:
+        serializedVersion: 2
+        x: 165
+        y: 5
+        width: 23
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3260093d5f6352770800000000000000
+      internalID: 8585328694096037411
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: quartz_pickaxe_head
+      rect:
+        serializedVersion: 2
+        x: 197
+        y: 5
+        width: 23
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b6e5f066a6b819e90800000000000000
+      internalID: -7020677054998815125
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: nickel_pickaxe_head
+      rect:
+        serializedVersion: 2
+        x: 229
+        y: 5
+        width: 23
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: adde291158f8e11f0800000000000000
+      internalID: -1072261859579335206
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: osmium_pickaxe_head
+      rect:
+        serializedVersion: 2
+        x: 261
+        y: 5
+        width: 23
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8923f3888e1a8e0b0800000000000000
+      internalID: -5699127308347034984
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: silver_pickaxe_head
+      rect:
+        serializedVersion: 2
+        x: 293
+        y: 5
+        width: 23
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 22d967febba358a90800000000000000
+      internalID: -7312373841115308766
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lead_pickaxe_head
+      rect:
+        serializedVersion: 2
+        x: 325
+        y: 5
+        width: 23
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 116d9908658418360800000000000000
+      internalID: 7170091618112493073
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: titanium_pickaxe_head
+      rect:
+        serializedVersion: 2
+        x: 357
+        y: 5
+        width: 23
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e6460b0310f13b0c0800000000000000
+      internalID: -4561267907623885714
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aluminum_pickaxe_head
+      rect:
+        serializedVersion: 2
+        x: 389
+        y: 5
+        width: 23
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bfa655cbd7b8b9140800000000000000
+      internalID: 4727525606002354939
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: uranium_pickaxe_head
+      rect:
+        serializedVersion: 2
+        x: 420
+        y: 4
+        width: 25
+        height: 25
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 62db365c1148afd80800000000000000
+      internalID: -8216109358323090138
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lithium_pickaxe_head
+      rect:
+        serializedVersion: 2
+        x: 453
+        y: 5
+        width: 23
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ae11ec61ef4790a10800000000000000
+      internalID: 1876159354429641194
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: thorium_pickaxe_head
+      rect:
+        serializedVersion: 2
+        x: 485
+        y: 5
+        width: 23
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3ca9a3597e278f320800000000000000
+      internalID: 2591947924518378179
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 455d663469a638049ba616f91b54bb55
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      aluminum_pickaxe_head: 4727525606002354939
+      copper_pickaxe_head: 8536069933924339819
+      gold_pickaxe_head: -1722055900178885121
+      iron_pickaxe_head: 2714365446335583516
+      lead_pickaxe_head: 7170091618112493073
+      lithium_pickaxe_head: 1876159354429641194
+      nickel_pickaxe_head: -1072261859579335206
+      nikel_pickaxe_head: -1072261859579335206
+      osmium_pickaxe_head: -5699127308347034984
+      pickaxe_head_0: 1222971526109760969
+      pickaxe_head_1: -7382260767309294186
+      pickaxe_head_10: 7170091618112493073
+      pickaxe_head_11: -4561267907623885714
+      pickaxe_head_12: 4727525606002354939
+      pickaxe_head_13: -8216109358323090138
+      pickaxe_head_14: 1876159354429641194
+      pickaxe_head_15: 2591947924518378179
+      pickaxe_head_2: 2714365446335583516
+      pickaxe_head_3: 8536069933924339819
+      pickaxe_head_4: -1722055900178885121
+      pickaxe_head_5: 8585328694096037411
+      pickaxe_head_6: -7020677054998815125
+      pickaxe_head_7: -1072261859579335206
+      pickaxe_head_8: -5699127308347034984
+      pickaxe_head_9: -7312373841115308766
+      quartz_pickaxe_head: -7020677054998815125
+      silver_pickaxe_head: -7312373841115308766
+      stone_pickaxe_head: -7382260767309294186
+      thorium_pickaxe_head: 2591947924518378179
+      tin_pickaxe_head: 8585328694096037411
+      titanium_pickaxe_head: -4561267907623885714
+      uranium_pickaxe_head: -8216109358323090138
+      wood_pickaxe_head: 1222971526109760969
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

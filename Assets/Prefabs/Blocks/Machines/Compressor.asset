@@ -13,10 +13,15 @@ MonoBehaviour:
   m_Name: Compressor
   m_EditorClassIdentifier: Assembly-CSharp::MachineBlock
   blockName: Machine:Compressor
+  displayName: "\uC555\uCD95\uAE30"
   machinePrefab: {fileID: 7844537751369292244, guid: ae2858d0fd1aa4846bd4e732759d0589, type: 3}
   uiPrefab: {fileID: 1872696084802925076, guid: fbde8ee6bcf30d14bb807cff2d63689d, type: 3}
+  tier: 1
+  recipeGroupId: 
   inputSlotCount: 1
   outputSlotCount: 1
+  fuelSlotCount: 0
+  fuelBurnRate: 20
   inputGasSlotCount: 0
   outputGasSlotCount: 0
   maxGasAmount: 0

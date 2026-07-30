@@ -20,6 +20,9 @@ namespace ProjectCraft.UIFactory.EditorTools
         /// <summary>조합대 목록의 레시피 칸(MachineSlot 아트에서 파생, 드래그 없는 클릭 전용).</summary>
         public const string CraftRecipeSlotPrefab = BuildingBlockFolder + "/CraftRecipeSlot.prefab";
 
+        /// <summary>조합대의 도구 부품 칸(MachineSlot 아트에서 파생, 종류 제한이 있는 드래그 슬롯).</summary>
+        public const string ToolPartSlotPrefab = BuildingBlockFolder + "/ToolPartSlot.prefab";
+
         /// <summary>조합대 UI 산출물.</summary>
         public const string CraftingTableUIPrefab = OutputFolder + "/CraftingTable_UI.prefab";
 
@@ -27,8 +30,10 @@ namespace ProjectCraft.UIFactory.EditorTools
         {
             MachineUIRole.InputSlot => SlotPrefab,
             MachineUIRole.OutputSlot => SlotPrefab,
+            MachineUIRole.FuelSlot => SlotPrefab,
             MachineUIRole.ProgressBar => ProgressBarPrefab,
             MachineUIRole.EnergyBar => EnergyBarPrefab,
+            MachineUIRole.FuelBar => EnergyBarPrefab,   // 잔량 바 아트를 그대로 쓴다
             MachineUIRole.InputGasBar => GasBarPrefab,
             MachineUIRole.OutputGasBar => GasBarPrefab,
             MachineUIRole.MachineName => NameTextPrefab,

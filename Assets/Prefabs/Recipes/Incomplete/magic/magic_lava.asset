@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d1635fa976c21145835b252e45d6313, type: 3}
+  m_Name: magic_lava
+  m_EditorClassIdentifier: Assembly-CSharp::Recipe
+  machine: {fileID: 11400000, guid: c72fdd50611adfe4383f6f64465da81e, type: 2}
+  category: {fileID: 0}
+  tier: 0
+  inputs:
+  - item: {fileID: 11400000, guid: 6b0d12ed06f23454c911d4cee8eead3a, type: 2}
+    count: 1
+  - item: {fileID: 11400000, guid: e1648015ff586bd4f8acecff314c4abb, type: 2}
+    count: 2
+  outputs: []
+  requiredTools: []
+  craftTime: 1
+  importNote: "[\uCD9C\uCC98] notion_magic.json / id=magic_lava\r\n[\uAE30\uACC4]
+    '\uCD08\uAE09 \uC7AC\uB2E8' \u2014 \uB300\uC751\uD558\uB294 MachineBlock \uC774
+    \uC5C6\uC5B4 \uBE44\uC6CC \uB460\r\n[\uC720\uCCB4 \uC0B0\uCD9C] \uC6A9\uC554
+    x1 (\uC544\uC774\uD15C\uC774 \uC544\uB2C8\uB77C \uC62E\uAE30\uC9C0 \uC54A\uC74C)\r\n[\uC870\uD569
+    \uC7A5\uC18C] \uCD08\uAE09 \uC7AC\uB2E8\r\n[\uBE44\uACE0] \uC870\uD569\uD558\uBA74
+    \uC591\uB3D9\uC774\uAC00 \uCC44\uC6CC\uC9D0\r\n[\uC6D0\uBB38] {\"id\":\"magic_lava\",\"machine\":\"\uCD08\uAE09
+    \uC7AC\uB2E8\",\"tier\":0,\"output\":\"\uC6A9\uC554\",\"outputQty\":1,\"outputFluid\":true,\"inputs\":[{\"item\":\"\uC591\uB3D9\uC774\",\"qty\":1},{\"item\":\"\uB9C8\uB825
+    \uD30C\uD3B8\",\"qty\":2}],\"station\":\"\uCD08\uAE09 \uC7AC\uB2E8\",\"note\":\"\uC870\uD569\uD558\uBA74
+    \uC591\uB3D9\uC774\uAC00 \uCC44\uC6CC\uC9D0\"}\r\n"

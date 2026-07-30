@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: raw_uranium_ore
   m_EditorClassIdentifier: Assembly-CSharp::Items
   itemName: raw_uranium_ore
+  displayName: "\uC6B0\uB77C\uB284 \uC870\uAC01"
   placeable: 0
   Icon: {fileID: 3946652768721684514, guid: aa9d507c382e03646868e7afb18980dc, type: 3}
   maxStack: 64

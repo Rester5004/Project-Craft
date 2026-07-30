@@ -1,0 +1,996 @@
+fileFormatVersion: 2
+guid: 8b20703c37c4f5b49961365663ce9a04
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 761100573506273824
+    second: knife_0
+  - first:
+      213: 2004792943942528744
+    second: knife_1
+  - first:
+      213: -8043225553811881211
+    second: knife_2
+  - first:
+      213: 9015607919472102145
+    second: knife_3
+  - first:
+      213: -4956671267377443734
+    second: knife_4
+  - first:
+      213: 5173395371469264052
+    second: knife_5
+  - first:
+      213: 5019899682744843848
+    second: knife_6
+  - first:
+      213: 1817728145210011540
+    second: knife_7
+  - first:
+      213: 5201269443867563416
+    second: knife_8
+  - first:
+      213: 5551778792376080641
+    second: knife_9
+  - first:
+      213: 4228228633768690094
+    second: knife_10
+  - first:
+      213: -8987137820512262963
+    second: knife_11
+  - first:
+      213: 2973008549839656876
+    second: knife_12
+  - first:
+      213: 9078806749925326870
+    second: knife_13
+  - first:
+      213: 8946378222386603391
+    second: knife_14
+  - first:
+      213: 6848100679115858835
+    second: knife_15
+  - first:
+      213: 1037224288927140945
+    second: knife_16
+  - first:
+      213: 6041095803131827580
+    second: knife_17
+  - first:
+      213: -1282120699985795654
+    second: knife_18
+  - first:
+      213: 491519192290850160
+    second: knife_19
+  - first:
+      213: -1834641895468562636
+    second: knife_20
+  - first:
+      213: -8634313237912424454
+    second: knife_21
+  - first:
+      213: 3061787235893183931
+    second: knife_22
+  - first:
+      213: 985447549498615972
+    second: knife_23
+  - first:
+      213: 3048071703262435221
+    second: knife_24
+  - first:
+      213: -4272249307579682426
+    second: knife_25
+  - first:
+      213: -7814869070482564755
+    second: knife_26
+  - first:
+      213: -5405536255206920560
+    second: knife_27
+  - first:
+      213: 7743016411606926253
+    second: knife_28
+  - first:
+      213: 4340291397186277130
+    second: knife_29
+  - first:
+      213: 4666279821224633518
+    second: knife_30
+  - first:
+      213: 7253375914543092140
+    second: knife_31
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WindowsStoreApps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: wood_blade
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 37
+        width: 22
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 022003a60f8ff8a00800000000000000
+      internalID: 761100573506273824
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: stone_blade
+      rect:
+        serializedVersion: 2
+        x: 38
+        y: 37
+        width: 22
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8ee67e78f8472db10800000000000000
+      internalID: 2004792943942528744
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: iron_blade
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 37
+        width: 22
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 503c2b049f8b06090800000000000000
+      internalID: -8043225553811881211
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: copper_blade
+      rect:
+        serializedVersion: 2
+        x: 102
+        y: 37
+        width: 22
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 10b4552d2afdd1d70800000000000000
+      internalID: 9015607919472102145
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gold_blade
+      rect:
+        serializedVersion: 2
+        x: 134
+        y: 37
+        width: 22
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a6c059f6ebd563bb0800000000000000
+      internalID: -4956671267377443734
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tin_blade
+      rect:
+        serializedVersion: 2
+        x: 166
+        y: 37
+        width: 22
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4b453173ea79bc740800000000000000
+      internalID: 5173395371469264052
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: quartz_blade
+      rect:
+        serializedVersion: 2
+        x: 198
+        y: 37
+        width: 22
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 84e3a163a244aa540800000000000000
+      internalID: 5019899682744843848
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: nickel_blade
+      rect:
+        serializedVersion: 2
+        x: 230
+        y: 37
+        width: 22
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 49fe8790e1ed93910800000000000000
+      internalID: 1817728145210011540
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: osmium_blade
+      rect:
+        serializedVersion: 2
+        x: 262
+        y: 37
+        width: 22
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 895d1de600f9e2840800000000000000
+      internalID: 5201269443867563416
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: silver_blade
+      rect:
+        serializedVersion: 2
+        x: 294
+        y: 37
+        width: 22
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1099f17a561eb0d40800000000000000
+      internalID: 5551778792376080641
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lead_blade
+      rect:
+        serializedVersion: 2
+        x: 326
+        y: 37
+        width: 22
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ea10be05a8fadaa30800000000000000
+      internalID: 4228228633768690094
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: titanium_blade
+      rect:
+        serializedVersion: 2
+        x: 358
+        y: 37
+        width: 22
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dc463e4a4c5474380800000000000000
+      internalID: -8987137820512262963
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aluminum_blade
+      rect:
+        serializedVersion: 2
+        x: 390
+        y: 37
+        width: 22
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ca7546f368f324920800000000000000
+      internalID: 2973008549839656876
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: uranium_blade
+      rect:
+        serializedVersion: 2
+        x: 421
+        y: 36
+        width: 24
+        height: 25
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 610c7b133a66efd70800000000000000
+      internalID: 9078806749925326870
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lithium_blade
+      rect:
+        serializedVersion: 2
+        x: 454
+        y: 37
+        width: 22
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f75e4a3e79be72c70800000000000000
+      internalID: 8946378222386603391
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: thorium_blade
+      rect:
+        serializedVersion: 2
+        x: 486
+        y: 37
+        width: 22
+        height: 23
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 393efcce847590f50800000000000000
+      internalID: 6848100679115858835
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: wood_knife
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 2
+        width: 26
+        height: 26
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 15cc8edcef5f46e00800000000000000
+      internalID: 1037224288927140945
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: stone_knife
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 2
+        width: 26
+        height: 26
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c7596c730a846d350800000000000000
+      internalID: 6041095803131827580
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: iron_knife
+      rect:
+        serializedVersion: 2
+        x: 66
+        y: 2
+        width: 26
+        height: 26
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ab5eb2e240ef43ee0800000000000000
+      internalID: -1282120699985795654
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: copper_knife
+      rect:
+        serializedVersion: 2
+        x: 98
+        y: 2
+        width: 26
+        height: 26
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 07578c8e91a32d600800000000000000
+      internalID: 491519192290850160
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: gold_knife
+      rect:
+        serializedVersion: 2
+        x: 130
+        y: 2
+        width: 26
+        height: 26
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4370c8a9aea0a86e0800000000000000
+      internalID: -1834641895468562636
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tin_knife
+      rect:
+        serializedVersion: 2
+        x: 162
+        y: 2
+        width: 26
+        height: 26
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: affe6ce4bd1cc2880800000000000000
+      internalID: -8634313237912424454
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: quartz_knife
+      rect:
+        serializedVersion: 2
+        x: 194
+        y: 2
+        width: 26
+        height: 26
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bb50d3dd447ad7a20800000000000000
+      internalID: 3061787235893183931
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: nickel_knife
+      rect:
+        serializedVersion: 2
+        x: 226
+        y: 2
+        width: 26
+        height: 26
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4a8e4ac33530dad00800000000000000
+      internalID: 985447549498615972
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: osmium_knife
+      rect:
+        serializedVersion: 2
+        x: 258
+        y: 2
+        width: 26
+        height: 26
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 59790e2901dec4a20800000000000000
+      internalID: 3048071703262435221
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: silver_knife
+      rect:
+        serializedVersion: 2
+        x: 290
+        y: 2
+        width: 26
+        height: 26
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 681fdcdd3ebe5b4c0800000000000000
+      internalID: -4272249307579682426
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lead_knife
+      rect:
+        serializedVersion: 2
+        x: 322
+        y: 2
+        width: 26
+        height: 26
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d6913bf3cf10c8390800000000000000
+      internalID: -7814869070482564755
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: titanium_knife
+      rect:
+        serializedVersion: 2
+        x: 354
+        y: 2
+        width: 26
+        height: 26
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 09e65e76a6dabf4b0800000000000000
+      internalID: -5405536255206920560
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: aluminum_knife
+      rect:
+        serializedVersion: 2
+        x: 386
+        y: 2
+        width: 26
+        height: 26
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: da3c9dfe668b47b60800000000000000
+      internalID: 7743016411606926253
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: uranium_knife
+      rect:
+        serializedVersion: 2
+        x: 417
+        y: 1
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a0fc8f6a700db3c30800000000000000
+      internalID: 4340291397186277130
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: lithium_knife
+      rect:
+        serializedVersion: 2
+        x: 450
+        y: 2
+        width: 26
+        height: 26
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ea4eaae36c4f1c040800000000000000
+      internalID: 4666279821224633518
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: thorium_knife
+      rect:
+        serializedVersion: 2
+        x: 482
+        y: 2
+        width: 26
+        height: 26
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ca117b8d6fa29a460800000000000000
+      internalID: 7253375914543092140
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: cb068c253aa6b9c47aa2651e2069f519
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      aluminum_blade: 2973008549839656876
+      aluminum_knife: 7743016411606926253
+      copper_blade: 9015607919472102145
+      copper_knife: 491519192290850160
+      gold_blade: -4956671267377443734
+      gold_knife: -1834641895468562636
+      iron_blade: -8043225553811881211
+      iron_knife: -1282120699985795654
+      knife_0: 761100573506273824
+      knife_1: 2004792943942528744
+      knife_10: 4228228633768690094
+      knife_11: -8987137820512262963
+      knife_12: 2973008549839656876
+      knife_13: 9078806749925326870
+      knife_14: 8946378222386603391
+      knife_15: 6848100679115858835
+      knife_16: 1037224288927140945
+      knife_17: 6041095803131827580
+      knife_18: -1282120699985795654
+      knife_19: 491519192290850160
+      knife_2: -8043225553811881211
+      knife_20: -1834641895468562636
+      knife_21: -8634313237912424454
+      knife_22: 3061787235893183931
+      knife_23: 985447549498615972
+      knife_24: 3048071703262435221
+      knife_25: -4272249307579682426
+      knife_26: -7814869070482564755
+      knife_27: -5405536255206920560
+      knife_28: 7743016411606926253
+      knife_29: 4340291397186277130
+      knife_3: 9015607919472102145
+      knife_30: 4666279821224633518
+      knife_31: 7253375914543092140
+      knife_4: -4956671267377443734
+      knife_5: 5173395371469264052
+      knife_6: 5019899682744843848
+      knife_7: 1817728145210011540
+      knife_8: 5201269443867563416
+      knife_9: 5551778792376080641
+      lead_blade: 4228228633768690094
+      lead_knife: -7814869070482564755
+      lithium_blade: 8946378222386603391
+      lithium_knife: 4666279821224633518
+      nickel_blade: 1817728145210011540
+      nickel_knife: 985447549498615972
+      nikel_blade: 1817728145210011540
+      nikel_knife: 985447549498615972
+      osmium_blade: 5201269443867563416
+      osmium_knife: 3048071703262435221
+      quartz_blade: 5019899682744843848
+      quartz_knife: 3061787235893183931
+      silver_blade: 5551778792376080641
+      silver_knife: -4272249307579682426
+      stone_blade: 2004792943942528744
+      stone_knife: 6041095803131827580
+      thorium_blade: 6848100679115858835
+      thorium_knife: 7253375914543092140
+      tin_blade: 5173395371469264052
+      tin_knife: -8634313237912424454
+      titanium_blade: -8987137820512262963
+      titanium_knife: -5405536255206920560
+      uranium_blade: 9078806749925326870
+      uranium_knife: 4340291397186277130
+      wood_blade: 761100573506273824
+      wood_knife: 1037224288927140945
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

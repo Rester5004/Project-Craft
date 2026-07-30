@@ -19,7 +19,10 @@ public class InventoryHotBarSlot : ItemSlot
     public override void OnPointerExit(PointerEventData eventData)
     {
         // 선택된 슬롯은 마우스가 벗어나도 하이라이트를 유지한다.
+        // (base 를 부르면 하이라이트가 풀리므로 스프라이트만 직접 처리하고 툴팁은 따로 닫는다)
         if (!isSelected && slotImage != null)
             slotImage.sprite = defaultSlotSprite;
+
+        if (TooltipUI.Instance != null) TooltipUI.Instance.Hide();
     }
 }

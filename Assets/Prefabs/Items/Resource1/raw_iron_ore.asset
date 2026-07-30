@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: raw_iron_ore
   m_EditorClassIdentifier: Assembly-CSharp::Items
   itemName: raw_iron_ore
+  displayName: "\uCCA0 \uC870\uAC01"
   placeable: 0
   Icon: {fileID: -8344025593901002095, guid: aa9d507c382e03646868e7afb18980dc, type: 3}
   maxStack: 64

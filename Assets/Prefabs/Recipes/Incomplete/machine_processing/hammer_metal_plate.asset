@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d1635fa976c21145835b252e45d6313, type: 3}
+  m_Name: hammer_metal_plate
+  m_EditorClassIdentifier: Assembly-CSharp::Recipe
+  machine: {fileID: 11400000, guid: ea55fe72f9315554a8ffdcf795dd1b7e, type: 2}
+  category: {fileID: 11400000, guid: a63365af4ccd3904a91ebf59b6456c84, type: 2}
+  tier: 0
+  inputs:
+  - item: {fileID: 11400000, guid: b1c4e565b22971b44ba8dfb055e3e7ea, type: 2}
+    count: 2
+  outputs:
+  - item: {fileID: 11400000, guid: cbd0323ed9da4ff41a690b00ea1586d4, type: 2}
+    count: 1
+  requiredTools: []
+  craftTime: 1
+  importNote: "[\uBCD1\uD569] Assets/Prefabs/Recipes/Incomplete/machine_processing/hammer_metal_plate.asset
+    \uB97C \uD761\uC218\uD568\r\n[\uCD9C\uCC98] notion_crafting.json / id=metal_plate_by_hammer\r\n[\uAE30\uACC4]
+    '\uC870\uD569\uB300' \u2014 \uB300\uC751\uD558\uB294 MachineBlock \uC774 \uC5C6\uC5B4
+    \uBE44\uC6CC \uB460\r\n[\uB3C4\uAD6C] \uB9DD\uCE58 (\uB0B4\uAD6C\uB3C4\uB9CC
+    \uC18C\uBAA8, \uC7AC\uB8CC \uC544\uB2D8)\r\n[\uBE44\uACE0] \uB9DD\uCE58\uB294
+    \uC18C\uBAA8\uB418\uC9C0 \uC54A\uC74C(\uB0B4\uAD6C\uB3C4\uB3C4 \uC18C\uBAA8 X)\r\n[\uC6D0\uBB38]
+    {\"id\":\"metal_plate_by_hammer\",\"tier\":0,\"output\":\"\uAE08\uC18D\uD310\",\"outputQty\":1,\"inputs\":[{\"item\":\"\uAE08\uC18D\",\"qty\":2}],\"tools\":[\"\uB9DD\uCE58\"],\"note\":\"\uB9DD\uCE58\uB294
+    \uC18C\uBAA8\uB418\uC9C0 \uC54A\uC74C(\uB0B4\uAD6C\uB3C4\uB3C4 \uC18C\uBAA8 X)\"}\r\n\r\n---
+    \uD761\uC218\uB41C \uC6D0\uBCF8 ---\r\n[\uCD9C\uCC98] machine_processing.json
+    / id=hammer_metal_plate\r\n[\uAE30\uACC4] '\uB9DD\uCE58' \u2014 \uB300\uC751\uD558\uB294
+    MachineBlock \uC774 \uC5C6\uC5B4 \uBE44\uC6CC \uB460\r\n[\uB3C4\uAD6C] \uB9DD\uCE58
+    (\uB0B4\uAD6C\uB3C4\uB9CC \uC18C\uBAA8, \uC7AC\uB8CC \uC544\uB2D8)\r\n[\uC218\uB3D9]
+    \uC804\uB825\uC774 \uD544\uC694 \uC5C6\uB2E4\r\n[\uBE44\uACE0] \uB9DD\uCE58\uB294
+    \uC18C\uBAA8\uB418\uC9C0 \uC54A\uC74C(\uC18C\uBAA8X)\r\n[\uC6D0\uBB38] {\"id\":\"hammer_metal_plate\",\"machine\":\"\uB9DD\uCE58\",\"tier\":0,\"manual\":true,\"output\":\"\uAE08\uC18D\uD310\",\"outputQty\":1,\"inputs\":[{\"item\":\"\uAE08\uC18D\",\"qty\":2}],\"tools\":[\"\uB9DD\uCE58\"],\"note\":\"\uB9DD\uCE58\uB294
+    \uC18C\uBAA8\uB418\uC9C0 \uC54A\uC74C(\uC18C\uBAA8X)\"}\r\n"

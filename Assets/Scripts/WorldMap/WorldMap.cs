@@ -15,6 +15,20 @@ public class PlaceableRecord
     public string[] outputItemNames;
     public int[] outputCounts;
 
+    // 슬롯별 개체 데이터(커스텀 도구의 재질·내구도 등). 없으면 null.
+    // 메모리에는 객체 그대로 두고, 디스크에 쓸 때만 ItemInstanceSerializer 로 바이트가 된다.
+    public ItemInstance[] inputInstances;
+    public ItemInstance[] outputInstances;
+
+    // 연료 슬롯(화로 등). 연료를 쓰지 않는 기계는 길이 0.
+    public string[] fuelItemNames;
+    public int[] fuelCounts;
+    public ItemInstance[] fuelInstances;
+
+    /// <summary>지금 타고 있는 연료의 남은 에너지와 그 연료의 총량(진행 표시용).</summary>
+    public float burnRemaining;
+    public float burnTotal;
+
     public PlaceableRecord() { }
 
     public PlaceableRecord(string blockId)
@@ -24,6 +38,11 @@ public class PlaceableRecord
         inputCounts = new int[0];
         outputItemNames = new string[0];
         outputCounts = new int[0];
+        inputInstances = new ItemInstance[0];
+        outputInstances = new ItemInstance[0];
+        fuelItemNames = new string[0];
+        fuelCounts = new int[0];
+        fuelInstances = new ItemInstance[0];
     }
 }
 
@@ -75,12 +94,15 @@ public class Chunk
             writer.Write(kvp.Key.y);
             PlaceableRecord rec = kvp.Value;
             writer.Write(rec.blockId ?? "");
-            WriteSlotArray(writer, rec.inputItemNames, rec.inputCounts);
-            WriteSlotArray(writer, rec.outputItemNames, rec.outputCounts);
+            WriteSlotArray(writer, rec.inputItemNames, rec.inputCounts, rec.inputInstances);
+            WriteSlotArray(writer, rec.outputItemNames, rec.outputCounts, rec.outputInstances);
+            WriteSlotArray(writer, rec.fuelItemNames, rec.fuelCounts, rec.fuelInstances);
+            writer.Write(rec.burnRemaining);
+            writer.Write(rec.burnTotal);
         }
     }
 
-    private static void WriteSlotArray(BinaryWriter writer, string[] names, int[] counts)
+    private static void WriteSlotArray(BinaryWriter writer, string[] names, int[] counts, ItemInstance[] instances)
     {
         int cap = names != null ? names.Length : 0;
         writer.Write(cap);
@@ -88,22 +110,26 @@ public class Chunk
         {
             writer.Write(names[i] ?? "");
             writer.Write(counts[i]);
+            ItemInstanceSerializer.Write(writer, instances != null && i < instances.Length ? instances[i] : null);
         }
     }
 
-    private static void ReadSlotArray(BinaryReader reader, out string[] names, out int[] counts)
+    private static void ReadSlotArray(BinaryReader reader, int version,
+        out string[] names, out int[] counts, out ItemInstance[] instances)
     {
         int cap = reader.ReadInt32();
         names = new string[cap];
         counts = new int[cap];
+        instances = new ItemInstance[cap];
         for (int i = 0; i < cap; i++)
         {
             names[i] = reader.ReadString();
             counts[i] = reader.ReadInt32();
+            if (version >= 4) instances[i] = ItemInstanceSerializer.Read(reader);
         }
     }
 
-    public static Chunk Load(BinaryReader reader)
+    public static Chunk Load(BinaryReader reader, int version)
     {
         Chunk chunk = new();
         for (int y = 0; y < 16; y++)
@@ -116,8 +142,22 @@ public class Chunk
             int lx = reader.ReadInt32();
             int ly = reader.ReadInt32();
             PlaceableRecord rec = new() { blockId = reader.ReadString() };
-            ReadSlotArray(reader, out rec.inputItemNames, out rec.inputCounts);
-            ReadSlotArray(reader, out rec.outputItemNames, out rec.outputCounts);
+            ReadSlotArray(reader, version, out rec.inputItemNames, out rec.inputCounts, out rec.inputInstances);
+            ReadSlotArray(reader, version, out rec.outputItemNames, out rec.outputCounts, out rec.outputInstances);
+
+            if (version >= 5)
+            {
+                ReadSlotArray(reader, version, out rec.fuelItemNames, out rec.fuelCounts, out rec.fuelInstances);
+                rec.burnRemaining = reader.ReadSingle();
+                rec.burnTotal = reader.ReadSingle();
+            }
+            else
+            {
+                rec.fuelItemNames = new string[0];
+                rec.fuelCounts = new int[0];
+                rec.fuelInstances = new ItemInstance[0];
+            }
+
             chunk.placeables[new Vector2Int(lx, ly)] = rec;
         }
         return chunk;
@@ -134,8 +174,11 @@ public class WorldMap : Singleton<WorldMap>
         Path.Combine(Application.streamingAssetsPath, "DefaultWorldmap.dat");
 
     // 세이브 포맷 식별/버전. v2: placeable 레코드 포함. v3: placeable 인벤토리를 input/output 분리.
+    // v4: 슬롯마다 ItemInstance(커스텀 도구의 재질·내구도)를 덧붙였다.
+    // v5: 연료 슬롯과 연소 잔량을 추가했다. v3·v4 도 계속 읽는다.
     private const int SaveMagic = 0x50435730; // 'PCW0'
-    private const int SaveVersion = 3;
+    private const int SaveVersion = 5;
+    private const int MinReadableVersion = 3;
 
     private Dictionary<Vector2Int, Chunk> chunks;
     private string savePath;
@@ -253,14 +296,14 @@ public class WorldMap : Singleton<WorldMap>
             if (magic != SaveMagic)
                 throw new IOException("Unsupported or legacy save format (magic mismatch).");
             int version = reader.ReadInt32();
-            if (version != SaveVersion)
-                throw new IOException($"Unsupported save version {version} (expected {SaveVersion}).");
+            if (version < MinReadableVersion || version > SaveVersion)
+                throw new IOException($"Unsupported save version {version} (expected {MinReadableVersion}..{SaveVersion}).");
             int count = reader.ReadInt32();
             for (int i = 0; i < count; i++)
             {
                 int cx = reader.ReadInt32();
                 int cy = reader.ReadInt32();
-                chunks[new Vector2Int(cx, cy)] = Chunk.Load(reader);
+                chunks[new Vector2Int(cx, cy)] = Chunk.Load(reader, version);
             }
             isLoaded = true;
         }

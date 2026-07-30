@@ -1,0 +1,92 @@
+{
+  "recipeType": "crafting",
+  "source": "Notion 기획 백로그 (1) — 6. 레시피 / 조합대 레시피",
+  "machine": "조합대",
+  "description": "중앙 코어(기초 조합대)와 자동 조합기가 공유하는 레시피. 코어는 수동·무전력, 자동 조합기는 저전압으로 자동화. 도구는 소모되지 않고 내구도만 소모된다.",
+  "recipes": [
+    { "id": "stick", "tier": 0, "output": "막대", "outputQty": 1,
+      "inputs": [ { "item": "돌", "qty": 1 } ] },
+
+    { "id": "stone_blade", "tier": 0, "output": "돌 칼날", "outputQty": 1,
+      "inputs": [ { "item": "돌", "qty": 2 } ] },
+
+    { "id": "stone_hammer_head", "tier": 0, "output": "돌 망치 머리", "outputQty": 1,
+      "inputs": [ { "item": "돌", "qty": 2 } ] },
+
+    { "id": "stone_knife", "tier": 0, "output": "돌 칼", "outputQty": 1,
+      "inputs": [ { "item": "막대", "qty": 1 }, { "item": "돌 칼날", "qty": 1 } ] },
+
+    { "id": "stone_hammer", "tier": 0, "output": "돌 망치", "outputQty": 1,
+      "inputs": [ { "item": "막대", "qty": 1 }, { "item": "돌 망치 머리", "qty": 1 } ] },
+
+    { "id": "crank", "tier": 0, "output": "크랭크", "outputQty": 1,
+      "inputs": [ { "item": "돌", "qty": 2 } ],
+      "tools": [ "칼" ] },
+
+    { "id": "dowsing_rod_t0", "tier": 0, "output": "0티어 다우징 로드", "outputQty": 1,
+      "inputs": [ { "item": "돌", "qty": 5 } ],
+      "tools": [ "칼", "망치" ] },
+
+    { "id": "brick", "tier": 0, "output": "벽돌", "outputQty": 1,
+      "inputs": [ { "item": "모래", "qty": 2 }, { "item": "물", "qty": 1 } ],
+      "note": "압연기에서 만들면 고효율" },
+
+    { "id": "iron_plate", "tier": 1, "output": "철판", "outputQty": 1,
+      "inputs": [ { "item": "철 주괴", "qty": 1 } ],
+      "tools": [ "망치" ],
+      "note": "압연기보다 저효율" },
+
+    { "id": "metal_plate_by_hammer", "tier": 0, "output": "금속판", "outputQty": 1,
+      "inputs": [ { "item": "금속", "qty": 2 } ],
+      "tools": [ "망치" ],
+      "note": "망치는 소모되지 않음(내구도도 소모 X)" },
+
+    { "id": "bucket", "tier": 1, "output": "양동이", "outputQty": 1,
+      "inputs": [ { "item": "철판", "qty": 3 } ],
+      "tools": [ "망치" ] },
+
+    { "id": "iron_blade", "tier": 1, "output": "철 칼날", "outputQty": 1,
+      "inputs": [ { "item": "철 주괴", "qty": 1 } ] },
+
+    { "id": "iron_hammer_head", "tier": 1, "output": "철 망치 머리", "outputQty": 1,
+      "inputs": [ { "item": "철 주괴", "qty": 1 } ] },
+
+    { "id": "iron_knife", "tier": 1, "output": "철 칼", "outputQty": 1,
+      "inputs": [ { "item": "막대", "qty": 1 }, { "item": "철 칼날", "qty": 1 } ] },
+
+    { "id": "iron_hammer", "tier": 1, "output": "철 망치", "outputQty": 1,
+      "inputs": [ { "item": "막대", "qty": 1 }, { "item": "철 망치 머리", "qty": 1 } ] },
+
+    { "id": "driver", "tier": 1, "output": "드라이버", "outputQty": 1,
+      "inputs": [ { "item": "금속판", "qty": 2 } ],
+      "tools": [ "망치", "칼" ] },
+
+    { "id": "computer_chip", "tier": 1, "output": "컴퓨터 칩", "outputQty": 1,
+      "inputs": [
+        { "item": "실리콘 판", "qty": 10 },
+        { "item": "구리판", "qty": 10 },
+        { "item": "철판", "qty": 10 },
+        { "item": "전도체 가루", "qty": 20 }
+      ],
+      "note": "레이저 가공기에서 만들면 재료가 1/10" },
+
+    { "id": "rebar", "tier": 1, "output": "철근", "outputQty": 1,
+      "inputs": [ { "item": "철판", "qty": 2 } ],
+      "note": "철근 공장이 조합대로 통합됨" },
+
+    { "id": "item_pipe", "tier": 1, "output": "아이템 파이프", "outputQty": 1,
+      "inputs": [ { "item": "돌", "qty": 2 } ],
+      "tools": [ "망치" ],
+      "note": "고체 자원 수송. 파이프 공장이 조합대로 통합됨" },
+
+    { "id": "liquid_pipe", "tier": 1, "output": "액체 파이프", "outputQty": 1,
+      "inputs": [ { "item": "구리 주괴", "qty": 2 } ],
+      "tools": [ "망치" ],
+      "note": "물·용암·석유·원유 수송" },
+
+    { "id": "gas_pipe", "tier": 1, "output": "기체 파이프", "outputQty": 1,
+      "inputs": [ { "item": "철 주괴", "qty": 2 } ],
+      "tools": [ "망치" ],
+      "note": "수소·산소 등 기체 수송" }
+  ]
+}

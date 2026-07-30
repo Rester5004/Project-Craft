@@ -23,11 +23,21 @@ public class Recipe : ScriptableObject
     [Tooltip("생산할 아이템. 첫 항목이 조합대 목록에 표시되는 대표 산출물이다.")]
     public List<ItemStack> outputs = new();
 
+    [Tooltip("필요한 도구. 소모되지 않고 내구도만 닳는다(내구도가 0 이 되면 도구가 사라진다).")]
+    public List<ToolRequirement> requiredTools = new();
+
     [Tooltip("가공 완료까지 걸리는 시간(초). 0 이면 즉시 완성.")]
     [Min(0f)] public float craftTime = 1f;
 
-    /// <summary>이 레시피가 속한 기계의 blockId(= <see cref="BlockBase.blockName"/>).</summary>
-    public string MachineBlockId => machine != null ? machine.blockName : "";
+    [Tooltip("JSON 임포트 시 Recipe 로 옮기지 못한 원본 정보(확률 부산물·유체·전력·도구·장소·비고와 원문).")]
+    [TextArea(3, 12)] public string importNote;
+
+    /// <summary>
+    /// 이 레시피를 찾을 때 쓰는 색인 키. 기본은 기계의 blockName 이지만,
+    /// 0/1/2티어 화로처럼 업그레이드 관계인 기계들은 <see cref="MachineBlock.recipeGroupId"/> 를 공유해
+    /// 같은 목록을 보게 된다(실제로 구울 수 있는지는 티어가 가른다).
+    /// </summary>
+    public string MachineBlockId => machine != null ? machine.RecipeGroupId : "";
 
     /// <summary>조합대 목록에 아이콘으로 표시할 대표 산출물.</summary>
     public Items PrimaryOutput => outputs != null && outputs.Count > 0 ? outputs[0].item : null;

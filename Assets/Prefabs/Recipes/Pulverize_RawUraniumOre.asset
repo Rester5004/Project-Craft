@@ -13,10 +13,14 @@ MonoBehaviour:
   m_Name: Pulverize_RawUraniumOre
   m_EditorClassIdentifier: Assembly-CSharp::Recipe
   machine: {fileID: 11400000, guid: 2290bdb0a27272d4eb44b866581bb18e, type: 2}
+  category: {fileID: 11400000, guid: a63365af4ccd3904a91ebf59b6456c84, type: 2}
+  tier: 0
   inputs:
   - item: {fileID: 11400000, guid: bc9f5f469d3a5bc47a673f7b12666f12, type: 2}
     count: 1
   outputs:
   - item: {fileID: 11400000, guid: b91134ae4ca256648a4a2f9cafa1123a, type: 2}
     count: 2
+  requiredTools: []
   craftTime: 2
+  importNote: 

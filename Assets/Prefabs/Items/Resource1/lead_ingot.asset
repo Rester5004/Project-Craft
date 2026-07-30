@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: lead_ingot
   m_EditorClassIdentifier: Assembly-CSharp::Items
   itemName: lead_ingot
+  displayName: "\uB0A9 \uC8FC\uAD34"
   placeable: 0
   Icon: {fileID: -6824469122261057667, guid: aa9d507c382e03646868e7afb18980dc, type: 3}
   maxStack: 64

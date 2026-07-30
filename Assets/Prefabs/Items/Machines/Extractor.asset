@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Extractor
   m_EditorClassIdentifier: Assembly-CSharp::Machine
   itemName: Machine:Extractor
+  displayName: "\uCD94\uCD9C\uAE30"
   placeable: 1
   Icon: {fileID: 2959100049386890778, guid: 8c8abafd1cffa6c4e8d7eb9309478e38, type: 3}
   maxStack: 64

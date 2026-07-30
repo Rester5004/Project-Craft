@@ -13,10 +13,15 @@ MonoBehaviour:
   m_Name: Extractor
   m_EditorClassIdentifier: Assembly-CSharp::MachineBlock
   blockName: Machine:Extractor
+  displayName: "\uCD94\uCD9C\uAE30"
   machinePrefab: {fileID: 6169806128200484634, guid: a59c0e3c04a70f34284bebec9c43dfff, type: 3}
   uiPrefab: {fileID: 7770727432205689101, guid: d1117a1aa7f3c474289df91e3132553d, type: 3}
+  tier: 1
+  recipeGroupId: 
   inputSlotCount: 1
   outputSlotCount: 1
+  fuelSlotCount: 0
+  fuelBurnRate: 20
   inputGasSlotCount: 0
   outputGasSlotCount: 0
   maxGasAmount: 0

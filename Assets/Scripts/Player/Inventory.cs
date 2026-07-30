@@ -42,11 +42,25 @@ public class Inventory : Singleton<Inventory>, IItemContainer
         }
         return slots[selectedSlotIndex];
     }
+    /// <summary>
+    /// 개체 데이터(커스텀 도구 등)를 가진 아이템을 지급한다.
+    /// 개체마다 내용이 달라 병합할 수 없으므로 빈 칸에만 들어간다.
+    /// </summary>
+    public bool AddItem(Items item, int amount, ItemInstance instance)
+    {
+        if (item == null || amount <= 0) return false;
+        if (!RecipeSolver.TryAdd(slots, item, amount, instance)) return false;
+
+        OnChanged?.Invoke();
+        return true;
+    }
+
     public bool AddItem(Items item, int amount)
     {
         foreach (ItemStack stack in slots)
         {
-            if (stack.item == item && stack.count < item.maxStack)
+            // 개체 데이터가 붙은 칸(도구)에는 절대 합치지 않는다.
+            if (stack.item == item && stack.IsPlain && stack.count < item.maxStack)
             {
                 stack.count += amount;
                 OnChanged?.Invoke();
@@ -90,7 +104,7 @@ public class Inventory : Singleton<Inventory>, IItemContainer
         stack.count--;
         if (stack.count == 0)
         {
-            stack.item = null;
+            stack.Clear();
             selectedSlotIndex = -1;
         }
 

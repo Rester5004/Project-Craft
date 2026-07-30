@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: bone_meal
   m_EditorClassIdentifier: Assembly-CSharp::Items
   itemName: bone_meal
+  displayName: "\uBF08 \uAC00\uB8E8"
   placeable: 0
   Icon: {fileID: 4297961677465193830, guid: aa9d507c382e03646868e7afb18980dc, type: 3}
   maxStack: 64

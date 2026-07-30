@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d1635fa976c21145835b252e45d6313, type: 3}
+  m_Name: liquid_pipe_2
+  m_EditorClassIdentifier: Assembly-CSharp::Recipe
+  machine: {fileID: 11400000, guid: ea55fe72f9315554a8ffdcf795dd1b7e, type: 2}
+  category: {fileID: 11400000, guid: a63365af4ccd3904a91ebf59b6456c84, type: 2}
+  tier: 1
+  inputs:
+  - item: {fileID: 11400000, guid: f3303932c33708443bcce46c16f8642c, type: 2}
+    count: 2
+  outputs:
+  - item: {fileID: 11400000, guid: 2b6b2d7a82ce4344ea34c1ea08fbde07, type: 2}
+    count: 1
+  requiredTools: []
+  craftTime: 1
+  importNote: "[\uBCD1\uD569] Assets/Prefabs/Recipes/Incomplete/crafting/liquid_pipe.asset
+    \uB97C \uD761\uC218\uD568\r\n[\uCD9C\uCC98] notion_crafting.json / id=liquid_pipe\r\n[\uAE30\uACC4]
+    '\uC870\uD569\uB300' \u2014 \uB300\uC751\uD558\uB294 MachineBlock \uC774 \uC5C6\uC5B4
+    \uBE44\uC6CC \uB460\r\n[\uB3C4\uAD6C] \uB9DD\uCE58 (\uB0B4\uAD6C\uB3C4\uB9CC
+    \uC18C\uBAA8, \uC7AC\uB8CC \uC544\uB2D8)\r\n[\uBE44\uACE0] \uBB3C\xB7\uC6A9\uC554\xB7\uC11D\uC720\xB7\uC6D0\uC720
+    \uC218\uC1A1\r\n[\uC6D0\uBB38] {\"id\":\"liquid_pipe\",\"tier\":1,\"output\":\"\uC561\uCCB4
+    \uD30C\uC774\uD504\",\"outputQty\":1,\"inputs\":[{\"item\":\"\uAD6C\uB9AC \uC8FC\uAD34\",\"qty\":2}],\"tools\":[\"\uB9DD\uCE58\"],\"note\":\"\uBB3C\xB7\uC6A9\uC554\xB7\uC11D\uC720\xB7\uC6D0\uC720
+    \uC218\uC1A1\"}\r\n\r\n--- \uD761\uC218\uB41C \uC6D0\uBCF8 ---\r\n[\uCD9C\uCC98]
+    crafting.json / id=liquid_pipe\r\n[\uB3C4\uAD6C] \uB9DD\uCE58 (\uB0B4\uAD6C\uB3C4\uB9CC
+    \uC18C\uBAA8, \uC7AC\uB8CC \uC544\uB2D8)\r\n[\uC6D0\uBB38 \uBD84\uB958] pipe\r\n[\uC6D0\uBB38]
+    {\"id\":\"liquid_pipe\",\"tier\":1,\"category\":\"pipe\",\"output\":\"\uC561\uCCB4
+    \uD30C\uC774\uD504\",\"outputQty\":1,\"tools\":[\"\uB9DD\uCE58\"],\"inputs\":[{\"item\":\"\uAD6C\uB9AC
+    \uC8FC\uAD34\",\"qty\":2}]}\r\n"

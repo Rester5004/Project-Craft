@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d1635fa976c21145835b252e45d6313, type: 3}
+  m_Name: electrolyzer_water
+  m_EditorClassIdentifier: Assembly-CSharp::Recipe
+  machine: {fileID: 11400000, guid: 322eae672e502b74da9ead827c3deded, type: 2}
+  category: {fileID: 0}
+  tier: 0
+  inputs: []
+  outputs: []
+  requiredTools: []
+  craftTime: 1
+  importNote: "[\uCD9C\uCC98] factory.json / id=electrolyzer_water\r\n[\uAE30\uACC4]
+    '\uC218\uC804\uD574\uAE30' \u2014 \uB300\uC751\uD558\uB294 MachineBlock \uC774
+    \uC5C6\uC5B4 \uBE44\uC6CC \uB460\r\n[\uC720\uCCB4 \uC7AC\uB8CC] \uBB3C x2 (\uC544\uC774\uD15C\uC774
+    \uC544\uB2C8\uB77C \uC62E\uAE30\uC9C0 \uC54A\uC74C)\r\n[\uC720\uCCB4 \uC0B0\uCD9C]
+    \uC218\uC18C x?\r\n[\uC720\uCCB4 \uC0B0\uCD9C] \uC0B0\uC18C x?\r\n[\uC804\uB825]
+    \uACE0\uC804\uC555\r\n[\uBE44\uACE0] \uACE0\uC804\uC555 \uD544\uC218\r\n[\uC6D0\uBB38]
+    {\"id\":\"electrolyzer_water\",\"machine\":\"\uC218\uC804\uD574\uAE30\",\"power\":\"\uACE0\uC804\uC555\",\"outputs\":[{\"item\":\"\uC218\uC18C\",\"fluid\":true},{\"item\":\"\uC0B0\uC18C\",\"fluid\":true}],\"inputs\":[{\"item\":\"\uBB3C\",\"qty\":2,\"fluid\":true}],\"note\":\"\uACE0\uC804\uC555
+    \uD544\uC218\"}\r\n"

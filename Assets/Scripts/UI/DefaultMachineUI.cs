@@ -24,9 +24,11 @@ public class DefaultMachineUI : MonoBehaviour
 
     private readonly List<SlotEntry> inputs = new();
     private readonly List<SlotEntry> outputs = new();
+    private readonly List<SlotEntry> fuels = new();
     private readonly List<BarEntry> inputGasBars = new();
     private readonly List<BarEntry> outputGasBars = new();
     private BarEntry energyBar;
+    private BarEntry fuelBar;
     private BarEntry progressBar;
     private TMP_Text machineNameText;
 
@@ -41,6 +43,7 @@ public class DefaultMachineUI : MonoBehaviour
     /// <summary>프리팹이 가진 요소 수(레이아웃 상한).</summary>
     public int InputElementCount => inputs.Count;
     public int OutputElementCount => outputs.Count;
+    public int FuelElementCount => fuels.Count;
     public int InputGasElementCount => inputGasBars.Count;
     public int OutputGasElementCount => outputGasBars.Count;
 
@@ -51,17 +54,21 @@ public class DefaultMachineUI : MonoBehaviour
 
         inputs.Clear();
         outputs.Clear();
+        fuels.Clear();
         inputGasBars.Clear();
         outputGasBars.Clear();
         energyBar = null;
+        fuelBar = null;
         progressBar = null;
         machineNameText = null;
 
         List<MachineUIElement> inputEls = new();
         List<MachineUIElement> outputEls = new();
+        List<MachineUIElement> fuelEls = new();
         List<MachineUIElement> inputGasEls = new();
         List<MachineUIElement> outputGasEls = new();
         MachineUIElement energyEl = null;
+        MachineUIElement fuelBarEl = null;
         MachineUIElement progressEl = null;
         MachineUIElement nameEl = null;
 
@@ -71,9 +78,11 @@ public class DefaultMachineUI : MonoBehaviour
             {
                 case MachineUIRole.InputSlot: inputEls.Add(element); break;
                 case MachineUIRole.OutputSlot: outputEls.Add(element); break;
+                case MachineUIRole.FuelSlot: fuelEls.Add(element); break;
                 case MachineUIRole.InputGasBar: inputGasEls.Add(element); break;
                 case MachineUIRole.OutputGasBar: outputGasEls.Add(element); break;
                 case MachineUIRole.EnergyBar: energyEl = Prefer(energyEl, element); break;
+                case MachineUIRole.FuelBar: fuelBarEl = Prefer(fuelBarEl, element); break;
                 case MachineUIRole.ProgressBar: progressEl = Prefer(progressEl, element); break;
                 case MachineUIRole.MachineName: nameEl = Prefer(nameEl, element); break;
             }
@@ -81,14 +90,17 @@ public class DefaultMachineUI : MonoBehaviour
 
         SortByIndex(inputEls);
         SortByIndex(outputEls);
+        SortByIndex(fuelEls);
         SortByIndex(inputGasEls);
         SortByIndex(outputGasEls);
 
         foreach (MachineUIElement e in inputEls) inputs.Add(MakeSlot(e));
         foreach (MachineUIElement e in outputEls) outputs.Add(MakeSlot(e));
+        foreach (MachineUIElement e in fuelEls) fuels.Add(MakeSlot(e));
         foreach (MachineUIElement e in inputGasEls) inputGasBars.Add(MakeBar(e));
         foreach (MachineUIElement e in outputGasEls) outputGasBars.Add(MakeBar(e));
         if (energyEl != null) energyBar = MakeBar(energyEl);
+        if (fuelBarEl != null) fuelBar = MakeBar(fuelBarEl);
         if (progressEl != null) progressBar = MakeBar(progressEl);
         if (nameEl != null)
         {
@@ -97,7 +109,7 @@ public class DefaultMachineUI : MonoBehaviour
                 Debug.LogError($"[DefaultMachineUI] '{nameEl.name}' 에 TMP_Text 가 없습니다.", nameEl);
         }
 
-        sharedInventory = new MachineInventory(inputs.Count, outputs.Count);
+        sharedInventory = new MachineInventory(inputs.Count, outputs.Count, fuels.Count);
         initialized = true;
     }
 
@@ -119,11 +131,17 @@ public class DefaultMachineUI : MonoBehaviour
         return new SlotEntry { go = element.gameObject, slot = slot };
     }
 
-    private static BarEntry MakeBar(MachineUIElement element)
+    private BarEntry MakeBar(MachineUIElement element)
     {
         FillingSlot bar = element.GetComponent<FillingSlot>();
         if (bar == null)
             Debug.LogError($"[DefaultMachineUI] '{element.name}' ({element.role}) 에 FillingSlot 이 없습니다.", element);
+
+        // 호버 툴팁을 코드로 붙인다(기존 기계 UI 프리팹을 수정하지 않기 위함).
+        BarTooltip tooltip = element.GetComponent<BarTooltip>();
+        if (tooltip == null) tooltip = element.gameObject.AddComponent<BarTooltip>();
+        tooltip.Bind(this);
+
         return new BarEntry { go = element.gameObject, bar = bar };
     }
 
@@ -136,8 +154,10 @@ public class DefaultMachineUI : MonoBehaviour
 
         // 컨테이너의 실제 입력 칸 수(출력 평면 인덱스의 기준). 화면 클램프와 별개로 유지해야 한다.
         int containerInputCount = instance != null ? instance.InputCount : inputs.Count;
+        int containerOutputCount = instance != null ? instance.OutputCount : outputs.Count;
         int visibleInputCount = containerInputCount;
-        int visibleOutputCount = instance != null ? instance.OutputCount : outputs.Count;
+        int visibleOutputCount = containerOutputCount;
+        int visibleFuelCount = instance != null ? instance.FuelCount : fuels.Count;
         int inputGasCount = instance != null ? instance.InputGasCount : 0;
         int outputGasCount = instance != null ? instance.OutputGasCount : 0;
         bool usesEnergy = instance != null && instance.UsesEnergy;
@@ -145,22 +165,27 @@ public class DefaultMachineUI : MonoBehaviour
         // 프리팹이 가진 요소 수로 클램프
         if (visibleInputCount > inputs.Count)
         {
-            Debug.LogWarning($"[DefaultMachineUI] 입력 {visibleInputCount}칸이 필요하지만 프리팹에는 {inputs.Count}개뿐입니다. 클램프합니다.", this);
+            WarnShortage("입력", visibleInputCount, inputs.Count);
             visibleInputCount = inputs.Count;
         }
         if (visibleOutputCount > outputs.Count)
         {
-            Debug.LogWarning($"[DefaultMachineUI] 출력 {visibleOutputCount}칸이 필요하지만 프리팹에는 {outputs.Count}개뿐입니다. 클램프합니다.", this);
+            WarnShortage("출력", visibleOutputCount, outputs.Count);
             visibleOutputCount = outputs.Count;
+        }
+        if (visibleFuelCount > fuels.Count)
+        {
+            WarnShortage("연료", visibleFuelCount, fuels.Count);
+            visibleFuelCount = fuels.Count;
         }
         if (inputGasCount > inputGasBars.Count)
         {
-            Debug.LogWarning($"[DefaultMachineUI] 입력 가스 {inputGasCount}개가 필요하지만 프리팹에는 {inputGasBars.Count}개뿐입니다. 클램프합니다.", this);
+            WarnShortage("입력 가스", inputGasCount, inputGasBars.Count);
             inputGasCount = inputGasBars.Count;
         }
         if (outputGasCount > outputGasBars.Count)
         {
-            Debug.LogWarning($"[DefaultMachineUI] 출력 가스 {outputGasCount}개가 필요하지만 프리팹에는 {outputGasBars.Count}개뿐입니다. 클램프합니다.", this);
+            WarnShortage("출력 가스", outputGasCount, outputGasBars.Count);
             outputGasCount = outputGasBars.Count;
         }
 
@@ -192,6 +217,21 @@ public class DefaultMachineUI : MonoBehaviour
             }
         }
 
+        // 연료 슬롯: 컨테이너 평면 인덱스 [입력 + 출력 .. ]
+        int fuelBase = containerInputCount + containerOutputCount;
+        for (int f = 0; f < fuels.Count; f++)
+        {
+            bool active = f < visibleFuelCount;
+            if (fuels[f].go != null) fuels[f].go.SetActive(active);
+            if (active && fuels[f].slot != null)
+            {
+                fuels[f].slot.Bind(container, fuelBase + f);
+                fuels[f].slot.SetInsertable(true);
+                boundSlots.Add(fuels[f].slot);
+            }
+        }
+        if (fuelBar != null && fuelBar.go != null) fuelBar.go.SetActive(visibleFuelCount > 0);
+
         for (int k = 0; k < inputGasBars.Count; k++)
             if (inputGasBars[k].go != null) inputGasBars[k].go.SetActive(k < inputGasCount);
         for (int k = 0; k < outputGasBars.Count; k++)
@@ -200,7 +240,7 @@ public class DefaultMachineUI : MonoBehaviour
         if (energyBar != null && energyBar.go != null) energyBar.go.SetActive(usesEnergy);
 
         if (machineNameText != null)
-            machineNameText.text = instance != null ? instance.blockId : "";
+            machineNameText.text = MachineTitle(instance);
 
         gameObject.SetActive(true);
         RefreshAll();
@@ -210,6 +250,25 @@ public class DefaultMachineUI : MonoBehaviour
         boundInstance = instance;
         if (instance != null) instance.AttachUI(this);
         else SetProgress(0f);
+    }
+
+    /// <summary>
+    /// 프리팹의 요소 수가 기계 설정보다 적을 때 경고할지.
+    /// 조합대처럼 베이스의 슬롯을 쓰지 않고 패널이 직접 슬롯을 관리하는 경우에는 끈다.
+    /// </summary>
+    protected virtual bool WarnOnElementShortage => true;
+
+    private void WarnShortage(string what, int needed, int available)
+    {
+        if (!WarnOnElementShortage) return;
+        Debug.LogWarning($"[DefaultMachineUI] {what} {needed}칸이 필요하지만 프리팹에는 {available}개뿐입니다. 클램프합니다.", this);
+    }
+
+    /// <summary>화면에 보일 기계 이름. 블록 정보가 없으면 blockId 로 폴백한다.</summary>
+    protected static string MachineTitle(MachineInstance instance)
+    {
+        if (instance == null) return "";
+        return instance.Info != null ? instance.Info.DisplayName : instance.blockId;
     }
 
     /// <summary>폴백 오픈(레이아웃 확인·드래그 회귀 테스트용 공용 저장소).</summary>
@@ -232,6 +291,48 @@ public class DefaultMachineUI : MonoBehaviour
     /// <summary>바인딩된 슬롯 뷰를 다시 그린다(기계가 아이템을 생산/소모했을 때 호출).</summary>
     public void RefreshSlots() => RefreshAll();
 
+    // ── 바 호버 툴팁 ───────────────────────────────────────────
+    /// <summary>가스/에너지/진행도 바에 표시할 문구. <see cref="BarTooltip"/> 이 호출한다.</summary>
+    public string GetBarTooltip(MachineUIRole role, int index)
+    {
+        switch (role)
+        {
+            case MachineUIRole.InputGasBar: return GasTooltip(boundInstance != null ? boundInstance.GetInputGas(index) : null);
+            case MachineUIRole.OutputGasBar: return GasTooltip(boundInstance != null ? boundInstance.GetOutputGas(index) : null);
+            case MachineUIRole.EnergyBar: return EnergyTooltip();
+            case MachineUIRole.FuelBar: return FuelTooltip();
+            case MachineUIRole.ProgressBar: return ProgressTooltip();
+            default: return "";
+        }
+    }
+
+    private string FuelTooltip()
+    {
+        if (boundInstance == null) return "";
+        if (boundInstance.BurnRemaining <= 0f) return "연료 없음";
+        return $"연소 중  {boundInstance.BurnRemaining:N0}";
+    }
+
+    private string GasTooltip(Gas gas)
+    {
+        float max = boundInstance != null ? boundInstance.MaxGas : 0f;
+        string name = gas != null && gas.gas != null ? gas.gas.gasName : "비어 있음";
+        float amount = gas != null ? gas.amount : 0f;
+        return $"{name}  {amount:N0} / {max:N0}";
+    }
+
+    private string EnergyTooltip()
+    {
+        if (boundInstance == null) return "";
+        return $"{boundInstance.CurrentEnergy:N0} / {boundInstance.MaxEnergy:N0}";
+    }
+
+    private string ProgressTooltip()
+    {
+        if (boundInstance == null || boundInstance.ActiveRecipe == null) return "대기 중";
+        return $"가공 중  {boundInstance.ProgressRatio * 100f:N0}%";
+    }
+
     /// <summary>진행도(0~1) 표시.</summary>
     public void SetProgress(float ratio)
     {
@@ -242,6 +343,12 @@ public class DefaultMachineUI : MonoBehaviour
     public void SetEnergy(float ratio)
     {
         if (energyBar != null && energyBar.bar != null) energyBar.bar.FillAmount = ratio;
+    }
+
+    /// <summary>타고 있는 연료의 잔량(0~1) 표시.</summary>
+    public void SetFuel(float ratio)
+    {
+        if (fuelBar != null && fuelBar.bar != null) fuelBar.bar.FillAmount = ratio;
     }
 
     /// <summary>입력 가스 잔량(0~1) 표시.</summary>
