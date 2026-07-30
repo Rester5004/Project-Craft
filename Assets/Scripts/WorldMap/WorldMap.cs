@@ -277,6 +277,19 @@ public class WorldMap : Singleton<WorldMap>
         }
         return chunk;
     }
+    /// <summary>
+    /// 해당 월드 셀의 타일 ID. 청크가 아직 없으면 <b>생성하지 않고</b> null 을 돌려준다
+    /// — 텍스처를 그리다 화면 밖 청크를 통째로 만들어 버리면 안 되기 때문이다.
+    /// </summary>
+    public string GetTileId(Vector2Int worldCell)
+    {
+        Vector3 pos = new Vector3(worldCell.x, worldCell.y, 0f);
+        if (!chunks.TryGetValue(Chunk.GetChunkId(pos), out Chunk chunk)) return null;
+
+        Vector2Int local = Chunk.GetLocalCellPositionInChunk(pos);
+        return chunk.GetTile(local.x, local.y);
+    }
+
     public bool Mining(Vector2Int chunkId, Vector2Int cellPos) => Mining(chunkId, cellPos, out _);
 
     /// <summary>
@@ -290,7 +303,25 @@ public class WorldMap : Singleton<WorldMap>
 
         if (!Chunk.IsWall(minedTileId)) return false;
 
-        chunk.SetTile(cellPos.x, cellPos.y, "floor:dirt");
+        // 캔 자리는 그 지역의 바닥이 된다(스테이지1 안이면 돌바닥, 밖이면 흙).
+        int worldX = chunkId.x * ChunkSize + cellPos.x;
+        int worldY = chunkId.y * ChunkSize + cellPos.y;
+        chunk.SetTile(cellPos.x, cellPos.y, TerrainPalette.FloorIdAt(worldX, worldY));
+        return true;
+    }
+
+    /// <summary>
+    /// 바닥 칸에 벽을 세운다(<see cref="Mining"/> 의 대칭). 이미 벽이면 아무것도 하지 않고 false.
+    /// 칸이 비어 있는지(기계·플레이어) 는 호출자가 판단한다 — 월드는 타일만 안다.
+    /// </summary>
+    public bool Place(Vector2Int chunkId, Vector2Int cellPos, string wallTileId)
+    {
+        if (!Chunk.IsWall(wallTileId)) return false;
+
+        Chunk chunk = GetOrCreateChunk(chunkId);
+        if (Chunk.IsWall(chunk.GetTile(cellPos.x, cellPos.y))) return false;
+
+        chunk.SetTile(cellPos.x, cellPos.y, wallTileId);
         return true;
     }
 
@@ -312,12 +343,16 @@ public class WorldMap : Singleton<WorldMap>
             {
                 Vector2Int chunkId = Chunk.GetChunkId(new Vector3(x, y, 0f));
                 Vector2Int localCell = Chunk.GetLocalCellPositionInChunk(new Vector3(x, y, 0f));
-                GetOrCreateChunk(chunkId).SetTile(localCell.x, localCell.y, "floor:dirt");
+                GetOrCreateChunk(chunkId).SetTile(localCell.x, localCell.y, TerrainPalette.FloorIdAt(x, y));
             }
         }
     }
 
-    Chunk GenerateChunk(Vector2Int chunkId) //추후 청크 id에 따라 다른 blockid를 사용하게 수정예정
+    /// <summary>
+    /// 청크를 새로 만든다. 스폰 앞 6x6 만 뚫어 두고 나머지는 벽으로 채우며,
+    /// 어떤 벽·바닥을 쓸지는 <see cref="TerrainPalette"/> 가 좌표를 보고 정한다.
+    /// </summary>
+    Chunk GenerateChunk(Vector2Int chunkId)
     {
         Chunk chunk = new();
         for (int ty = 0; ty < ChunkSize; ty++)
@@ -326,7 +361,9 @@ public class WorldMap : Singleton<WorldMap>
                 int wx = chunkId.x * ChunkSize + tx;
                 int wy = chunkId.y * ChunkSize + ty;
                 bool inSpawn = wx >= -3 && wx <= 2 && wy >= -2 && wy <= 3;
-                chunk.SetTile(tx, ty, inSpawn ? "floor:dirt" : "wall:stone");
+                chunk.SetTile(tx, ty, inSpawn
+                    ? TerrainPalette.FloorIdAt(wx, wy)
+                    : TerrainPalette.WallIdAt(wx, wy));
             }
         return chunk;
     }

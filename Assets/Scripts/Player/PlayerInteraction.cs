@@ -95,14 +95,53 @@ public class PlayerInteraction : MonoBehaviour
         if (chunk.GetPlaceable(localCell) != null)
             return; // 이미 placeable 이 있는 칸
 
+        // 2-a) 지형 블록(돌·마력석 등)은 프리팹이 아니라 타일로 놓는다.
+        MainBlock terrain = ItemDictionary.Instance != null
+            ? ItemDictionary.Instance.GetTerrainBlockFor(selectedItemStack.item)
+            : null;
+        if (terrain != null)
+        {
+            if (!IsCellClearForWall(targetCell))
+                return; // 플레이어나 기계 위에 벽을 세우면 갇히거나 겹친다
+            if (!WorldMap.Instance.Place(chunkId, localCell, terrain.blockName))
+                return; // 이미 벽인 칸
+
+            mapGenerator.RefreshTile(targetCell);
+            ConsumeSelected(selectedItemStack);
+            return;
+        }
+
+        // 2-b) 기계는 프리팹을 세운다.
         PlaceableRecord record = new PlaceableRecord(selectedItemStack.item.itemName);
         chunk.SetPlaceable(localCell, record);
         mapGenerator.SpawnPlaceableAt(targetCell, record);
 
-        selectedItemStack.count--;
-        if (selectedItemStack.count <= 0)
-            selectedItemStack.Clear();
+        ConsumeSelected(selectedItemStack);
+    }
+
+    private void ConsumeSelected(ItemStack stack)
+    {
+        stack.count--;
+        if (stack.count <= 0)
+            stack.Clear();
         Inventory.Instance.OnChanged?.Invoke();
+    }
+
+    /// <summary>
+    /// 이 칸에 벽을 세워도 되는가. 벽은 통과할 수 없으니 무언가가 서 있는 칸에 세우면 그 안에 갇힌다.
+    /// </summary>
+    private bool IsCellClearForWall(Vector2Int cell)
+    {
+        Vector3 center = mapGenerator.blocksTilemap.GetCellCenterWorld(new Vector3Int(cell.x, cell.y, 0));
+        Vector2 size = Vector2.one * occupancyCheckSize;
+
+        if (Physics2D.OverlapBox(center, size, 0f, occupiedLayers) != null)
+            return false;
+
+        // 플레이어는 Default 레이어라 위 마스크에 걸리지 않는다. 자기 자신은 따로 확인한다
+        // — 콜라이더가 한 칸보다 크지 않아도 두 칸에 걸쳐 서 있을 수 있다.
+        Collider2D self = GetComponent<Collider2D>();
+        return self == null || !self.bounds.Intersects(new Bounds(center, new Vector3(size.x, size.y, 1f)));
     }
     private bool GetIsCardinalAdjacent(Vector2Int targetGlobalCell, Vector2Int playerGlobalCell)
     {
@@ -193,7 +232,7 @@ public class PlayerInteraction : MonoBehaviour
         if (block != null && block.dropItem != null)
             mapGenerator.SpawnDrop(mineCell, new ItemStack { item = block.dropItem, count = block.dropCount });
 
-        mapGenerator.RefreshMinedTile(mineCell);
+        mapGenerator.RefreshTile(mineCell);
     }
 
     /// <summary>기계를 캔다. 내부 아이템은 필드로 쏟아지고 에너지·가스·연소 상태는 사라진다.</summary>

@@ -1,18 +1,23 @@
-using Unity.VisualScripting;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+/// <summary>
+/// 데이터 타일맵(Blocks/Floor)을 보고 실제로 보이는 벽·바닥 텍스처를 그린다.
+///
+/// 어떤 그림을 쓸지는 <b>블록이 정한다</b> — 좌표의 타일 ID 로 <see cref="MainBlock"/> 을 찾아
+/// 벽이면 <see cref="MainBlock.wallAtlas"/>, 바닥이면 <see cref="MainBlock.floorSprite"/> 를 쓴다.
+/// 덕분에 스테이지마다 다른 타일셋을 쓰면서도 오토타일 조견표(<see cref="TileAtlasManager"/>)는 하나로 공유한다.
+/// </summary>
 public class TilemapTextureLoader : Singleton<TilemapTextureLoader>
 {
     [Header("아틀라스 설정")]
-    public Texture2D tilemapTexture;
+    [Tooltip("커서 윤곽선 시트. 벽 시트들과 격자가 같아 스테이지 구분 없이 공용으로 쓴다.")]
+    [SerializeField] private TileAtlas outlineAtlas;
     public Tile floorOutLine;
-    public Texture2D outlineTexture; // 슬라이스한 타일맵 PNG 파일 등록
-    public Vector2Int atlasGridSize = new Vector2Int(16, 16); // 아틀라스의 전체 가로/세로 타일 개수 (예: 16x16칸짜리 이미지)
-    public Vector2Int frontAtlasBase = new Vector2Int(8, 0); // X=8, Y=4
     [Range(0f, 1f)]
-    public float gemChance = 0.3f; // 보석이 등장할 확률 (8%) 
-    public Sprite testFloorTexture;
+    public float gemChance = 0.3f; // 보석이 등장할 확률
+    public Vector2Int frontAtlasBase = new Vector2Int(8, 0);
 
     [Header("타일맵")]
     [SerializeField] Tilemap wallBottomTilemap; // 벽 "앞면" 전용 - 항상 플레이어보다 뒤에 고정 정렬
@@ -22,24 +27,23 @@ public class TilemapTextureLoader : Singleton<TilemapTextureLoader>
     [SerializeField] Tilemap floorTilemap;
     [SerializeField] Tilemap outlineTilemap;
 
-    // 좌표로 스프라이트를 초고속 탐색하기 위한 2차원 배열
-    private Sprite[,] spriteAtlasTable;
-    private Sprite[,] outlineSpriteAtlasTable;
-
-    // 아틀라스 좌표별로 한 번 만든 Tile 인스턴스를 재사용하기 위한 캐시
+    // 아틀라스별로 스프라이트 격자표와 런타임 Tile 캐시를 따로 들고 있는다.
     // (같은 스프라이트를 여러 칸에 찍을 때 Tile을 매번 새로 생성하지 않기 위함)
-    private Tile[,] tileCache;
-    private Tile[,] outlineTileCache;
-    private Tile cachedFloorTile;
+    private readonly Dictionary<TileAtlas, Sprite[,]> spriteTables = new();
+    private readonly Dictionary<TileAtlas, Tile[,]> tileCaches = new();
+    private readonly Dictionary<Sprite, Tile> floorTileCache = new();
+
+    // 같은 블록에 대해 경고를 매 칸마다 쏟지 않기 위한 기록
+    private readonly HashSet<string> warnedBlocks = new();
 
     // 현재 outline이 표시되어 있는 위치 (ShowOutline 재호출 시 이전 outline을 지우기 위해 추적)
     private Vector2Int? currentOutlinePos;
 
     private bool isFloorOutLine;
+
     protected override void Awake()
     {
         base.Awake();
-        CacheAtlasSprites();
         ConfigureYSorting();
     }
 
@@ -64,107 +68,82 @@ public class TilemapTextureLoader : Singleton<TilemapTextureLoader>
         }
     }
 
-    private void CacheAtlasSprites()
-    {
-        tileCache = new Tile[atlasGridSize.x, atlasGridSize.y];
-        outlineTileCache = new Tile[atlasGridSize.x, atlasGridSize.y];
+    // ── 블록 조회 ───────────────────────────────────────────────────────
 
-        spriteAtlasTable = LoadAtlasSprites("Tilesets/stage2_wall_tilemap");
-        // wall_tilemap_outline은 stage2_wall_tilemap과 동일한 그리드로 슬라이스되어 있어
-        // 같은 아틀라스 좌표(topAtlas/frontAtlas)를 그대로 outline 쪽에도 사용할 수 있다.
-        outlineSpriteAtlasTable = LoadAtlasSprites("Tilesets/wall_tilemap_outline");
+    /// <summary>해당 셀의 지형 블록. 청크가 없거나 등록되지 않은 블록이면 null.</summary>
+    private MainBlock BlockAt(Vector2Int pos)
+    {
+        if (WorldMap.Instance == null || ItemDictionary.Instance == null) return null;
+
+        string tileId = WorldMap.Instance.GetTileId(pos);
+        if (string.IsNullOrEmpty(tileId)) return null;
+
+        MainBlock block = ItemDictionary.Instance.GetBlock(tileId) as MainBlock;
+        if (block == null) WarnOnce(tileId, "딕셔너리에 MainBlock 으로 등록되어 있지 않습니다");
+        return block;
     }
 
-    /// <summary>
-    /// Resources 폴더 기준 경로의 슬라이스된 스프라이트들을 grid 좌표별 2차원 배열로 캐싱합니다.
-    /// </summary>
-    private Sprite[,] LoadAtlasSprites(string resourcePath)
+    private void WarnOnce(string blockId, string reason)
     {
-        Sprite[,] table = new Sprite[atlasGridSize.x, atlasGridSize.y];
-
-        // LoadAll<Sprite>는 하위 에셋 중 'Sprite' 타입만 알아서 필터링해서 배열로 반환합니다.
-        Sprite[] allSprites = Resources.LoadAll<Sprite>(resourcePath);
-
-        if (allSprites == null || allSprites.Length == 0)
-        {
-            Debug.LogError($"Resources에서 스프라이트 아틀라스를 찾을 수 없습니다! ({resourcePath})");
-            return table;
-        }
-
-        foreach (Sprite sprite in allSprites)
-        {
-            int gridX = Mathf.RoundToInt(sprite.rect.x / sprite.rect.width);
-            int gridY = Mathf.RoundToInt(sprite.rect.y / sprite.rect.height);
-
-            if (gridX < atlasGridSize.x && gridY < atlasGridSize.y)
-            {
-                table[gridX, gridY] = sprite;
-            }
-        }
-
-        return table;
+        if (!warnedBlocks.Add(blockId)) return;
+        Debug.LogWarning($"[TilemapTextureLoader] 블록 '{blockId}' 의 텍스처를 그릴 수 없습니다 — {reason}.", this);
     }
 
-    /// <summary>
-    /// 앞서 계산한 아틀라스 좌표(Vector2Int)를 던지면 유니티 Tile 객체를 동적으로 생성해 반환합니다.
-    /// </summary>
-    public Tile CreateRuntimeTile(Vector2Int atlasCoord)
-    {
-        if (atlasCoord.x < 0 || atlasCoord.y < 0) return null;
+    // ── 런타임 Tile 생성 ────────────────────────────────────────────────
 
-        // 0. 이미 만들어둔 Tile이 있으면 그걸 그대로 재사용 (같은 좌표는 항상 같은 스프라이트라
-        //    매번 새 Tile 오브젝트를 만들 필요가 없음)
-        Tile cachedTile = tileCache[atlasCoord.x, atlasCoord.y];
+    /// <summary>
+    /// 아틀라스 좌표(Vector2Int)를 던지면 유니티 Tile 객체를 동적으로 생성해 반환합니다.
+    /// 같은 (아틀라스, 좌표) 는 항상 같은 스프라이트라 한 번 만든 Tile 을 계속 재사용합니다.
+    /// </summary>
+    public Tile CreateRuntimeTile(TileAtlas atlas, Vector2Int atlasCoord)
+    {
+        if (atlas == null || atlasCoord.x < 0 || atlasCoord.y < 0) return null;
+
+        if (!tileCaches.TryGetValue(atlas, out Tile[,] cache))
+        {
+            spriteTables[atlas] = atlas.BuildTable();
+            cache = new Tile[Mathf.Max(1, atlas.gridSize.x), Mathf.Max(1, atlas.gridSize.y)];
+            tileCaches[atlas] = cache;
+        }
+
+        if (atlasCoord.x >= cache.GetLength(0) || atlasCoord.y >= cache.GetLength(1)) return null;
+
+        Tile cachedTile = cache[atlasCoord.x, atlasCoord.y];
         if (cachedTile != null) return cachedTile;
 
-        // 1. 2차원 캐시 배열에서 해당 좌표의 스프라이트 쏙 빼오기
-        Sprite targetSprite = spriteAtlasTable[atlasCoord.x, atlasCoord.y];
+        Sprite targetSprite = spriteTables[atlas][atlasCoord.x, atlasCoord.y];
+        if (targetSprite == null) return null;
 
-        if (targetSprite != null)
-        {
-            // 2. 유니티 타일맵에 찍을 수 있는 Scriptable Tile 인스턴스 생성 후 캐시에 저장
-            Tile newTile = ScriptableObject.CreateInstance<Tile>();
-            newTile.sprite = targetSprite;
-            tileCache[atlasCoord.x, atlasCoord.y] = newTile;
-            return newTile;
-        }
-
-        return null;
+        Tile newTile = ScriptableObject.CreateInstance<Tile>();
+        newTile.sprite = targetSprite;
+        cache[atlasCoord.x, atlasCoord.y] = newTile;
+        return newTile;
     }
 
-    /// <summary>
-    /// CreateRuntimeTile과 동일한 구조로, outline 전용 아틀라스/캐시를 사용하는 버전입니다.
-    /// </summary>
-    public Tile CreateRuntimeOutlineTile(Vector2Int atlasCoord)
-    {
-        if (atlasCoord.x < 0 || atlasCoord.y < 0) return null;
-
-        Tile cachedTile = outlineTileCache[atlasCoord.x, atlasCoord.y];
-        if (cachedTile != null) return cachedTile;
-
-        Sprite targetSprite = outlineSpriteAtlasTable[atlasCoord.x, atlasCoord.y];
-
-        if (targetSprite != null)
-        {
-            Tile newTile = ScriptableObject.CreateInstance<Tile>();
-            newTile.sprite = targetSprite;
-            outlineTileCache[atlasCoord.x, atlasCoord.y] = newTile;
-            return newTile;
-        }
-
-        return null;
-    }
+    // ── 바닥 ────────────────────────────────────────────────────────────
 
     public void LoadFloorTexture(Vector2Int pos)
     {
-        if (cachedFloorTile == null)
+        MainBlock block = BlockAt(pos);
+        if (block == null) return;
+
+        if (block.floorSprite == null)
         {
-            cachedFloorTile = ScriptableObject.CreateInstance<Tile>();
-            cachedFloorTile.sprite = testFloorTexture;
+            WarnOnce(block.blockName, "floorSprite 가 비어 있습니다");
+            return;
         }
 
-        floorTextureTilemap.SetTile((Vector3Int)pos, cachedFloorTile);
+        if (!floorTileCache.TryGetValue(block.floorSprite, out Tile floorTile))
+        {
+            floorTile = ScriptableObject.CreateInstance<Tile>();
+            floorTile.sprite = block.floorSprite;
+            floorTileCache[block.floorSprite] = floorTile;
+        }
+
+        floorTextureTilemap.SetTile((Vector3Int)pos, floorTile);
     }
+
+    // ── 벽 ──────────────────────────────────────────────────────────────
 
     public void LoadWallTexture(Vector2Int pos)
     {
@@ -173,13 +152,21 @@ public class TilemapTextureLoader : Singleton<TilemapTextureLoader>
         // 1. 데이터 상에 블록이 없으면 패스
         if (blocksTilemap.GetTile(currentGridPos) == null) return;
 
+        MainBlock block = BlockAt(pos);
+        if (block == null) return;
+        if (block.wallAtlas == null)
+        {
+            WarnOnce(block.blockName, "wallAtlas 가 비어 있습니다");
+            return;
+        }
+
         var (topAtlas, frontAtlas) = CalculateWallAtlasCoords(pos);
 
         // =================================================================
         // [단계 1] 한 칸 위(Y + 1) 좌표에 "벽 윗면(Top Wall)" 그리기
         // =================================================================
         Vector3Int topGridPos = currentGridPos + Vector3Int.up;
-        Tile topWallTile = CreateRuntimeTile(topAtlas);
+        Tile topWallTile = CreateRuntimeTile(block.wallAtlas, topAtlas);
 
         if (topWallTile != null)
         {
@@ -189,7 +176,7 @@ public class TilemapTextureLoader : Singleton<TilemapTextureLoader>
         // =================================================================
         // [단계 2] 현재 제자리(pos) 좌표에 "앞면 벽(Front Wall)" 그리기
         // =================================================================
-        Tile frontWallTile = CreateRuntimeTile(frontAtlas);
+        Tile frontWallTile = CreateRuntimeTile(block.wallAtlas, frontAtlas);
 
         if (frontWallTile != null)
         {
@@ -231,6 +218,7 @@ public class TilemapTextureLoader : Singleton<TilemapTextureLoader>
 
     /// <summary>
     /// 특정 좌표를 기준으로 주변 8방향의 블록 존재 여부를 비트마스크로 환산합니다.
+    /// 벽의 <b>종류는 구분하지 않습니다</b> — 스테이지 경계에서도 실루엣이 끊기지 않아야 하기 때문입니다.
     /// </summary>
     private int CalculateBitmask(Vector2Int centerPos)
     {
@@ -258,10 +246,11 @@ public class TilemapTextureLoader : Singleton<TilemapTextureLoader>
         wallTopTilemap.SetTile((Vector3Int)pos, null);
     }
 
+    // ── 커서 윤곽선 ─────────────────────────────────────────────────────
+
     /// <summary>
     /// pos 위치의 블록에 outline을 표시합니다. LoadWallTexture가 그리는 것과 동일한
     /// 아틀라스 좌표(같은 인덱스)를 사용해 outlineTilemap의 같은 두 칸(자신 + 한 칸 위)에 그립니다.
-    /// 커서 위치 계산 및 호출 타이밍은 별도로 구현합니다.
     /// </summary>
     public void ShowOutline(Vector2Int pos)
     {
@@ -278,8 +267,8 @@ public class TilemapTextureLoader : Singleton<TilemapTextureLoader>
         }
         var (topAtlas, frontAtlas) = CalculateWallAtlasCoords(pos);
 
-        Tile topOutline = CreateRuntimeOutlineTile(topAtlas);
-        Tile frontOutline = CreateRuntimeOutlineTile(frontAtlas);
+        Tile topOutline = CreateRuntimeTile(outlineAtlas, topAtlas);
+        Tile frontOutline = CreateRuntimeTile(outlineAtlas, frontAtlas);
 
         if (topOutline != null)
             outlineTilemap.SetTile((Vector3Int)(pos + Vector2Int.up), topOutline);

@@ -10,8 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4cecabaf732519b4bb23d8f04e36093c, type: 3}
-  m_Name: floorObject
+  m_Name: StoneObject
   m_EditorClassIdentifier: Assembly-CSharp::MainBlock
-  blockName: floor:dirt
-  displayName: "\uD759"
-  assetPath: {fileID: 11400000, guid: 45c12955aad162945b88ce7c6d74cd82, type: 2}
+  blockName: wall:stone
+  displayName: "\uB3CC"
+  dropItem: {fileID: 11400000, guid: a377e0a4d5d6c8d4aa8d532ab54dcba5, type: 2}
+  dropCount: 1
+  assetPath: {fileID: 11400000, guid: 5a661856f98a9b44680fb5f52271dfb7, type: 2}
+  wallAtlas: {fileID: 11400000, guid: fdc897ea41164a14e8dc0e9b53d8c3ab, type: 2}
+  floorSprite: {fileID: 0}

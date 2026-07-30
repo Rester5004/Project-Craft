@@ -11,5 +11,16 @@ using UnityEngine.Tilemaps;
 [CreateAssetMenu(fileName = "MainBlock", menuName = "Blocks/MainBlock")]
 public class MainBlock : BlockBase
 {
+    [Tooltip("데이터 타일맵(Blocks/Floor)에 찍는 타일. 판정용인 동시에 맨 아래 깔리는 바닥 그림이라, " +
+             "벽 스프라이트의 투명한 부분(바깥 모서리 등)으로 이게 비쳐 보인다. " +
+             "그래서 벽 블록도 자기 지역의 바닥 타일을 써야 벽과 바닥이 이어져 보인다.")]
     public Tile assetPath;
+
+    [Header("벽 전용")]
+    [Tooltip("오토타일링에 쓸 벽 시트. 비우면 이 벽은 텍스처가 그려지지 않는다.")]
+    public TileAtlas wallAtlas;
+
+    [Header("바닥 전용")]
+    [Tooltip("바닥에 까는 그림 한 장. 바닥은 오토타일링하지 않는다.")]
+    public Sprite floorSprite;
 }

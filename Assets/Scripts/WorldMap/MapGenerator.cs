@@ -366,17 +366,27 @@ public class MapGenerator : MonoBehaviour
     }
 
     /// <summary>
-    /// 채굴로 블록이 제거된 위치의 데이터 타일맵(blocks/floor)과
+    /// 한 칸의 지형이 바뀐 뒤(채굴·설치) 데이터 타일맵(blocks/floor)과
     /// 벽 오토타일링(자신 + 8방향 이웃)을 즉시 갱신합니다.
+    /// 무엇으로 바뀌었는지는 <see cref="WorldMap"/> 이 이미 정해 뒀으므로 여기서는 읽기만 합니다.
     /// </summary>
-    public void RefreshMinedTile(Vector2Int worldPos)
+    public void RefreshTile(Vector2Int worldPos)
     {
         Vector3Int pos = (Vector3Int)worldPos;
+        string tileId = WorldMap.Instance.GetTileId(worldPos);
 
-        blocksTilemap.SetTile(pos, null);
-        floorTilemap.SetTile(pos, LoadTile("floor:dirt"));
+        if (Chunk.IsWall(tileId))
+        {
+            floorTilemap.SetTile(pos, null);
+            blocksTilemap.SetTile(pos, LoadTile(tileId));
+        }
+        else
+        {
+            blocksTilemap.SetTile(pos, null);
+            floorTilemap.SetTile(pos, LoadTile(tileId));
+        }
 
-        // 캔 블록이 자신(앞면)과 한 칸 위(윗면)에 그려뒀던 예전 벽 텍스처를 먼저 지운다.
+        // 이 칸과 한 칸 위에 남아 있던 예전 벽 텍스처를 먼저 지운다.
         // LoadWallTexture는 블록이 있을 때만 새로 그릴 뿐, 없어진 블록의 흔적을 지우지는 않기 때문.
         // (ClearTileTexture가 floorTextureTilemap도 같이 지우므로, 바닥 텍스처는 반드시 이 다음에 그려야 함)
         TilemapTextureLoader.Instance.ClearTileTexture(worldPos);

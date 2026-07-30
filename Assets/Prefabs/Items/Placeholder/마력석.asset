@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f0aa270e77a10f843b1b6fe8950719d0, type: 3}
-  m_Name: "\uB3CC"
+  m_Name: "\uB9C8\uB825\uC11D"
   m_EditorClassIdentifier: Assembly-CSharp::Items
-  itemName: "\uB3CC"
-  displayName: "\uB3CC"
+  itemName: "\uB9C8\uB825\uC11D"
+  displayName: "\uB9C8\uB825\uC11D"
   placeable: 1
   Icon: {fileID: 21300000, guid: 4a4d2640fbd603542be3906e18903c59, type: 3}
   maxStack: 64

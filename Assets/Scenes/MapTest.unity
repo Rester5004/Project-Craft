@@ -534,13 +534,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a97867e86d447a4b869a4bb36241198, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TilemapTextureLoader
-  tilemapTexture: {fileID: 2800000, guid: 95f0bf8b3cdece945abff3441bd3b7e6, type: 3}
+  outlineAtlas: {fileID: 11400000, guid: 173fde0d1a4da5745940162b2af1b987, type: 2}
   floorOutLine: {fileID: 11400000, guid: 3b40fd614395bf84689eed118520c487, type: 2}
-  outlineTexture: {fileID: 2800000, guid: 7a6c39590bd37fe4a81cf94956623ae1, type: 3}
-  atlasGridSize: {x: 12, y: 8}
-  frontAtlasBase: {x: 8, y: 0}
   gemChance: 0
-  testFloorTexture: {fileID: 200298996, guid: 348522f001a05c04e94de3de4a961a41, type: 3}
+  frontAtlasBase: {x: 8, y: 0}
   wallBottomTilemap: {fileID: 1962042473}
   wallTopTilemap: {fileID: 252267998}
   floorTextureTilemap: {fileID: 2087985415}
@@ -888,6 +885,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: caadf17f6313e4946915f3a21f0d26f5, type: 2}
   - {fileID: 11400000, guid: 450965d5d2a4c2b4682ac4692e737eb0, type: 2}
   - {fileID: 11400000, guid: 6b9a68024d0cc4748ae64faa9b1577bd, type: 2}
+  - {fileID: 11400000, guid: 3b3ecc29dd70a9d409676129a61c5bdf, type: 2}
   blocksList:
   - {fileID: 11400000, guid: b0993c14880dfe640a2a1dd71de15a88, type: 2}
   - {fileID: 11400000, guid: ae686f65c4060264bac6c596db8425cc, type: 2}
@@ -917,6 +915,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 59a377d9899549b479b02a656546c96d, type: 2}
   - {fileID: 11400000, guid: 766ba04896b277645ada272bae27fda7, type: 2}
   - {fileID: 11400000, guid: c5eb0ad674aa46040b8faa75fab9ad2e, type: 2}
+  - {fileID: 11400000, guid: f703ecfe0e42562468a67d4ac5500491, type: 2}
+  - {fileID: 11400000, guid: 572d36bef074ca4439dc4d1fd1b31eea, type: 2}
 --- !u!4 &180631861
 Transform:
   m_ObjectHideFlags: 0

@@ -8,6 +8,8 @@ public class ItemDictionary : Singleton<ItemDictionary>
     private Dictionary<string, BlockBase> blockDictionary = new Dictionary<string, BlockBase>();
     // 한글 표시 이름 → 아이템. /give 나 레시피 임포트에서 한글로 찾을 때 쓴다.
     private Dictionary<string, Items> displayNameDictionary = new Dictionary<string, Items>();
+    // 아이템 → 그 아이템을 놓으면 생기는 지형 블록. dropItem 의 역방향이라 캔 것을 그대로 되놓을 수 있다.
+    private Dictionary<Items, MainBlock> terrainByItem = new Dictionary<Items, MainBlock>();
 
     /// <summary>
     /// 한글 이름을 키로 비교할 때는 NFC 로 통일한다.
@@ -63,7 +65,36 @@ public class ItemDictionary : Singleton<ItemDictionary>
             {
                 Debug.LogWarning($"Duplicate block name detected: {block.blockName}. Please ensure unique names for all blocks.");
             }
+
+            RegisterTerrainPlacement(block);
         }
+    }
+
+    /// <summary>
+    /// 캔 아이템으로 같은 지형을 되놓을 수 있도록 dropItem 의 역방향 색인을 만든다.
+    /// dropItem 을 그대로 키로 쓰기 때문에 "캐면 나오는 것"과 "놓으면 되는 것"이 어긋날 일이 없다.
+    /// </summary>
+    private void RegisterTerrainPlacement(BlockBase block)
+    {
+        MainBlock terrain = block as MainBlock;
+        if (terrain == null || terrain.dropItem == null) return;
+
+        if (terrainByItem.TryGetValue(terrain.dropItem, out MainBlock existing))
+        {
+            Debug.LogWarning($"아이템 '{terrain.dropItem.itemName}' 를 떨구는 지형 블록이 둘입니다"
+                + $"({existing.blockName}, {terrain.blockName}). 배치에는 먼저 등록된 쪽을 씁니다.");
+            return;
+        }
+
+        terrainByItem.Add(terrain.dropItem, terrain);
+    }
+
+    /// <summary>이 아이템을 놓으면 생기는 지형 블록. 지형이 아니면 null(기계 배치로 넘어간다).</summary>
+    public MainBlock GetTerrainBlockFor(Items item)
+    {
+        if (item != null && terrainByItem.TryGetValue(item, out MainBlock block))
+            return block;
+        return null;
     }
     /// <summary>itemName 으로 Items 를 조회한다(placeable 인벤토리 복원 등에 사용).</summary>
     public Items GetItem(string itemName)
