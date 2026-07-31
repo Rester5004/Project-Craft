@@ -212,6 +212,30 @@ public static class RecipeSolver
         => AddItems(slots, item, amount, instance) == amount;
 
     /// <summary>
+    /// 지금 이 슬롯들이 이 아이템을 몇 개까지 받을 수 있는지 <b>넣어 보지 않고</b> 센다.
+    /// 파이프가 "보내 봐야 못 받는 곳"으로 짐을 실어 보내지 않도록 미리 확인하는 데 쓴다.
+    /// </summary>
+    public static int CountFreeSpace(IList<ItemStack> slots, Items item, bool hasInstance = false)
+    {
+        if (slots == null || item == null) return 0;
+
+        int max = MaxStackOf(item);
+        int room = 0;
+        for (int i = 0; i < slots.Count; i++)
+        {
+            ItemStack stack = slots[i];
+            if (stack == null) continue;
+
+            if (stack.item == null) { room += max; continue; }
+
+            // 개체 데이터가 붙은 짐은 기존 스택에 합칠 수 없어 빈 칸만 센다.
+            if (hasInstance) continue;
+            if (stack.item == item && stack.IsPlain && stack.count < max) room += max - stack.count;
+        }
+        return room;
+    }
+
+    /// <summary>
     /// 넣을 수 있는 만큼만 넣고 <b>실제로 넣은 개수</b>를 돌려준다.
     /// 다 못 넣어도 나머지를 호출자가 알 수 있으므로, 필드 드랍 줍기처럼
     /// "일부만 주워지는" 상황에서 남은 것이 증발하지 않는다.

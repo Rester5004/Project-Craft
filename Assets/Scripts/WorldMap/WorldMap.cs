@@ -41,6 +41,9 @@ public class PlaceableRecord
     /// <summary>발전기가 전력을 보내는 대상들의 월드 셀. 발전기가 아니면 길이 0.</summary>
     public Vector2Int[] links;
 
+    /// <summary>파이프가 운반 중인 짐. 파이프가 아니면 길이 0.</summary>
+    public ParcelRecord[] parcels;
+
     public PlaceableRecord() { }
 
     public PlaceableRecord(string blockId)
@@ -56,6 +59,7 @@ public class PlaceableRecord
         fuelCounts = new int[0];
         fuelInstances = new ItemInstance[0];
         links = System.Array.Empty<Vector2Int>();
+        parcels = System.Array.Empty<ParcelRecord>();
     }
 }
 
@@ -143,6 +147,20 @@ public class Chunk
                 writer.Write(rec.links[i].x);
                 writer.Write(rec.links[i].y);
             }
+
+            // v8: 파이프가 운반 중인 짐. 파이프가 아니면 0 이라 4바이트만 든다.
+            int parcelCount = rec.parcels != null ? rec.parcels.Length : 0;
+            writer.Write(parcelCount);
+            for (int i = 0; i < parcelCount; i++)
+            {
+                ParcelRecord parcel = rec.parcels[i];
+                writer.Write(parcel.itemName ?? "");
+                writer.Write(parcel.count);
+                ItemInstanceSerializer.Write(writer, parcel.instance);
+                writer.Write(parcel.destX);
+                writer.Write(parcel.destY);
+                writer.Write(parcel.remaining);
+            }
         }
 
         writer.Write(drops.Count);
@@ -226,6 +244,27 @@ public class Chunk
                 rec.links = System.Array.Empty<Vector2Int>();
             }
 
+            if (version >= 8)
+            {
+                int parcelCount = reader.ReadInt32();
+                rec.parcels = new ParcelRecord[parcelCount];
+                for (int i = 0; i < parcelCount; i++)
+                    rec.parcels[i] = new ParcelRecord
+                    {
+                        itemName = reader.ReadString(),
+                        count = reader.ReadInt32(),
+                        instance = ItemInstanceSerializer.Read(reader),
+                        destX = reader.ReadInt32(),
+                        destY = reader.ReadInt32(),
+                        remaining = reader.ReadSingle(),
+                    };
+            }
+            else
+            {
+                // 이 else 를 빼면 v7 이하 세이브에서 parcels 가 null 로 남아 PipeCell 이 터진다.
+                rec.parcels = System.Array.Empty<ParcelRecord>();
+            }
+
             chunk.placeables[new Vector2Int(lx, ly)] = rec;
         }
 
@@ -266,8 +305,9 @@ public class WorldMap : Singleton<WorldMap>
     // v5: 연료 슬롯과 연소 잔량을 추가했다.
     // v6: 필드에 떨어진 아이템(DropRecord)을 청크마다 저장한다. v3~v5 도 계속 읽는다.
     // v7: 기계의 보유 전력·라운드로빈 커서·발전기의 전력 링크 목록을 추가했다.
+    // v8: 파이프가 운반 중인 짐(ParcelRecord)을 배치물마다 저장한다.
     private const int SaveMagic = 0x50435730; // 'PCW0'
-    private const int SaveVersion = 7;
+    private const int SaveVersion = 8;
     private const int MinReadableVersion = 3;
 
     private Dictionary<Vector2Int, Chunk> chunks;
@@ -326,6 +366,18 @@ public class WorldMap : Singleton<WorldMap>
 
         Vector2Int local = Chunk.GetLocalCellPositionInChunk(pos);
         return chunk.GetTile(local.x, local.y);
+    }
+
+    /// <summary>
+    /// 해당 월드 셀의 배치물. 청크가 아직 없으면 <b>만들지 않고</b> null 을 돌려준다
+    /// (<see cref="GetTileId"/> 와 같은 규약) — 파이프 이웃을 살피다 화면 밖 청크를 통째로 만들면 안 된다.
+    /// </summary>
+    public PlaceableRecord GetPlaceableAt(Vector2Int worldCell)
+    {
+        Vector3 pos = new Vector3(worldCell.x, worldCell.y, 0f);
+        if (!chunks.TryGetValue(Chunk.GetChunkId(pos), out Chunk chunk)) return null;
+
+        return chunk.GetPlaceable(Chunk.GetLocalCellPositionInChunk(pos));
     }
 
     public bool Mining(Vector2Int chunkId, Vector2Int cellPos) => Mining(chunkId, cellPos, out _);

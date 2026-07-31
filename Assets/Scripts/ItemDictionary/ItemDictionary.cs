@@ -10,6 +10,8 @@ public class ItemDictionary : Singleton<ItemDictionary>
     private Dictionary<string, Items> displayNameDictionary = new Dictionary<string, Items>();
     // 아이템 → 그 아이템을 놓으면 생기는 지형 블록. dropItem 의 역방향이라 캔 것을 그대로 되놓을 수 있다.
     private Dictionary<Items, MainBlock> terrainByItem = new Dictionary<Items, MainBlock>();
+    // 아이템 → 그 아이템을 놓으면 깔리는 파이프. 위와 같은 역인덱스 발상이다.
+    private Dictionary<Items, PipeBlock> pipeByItem = new Dictionary<Items, PipeBlock>();
 
     /// <summary>
     /// 한글 이름을 키로 비교할 때는 NFC 로 통일한다.
@@ -67,6 +69,7 @@ public class ItemDictionary : Singleton<ItemDictionary>
             }
 
             RegisterTerrainPlacement(block);
+            RegisterPipePlacement(block);
         }
     }
 
@@ -94,6 +97,38 @@ public class ItemDictionary : Singleton<ItemDictionary>
     {
         if (item != null && terrainByItem.TryGetValue(item, out MainBlock block))
             return block;
+        return null;
+    }
+
+    /// <summary>파이프도 지형과 같은 방식으로 dropItem 역인덱스를 만든다.</summary>
+    private void RegisterPipePlacement(BlockBase block)
+    {
+        PipeBlock pipe = block as PipeBlock;
+        if (pipe == null || pipe.dropItem == null) return;
+
+        if (pipeByItem.TryGetValue(pipe.dropItem, out PipeBlock existing))
+        {
+            Debug.LogWarning($"아이템 '{pipe.dropItem.itemName}' 를 떨구는 파이프 블록이 둘입니다"
+                + $"({existing.blockName}, {pipe.blockName}). 배치에는 먼저 등록된 쪽을 씁니다.");
+            return;
+        }
+
+        pipeByItem.Add(pipe.dropItem, pipe);
+    }
+
+    /// <summary>이 아이템을 놓으면 깔리는 파이프. 파이프가 아니면 null.</summary>
+    public PipeBlock GetPipeBlockFor(Items item)
+    {
+        if (item != null && pipeByItem.TryGetValue(item, out PipeBlock pipe))
+            return pipe;
+        return null;
+    }
+
+    /// <summary>blockId 로 파이프 정보를 조회한다. 없거나 파이프가 아니면 null.</summary>
+    public PipeBlock GetPipeInfo(string blockId)
+    {
+        if (!string.IsNullOrEmpty(blockId) && blockDictionary.TryGetValue(blockId, out BlockBase block))
+            return block as PipeBlock;
         return null;
     }
     /// <summary>itemName 으로 Items 를 조회한다(placeable 인벤토리 복원 등에 사용).</summary>
@@ -149,30 +184,32 @@ public class ItemDictionary : Singleton<ItemDictionary>
             return block as MachineBlock;
         return null;
     }
+    // 아래 둘은 예전에 무조건 캐스팅을 했다. 파이프처럼 MainBlock/MachineBlock 이 아닌 블록이 생기면
+    // InvalidCastException 이 나므로 타입 검사로 바꾼다.
     public TileBase GetTileFromBlockDictionary(string name)
     {
-        if (blockDictionary.ContainsKey(name))
+        if (!blockDictionary.TryGetValue(name, out BlockBase block))
         {
-            MainBlock tmp = (MainBlock)blockDictionary[name];
-            return tmp.assetPath;
+            Debug.Log(name + "is not exists in dictionary.");
+            return null;
         }
-        else
-        {
-            Debug.Log(name+"is not exists in dictionary.");
-        }
+
+        if (block is MainBlock main) return main.assetPath;
+
+        Debug.LogWarning($"[ItemDictionary] '{name}' 은 지형 블록이 아니라 타일이 없습니다({block.GetType().Name}).");
         return null;
     }
     public GameObject GetGameObjectFromBlockDictionary(string name)
     {
-        if (blockDictionary.ContainsKey(name))
+        if (!blockDictionary.TryGetValue(name, out BlockBase block))
         {
-            MachineBlock tmp = (MachineBlock)blockDictionary[name];
-            return tmp.machinePrefab;
+            Debug.Log(name + "is not exists in dictionary.");
+            return null;
         }
-        else
-        {
-            Debug.Log(name+"is not exists in dictionary.");
-        }
+
+        if (block is MachineBlock machine) return machine.machinePrefab;
+
+        Debug.LogWarning($"[ItemDictionary] '{name}' 은 기계가 아니라 프리팹이 없습니다({block.GetType().Name}).");
         return null;
     }
 }

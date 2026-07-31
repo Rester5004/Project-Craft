@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05f22039199358242aea8da1447fc3c4, type: 3}
+  m_Name: pipe_liquid_atlas
+  m_EditorClassIdentifier: Assembly-CSharp::PipeAtlas
+  sprites:
+  - {fileID: -2090620339, guid: 5fcbec9e6120da346ad0921f04cd4c28, type: 3}
+  - {fileID: 191999313, guid: 5fcbec9e6120da346ad0921f04cd4c28, type: 3}
+  - {fileID: 191999313, guid: 5fcbec9e6120da346ad0921f04cd4c28, type: 3}
+  - {fileID: 2133432169, guid: 5fcbec9e6120da346ad0921f04cd4c28, type: 3}
+  - {fileID: 191999313, guid: 5fcbec9e6120da346ad0921f04cd4c28, type: 3}
+  - {fileID: -1535355101, guid: 5fcbec9e6120da346ad0921f04cd4c28, type: 3}
+  - {fileID: -1501935435, guid: 5fcbec9e6120da346ad0921f04cd4c28, type: 3}
+  - {fileID: 443614615, guid: 5fcbec9e6120da346ad0921f04cd4c28, type: 3}
+  - {fileID: 1742251746, guid: 5fcbec9e6120da346ad0921f04cd4c28, type: 3}
+  - {fileID: 1371774084, guid: 5fcbec9e6120da346ad0921f04cd4c28, type: 3}
+  - {fileID: -2090620339, guid: 5fcbec9e6120da346ad0921f04cd4c28, type: 3}
+  - {fileID: -630671583, guid: 5fcbec9e6120da346ad0921f04cd4c28, type: 3}
+  - {fileID: -1744597482, guid: 5fcbec9e6120da346ad0921f04cd4c28, type: 3}
+  - {fileID: 1166063763, guid: 5fcbec9e6120da346ad0921f04cd4c28, type: 3}
+  - {fileID: -957117637, guid: 5fcbec9e6120da346ad0921f04cd4c28, type: 3}
+  - {fileID: -521018223, guid: 5fcbec9e6120da346ad0921f04cd4c28, type: 3}
+  rotations: 000000005a0000000000000000000000a6ffffff0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000

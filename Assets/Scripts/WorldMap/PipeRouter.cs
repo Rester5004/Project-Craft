@@ -1,0 +1,192 @@
+using System.Collections.Generic;
+using UnityEngine;
+
+/// <summary>
+/// 파이프 망을 훑는 순수 탐색기. MonoBehaviour 도 상태도 없어 에디터에서 그대로 불러 검증할 수 있다.
+///
+/// 위상은 <see cref="WorldMap.GetPlaceableAt"/> 로 <b>레코드에서</b> 읽는다.
+/// MapGenerator 의 렌더 창과 무관하므로 망이 청크 경계에서 끊기지 않는다 —
+/// 실제로 물건을 주고받는 순간에만 상대가 로드돼 있는지 따진다.
+/// </summary>
+public static class PipeRouter
+{
+    /// <summary>4방향. 마스크 비트는 N=1, E=2, S=4, W=8 순서다.</summary>
+    public static readonly Vector2Int[] Directions =
+    {
+        new Vector2Int(0, 1),    // N
+        new Vector2Int(1, 0),    // E
+        new Vector2Int(0, -1),   // S
+        new Vector2Int(-1, 0),   // W
+    };
+
+    /// <summary>도착 후보 하나. 기계까지 걸리는 총 이동 시간을 함께 들고 있다.</summary>
+    public readonly struct Sink
+    {
+        public readonly Vector2Int machineCell;
+        public readonly float seconds;
+
+        public Sink(Vector2Int machineCell, float seconds)
+        {
+            this.machineCell = machineCell;
+            this.seconds = seconds;
+        }
+    }
+
+    /// <summary>이 셀에 놓인 파이프(파이프가 아니면 null). 청크를 새로 만들지 않는다.</summary>
+    public static PipeBlock PipeAt(Vector2Int cell)
+    {
+        PlaceableRecord record = WorldMap.Instance != null ? WorldMap.Instance.GetPlaceableAt(cell) : null;
+        if (record == null || ItemDictionary.Instance == null) return null;
+        return ItemDictionary.Instance.GetPipeInfo(record.blockId);
+    }
+
+    /// <summary>이 셀에 기계가 놓여 있는가(로드 여부와 무관하게 레코드 기준).</summary>
+    public static bool MachineAt(Vector2Int cell)
+    {
+        PlaceableRecord record = WorldMap.Instance != null ? WorldMap.Instance.GetPlaceableAt(cell) : null;
+        if (record == null || ItemDictionary.Instance == null) return false;
+        return ItemDictionary.Instance.GetMachineInfo(record.blockId) != null;
+    }
+
+    /// <summary>
+    /// 이 셀이 <paramref name="kind"/> 파이프와 이어지는가.
+    /// 같은 종류의 파이프끼리 이어지고(등급은 상관없다), 기계는 어느 면으로든 붙는다.
+    /// </summary>
+    public static bool Connects(Vector2Int cell, PipeKind kind)
+    {
+        PlaceableRecord record = WorldMap.Instance != null ? WorldMap.Instance.GetPlaceableAt(cell) : null;
+        if (record == null || ItemDictionary.Instance == null) return false;
+
+        PipeBlock pipe = ItemDictionary.Instance.GetPipeInfo(record.blockId);
+        if (pipe != null) return pipe.kind == kind;
+
+        // 기계는 방향을 고를 UI 가 없으므로 어느 면으로든 연결된다.
+        return ItemDictionary.Instance.GetMachineInfo(record.blockId) != null;
+    }
+
+    /// <summary>
+    /// 4방향 연결 마스크(N=1, E=2, S=4, W=8).
+    /// 저장하지 않고 필요할 때마다 계산한다 — 파생 상태를 저장하면 이웃이 바뀔 때 어긋난다.
+    /// </summary>
+    public static byte ConnectionMask(Vector2Int cell, PipeKind kind)
+    {
+        int mask = 0;
+        for (int i = 0; i < Directions.Length; i++)
+            if (Connects(cell + Directions[i], kind)) mask |= 1 << i;
+        return (byte)mask;
+    }
+
+    // ── 경로 탐색 ───────────────────────────────────────────────
+
+    /// <summary>한 번 탐색할 때 훑을 파이프 칸의 상한. 거대한 망에서 프레임이 튀지 않게 막는다.</summary>
+    public const int MaxVisited = 512;
+
+    // 매번 새로 할당하지 않도록 재사용하는 작업용 자료구조(탐색은 한 번에 하나만 돈다).
+    private static readonly Dictionary<Vector2Int, float> best = new Dictionary<Vector2Int, float>();
+    private static readonly List<Vector2Int> frontier = new List<Vector2Int>();
+
+    /// <summary>
+    /// 출발 파이프에서 같은 종류의 망을 따라 닿을 수 있는 기계를 <b>이동 시간 순</b>으로 모은다.
+    ///
+    /// 칸마다 <see cref="PipeBlock.secondsPerCell"/> 이 다르므로 BFS 가 아니라 다익스트라다
+    /// (등급이 균일하면 결과가 BFS 와 같다). 비용에는 지나는 파이프 칸이 모두 들어가고,
+    /// 기계로 나가는 마지막 한 걸음은 0 이다.
+    ///
+    /// <paramref name="exclude"/> 는 짐을 꺼낸 기계다 — 자기 산출물을 자기가 도로 먹으면 안 된다.
+    /// </summary>
+    public static void FindSinks(Vector2Int start, PipeKind kind, Vector2Int exclude, List<Sink> results)
+    {
+        results.Clear();
+        best.Clear();
+        frontier.Clear();
+
+        PipeBlock startPipe = PipeAt(start);
+        if (startPipe == null || startPipe.kind != kind) return;
+
+        best[start] = startPipe.secondsPerCell;
+        frontier.Add(start);
+
+        int visited = 0;
+        while (frontier.Count > 0 && visited < MaxVisited)
+        {
+            // 가장 싼 칸을 꺼낸다. 망이 작아 선형 탐색이 힙보다 빠르다.
+            int pick = 0;
+            for (int i = 1; i < frontier.Count; i++)
+                if (best[frontier[i]] < best[frontier[pick]]) pick = i;
+
+            Vector2Int cell = frontier[pick];
+            frontier.RemoveAt(pick);
+            float cost = best[cell];
+            visited++;
+
+            for (int d = 0; d < Directions.Length; d++)
+            {
+                Vector2Int next = cell + Directions[d];
+                if (next == exclude) continue;   // 꺼내온 기계로 되돌려 주지 않는다
+
+                PipeBlock pipe = PipeAt(next);
+                if (pipe != null)
+                {
+                    if (pipe.kind != kind) continue;
+
+                    float nextCost = cost + pipe.secondsPerCell;
+                    if (best.TryGetValue(next, out float known) && known <= nextCost) continue;
+
+                    best[next] = nextCost;
+                    if (!frontier.Contains(next)) frontier.Add(next);
+                    continue;
+                }
+
+                // 파이프가 아니면 기계인지 본다. 기계는 종점이라 더 뻗지 않는다.
+                if (MachineAt(next)) AddSink(results, next, cost);
+            }
+        }
+
+        results.Sort((a, b) => a.seconds.CompareTo(b.seconds));
+    }
+
+    /// <summary>같은 기계에 여러 경로로 닿으면 가장 빠른 것만 남긴다.</summary>
+    private static void AddSink(List<Sink> results, Vector2Int machineCell, float seconds)
+    {
+        for (int i = 0; i < results.Count; i++)
+        {
+            if (results[i].machineCell != machineCell) continue;
+            if (results[i].seconds <= seconds) return;
+
+            results[i] = new Sink(machineCell, seconds);
+            return;
+        }
+        results.Add(new Sink(machineCell, seconds));
+    }
+
+    /// <summary>
+    /// 이 기계가 이 아이템을 받아 줄 슬롯(못 받으면 null).
+    ///
+    /// <b>레시피를 근거로 거르는 것이 핵심이다</b> — 이게 없으면 화로가 자기 산출물을
+    /// 도로 입력칸에 받아 무한 고리가 생긴다.
+    /// </summary>
+    public static IList<ItemStack> TargetSlots(MachineInstance machine, Items item)
+    {
+        if (machine == null || item == null || machine.inventory == null) return null;
+
+        // 연료는 연료 칸으로 (발전기·화로에 석탄을 자동 공급할 수 있게)
+        if (machine.UsesFuel && item.IsFuel) return machine.inventory.fuelSlots;
+
+        RecipeDictionary dictionary = RecipeDictionary.Instance;
+        if (dictionary == null) return null;
+
+        IReadOnlyList<Recipe> recipes = dictionary.GetRecipesFor(machine.RecipeKey);
+        for (int i = 0; i < recipes.Count; i++)
+        {
+            Recipe recipe = recipes[i];
+            if (recipe == null || recipe.tier > machine.Tier || recipe.inputs == null) continue;
+
+            for (int j = 0; j < recipe.inputs.Count; j++)
+            {
+                ItemStack need = recipe.inputs[j];
+                if (need != null && need.item == item && need.count > 0) return machine.inventory.inputSlots;
+            }
+        }
+        return null;
+    }
+}

@@ -21,6 +21,8 @@ public class MapGenerator : MonoBehaviour
 
     // 로드된 청크에 스폰된 기계들(월드 셀 → 인스턴스)
     private readonly Dictionary<Vector2Int, MachineInstance> loadedMachines = new();
+    // 로드된 청크에 깔린 파이프들. 파이프는 오브젝트가 아니라 타일이라 순수 데이터만 든다.
+    private readonly Dictionary<Vector2Int, PipeCell> loadedPipes = new();
     private Transform placeableContainer;
 
     // 로드된 청크에 스폰된 필드 드랍들(레코드 → 표시 오브젝트)
@@ -43,6 +45,8 @@ public class MapGenerator : MonoBehaviour
     void Start()
     {
         EnsurePlaceableContainer();
+        // 파이프 타일맵은 씬에 배선하지 않고 여기서 만든다(씬 파일을 건드리지 않기 위해).
+        PipeNetworkManager.EnsureCreated(placeableObjectsTilemap != null ? placeableObjectsTilemap.transform.parent : null);
         if (WorldMap.Instance != null)
             WorldMap.Instance.OnBeforeSave += FlushAll;
         UpdateChunks();
@@ -248,6 +252,12 @@ public class MapGenerator : MonoBehaviour
     private void SpawnPlaceable(Vector2Int worldCell, PlaceableRecord record)
     {
         if (record == null || loadedMachines.ContainsKey(worldCell)) return;
+
+        // 파이프는 프리팹을 세우지 않고 타일맵에 그린다. 아래 기계 경로를 타면
+        // MachineInstance 가 붙어 "유령 기계"가 되므로 반드시 여기서 갈라야 한다.
+        PipeBlock pipe = ItemDictionary.Instance != null ? ItemDictionary.Instance.GetPipeInfo(record.blockId) : null;
+        if (pipe != null) { SpawnPipe(worldCell, record, pipe); return; }
+
         EnsurePlaceableContainer();
 
         GameObject prefab = ItemDictionary.Instance.GetGameObjectFromBlockDictionary(record.blockId);
@@ -268,10 +278,31 @@ public class MapGenerator : MonoBehaviour
         if (sr != null) sr.sortingOrder = 2; // 인스턴스에만 설정(공유 프리팹 오염 방지)
 
         loadedMachines[worldCell] = inst;
+
+        // 기계가 생기면 옆 파이프가 이쪽으로 붙는 모양으로 바뀐다.
+        if (PipeNetworkManager.Active != null) PipeNetworkManager.Active.MarkTopologyDirty(worldCell);
+    }
+
+    /// <summary>파이프 한 칸을 등록하고 타일로 그린다(GameObject 를 만들지 않는다).</summary>
+    private void SpawnPipe(Vector2Int worldCell, PlaceableRecord record, PipeBlock block)
+    {
+        if (loadedPipes.ContainsKey(worldCell)) return;
+
+        PipeNetworkManager.EnsureCreated(placeableObjectsTilemap != null ? placeableObjectsTilemap.transform.parent : null);
+
+        PipeCell pipe = new PipeCell(worldCell, block, record);
+        loadedPipes[worldCell] = pipe;
+        if (PipeNetworkManager.Active != null) PipeNetworkManager.Active.OnPipeLoaded(pipe);
     }
 
     public bool TryGetMachineAt(Vector2Int worldCell, out MachineInstance instance)
         => loadedMachines.TryGetValue(worldCell, out instance);
+
+    /// <summary>로드된 청크에 깔려 있는 파이프(월드 셀 → 상태). loadedMachines 와 대칭이다.</summary>
+    public bool TryGetPipeAt(Vector2Int worldCell, out PipeCell pipe)
+        => loadedPipes.TryGetValue(worldCell, out pipe);
+
+    public IEnumerable<KeyValuePair<Vector2Int, PipeCell>> LoadedPipes => loadedPipes;
 
     /// <summary>로드된 청크에 스폰돼 있는 기계 전부(월드 셀 → 인스턴스). 전력 범위 검색에 쓴다.</summary>
     public IEnumerable<KeyValuePair<Vector2Int, MachineInstance>> LoadedMachines => loadedMachines;
@@ -299,6 +330,18 @@ public class MapGenerator : MonoBehaviour
         PlaceableRecord record = chunk.GetPlaceable(local);
         if (record == null) return false;
 
+        // 파이프는 인벤토리 대신 운반 중인 짐을 쏟는다.
+        if (loadedPipes.TryGetValue(worldCell, out PipeCell pipe))
+        {
+            DropParcel(worldCell, pipe);
+            DropSelf(worldCell, record);
+
+            chunk.RemovePlaceable(local);
+            loadedPipes.Remove(worldCell);
+            if (PipeNetworkManager.Active != null) PipeNetworkManager.Active.OnPipeUnloaded(worldCell);
+            return true;
+        }
+
         loadedMachines.TryGetValue(worldCell, out MachineInstance inst);
 
         // 1) 내부 슬롯을 쏟는다. 개체 데이터를 그대로 넘겨 도구의 재질·내구도가 보존된다.
@@ -310,15 +353,37 @@ public class MapGenerator : MonoBehaviour
         }
 
         // 2) 기계 자신도 떨어뜨린다(아이템 ID 는 blockName 과 같다는 규약).
-        Items machineItem = ItemDictionary.Instance != null ? ItemDictionary.Instance.GetItem(record.blockId) : null;
-        if (machineItem != null) SpawnDrop(worldCell, new ItemStack { item = machineItem, count = 1 });
-        else Debug.LogWarning($"[MapGenerator] '{record.blockId}' 에 대응하는 아이템이 없어 기계를 회수하지 못했습니다.");
+        DropSelf(worldCell, record);
 
         // 3) 레코드와 인스턴스를 없앤다.
         chunk.RemovePlaceable(local);
         loadedMachines.Remove(worldCell);
         if (inst != null) Destroy(inst.gameObject);
+
+        // 기계가 사라지면 옆 파이프의 연결 모양도 바뀐다.
+        if (PipeNetworkManager.Active != null) PipeNetworkManager.Active.MarkTopologyDirty(worldCell);
         return true;
+    }
+
+    /// <summary>배치물 자신을 아이템으로 돌려준다(아이템 ID 는 blockName 과 같다는 규약).</summary>
+    private void DropSelf(Vector2Int worldCell, PlaceableRecord record)
+    {
+        Items item = ItemDictionary.Instance != null ? ItemDictionary.Instance.GetItem(record.blockId) : null;
+        if (item != null) SpawnDrop(worldCell, new ItemStack { item = item, count = 1 });
+        else Debug.LogWarning($"[MapGenerator] '{record.blockId}' 에 대응하는 아이템이 없어 회수하지 못했습니다.");
+    }
+
+    /// <summary>파이프가 싣고 있던 짐을 필드에 쏟는다. 짐을 회수할 수 있는 유일한 경로다.</summary>
+    private void DropParcel(Vector2Int worldCell, PipeCell pipe)
+    {
+        if (pipe.parcel == null || pipe.parcel.count <= 0) return;
+
+        Items item = ItemDictionary.Instance != null ? ItemDictionary.Instance.GetItem(pipe.parcel.itemName) : null;
+        if (item != null)
+            SpawnDrop(worldCell, new ItemStack { item = item, count = pipe.parcel.count, instance = pipe.parcel.instance });
+
+        pipe.parcel = null;
+        pipe.WriteBack();
     }
 
     private void DropSlots(Vector2Int worldCell, List<ItemStack> slots)
@@ -338,12 +403,15 @@ public class MapGenerator : MonoBehaviour
     {
         foreach (MachineInstance inst in loadedMachines.Values)
             if (inst != null) inst.Flush();
+
+        // 파이프가 싣고 있는 짐도 레코드로 옮긴다 — 빼먹으면 저장할 때 화물이 사라진다.
+        if (PipeNetworkManager.Active != null) PipeNetworkManager.Active.FlushAll();
     }
     public void UnLoadChunk(Vector2Int id, Chunk chunk)
     {
         int size = WorldMap.ChunkSize;
 
-        // 이 청크의 기계들을 레코드로 동기화 후 디스폰
+        // 이 청크의 기계·파이프를 레코드로 동기화 후 디스폰
         foreach (var kvp in chunk.Placeables)
         {
             Vector2Int local = kvp.Key;
@@ -352,6 +420,11 @@ public class MapGenerator : MonoBehaviour
             {
                 if (inst != null) { inst.Flush(); Destroy(inst.gameObject); }
                 loadedMachines.Remove(worldCell);
+            }
+            else if (loadedPipes.ContainsKey(worldCell))
+            {
+                loadedPipes.Remove(worldCell);
+                if (PipeNetworkManager.Active != null) PipeNetworkManager.Active.OnPipeUnloaded(worldCell);
             }
         }
 

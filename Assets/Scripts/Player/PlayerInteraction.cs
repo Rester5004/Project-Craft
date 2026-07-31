@@ -112,7 +112,24 @@ public class PlayerInteraction : MonoBehaviour
             return;
         }
 
-        // 2-b) 기계는 프리팹을 세운다.
+        // 2-b) 파이프는 프리팹이 아니라 전용 타일맵에 그린다(수백 개가 깔리므로).
+        PipeBlock pipe = ItemDictionary.Instance != null
+            ? ItemDictionary.Instance.GetPipeBlockFor(selectedItemStack.item)
+            : null;
+        if (pipe != null)
+        {
+            // 벽 속에 묻으면 벽 텍스처에 완전히 가려 보이지 않는다.
+            if (!Chunk.IsFloor(WorldMap.Instance.GetTileId(targetCell)))
+                return;
+
+            PlaceableRecord pipeRecord = new PlaceableRecord(selectedItemStack.item.itemName);
+            chunk.SetPlaceable(localCell, pipeRecord);
+            mapGenerator.SpawnPlaceableAt(targetCell, pipeRecord);   // 안에서 파이프로 갈라진다
+            ConsumeSelected(selectedItemStack);
+            return;
+        }
+
+        // 2-c) 기계는 프리팹을 세운다.
         PlaceableRecord record = new PlaceableRecord(selectedItemStack.item.itemName);
         chunk.SetPlaceable(localCell, record);
         mapGenerator.SpawnPlaceableAt(targetCell, record);
@@ -185,7 +202,7 @@ public class PlayerInteraction : MonoBehaviour
     }
 
     /// <summary>좌클릭 홀드로 캘 수 있는 대상의 종류.</summary>
-    private enum MineTarget { None, Wall, Machine }
+    private enum MineTarget { None, Wall, Machine, Pipe }
 
     private void UpdateMining()
     {
@@ -202,11 +219,12 @@ public class PlayerInteraction : MonoBehaviour
             && GetIsCardinalAdjacent(mineCell, playerGlobalCell)
             && WorldMap.Instance != null;
 
-        // 기계가 놓인 칸은 그 아래 바닥이 아니라 기계를 캔다.
+        // 배치물이 놓인 칸은 그 아래 지형이 아니라 배치물을 캔다.
         MineTarget target = MineTarget.None;
         if (inputAllowed)
         {
             if (mapGenerator.TryGetMachineAt(mineCell, out _)) target = MineTarget.Machine;
+            else if (mapGenerator.TryGetPipeAt(mineCell, out _)) target = MineTarget.Pipe;
             else if (WorldMap.Instance.IsMineable(chunkId, localCell)) target = MineTarget.Wall;
         }
 
@@ -228,6 +246,7 @@ public class PlayerInteraction : MonoBehaviour
             return;
 
         if (target == MineTarget.Machine) MineMachine(mineCell);
+        else if (target == MineTarget.Pipe) mapGenerator.RemoveMachineAt(mineCell);   // 안에서 파이프로 갈라진다
         else MineWall(mineCell, chunkId, localCell);
 
         CancelMining();

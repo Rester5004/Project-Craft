@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8819b725f101d846a6287e07024b41e, type: 3}
+  m_Name: LiquidPipe
+  m_EditorClassIdentifier: Assembly-CSharp::PipeBlock
+  blockName: "\uC561\uCCB4 \uD30C\uC774\uD504"
+  displayName: "\uC561\uCCB4 \uD30C\uC774\uD504"
+  dropItem: {fileID: 11400000, guid: 2b6b2d7a82ce4344ea34c1ea08fbde07, type: 2}
+  dropCount: 1
+  kind: 1
+  tier: 0
+  secondsPerCell: 0.3
+  throughput: 1
+  atlas: {fileID: 11400000, guid: d61b661701f9981488205090b23dad3f, type: 2}
+  tint: {r: 1, g: 1, b: 1, a: 1}
