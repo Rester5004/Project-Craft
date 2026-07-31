@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MachineBlock
   blockName: Machine:Electrolyzer
   displayName: "\uC804\uAE30 \uBD84\uD574\uAE30"
+  dropItem: {fileID: 0}
+  dropCount: 1
   machinePrefab: {fileID: 294556655845549275, guid: eb414131f3dd6cf42a50d051ce644ca6, type: 3}
   uiPrefab: {fileID: 1630192388603133487, guid: 45a4fb8bdc8ec6f4f95279927eeef2f6, type: 3}
   tier: 1
@@ -27,3 +29,6 @@ MonoBehaviour:
   maxGasAmount: 100
   maxEnergyAmount: 100
   isUseEnergy: 1
+  isGenerator: 0
+  powerRange: 0
+  energyUseRate: 10

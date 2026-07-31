@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MachineBlock
   blockName: Machine:HVElectricFurnace
   displayName: "\uACE0\uC804\uC555 \uC804\uAE30\uB85C"
+  dropItem: {fileID: 0}
+  dropCount: 1
   machinePrefab: {fileID: 2613032363430261748, guid: 4dfde3c845569ef4fb05fb3aafc29e10, type: 3}
   uiPrefab: {fileID: 723616340984963795, guid: 4adcfcf7c46b42f498142de21fe71bf5, type: 3}
   tier: 2
@@ -27,3 +29,6 @@ MonoBehaviour:
   maxGasAmount: 0
   maxEnergyAmount: 1000
   isUseEnergy: 1
+  isGenerator: 0
+  powerRange: 0
+  energyUseRate: 100

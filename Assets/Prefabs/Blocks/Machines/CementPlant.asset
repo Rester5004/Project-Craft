@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MachineBlock
   blockName: Machine:CementPlant
   displayName: "\uC2DC\uBA58\uD2B8 \uACF5\uC7A5"
+  dropItem: {fileID: 0}
+  dropCount: 1
   machinePrefab: {fileID: 2613032363430261748, guid: 1ffdd30464be60f43b3523210d09a0cf, type: 3}
   uiPrefab: {fileID: 0}
   tier: 1
@@ -27,3 +29,6 @@ MonoBehaviour:
   maxGasAmount: 0
   maxEnergyAmount: 1000
   isUseEnergy: 1
+  isGenerator: 0
+  powerRange: 0
+  energyUseRate: 100

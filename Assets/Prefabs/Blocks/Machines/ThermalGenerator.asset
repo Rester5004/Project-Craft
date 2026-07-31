@@ -14,16 +14,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MachineBlock
   blockName: Machine:ThermalGenerator
   displayName: "\uD654\uB825 \uBC1C\uC804\uAE30"
+  dropItem: {fileID: 0}
+  dropCount: 1
   machinePrefab: {fileID: 2613032363430261748, guid: 5d6ef73bd00b5df46aa76046423db3a5, type: 3}
-  uiPrefab: {fileID: 0}
+  uiPrefab: {fileID: 723616340984963795, guid: dc2ac8fe2a1dc494a9bb4dce816ffc3b, type: 3}
   tier: 1
   recipeGroupId: 
-  inputSlotCount: 1
-  outputSlotCount: 1
-  fuelSlotCount: 0
+  inputSlotCount: 0
+  outputSlotCount: 0
+  fuelSlotCount: 1
   fuelBurnRate: 20
   inputGasSlotCount: 0
   outputGasSlotCount: 0
   maxGasAmount: 0
-  maxEnergyAmount: 0
+  maxEnergyAmount: 400
   isUseEnergy: 0
+  isGenerator: 1
+  powerRange: 8
+  energyUseRate: 0

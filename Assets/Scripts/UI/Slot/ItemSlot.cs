@@ -141,10 +141,17 @@ public abstract class ItemSlot : MonoBehaviour,
         container.NotifyChanged();
     }
 
+    // 호버할 때마다 델리게이트를 새로 만들지 않도록 한 번만 만들어 둔다.
+    private System.Func<string> tooltipProvider;
+
     public virtual void OnPointerEnter(PointerEventData eventData)
     {
         if (slotImage != null) slotImage.sprite = selectedSlotSprite;
-        if (TooltipUI.Instance != null) TooltipUI.Instance.Show(TooltipText());
+        if (TooltipUI.Instance == null) return;
+
+        // 기계가 가공을 끝내면 커서를 올려 둔 채로도 슬롯 내용이 바뀌므로 매 프레임 다시 읽는다.
+        if (tooltipProvider == null) tooltipProvider = TooltipText;
+        TooltipUI.Instance.Show(tooltipProvider);
     }
 
     public virtual void OnPointerExit(PointerEventData eventData)

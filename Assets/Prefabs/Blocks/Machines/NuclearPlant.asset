@@ -14,16 +14,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MachineBlock
   blockName: Machine:NuclearPlant
   displayName: "\uD575\uBC1C\uC804\uC18C"
+  dropItem: {fileID: 0}
+  dropCount: 1
   machinePrefab: {fileID: 2613032363430261748, guid: 15f2c806fa367fd42956e80b81a427a2, type: 3}
-  uiPrefab: {fileID: 0}
-  tier: 1
+  uiPrefab: {fileID: 723616340984963795, guid: dc2ac8fe2a1dc494a9bb4dce816ffc3b, type: 3}
+  tier: 2
   recipeGroupId: 
-  inputSlotCount: 1
-  outputSlotCount: 1
-  fuelSlotCount: 0
-  fuelBurnRate: 20
+  inputSlotCount: 0
+  outputSlotCount: 0
+  fuelSlotCount: 1
+  fuelBurnRate: 100
   inputGasSlotCount: 0
   outputGasSlotCount: 0
   maxGasAmount: 0
-  maxEnergyAmount: 0
+  maxEnergyAmount: 2000
   isUseEnergy: 0
+  isGenerator: 1
+  powerRange: 12
+  energyUseRate: 0

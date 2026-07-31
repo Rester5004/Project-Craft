@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MachineBlock
   blockName: Machine:Appraiser
   displayName: "\uAC10\uBCC4\uAE30"
+  dropItem: {fileID: 0}
+  dropCount: 1
   machinePrefab: {fileID: 2613032363430261748, guid: f9dc453fefe552b4d8d19f2bf60c0529, type: 3}
   uiPrefab: {fileID: 0}
   tier: 0
@@ -27,3 +29,6 @@ MonoBehaviour:
   maxGasAmount: 0
   maxEnergyAmount: 1000
   isUseEnergy: 1
+  isGenerator: 0
+  powerRange: 0
+  energyUseRate: 100

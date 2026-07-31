@@ -23,6 +23,10 @@ public class TooltipUI : Singleton<TooltipUI>
     private TextMeshProUGUI label;
     private bool visible;
 
+    // 떠 있는 동안 매 프레임 다시 물어볼 문구 공급자(없으면 고정 문구).
+    // 전력·연료·진행도처럼 계속 변하는 값은 호버 시점에 한 번 읽으면 곧바로 낡은 값이 된다.
+    private System.Func<string> provider;
+
     protected override void Awake()
     {
         base.Awake();
@@ -30,11 +34,34 @@ public class TooltipUI : Singleton<TooltipUI>
         Hide();
     }
 
-    /// <summary>툴팁을 띄운다. 내용이 비면 대신 숨긴다(빈 슬롯 등).</summary>
+    /// <summary>고정 문구로 툴팁을 띄운다. 내용이 비면 대신 숨긴다(빈 슬롯 등).</summary>
     public void Show(string text)
     {
-        if (panel == null) return;
+        provider = null;
+        Display(text);
+    }
 
+    /// <summary>
+    /// 매 프레임 <paramref name="textProvider"/> 를 다시 불러 갱신되는 툴팁을 띄운다.
+    /// 전력·연료 잔량·가공 진행도처럼 커서를 올려 둔 사이에도 계속 변하는 값에 쓴다.
+    /// 호출자는 델리게이트를 필드에 캐시해 두는 편이 좋다(호버마다 새로 만들지 않도록).
+    /// </summary>
+    public void Show(System.Func<string> textProvider)
+    {
+        provider = textProvider;
+        Display(textProvider != null ? textProvider() : "");
+    }
+
+    public void Hide()
+    {
+        visible = false;
+        provider = null;
+        if (panel != null && panel.gameObject.activeSelf) panel.gameObject.SetActive(false);
+    }
+
+    private void Display(string text)
+    {
+        if (panel == null) return;
         if (string.IsNullOrWhiteSpace(text)) { Hide(); return; }
 
         label.text = text;
@@ -43,15 +70,20 @@ public class TooltipUI : Singleton<TooltipUI>
         FollowCursor();   // 뜨는 첫 프레임부터 제자리에 있도록
     }
 
-    public void Hide()
-    {
-        visible = false;
-        if (panel != null && panel.gameObject.activeSelf) panel.gameObject.SetActive(false);
-    }
-
     private void LateUpdate()
     {
-        if (visible) FollowCursor();
+        if (!visible) return;
+
+        if (provider != null)
+        {
+            string text = provider();
+            if (string.IsNullOrWhiteSpace(text)) { Hide(); return; }   // 내용이 사라지면(슬롯이 비는 등) 접는다
+
+            // 같은 문자열이면 건드리지 않는다 — 매 프레임 TMP 재조판과 레이아웃 재계산이 걸린다.
+            if (label.text != text) label.text = text;
+        }
+
+        FollowCursor();
     }
 
     /// <summary>커서를 따라가되 캔버스 밖으로 나가면 반대 방향으로 접는다.</summary>

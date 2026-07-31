@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 /// <summary>
@@ -36,6 +37,7 @@ public class DefaultMachineUI : MonoBehaviour
     private readonly List<ItemSlot> boundSlots = new();  // 현재 바인딩된(활성) 슬롯
     private MachineInstance boundInstance;               // 현재 표시 중인 기계(진행도를 밀어 넣는 주체)
     private bool initialized;
+    private Button powerLinkButton;                      // 발전기에서만 보이는 "전력 전송" 버튼
 
     /// <summary>현재 이 패널이 표시 중인 기계(없으면 null).</summary>
     public MachineInstance BoundInstance => boundInstance;
@@ -160,7 +162,8 @@ public class DefaultMachineUI : MonoBehaviour
         int visibleFuelCount = instance != null ? instance.FuelCount : fuels.Count;
         int inputGasCount = instance != null ? instance.InputGasCount : 0;
         int outputGasCount = instance != null ? instance.OutputGasCount : 0;
-        bool usesEnergy = instance != null && instance.UsesEnergy;
+        // 발전기는 전력을 쓰지 않지만(isUseEnergy=0) 자기 발전 버퍼는 보여야 한다.
+        bool usesEnergy = instance != null && (instance.UsesEnergy || instance.IsGenerator);
 
         // 프리팹이 가진 요소 수로 클램프
         if (visibleInputCount > inputs.Count)
@@ -242,6 +245,8 @@ public class DefaultMachineUI : MonoBehaviour
         if (machineNameText != null)
             machineNameText.text = MachineTitle(instance);
 
+        BindPowerLinkButton(instance);
+
         gameObject.SetActive(true);
         RefreshAll();
 
@@ -250,6 +255,67 @@ public class DefaultMachineUI : MonoBehaviour
         boundInstance = instance;
         if (instance != null) instance.AttachUI(this);
         else SetProgress(0f);
+    }
+
+    /// <summary>
+    /// "전력 전송" 버튼을 이 기계에 맞게 붙인다.
+    ///
+    /// 버튼을 프리팹에 넣지 않고 코드로 만드는 이유: uiPrefab 이 없는 기계들은 <b>기본 패널 한 개를
+    /// 돌려 쓰므로</b> 프리팹에 넣으면 전기로에도 버튼이 보인다. 여기서 발전기일 때만 켠다.
+    /// </summary>
+    private void BindPowerLinkButton(MachineInstance instance)
+    {
+        bool isGenerator = instance != null && instance.IsGenerator;
+        if (isGenerator && powerLinkButton == null) powerLinkButton = BuildPowerLinkButton();
+        if (powerLinkButton == null) return;
+
+        powerLinkButton.gameObject.SetActive(isGenerator);
+
+        // 리스너를 지우지 않으면 기계를 열 때마다 쌓여 예전 발전기의 모드가 열린다.
+        powerLinkButton.onClick.RemoveAllListeners();
+        if (!isGenerator) return;
+
+        MachineInstance captured = instance;
+        powerLinkButton.onClick.AddListener(() =>
+        {
+            if (PowerLinkMode.Instance != null) PowerLinkMode.Instance.Enter(captured);
+        });
+    }
+
+    private Button BuildPowerLinkButton()
+    {
+        GameObject go = new GameObject("PowerLinkButton", typeof(RectTransform));
+        go.layer = LayerMask.NameToLayer("UI");
+        go.transform.SetParent(transform, false);
+
+        RectTransform rect = (RectTransform)go.transform;
+        rect.anchorMin = new Vector2(1f, 1f);
+        rect.anchorMax = new Vector2(1f, 1f);
+        rect.pivot = new Vector2(1f, 1f);
+        rect.anchoredPosition = new Vector2(-24f, -24f);
+        rect.sizeDelta = new Vector2(200f, 56f);
+
+        Image background = go.AddComponent<Image>();
+        background.color = new Color(0.15f, 0.35f, 0.6f, 0.95f);
+
+        GameObject labelGO = new GameObject("Label", typeof(RectTransform));
+        labelGO.layer = go.layer;
+        labelGO.transform.SetParent(go.transform, false);
+        RectTransform labelRect = (RectTransform)labelGO.transform;
+        labelRect.anchorMin = Vector2.zero;
+        labelRect.anchorMax = Vector2.one;
+        labelRect.offsetMin = Vector2.zero;
+        labelRect.offsetMax = Vector2.zero;
+
+        TextMeshProUGUI label = labelGO.AddComponent<TextMeshProUGUI>();
+        label.font = TMP_Settings.defaultFontAsset;
+        label.text = "전력 전송";
+        label.fontSize = 28f;
+        label.alignment = TextAlignmentOptions.Center;
+        label.color = Color.white;
+        label.raycastTarget = false;
+
+        return go.AddComponent<Button>();
     }
 
     /// <summary>

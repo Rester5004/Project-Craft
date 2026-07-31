@@ -38,6 +38,16 @@ public class MachineBlock : BlockBase
     public float maxEnergyAmount = 0f;
     public bool isUseEnergy = false;
 
+    [Header("전력")]
+    [Tooltip("연료를 태워 전력을 만드는 발전기인가. 켜면 레시피 가공 대신 발전을 한다.")]
+    public bool isGenerator = false;
+
+    [Tooltip("전력을 보낼 수 있는 최대 거리(칸, 체비셰프). 0 이면 전송 불가. 중계기도 이 값을 쓴다.")]
+    [Min(0)] public int powerRange = 0;
+
+    [Tooltip("가동 중 1초에 쓰는 전력. 0 이면 maxEnergyAmount 의 10% 를 쓴다.")]
+    [Min(0f)] public float energyUseRate = 0f;
+
     /// <summary>
     /// 입력/출력 슬롯이 둘 다 0 이어도 "미설정"으로 보지 않고 그대로 적용할지.
     /// 조합대처럼 슬롯이 없는 기계가 기본값(3/6)으로 폴백되지 않게 한다.
@@ -53,6 +63,15 @@ public class MachineBlock : BlockBase
 
     /// <summary>연료를 태워 돌아가는 기계인가.</summary>
     public bool UsesFuel => fuelSlotCount > 0;
+
+    /// <summary>
+    /// 연료를 태워 전력을 만드는 발전기인가. 연료 칸이 없으면 태울 것이 없으므로 발전기가 아니다.
+    /// 발전만 안 하고 전송만 하는 중계기는 <see cref="isGenerator"/> 를 끄고 <see cref="powerRange"/> 만 준다.
+    /// </summary>
+    public bool IsGenerator => isGenerator && fuelSlotCount > 0;
+
+    /// <summary>가동 중 초당 소비 전력. 미설정(0)이면 최대 저장량의 10% 로 폴백한다.</summary>
+    public float EnergyUseRate => energyUseRate > 0f ? energyUseRate : maxEnergyAmount * 0.1f;
 
     /// <summary>레시피 조회 키. 업그레이드 관계인 기계들은 같은 값을 공유한다.</summary>
     public string RecipeGroupId => string.IsNullOrEmpty(recipeGroupId) ? blockName : recipeGroupId;

@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MachineBlock
   blockName: Machine:LasorProcessor
   displayName: "\uB808\uC774\uC800 \uAC00\uACF5\uAE30"
+  dropItem: {fileID: 0}
+  dropCount: 1
   machinePrefab: {fileID: 5511969497523617241, guid: 07a54667c6fd810409ccd252dca4bc9a, type: 3}
   uiPrefab: {fileID: 449385401667448120, guid: 050511f23b7b4cd40b3391c1bec81ef9, type: 3}
   tier: 1
@@ -27,3 +29,6 @@ MonoBehaviour:
   maxGasAmount: 0
   maxEnergyAmount: 100
   isUseEnergy: 1
+  isGenerator: 0
+  powerRange: 0
+  energyUseRate: 10

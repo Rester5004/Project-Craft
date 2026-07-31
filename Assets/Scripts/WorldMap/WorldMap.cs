@@ -29,6 +29,18 @@ public class PlaceableRecord
     public float burnRemaining;
     public float burnTotal;
 
+    /// <summary>보유 전력. 발전기에겐 발전 버퍼, 소비 기계에겐 남은 잔량이다.</summary>
+    public float energy;
+
+    /// <summary>
+    /// 라운드로빈 분배가 다음에 시작할 링크 번호.
+    /// 저장하지 않으면 청크를 오갈 때마다 0으로 돌아가 앞쪽 기계만 계속 편애하게 된다.
+    /// </summary>
+    public int roundRobinCursor;
+
+    /// <summary>발전기가 전력을 보내는 대상들의 월드 셀. 발전기가 아니면 길이 0.</summary>
+    public Vector2Int[] links;
+
     public PlaceableRecord() { }
 
     public PlaceableRecord(string blockId)
@@ -43,6 +55,7 @@ public class PlaceableRecord
         fuelItemNames = new string[0];
         fuelCounts = new int[0];
         fuelInstances = new ItemInstance[0];
+        links = System.Array.Empty<Vector2Int>();
     }
 }
 
@@ -120,6 +133,16 @@ public class Chunk
             WriteSlotArray(writer, rec.fuelItemNames, rec.fuelCounts, rec.fuelInstances);
             writer.Write(rec.burnRemaining);
             writer.Write(rec.burnTotal);
+
+            writer.Write(rec.energy);
+            writer.Write(rec.roundRobinCursor);
+            int linkCount = rec.links != null ? rec.links.Length : 0;
+            writer.Write(linkCount);
+            for (int i = 0; i < linkCount; i++)
+            {
+                writer.Write(rec.links[i].x);
+                writer.Write(rec.links[i].y);
+            }
         }
 
         writer.Write(drops.Count);
@@ -189,6 +212,20 @@ public class Chunk
                 rec.fuelInstances = new ItemInstance[0];
             }
 
+            if (version >= 7)
+            {
+                rec.energy = reader.ReadSingle();
+                rec.roundRobinCursor = reader.ReadInt32();
+                int linkCount = reader.ReadInt32();
+                rec.links = new Vector2Int[linkCount];
+                for (int i = 0; i < linkCount; i++)
+                    rec.links[i] = new Vector2Int(reader.ReadInt32(), reader.ReadInt32());
+            }
+            else
+            {
+                rec.links = System.Array.Empty<Vector2Int>();
+            }
+
             chunk.placeables[new Vector2Int(lx, ly)] = rec;
         }
 
@@ -228,8 +265,9 @@ public class WorldMap : Singleton<WorldMap>
     // v4: 슬롯마다 ItemInstance(커스텀 도구의 재질·내구도)를 덧붙였다.
     // v5: 연료 슬롯과 연소 잔량을 추가했다.
     // v6: 필드에 떨어진 아이템(DropRecord)을 청크마다 저장한다. v3~v5 도 계속 읽는다.
+    // v7: 기계의 보유 전력·라운드로빈 커서·발전기의 전력 링크 목록을 추가했다.
     private const int SaveMagic = 0x50435730; // 'PCW0'
-    private const int SaveVersion = 6;
+    private const int SaveVersion = 7;
     private const int MinReadableVersion = 3;
 
     private Dictionary<Vector2Int, Chunk> chunks;

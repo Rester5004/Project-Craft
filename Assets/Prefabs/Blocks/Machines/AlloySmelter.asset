@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MachineBlock
   blockName: Machine:AlloySmelter
   displayName: "\uD569\uAE08 \uC7AC\uB828\uAE30"
+  dropItem: {fileID: 0}
+  dropCount: 1
   machinePrefab: {fileID: 2613032363430261748, guid: 86f19f5eb0b5a5842bc539210c0c3500, type: 3}
   uiPrefab: {fileID: 723616340984963795, guid: 5222efefda342f24993262ad4387165e, type: 3}
   tier: 1
@@ -27,3 +29,6 @@ MonoBehaviour:
   maxGasAmount: 0
   maxEnergyAmount: 100
   isUseEnergy: 1
+  isGenerator: 0
+  powerRange: 0
+  energyUseRate: 10

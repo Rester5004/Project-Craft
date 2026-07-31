@@ -65,6 +65,7 @@ public class PlayerInteraction : MonoBehaviour
     private void HandleUsePerformed()
     {
         if (Camera.main == null) return;
+        if (PowerLinkMode.IsActive) return;   // 전송 모드의 우클릭은 연결 해제지 배치가 아니다
         // 열린 UI 패널 위에서의 우클릭은 배치/상호작용으로 처리하지 않는다.
         if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject()) return;
 
@@ -165,6 +166,15 @@ public class PlayerInteraction : MonoBehaviour
     }
     private void Update()
     {
+        // 전력 전송 모드에서는 커서 윤곽선을 그리지 않는다(전용 오버레이가 대신 표시한다).
+        // 여기서 return 하면 진행 중이던 채굴 홀드도 함께 끊긴다.
+        if (PowerLinkMode.IsActive)
+        {
+            if (TilemapTextureLoader.Instance != null) TilemapTextureLoader.Instance.ClearOutline();
+            CancelMining();
+            return;
+        }
+
         SetGlobalCellPositions();
         isPointerOverUI = EventSystem.current != null && EventSystem.current.IsPointerOverGameObject();
         UpdateMining();

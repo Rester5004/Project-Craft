@@ -17,19 +17,27 @@ public class BarTooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     private DefaultMachineUI owner;
     private MachineUIElement element;
 
+    // 호버할 때마다 델리게이트를 새로 만들지 않도록 한 번만 만들어 둔다.
+    private System.Func<string> textProvider;
+
     /// <summary>이 바가 속한 패널을 지정한다.</summary>
     public void Bind(DefaultMachineUI panel)
     {
         owner = panel;
         if (element == null) element = GetComponent<MachineUIElement>();
+        if (textProvider == null) textProvider = GetText;
     }
+
+    /// <summary>바가 가리키는 값은 계속 변하므로 호버 시점에 한 번 읽지 않고 매 프레임 다시 만든다.</summary>
+    private string GetText()
+        => owner != null && element != null ? owner.GetBarTooltip(element.role, element.index) : "";
 
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (TooltipUI.Instance == null) return;
         if (owner == null || element == null) return;
 
-        TooltipUI.Instance.Show(owner.GetBarTooltip(element.role, element.index));
+        TooltipUI.Instance.Show(textProvider);
     }
 
     public void OnPointerExit(PointerEventData eventData)

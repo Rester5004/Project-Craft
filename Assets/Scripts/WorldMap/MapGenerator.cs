@@ -31,6 +31,15 @@ public class MapGenerator : MonoBehaviour
     private const float DropScatter = 0.3f;
 
 
+    /// <summary>씬에 하나뿐인 맵. 기계와 전력 전송 모드가 셀 조회에 쓴다.</summary>
+    public static MapGenerator Active { get; private set; }
+
+    void Awake()
+    {
+        // Start 에서 청크를 렌더하며 기계가 스폰되므로 그보다 앞서 등록되어야 한다.
+        if (Active == null) Active = this;
+    }
+
     void Start()
     {
         EnsurePlaceableContainer();
@@ -41,6 +50,7 @@ public class MapGenerator : MonoBehaviour
 
     void OnDestroy()
     {
+        if (Active == this) Active = null;
         if (WorldMap.Instance != null)
             WorldMap.Instance.OnBeforeSave -= FlushAll;
     }
@@ -262,6 +272,16 @@ public class MapGenerator : MonoBehaviour
 
     public bool TryGetMachineAt(Vector2Int worldCell, out MachineInstance instance)
         => loadedMachines.TryGetValue(worldCell, out instance);
+
+    /// <summary>로드된 청크에 스폰돼 있는 기계 전부(월드 셀 → 인스턴스). 전력 범위 검색에 쓴다.</summary>
+    public IEnumerable<KeyValuePair<Vector2Int, MachineInstance>> LoadedMachines => loadedMachines;
+
+    /// <summary>
+    /// 이 셀이 속한 청크가 지금 로드돼 있는가.
+    /// "기계가 없다"와 "아직 안 불러왔다"를 가르는 기준 — 전력 링크를 함부로 지우지 않으려면 필요하다.
+    /// </summary>
+    public bool IsCellLoaded(Vector2Int worldCell)
+        => LoadedChunks.ContainsKey(Chunk.GetChunkId(new Vector3(worldCell.x, worldCell.y, 0f)));
 
     /// <summary>
     /// 기계를 캔다. 기계 자신과 내부 슬롯(입력·출력·연료)의 아이템을 전부 필드에 떨어뜨리고 제거한다.

@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MachineBlock
   blockName: Machine:BioIncubator
   displayName: "\uC720\uAE30\uBB3C \uBC30\uC591\uAE30"
+  dropItem: {fileID: 0}
+  dropCount: 1
   machinePrefab: {fileID: 8381249328980302204, guid: b20191f51767ac94ca03d9968c27d7eb, type: 3}
   uiPrefab: {fileID: 1651831456170303087, guid: 2eff4a043fa8d9f43af0f9a1ecf166f6, type: 3}
   tier: 1
@@ -27,3 +29,6 @@ MonoBehaviour:
   maxGasAmount: 100
   maxEnergyAmount: 100
   isUseEnergy: 1
+  isGenerator: 0
+  powerRange: 0
+  energyUseRate: 10

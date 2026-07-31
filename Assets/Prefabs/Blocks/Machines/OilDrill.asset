@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MachineBlock
   blockName: Machine:OilDrill
   displayName: "\uC6D0\uC720 \uCC44\uAD74\uAE30"
+  dropItem: {fileID: 0}
+  dropCount: 1
   machinePrefab: {fileID: 2613032363430261748, guid: e1aec99a6d8b9f946a90ab095e242195, type: 3}
   uiPrefab: {fileID: 0}
   tier: 1
@@ -27,3 +29,6 @@ MonoBehaviour:
   maxGasAmount: 0
   maxEnergyAmount: 1000
   isUseEnergy: 1
+  isGenerator: 0
+  powerRange: 0
+  energyUseRate: 100

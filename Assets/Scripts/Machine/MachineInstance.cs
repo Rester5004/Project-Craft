@@ -20,6 +20,9 @@ public class MachineInstance : MonoBehaviour
     private float MaxGasAmount;   // 모든 가스 슬롯(입력/출력)이 공유하는 최대치
     private float MaxEnergyAmount;
     private bool IsUseEnergy;
+    private bool isGenerator;
+    private int powerRange;
+    private float energyUseRate;
 
     public string blockId;
     public Vector2Int worldCell;
@@ -30,14 +33,47 @@ public class MachineInstance : MonoBehaviour
     public MachineBlock Info { get; private set; }
 
     // ── 가스 · 에너지 보유량 ────────────────────────────────────
-    // 아직 생산/소비 로직이 없어 항상 0 이지만, UI(툴팁·바)가 읽을 실체를 먼저 만들어 둔다.
-    // PlaceableRecord 에는 넣지 않는다(세이브 버전을 올려야 하므로 로직을 붙일 때 함께 처리).
     private float currentEnergy;
     private Gas[] inputGas = System.Array.Empty<Gas>();
     private Gas[] outputGas = System.Array.Empty<Gas>();
 
     public float CurrentEnergy => currentEnergy;
     public float EnergyRatio => MaxEnergyAmount > 0f ? Mathf.Clamp01(currentEnergy / MaxEnergyAmount) : 0f;
+
+    // ── 전력 링크 (발전기만 보유) ───────────────────────────────
+    // 전력을 보내는 쪽만 상대를 안다. 받는 기계는 누가 먹여주는지 알 필요가 없어
+    // 발전기를 캐면 레코드와 함께 링크도 한꺼번에 사라진다.
+    private readonly System.Collections.Generic.List<Vector2Int> links = new();
+    private int roundRobinCursor;
+
+    public bool IsGenerator => isGenerator;
+    public int PowerRange => powerRange;
+    public System.Collections.Generic.IReadOnlyList<Vector2Int> Links => links;
+    public bool IsLinkedTo(Vector2Int cell) => links.Contains(cell);
+
+    /// <summary>이 셀이 전송 범위(체비셰프 거리) 안인가.</summary>
+    public bool IsInPowerRange(Vector2Int cell)
+        => Mathf.Max(Mathf.Abs(cell.x - worldCell.x), Mathf.Abs(cell.y - worldCell.y)) <= powerRange;
+
+    /// <summary>전송 대상을 추가한다. 발전기가 아니거나 자기 자신·중복·범위 밖이면 false.</summary>
+    public bool AddLink(Vector2Int cell)
+    {
+        if (!isGenerator || cell == worldCell || links.Contains(cell) || !IsInPowerRange(cell)) return false;
+
+        links.Add(cell);
+        Flush();   // 청크 언로드·저장 사이에 잃지 않도록 즉시 레코드에 반영
+        return true;
+    }
+
+    /// <summary>전송 대상을 끊는다.</summary>
+    public bool RemoveLink(Vector2Int cell)
+    {
+        if (!links.Remove(cell)) return false;
+
+        if (roundRobinCursor >= links.Count) roundRobinCursor = 0;
+        Flush();
+        return true;
+    }
 
     // ── 연료 연소 ──────────────────────────────────────────────
     // 화로처럼 연료를 태우는 기계는 지금 타고 있는 연료가 남아 있어야 가공이 진행된다.
@@ -89,7 +125,7 @@ public class MachineInstance : MonoBehaviour
 
         inputGas = CreateGasSlots(InputGasSlotCount);
         outputGas = CreateGasSlots(OutputGasSlotCount);
-        currentEnergy = 0f;
+        // 전력은 여기서 0으로 리셋하지 않는다 — LoadFrom 이 레코드에서 복원한 값을 지워 버리게 된다.
 
         activeRecipe = null;
         progress = 0f;
@@ -122,7 +158,9 @@ public class MachineInstance : MonoBehaviour
     {
         Info = info;
 
-        if (info != null && (info.AllowsZeroSlots || info.inputSlotCount > 0 || info.outputSlotCount > 0))
+        // 연료 칸만 있고 입출력이 0인 기계(발전기)도 "미설정"으로 보면 안 된다.
+        // 폴백으로 넘어가면 fuelSlotCount 까지 0 으로 덮여 발전기가 조용히 죽는다.
+        if (info != null && (info.AllowsZeroSlots || info.inputSlotCount > 0 || info.outputSlotCount > 0 || info.fuelSlotCount > 0))
         {
             inputSlotCount = info.inputSlotCount;
             outputSlotCount = info.outputSlotCount;
@@ -133,6 +171,9 @@ public class MachineInstance : MonoBehaviour
             MaxGasAmount = info.maxGasAmount;
             MaxEnergyAmount = info.maxEnergyAmount;
             IsUseEnergy = info.isUseEnergy;
+            isGenerator = info.IsGenerator;
+            powerRange = info.powerRange;
+            energyUseRate = info.EnergyUseRate;
         }
         else
         {
@@ -145,6 +186,9 @@ public class MachineInstance : MonoBehaviour
             MaxGasAmount = 0f;
             MaxEnergyAmount = 0f;
             IsUseEnergy = false;
+            isGenerator = false;
+            powerRange = 0;
+            energyUseRate = 0f;
         }
     }
 
@@ -157,6 +201,12 @@ public class MachineInstance : MonoBehaviour
 
         burnRemaining = record.burnRemaining;
         burnTotal = record.burnTotal;
+
+        currentEnergy = Mathf.Clamp(record.energy, 0f, MaxEnergyAmount);
+        links.Clear();
+        if (record.links != null) links.AddRange(record.links);
+        roundRobinCursor = record.roundRobinCursor;
+        if (roundRobinCursor >= links.Count) roundRobinCursor = 0;
     }
 
     private static void LoadSlots(System.Collections.Generic.List<ItemStack> slots,
@@ -189,6 +239,10 @@ public class MachineInstance : MonoBehaviour
 
         record.burnRemaining = burnRemaining;
         record.burnTotal = burnTotal;
+
+        record.energy = currentEnergy;
+        record.roundRobinCursor = roundRobinCursor;
+        record.links = links.Count > 0 ? links.ToArray() : System.Array.Empty<Vector2Int>();
     }
 
     private static void WriteSlots(System.Collections.Generic.List<ItemStack> slots,
@@ -222,7 +276,8 @@ public class MachineInstance : MonoBehaviour
     private void Update()
     {
         if (inventory == null) return;
-        if (Info != null && !Info.AutoProcess) return;   // 조합대는 버튼을 눌러야 만든다
+        if (isGenerator) { TickGenerator(Time.deltaTime); return; }   // 발전기는 레시피를 보지 않는다
+        if (Info != null && !Info.AutoProcess) return;                // 조합대는 버튼을 눌러야 만든다
         Tick(Time.deltaTime);
     }
 
@@ -251,6 +306,14 @@ public class MachineInstance : MonoBehaviour
 
         // 연료를 쓰는 기계는 불이 붙어 있는 동안에만 진행한다.
         if (UsesFuel && !BurnFuel(deltaTime))
+        {
+            PushProgress();
+            return;
+        }
+
+        // 전력을 쓰는 기계는 전력이 남아 있는 동안에만 진행한다.
+        // 여기까지 왔다는 건 레시피가 잡혀 있고 재료도 있다는 뜻이라, 놀고 있는 기계는 전기를 먹지 않는다.
+        if (IsUseEnergy && !ConsumeEnergy(deltaTime))
         {
             PushProgress();
             return;
@@ -289,11 +352,21 @@ public class MachineInstance : MonoBehaviour
     /// 이 프레임만큼 연료를 태운다. 불이 꺼져 있으면 연료 칸에서 하나 집어 불을 붙인다.
     /// 태울 연료가 없으면 false(진행 정지).
     /// </summary>
-    private bool BurnFuel(float deltaTime)
+    private bool BurnFuel(float deltaTime) => BurnFuel(deltaTime, out _);
+
+    /// <summary>
+    /// <see cref="BurnFuel(float)"/> 와 같되 <paramref name="burned"/> 로 <b>실제로 태운 양</b>을 돌려준다.
+    /// 연료가 다 타는 마지막 프레임에는 요청량보다 적게 타므로, 발전기가 없는 전력을 만들지 않으려면 이 값을 써야 한다.
+    /// </summary>
+    private bool BurnFuel(float deltaTime, out float burned)
     {
+        burned = 0f;
         if (burnRemaining <= 0f && !Ignite()) return false;
 
-        burnRemaining -= fuelBurnRate * deltaTime;
+        float want = fuelBurnRate * deltaTime;
+        burned = Mathf.Min(want, burnRemaining);
+
+        burnRemaining -= want;
         if (burnRemaining <= 0f)
         {
             // 이번 프레임 분은 태웠으니 진행은 허용하고, 다음 프레임에 다시 불을 붙인다.
@@ -302,6 +375,92 @@ public class MachineInstance : MonoBehaviour
         }
         PushFuel();
         return true;
+    }
+
+    /// <summary>이 프레임 분의 전력을 쓴다. 모자라면 false(진행 정지).</summary>
+    private bool ConsumeEnergy(float deltaTime)
+    {
+        float need = energyUseRate * deltaTime;
+        if (need <= 0f) return true;           // 소비량이 설정되지 않은 기계는 막지 않는다
+        if (currentEnergy < need) return false;
+
+        SetEnergy(currentEnergy - need);
+        return true;
+    }
+
+    // ── 발전 (연료 → 버퍼 → 연결된 기계) ────────────────────────
+    // 매 프레임 새로 할당하지 않도록 재사용하는 작업용 목록.
+    private readonly System.Collections.Generic.List<MachineInstance> receivers = new();
+    private readonly System.Collections.Generic.List<Vector2Int> deadLinks = new();
+
+    /// <summary>
+    /// 발전기 한 프레임: 버퍼에 자리가 있을 때만 연료를 태워 채우고, 연결된 기계에 나눠 준다.
+    /// 버퍼가 가득 차면 태우지 않는다 — 아무도 안 쓰는데 석탄이 녹아 없어지면 안 되기 때문.
+    /// </summary>
+    private void TickGenerator(float deltaTime)
+    {
+        if (currentEnergy < MaxEnergyAmount && BurnFuel(deltaTime, out float burned) && burned > 0f)
+            SetEnergy(currentEnergy + burned);   // SetEnergy 가 클램프와 UI 반영까지 맡는다
+
+        Distribute();
+    }
+
+    /// <summary>
+    /// 연결된 기계에 전력을 나눠 준다. 커서에서 시작해 한 바퀴 돌며(라운드로빈)
+    /// 꽉 찬 곳과 사라진 곳은 빼고, 받을 수 있는 대상들에게 균등하게 분배한다.
+    /// 전송 자체에는 비용이 없다 — 받은 기계가 가공하며 쓸 뿐이다.
+    /// </summary>
+    private void Distribute()
+    {
+        if (links.Count == 0 || currentEnergy <= 0f) return;
+
+        MapGenerator map = MapGenerator.Active;
+        if (map == null) return;
+
+        receivers.Clear();
+        deadLinks.Clear();
+
+        for (int i = 0; i < links.Count; i++)
+        {
+            Vector2Int cell = links[(roundRobinCursor + i) % links.Count];
+
+            if (!map.TryGetMachineAt(cell, out MachineInstance target) || target == null)
+            {
+                // 청크는 로드돼 있는데 기계가 없다 = 캐서 사라진 것이므로 링크를 지운다.
+                // 언로드된 청크라면 있는지 알 수 없으니 그대로 둔다(돌아왔을 때 연결이 살아 있어야 한다).
+                if (map.IsCellLoaded(cell)) deadLinks.Add(cell);
+                continue;
+            }
+
+            if (!target.UsesEnergy) continue;                        // 전력을 안 쓰는 기계
+            if (target.CurrentEnergy >= target.MaxEnergy) continue;   // 꽉 참 — 이번 바퀴에서 제외
+            receivers.Add(target);
+        }
+
+        if (deadLinks.Count > 0)
+        {
+            for (int i = 0; i < deadLinks.Count; i++) links.Remove(deadLinks[i]);
+            if (roundRobinCursor >= links.Count) roundRobinCursor = 0;
+            Flush();   // 링크가 실제로 바뀔 때만 레코드에 반영한다
+        }
+
+        if (receivers.Count == 0) return;
+
+        // 남은 전력을 균등 분배한다. 자리가 모자란 대상은 덜 받고, 남은 몫은 다음 대상에게 넘어간다.
+        float remaining = currentEnergy;
+        for (int i = 0; i < receivers.Count && remaining > 0f; i++)
+        {
+            MachineInstance target = receivers[i];
+            float share = remaining / (receivers.Count - i);
+            float give = Mathf.Min(share, target.MaxEnergy - target.CurrentEnergy);
+            if (give <= 0f) continue;
+
+            target.SetEnergy(target.CurrentEnergy + give);
+            remaining -= give;
+        }
+        SetEnergy(remaining);
+
+        if (links.Count > 0) roundRobinCursor = (roundRobinCursor + 1) % links.Count;   // 다음 프레임은 다음 대상부터
     }
 
     /// <summary>연료 칸에서 하나를 소모해 불을 붙인다. 연료가 없으면 false.</summary>
@@ -352,6 +511,7 @@ public class MachineInstance : MonoBehaviour
         boundUI = ui;
         PushProgress();
         PushFuel();
+        PushEnergy();
     }
 
     /// <summary>표시가 끝난 패널의 연결을 해제한다.</summary>
@@ -372,6 +532,12 @@ public class MachineInstance : MonoBehaviour
         boundUI.SetFuel(BurnRatio);
     }
 
+    private void PushEnergy()
+    {
+        if (boundUI == null) return;
+        boundUI.SetEnergy(EnergyRatio);
+    }
+
     // ── 가스 · 에너지 접근 ──────────────────────────────────────
     /// <summary>입력 가스 슬롯(범위 밖이면 null).</summary>
     public Gas GetInputGas(int index)
@@ -389,7 +555,7 @@ public class MachineInstance : MonoBehaviour
     public void SetEnergy(float amount)
     {
         currentEnergy = Mathf.Clamp(amount, 0f, MaxEnergyAmount);
-        if (boundUI != null) boundUI.SetEnergy(EnergyRatio);
+        PushEnergy();
     }
 
     /// <summary>입력 가스 슬롯의 종류/보유량을 설정하고 열려 있는 UI 에 반영한다.</summary>
