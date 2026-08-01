@@ -29,12 +29,7 @@ public class InventoryHotBarUI : MonoBehaviour
         inventory.SetSeclectedSlotIndex(selectedSlot); // 인벤토리에도 선택된 슬롯 인덱스 전달
     }
 
-    void Refresh()
-    {
-        if (slots == null) return;
-        foreach (var s in slots)
-            if (s != null) s.Refresh();
-    }
+    void Refresh() { foreach (var s in slots) s.Refresh(); }
 
     void OnEnable()
     {
@@ -63,20 +58,7 @@ public class InventoryHotBarUI : MonoBehaviour
     }
     void Update()
     {
-        // The RectTransform belongs to the current scene and may already be destroyed
-        // while this component receives its final Update during a scene transition.
-        if (!isActiveAndEnabled || UI == null)
-            return;
-
-        UIManager uiManager = UIManager.Instance;
-        if (uiManager == null)
-            return;
-
-        bool shouldShow = !uiManager.isAnyUIOpen;
-        if (UI.gameObject.activeSelf == shouldShow)
-            return;
-
-        if (!shouldShow)
+        if(UIManager.Instance.isAnyUIOpen)
         {
             UI.gameObject.SetActive(false);
         }

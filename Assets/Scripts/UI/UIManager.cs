@@ -3,8 +3,6 @@ using UnityEngine;
 
 public class UIManager : Singleton<UIManager> //싱글톤 이용
 {
-    protected override bool PersistAcrossScenes => false;
-
     private Dictionary<string, GameObject> UIs = new Dictionary<string, GameObject>();
     // 현재 열려 있는 UI 이름 집합(다중 패널을 정확히 추적)
     private readonly HashSet<string> openNames = new HashSet<string>();

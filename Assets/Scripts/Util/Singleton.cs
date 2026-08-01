@@ -6,9 +6,6 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
     private static readonly object _lock = new object();
     private static bool _applicationIsQuitting = false;
 
-    // UI and tilemap services hold scene references, so they can opt out of persistence.
-    protected virtual bool PersistAcrossScenes => true;
-
     public static T Instance
     {
         get
@@ -36,8 +33,7 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
                         singletonObject.name = typeof(T).ToString() + " (Singleton)";
 
                         // 씬이 바뀌어도 파괴되지 않도록 설정
-                        // AddComponent invokes Awake immediately; Awake applies the
-                        // persistence policy for this concrete singleton.
+                        DontDestroyOnLoad(singletonObject);
                     }
                 }
 
@@ -52,8 +48,7 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
         if (_instance == null)
         {
             _instance = this as T;
-            if (PersistAcrossScenes)
-                DontDestroyOnLoad(gameObject);
+            DontDestroyOnLoad(gameObject);
         }
         else if (_instance != this)
         {
