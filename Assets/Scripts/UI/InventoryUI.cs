@@ -25,7 +25,12 @@ public class InventoryUI : MonoBehaviour
         UI.gameObject.SetActive(false);
     }
 
-    void Refresh() { foreach (var s in slots) s.Refresh(); }
+    void Refresh()
+    {
+        if (slots == null) return;
+        foreach (var s in slots)
+            if (s != null) s.Refresh();
+    }
 
     void OnDestroy()
     {

@@ -425,6 +425,7 @@ public class WorldMap : Singleton<WorldMap>
         return block != null && block.dropItem != null;
     }
 
+<<<<<<< Updated upstream
     public void EnsurePrototypeUndergroundRoom()
     {
         for (int y = -67; y <= -61; y++)
@@ -443,6 +444,9 @@ public class WorldMap : Singleton<WorldMap>
     /// 어떤 벽·바닥을 쓸지는 <see cref="TerrainPalette"/> 가 좌표를 보고 정한다.
     /// </summary>
     Chunk GenerateChunk(Vector2Int chunkId)
+=======
+    Chunk GenerateChunk(Vector2Int chunkId) //추후 청크 id에 따라 다른 blockid를 사용하게 수정예정
+>>>>>>> Stashed changes
     {
         Chunk chunk = new();
         for (int ty = 0; ty < ChunkSize; ty++)

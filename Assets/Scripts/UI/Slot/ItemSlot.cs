@@ -58,7 +58,7 @@ public abstract class ItemSlot : MonoBehaviour,
     /// <summary>바인딩된 저장소의 데이터를 화면에 반영한다.</summary>
     public void Refresh()
     {
-        if (container == null) return;
+        if (container == null || iconImage == null || countText == null) return;
         ItemStack stack = container.GetStack(index);
         bool hasItem = stack != null && stack.item != null && stack.count > 0;
 

@@ -11,6 +11,8 @@ using UnityEngine.Tilemaps;
 /// </summary>
 public class TilemapTextureLoader : Singleton<TilemapTextureLoader>
 {
+    protected override bool PersistAcrossScenes => false;
+
     [Header("아틀라스 설정")]
     [Tooltip("커서 윤곽선 시트. 벽 시트들과 격자가 같아 스테이지 구분 없이 공용으로 쓴다.")]
     [SerializeField] private TileAtlas outlineAtlas;
