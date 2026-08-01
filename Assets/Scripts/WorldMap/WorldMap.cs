@@ -44,6 +44,13 @@ public class PlaceableRecord
     /// <summary>파이프가 운반 중인 짐. 파이프가 아니면 길이 0.</summary>
     public ParcelRecord[] parcels;
 
+    /// <summary>
+    /// 플레이어가 렌치로 지정한 네 면의 상태(N/E/S/W 순서로 2비트씩). 0 이면 전부 기본이다.
+    /// 읽고 쓰는 것은 <see cref="PipeRouter.FaceOf"/> · <see cref="PipeRouter.SetFace"/> 를 쓴다
+    /// — 시프트 규칙을 아는 곳이 한 군데뿐이어야 어긋나지 않는다.
+    /// </summary>
+    public byte faceModes;
+
     public PlaceableRecord() { }
 
     public PlaceableRecord(string blockId)
@@ -161,6 +168,9 @@ public class Chunk
                 writer.Write(parcel.destY);
                 writer.Write(parcel.remaining);
             }
+
+            // v9: 렌치로 지정한 네 면의 상태. 파이프가 아니면 언제나 0 이라 1바이트로 끝난다.
+            writer.Write(rec.faceModes);
         }
 
         writer.Write(drops.Count);
@@ -265,6 +275,9 @@ public class Chunk
                 rec.parcels = System.Array.Empty<ParcelRecord>();
             }
 
+            // parcels 와 달리 else 가 없어도 된다. byte 의 기본값 0 이 곧 "네 면 모두 기본" 이다.
+            if (version >= 9) rec.faceModes = reader.ReadByte();
+
             chunk.placeables[new Vector2Int(lx, ly)] = rec;
         }
 
@@ -306,8 +319,9 @@ public class WorldMap : Singleton<WorldMap>
     // v6: 필드에 떨어진 아이템(DropRecord)을 청크마다 저장한다. v3~v5 도 계속 읽는다.
     // v7: 기계의 보유 전력·라운드로빈 커서·발전기의 전력 링크 목록을 추가했다.
     // v8: 파이프가 운반 중인 짐(ParcelRecord)을 배치물마다 저장한다.
+    // v9: 렌치로 지정한 파이프 네 면의 상태(faceModes 1바이트)를 배치물마다 저장한다.
     private const int SaveMagic = 0x50435730; // 'PCW0'
-    private const int SaveVersion = 8;
+    private const int SaveVersion = 9;
     private const int MinReadableVersion = 3;
 
     private Dictionary<Vector2Int, Chunk> chunks;

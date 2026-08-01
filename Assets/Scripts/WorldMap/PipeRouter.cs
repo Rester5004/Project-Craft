@@ -32,6 +32,33 @@ public static class PipeRouter
         }
     }
 
+    // ── 면 상태 (렌치) ──────────────────────────────────────────
+    //
+    // 네 면을 PlaceableRecord.faceModes 1바이트에 2비트씩 담는다.
+    // 시프트 규칙을 아는 곳은 이 세 함수뿐이어야 한다 — 흩어지면 반드시 한 군데가 어긋난다.
+
+    /// <summary>반대쪽 방향 번호. <see cref="Directions"/> 가 N,E,S,W 순서라 2 를 더하면 된다.</summary>
+    public static int Opposite(int dir) => (dir + 2) & 3;
+
+    /// <summary>이 배치물의 <paramref name="dir"/> 면 상태. 레코드가 없으면 기본으로 본다.</summary>
+    public static PipeFaceMode FaceOf(PlaceableRecord record, int dir)
+    {
+        if (record == null || dir < 0 || dir > 3) return PipeFaceMode.Default;
+        return (PipeFaceMode)((record.faceModes >> (dir * 2)) & 0x3);
+    }
+
+    /// <summary>셀 좌표로 바로 묻는다(레코드를 꺼내 오는 수고를 줄인다). 청크를 새로 만들지 않는다.</summary>
+    public static PipeFaceMode FaceAt(Vector2Int cell, int dir)
+        => FaceOf(WorldMap.Instance != null ? WorldMap.Instance.GetPlaceableAt(cell) : null, dir);
+
+    /// <summary>이 배치물의 <paramref name="dir"/> 면 상태를 바꾼다.</summary>
+    public static void SetFace(PlaceableRecord record, int dir, PipeFaceMode mode)
+    {
+        if (record == null || dir < 0 || dir > 3) return;
+        int shift = dir * 2;
+        record.faceModes = (byte)((record.faceModes & ~(0x3 << shift)) | (((int)mode & 0x3) << shift));
+    }
+
     /// <summary>이 셀에 놓인 파이프(파이프가 아니면 null). 청크를 새로 만들지 않는다.</summary>
     public static PipeBlock PipeAt(Vector2Int cell)
     {
@@ -65,14 +92,40 @@ public static class PipeRouter
     }
 
     /// <summary>
+    /// <paramref name="from"/> 의 <paramref name="dir"/> 면이 렌치로 끊겨 있는가.
+    ///
+    /// <b>양쪽 레코드를 모두 본다.</b> 렌치는 끊을 때 두 칸에 같은 값을 써 두지만,
+    /// 한쪽만 캤다가 다시 깔린 경우에도 남은 쪽 표시가 그대로 먹히게 하기 위해서다.
+    /// </summary>
+    public static bool IsCut(Vector2Int from, int dir)
+    {
+        if (dir < 0 || dir > 3) return false;
+        if (FaceAt(from, dir) == PipeFaceMode.Cut) return true;
+        return FaceAt(from + Directions[dir], Opposite(dir)) == PipeFaceMode.Cut;
+    }
+
+    /// <summary>이 파이프가 <paramref name="dir"/> 쪽 기계에 <b>넣어도</b> 되는가(꺼내기 전용 면이면 안 된다).</summary>
+    public static bool CanInsert(PipeFaceMode mode)
+        => mode == PipeFaceMode.Default || mode == PipeFaceMode.Insert;
+
+    /// <summary>이 파이프가 <paramref name="dir"/> 쪽 기계에서 <b>꺼내도</b> 되는가(넣기 전용 면이면 안 된다).</summary>
+    public static bool CanExtract(PipeFaceMode mode)
+        => mode == PipeFaceMode.Default || mode == PipeFaceMode.Extract;
+
+    /// <summary>
     /// 4방향 연결 마스크(N=1, E=2, S=4, W=8).
     /// 저장하지 않고 필요할 때마다 계산한다 — 파생 상태를 저장하면 이웃이 바뀔 때 어긋난다.
+    ///
+    /// 렌치로 끊은 면은 마스크에서 빠지므로, 스프라이트가 저절로 막힌 끝 모양이 된다.
     /// </summary>
     public static byte ConnectionMask(Vector2Int cell, PipeKind kind)
     {
         int mask = 0;
         for (int i = 0; i < Directions.Length; i++)
+        {
+            if (IsCut(cell, i)) continue;
             if (Connects(cell + Directions[i], kind)) mask |= 1 << i;
+        }
         return (byte)mask;
     }
 
@@ -119,10 +172,16 @@ public static class PipeRouter
             float cost = best[cell];
             visited++;
 
+            // 이 칸의 면 상태는 네 방향에서 공유하므로 레코드를 한 번만 꺼낸다.
+            PlaceableRecord record = WorldMap.Instance != null ? WorldMap.Instance.GetPlaceableAt(cell) : null;
+
             for (int d = 0; d < Directions.Length; d++)
             {
                 Vector2Int next = cell + Directions[d];
                 if (next == exclude) continue;   // 꺼내온 기계로 되돌려 주지 않는다
+
+                PipeFaceMode face = FaceOf(record, d);
+                if (face == PipeFaceMode.Cut || FaceAt(next, Opposite(d)) == PipeFaceMode.Cut) continue;
 
                 PipeBlock pipe = PipeAt(next);
                 if (pipe != null)
@@ -138,7 +197,8 @@ public static class PipeRouter
                 }
 
                 // 파이프가 아니면 기계인지 본다. 기계는 종점이라 더 뻗지 않는다.
-                if (MachineAt(next)) AddSink(results, next, cost);
+                // 꺼내기 전용(빨강) 면으로는 넣을 수 없으므로 도착 후보에서 뺀다.
+                if (CanInsert(face) && MachineAt(next)) AddSink(results, next, cost);
             }
         }
 

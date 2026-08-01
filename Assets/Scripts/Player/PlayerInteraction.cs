@@ -74,6 +74,13 @@ public class PlayerInteraction : MonoBehaviour
         Vector2Int playerCell = (Vector2Int)mapGenerator.blocksTilemap.WorldToCell(transform.position);
         bool adjacent = Mathf.Abs(targetCell.x - playerCell.x) + Mathf.Abs(targetCell.y - playerCell.y) == 1;
 
+        // 0) 렌치를 들고 있으면 파이프 연결면 설정이 가장 앞선다.
+        //    파이프 면이 아니면 흘려보낸다 — 렌치를 들었다고 기계 UI 까지 막히면 안 된다.
+        ItemStack heldStack = inventory.GetSelectedItem();
+        if (adjacent && heldStack != null && heldStack.item is WrenchItem
+            && TryWrench(mouseWorldPosition, targetCell))
+            return;
+
         // 1) 대상 셀에 기계가 있으면 → 그 기계 UI 오픈 (배치보다 우선)
         if (mapGenerator.TryGetMachineAt(targetCell, out MachineInstance machine))
         {
@@ -135,6 +142,48 @@ public class PlayerInteraction : MonoBehaviour
         mapGenerator.SpawnPlaceableAt(targetCell, record);
 
         ConsumeSelected(selectedItemStack);
+    }
+
+    /// <summary>
+    /// 렌치 우클릭. <b>어느 파이프의 어느 면인지 고르는 것까지</b>가 여기 몫이고,
+    /// 그 면이 무엇으로 바뀌는지는 <see cref="PipeNetworkManager.CycleFace"/> 가 정한다.
+    ///
+    /// 파이프 칸뿐 아니라 <b>기계 칸의 그쪽 절반</b>을 눌러도 통한다 —
+    /// "기계와 파이프 사이"는 양쪽 어디를 눌러도 같은 이음매여야 자연스럽다.
+    /// </summary>
+    /// <returns>면을 실제로 바꿨으면 true. false 면 호출자가 평소 동작으로 흘려보낸다.</returns>
+    private bool TryWrench(Vector2 mouseWorldPosition, Vector2Int targetCell)
+    {
+        PipeNetworkManager network = PipeNetworkManager.Active;
+        if (network == null || mapGenerator == null) return false;
+
+        int face = NearestFace(mouseWorldPosition, targetCell);
+
+        if (mapGenerator.TryGetPipeAt(targetCell, out _))
+            return network.CycleFace(targetCell, face);
+
+        // 기계 쪽 절반을 눌렀다면 그 너머 파이프의 반대쪽 면을 만진다.
+        if (mapGenerator.TryGetMachineAt(targetCell, out _))
+        {
+            Vector2Int across = targetCell + PipeRouter.Directions[face];
+            if (mapGenerator.TryGetPipeAt(across, out _))
+                return network.CycleFace(across, PipeRouter.Opposite(face));
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// 커서가 셀 안 어디에 있는지로 가장 가까운 면(N=0, E=1, S=2, W=3)을 고른다.
+    /// 사각지대를 두지 않는다 — 한가운데를 눌러도 어느 한 면은 잡히는 편이 손에 붙는다.
+    /// </summary>
+    private int NearestFace(Vector2 mouseWorldPosition, Vector2Int cell)
+    {
+        float dx = mouseWorldPosition.x - (cell.x + 0.5f);
+        float dy = mouseWorldPosition.y - (cell.y + 0.5f);
+
+        if (Mathf.Abs(dy) > Mathf.Abs(dx)) return dy > 0f ? 0 : 2;   // N : S
+        return dx > 0f ? 1 : 3;                                       // E : W
     }
 
     private void ConsumeSelected(ItemStack stack)

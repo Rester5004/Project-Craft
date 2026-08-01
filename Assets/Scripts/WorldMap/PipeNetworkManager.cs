@@ -49,6 +49,9 @@ public class PipeNetworkManager : MonoBehaviour
 
         manager.PipeTilemap = tilemapGO.GetComponent<Tilemap>();
         tilemapGO.GetComponent<TilemapRenderer>().sortingOrder = PipeSortingOrder;
+
+        manager.overlay = host.AddComponent<PipeFaceOverlay>();
+        manager.overlay.Reference = manager.PipeTilemap;
     }
 
     private void Awake()
@@ -71,6 +74,7 @@ public class PipeNetworkManager : MonoBehaviour
         cells[cell.cell] = cell;
         TopologyVersion++;
         RefreshAround(cell.cell);
+        overlayDirty = true;
     }
 
     /// <summary>청크가 언로드돼 파이프를 화면에서 내린다(레코드는 남는다).</summary>
@@ -85,6 +89,7 @@ public class PipeNetworkManager : MonoBehaviour
         if (PipeTilemap != null) PipeTilemap.SetTile((Vector3Int)cell, null);
         TopologyVersion++;
         RefreshNeighbours(cell);
+        overlayDirty = true;
     }
 
     public bool TryGet(Vector2Int cell, out PipeCell pipe) => cells.TryGetValue(cell, out pipe);
@@ -96,6 +101,61 @@ public class PipeNetworkManager : MonoBehaviour
     {
         TopologyVersion++;
         RefreshAround(cell);
+        overlayDirty = true;
+    }
+
+    // ── 렌치: 연결면 설정 ───────────────────────────────────────
+
+    /// <summary>
+    /// 파이프 한 면의 상태를 다음 단계로 돌린다. 무엇으로 바뀌는지는 <b>이웃이 무엇인가</b>로 갈린다.
+    ///
+    ///   이웃이 같은 종류 파이프 → 끊김 ↔ 기본 (두 칸에 같은 값을 써 둔다)
+    ///   이웃이 기계             → 기본 → 넣기(파랑) → 꺼내기(빨강) → 기본
+    ///   그 밖(빈 칸·다른 종류)  → 아무 일도 하지 않는다
+    ///
+    /// 어느 면을 눌렀는지 고르는 것은 <see cref="PlayerInteraction"/> 의 몫이다 —
+    /// 플레이어 입력 판별은 거기 한 곳에 모아 둔다.
+    /// </summary>
+    /// <returns>실제로 바뀌었으면 true.</returns>
+    public bool CycleFace(Vector2Int cell, int dir)
+    {
+        if (dir < 0 || dir > 3) return false;
+        if (!cells.TryGetValue(cell, out PipeCell pipe) || pipe.block == null) return false;
+        if (pipe.record == null) return false;
+
+        Vector2Int neighbourCell = cell + PipeRouter.Directions[dir];
+        PipeBlock neighbourPipe = PipeRouter.PipeAt(neighbourCell);
+
+        if (neighbourPipe != null && neighbourPipe.kind == pipe.block.kind)
+        {
+            PipeFaceMode next = PipeRouter.FaceOf(pipe.record, dir) == PipeFaceMode.Cut
+                ? PipeFaceMode.Default
+                : PipeFaceMode.Cut;
+
+            PipeRouter.SetFace(pipe.record, dir, next);
+
+            // 이웃에도 같은 값을 남긴다. 판정은 양쪽을 다 보므로 없어도 동작은 하지만,
+            // 있어야 이 파이프를 캤을 때 이웃 쪽 표시를 지울 대상을 찾을 수 있다.
+            PlaceableRecord other = WorldMap.Instance != null ? WorldMap.Instance.GetPlaceableAt(neighbourCell) : null;
+            if (other != null) PipeRouter.SetFace(other, PipeRouter.Opposite(dir), next);
+
+            MarkTopologyDirty(cell);
+            return true;
+        }
+
+        if (PipeRouter.MachineAt(neighbourCell))
+        {
+            PipeFaceMode current = PipeRouter.FaceOf(pipe.record, dir);
+            PipeFaceMode next = current == PipeFaceMode.Default ? PipeFaceMode.Insert
+                : current == PipeFaceMode.Insert ? PipeFaceMode.Extract
+                : PipeFaceMode.Default;
+
+            PipeRouter.SetFace(pipe.record, dir, next);
+            MarkTopologyDirty(cell);
+            return true;
+        }
+
+        return false;
     }
 
     /// <summary>저장 직전에 실은 짐을 레코드로 동기화한다.</summary>
@@ -122,6 +182,25 @@ public class PipeNetworkManager : MonoBehaviour
     private float clock;
 
     private void Update() => Tick(Time.deltaTime);
+
+    // 색 막대는 청크를 불러오는 동안 기계가 수십 개 스폰되며 계속 더러워진다.
+    // 표시만 남겨 두고 프레임 끝에 한 번만 다시 만든다.
+    private PipeFaceOverlay overlay;
+    private bool overlayDirty;
+
+    private void LateUpdate()
+    {
+        if (!overlayDirty || overlay == null) return;
+        overlayDirty = false;
+        overlay.Rebuild(cells);
+    }
+
+    /// <summary>프레임을 돌리지 않는 검증용. 게임에서는 <see cref="LateUpdate"/> 가 알아서 부른다.</summary>
+    public void RebuildOverlayNow()
+    {
+        overlayDirty = false;
+        if (overlay != null) overlay.Rebuild(cells);
+    }
 
     /// <summary>
     /// 한 프레임 분의 운송.
@@ -167,6 +246,19 @@ public class PipeNetworkManager : MonoBehaviour
 
         // 청크가 안 불려 있으면 "기계가 없다"고 단정할 수 없다 — 그냥 기다린다.
         if (!map.IsCellLoaded(dest)) return;
+
+        // 짐이 날아가는 사이에 렌치로 길을 끊거나 뒤집었을 수 있다. 위상이 바뀌었을 때만 다시 확인한다.
+        if (pipe.routeVersion != TopologyVersion)
+        {
+            PipeRouter.FindSinks(pipe.cell, pipe.block.kind, new Vector2Int(int.MinValue, int.MinValue), pipe.sinks);
+            pipe.routeVersion = TopologyVersion;
+
+            bool stillReachable = false;
+            for (int i = 0; i < pipe.sinks.Count && !stillReachable; i++)
+                stillReachable = pipe.sinks[i].machineCell == dest;
+
+            if (!stillReachable) { Retarget(pipe); return; }
+        }
 
         if (!map.TryGetMachineAt(dest, out MachineInstance target) || target == null)
         {
@@ -252,6 +344,9 @@ public class PipeNetworkManager : MonoBehaviour
         ItemStack stack = null;
         for (int d = 0; d < PipeRouter.Directions.Length && source == null; d++)
         {
+            // 넣기 전용(파랑) 면으로는 꺼내지 않는다. 끊긴 면도 마찬가지다.
+            if (!PipeRouter.CanExtract(PipeRouter.FaceOf(pipe.record, d))) continue;
+
             Vector2Int cell = pipe.cell + PipeRouter.Directions[d];
             if (!map.TryGetMachineAt(cell, out MachineInstance machine) || machine == null) continue;
             if (machine.inventory == null) continue;

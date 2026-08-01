@@ -335,6 +335,7 @@ public class MapGenerator : MonoBehaviour
         {
             DropParcel(worldCell, pipe);
             DropSelf(worldCell, record);
+            ClearMirroredCuts(worldCell, record);
 
             chunk.RemovePlaceable(local);
             loadedPipes.Remove(worldCell);
@@ -363,6 +364,28 @@ public class MapGenerator : MonoBehaviour
         // 기계가 사라지면 옆 파이프의 연결 모양도 바뀐다.
         if (PipeNetworkManager.Active != null) PipeNetworkManager.Active.MarkTopologyDirty(worldCell);
         return true;
+    }
+
+    /// <summary>
+    /// 캐 낼 파이프가 이웃 쪽에 남겨 둔 "끊김" 표시를 지운다.
+    ///
+    /// 렌치는 끊을 때 양쪽 레코드에 같은 값을 쓴다. 한쪽이 사라져도 남은 쪽 표시가 살아 있으면,
+    /// 같은 자리에 파이프를 새로 깔았을 때 영문 모르게 끊긴 채로 시작하게 된다.
+    /// <b>"끊김은 살아 있는 파이프 두 칸 사이에만 있다"</b> 는 불변식을 여기서 지킨다.
+    /// </summary>
+    private void ClearMirroredCuts(Vector2Int worldCell, PlaceableRecord record)
+    {
+        for (int d = 0; d < PipeRouter.Directions.Length; d++)
+        {
+            if (PipeRouter.FaceOf(record, d) != PipeFaceMode.Cut) continue;
+
+            Vector2Int neighbour = worldCell + PipeRouter.Directions[d];
+            PlaceableRecord other = WorldMap.Instance != null ? WorldMap.Instance.GetPlaceableAt(neighbour) : null;
+            if (other == null) continue;   // 이웃 청크가 아직 없으면 지울 것도 없다
+
+            if (PipeRouter.FaceOf(other, PipeRouter.Opposite(d)) == PipeFaceMode.Cut)
+                PipeRouter.SetFace(other, PipeRouter.Opposite(d), PipeFaceMode.Default);
+        }
     }
 
     /// <summary>배치물 자신을 아이템으로 돌려준다(아이템 ID 는 blockName 과 같다는 규약).</summary>

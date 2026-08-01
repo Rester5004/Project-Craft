@@ -886,6 +886,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 450965d5d2a4c2b4682ac4692e737eb0, type: 2}
   - {fileID: 11400000, guid: 6b9a68024d0cc4748ae64faa9b1577bd, type: 2}
   - {fileID: 11400000, guid: 3b3ecc29dd70a9d409676129a61c5bdf, type: 2}
+  - {fileID: 11400000, guid: a8fe23c53b9ba6f46ac41579a41fbcfb, type: 2}
   blocksList:
   - {fileID: 11400000, guid: b0993c14880dfe640a2a1dd71de15a88, type: 2}
   - {fileID: 11400000, guid: ae686f65c4060264bac6c596db8425cc, type: 2}
@@ -2681,6 +2682,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6829f8fe7fd3527418e1a3941723e32f, type: 2}
   - {fileID: 11400000, guid: 322e398c97ebdfa4db798b153283b48c, type: 2}
   - {fileID: 11400000, guid: 3f400037076e2c04f9d411a244707d2f, type: 2}
+  - {fileID: 11400000, guid: 6c4360ed90cb33b43acb0ac4b27dab25, type: 2}
 --- !u!4 &801921468
 Transform:
   m_ObjectHideFlags: 0
