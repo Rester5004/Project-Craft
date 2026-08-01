@@ -39,8 +39,9 @@ public class InventoryHotBarUI : MonoBehaviour
 
     void OnDisable()
     {
-        if (InputActionManager.Instance != null)
-            InputActionManager.Instance.OnHotbarSlotSelected -= HandleHotbarSlotSelected;
+        InputActionManager input = InputActionManager.ExistingInstance;
+        if (input != null)
+            input.OnHotbarSlotSelected -= HandleHotbarSlotSelected;
     }
 
     private void HandleHotbarSlotSelected(int slot)

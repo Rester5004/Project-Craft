@@ -39,8 +39,9 @@ public class CommandConsole : MonoBehaviour
 
     private void OnDisable()
     {
-        if (InputActionManager.Instance != null)
-            InputActionManager.Instance.OnConsolePerformed -= HandleConsoleKey;
+        InputActionManager input = InputActionManager.ExistingInstance;
+        if (input != null)
+            input.OnConsolePerformed -= HandleConsoleKey;
     }
 
     private void HandleConsoleKey()

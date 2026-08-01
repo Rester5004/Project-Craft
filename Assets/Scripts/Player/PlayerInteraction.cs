@@ -41,9 +41,10 @@ public class PlayerInteraction : MonoBehaviour
 
     private void OnDisable()
     {
-        if (InputActionManager.Instance != null){
-            InputActionManager.Instance.OnUsePerformed -= HandleUsePerformed;
-            InputActionManager.Instance.OnInteractPerformed -= HandleInteractPerformed;
+        InputActionManager input = InputActionManager.ExistingInstance;
+        if (input != null){
+            input.OnUsePerformed -= HandleUsePerformed;
+            input.OnInteractPerformed -= HandleInteractPerformed;
         }
     }
 
