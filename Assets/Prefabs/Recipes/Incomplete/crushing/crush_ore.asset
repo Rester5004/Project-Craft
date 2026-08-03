@@ -16,7 +16,7 @@ MonoBehaviour:
   category: {fileID: 11400000, guid: a63365af4ccd3904a91ebf59b6456c84, type: 2}
   tier: 1
   inputs:
-  - item: {fileID: 11400000, guid: 5bc683203fd5c414aade6a335df13fa4, type: 2}
+  - item: {fileID: 11400000, guid: 3b3ecc29dd70a9d409676129a61c5bdf, type: 2}
     count: 1
   outputs:
   - item: {fileID: 11400000, guid: e15a2e56f9e1e5d48beb6f568dfb7dfb, type: 2}

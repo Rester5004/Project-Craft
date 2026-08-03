@@ -72,6 +72,16 @@ namespace ProjectCraft.EditorTools
         [MenuItem("Tools/Project Craft/Machines/Setup Furnace And Move Smelting")]
         public static void Run()
         {
+            // <b>파괴적인 작업보다 전제 조건 검사가 먼저다.</b>
+            // 예전에는 아래에서 Smelt_* 레시피를 지운 다음 등록 단계에 가서야 씬에 딕셔너리가 없다는 걸
+            // 알아챘다 — 삭제는 이미 끝났는데 리스트의 빈 칸 정리(RemoveMissing)는 못 한 중간 상태로 끝났다.
+            if (Object.FindFirstObjectByType<ItemDictionary>(FindObjectsInactive.Include) == null)
+            {
+                Debug.LogWarning("[FurnaceSetup] 열려 있는 씬에 ItemDictionary 가 없습니다. "
+                    + "MapTest 씬을 연 뒤 다시 실행하세요. (아무것도 바꾸지 않았습니다)");
+                return;
+            }
+
             Report.Clear();
             Report.AppendLine("# 화로 구성 보고서");
             Report.AppendLine();

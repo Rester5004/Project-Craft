@@ -131,6 +131,9 @@ public class DroppedItem : MonoBehaviour
         }
 
         if (owner != null) owner.RemoveDrop(record);
+        // 표시 목록에서도 빼야 한다. UnLoadChunk 는 chunk.Drops 를 순회하는데 이 레코드는 방금
+        // 거기서 빠졌으므로 그 경로로는 절대 지워지지 않는다 — 안 부르면 영구히 쌓인다.
+        if (MapGenerator.Active != null) MapGenerator.Active.NotifyDropRemoved(record);
         record = null;
         Destroy(gameObject);
     }

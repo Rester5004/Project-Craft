@@ -39,8 +39,8 @@ public class CommandConsole : MonoBehaviour
 
     private void OnDisable()
     {
-        if (InputActionManager.Instance != null)
-            InputActionManager.Instance.OnConsolePerformed -= HandleConsoleKey;
+        InputActionManager input = InputActionManager.InstanceIfAlive;   // 종료 중엔 Instance 가 null 이다
+        if (input != null) input.OnConsolePerformed -= HandleConsoleKey;
     }
 
     private void HandleConsoleKey()
@@ -190,7 +190,11 @@ public class CommandConsole : MonoBehaviour
         Inventory inventory = Inventory.Instance;
         if (inventory == null) return "Inventory 를 찾을 수 없습니다.";
 
-        if (!inventory.AddItem(item, count)) return $"인벤토리가 가득 차 '{item.DisplayName}' 을(를) 넣지 못했습니다.";
+        // 이제 maxStack 을 지켜 넣으므로 "일부만 들어가는" 경우가 실제로 생긴다.
+        // 넣은 개수를 그대로 알려 준다 — 전부 들어간 척하면 그 차이를 추적할 방법이 없다.
+        int added = inventory.AddPartial(item, count);
+        if (added == 0) return $"인벤토리가 가득 차 '{item.DisplayName}' 을(를) 넣지 못했습니다.";
+        if (added < count) return $"{item.DisplayName} x{added} 지급 (자리가 모자라 {count - added}개는 넣지 못했습니다)";
         return $"{item.DisplayName} x{count} 지급 완료";
     }
 

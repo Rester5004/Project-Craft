@@ -304,6 +304,15 @@ public class MachineInstance : MonoBehaviour
             return;
         }
 
+        // 출력이 가득 차 있으면 <b>연료·전력을 쓰기 전에</b> 멈춘다.
+        // 이 검사가 아래(완성 시점)에만 있으면, 진행도가 100% 에 멈춘 채로도 매 프레임 연료가 계속 타고
+        // 다 타면 Ignite 가 새 연료를 또 집는다 — 화면에 아무 단서 없이 석탄 한 스택이 통째로 증발한다.
+        if (!RecipeSolver.CanStoreOutputs(inventory.outputSlots, activeRecipe))
+        {
+            PushProgress();
+            return;
+        }
+
         // 연료를 쓰는 기계는 불이 붙어 있는 동안에만 진행한다.
         if (UsesFuel && !BurnFuel(deltaTime))
         {
@@ -322,14 +331,6 @@ public class MachineInstance : MonoBehaviour
         progress += deltaTime;
         if (progress < activeRecipe.craftTime)
         {
-            PushProgress();
-            return;
-        }
-
-        // 완료 시점에 출력이 가득 차 있으면 진행도를 유지한 채 자리가 날 때까지 대기한다.
-        if (!RecipeSolver.CanStoreOutputs(inventory.outputSlots, activeRecipe))
-        {
-            progress = activeRecipe.craftTime;
             PushProgress();
             return;
         }

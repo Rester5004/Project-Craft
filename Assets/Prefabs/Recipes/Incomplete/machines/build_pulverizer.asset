@@ -29,7 +29,7 @@ MonoBehaviour:
   - item: {fileID: 11400000, guid: e28e21cfbb23d8c42869f75d13aba7e5, type: 2}
     count: 4
   outputs:
-  - item: {fileID: 11400000, guid: ab76da6ea91916646b4a4f48cd21f054, type: 2}
+  - item: {fileID: 11400000, guid: 79710fa90b64dc74d9d8eeeb26c6b801, type: 2}
     count: 1
   requiredTools: []
   craftTime: 1

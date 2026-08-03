@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9e72bd956b65294a846c4174caf0f0f, type: 3}
+  m_Name: Pump
+  m_EditorClassIdentifier: Assembly-CSharp::MachineBlock
+  blockName: Machine:Pump
+  displayName: "\uD38C\uD504"
+  dropItem: {fileID: 0}
+  dropCount: 1
+  machinePrefab: {fileID: 2613032363430261748, guid: d0ffae4cfa39a0f4c9872e77243fcdb6, type: 3}
+  uiPrefab: {fileID: 0}
+  tier: 0
+  recipeGroupId: Pump
+  inputSlotCount: 0
+  outputSlotCount: 1
+  fuelSlotCount: 0
+  fuelBurnRate: 20
+  inputGasSlotCount: 0
+  outputGasSlotCount: 0
+  maxGasAmount: 0
+  maxEnergyAmount: 1000
+  isUseEnergy: 1
+  isGenerator: 0
+  powerRange: 0
+  energyUseRate: 0
+  speedMultiplier: 1
+  chanceMultiplier: 1

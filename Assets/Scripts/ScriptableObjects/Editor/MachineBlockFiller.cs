@@ -12,7 +12,7 @@ namespace ProjectCraft.EditorTools
     /// 임포터가 JSON 의 기계 이름에 대응하는 MachineBlock 을 찾지 못해 비워 둔 것들로,
     /// 그대로 두면 어느 기계도 이 레시피를 찾지 못해 게임에 존재하지 않는 것과 같다.
     ///
-    /// - 이미 있는 기계는 <b>표시 이름</b>으로 이어 붙인다(구 이름은 <see cref="MachineAlias"/> 로 보정).
+    /// - 이미 있는 기계는 <b>표시 이름</b>으로 이어 붙인다(구 이름은 <see cref="MachineAliases"/> 로 보정).
     /// - `조합대` 와 기계 이름이 아예 없는 조합 레시피는 <b>코어 조합기</b> 로 본다.
     /// - 나머지는 <b>플레이스홀더 아트로 MachineBlock 과 배치용 아이템을 새로 만든다.</b>
     ///   슬롯 수·티어·전력 여부는 그 기계가 가진 레시피에서 뽑는다.
@@ -27,18 +27,6 @@ namespace ProjectCraft.EditorTools
         private const string PlaceholderSprite = "Assets/Asset/assetPlaceHolder.png";
         private const string CoreCrafterPath = BlockFolder + "/CoreCrafter.asset";
         private const string ReportPath = BlockFolder + "/_MachineFillReport.md";
-
-        /// <summary>구 JSON 어휘 → 현재 어휘. 레시피 트리 통합 때 쓴 표와 같다.</summary>
-        private static readonly string[,] MachineAlias =
-        {
-            { "용광로", "화로" }, { "유리 제조기", "화로" },
-            { "가공대", "조합대" }, { "철근 공장", "조합대" }, { "파이프 공장", "조합대" },
-            { "파이프 공장 (2티어 업그레이드)", "조합대" }, { "망치", "조합대" }, { "수동 0-0티어 추출기", "조합대" },
-            { "수전해기", "전기 분해기" },
-            { "벽돌 공장", "압연기" }, { "벽돌 공장 (1티어 업그레이드)", "시멘트 공장" },
-            { "파이프 공장 (1티어 업그레이드)", "유리 가공기" },
-            { "화력발전소", "화력 발전기" }, { "화력발전소 (1티어 업그레이드)", "화력 발전기" },
-        };
 
         /// <summary>새로 만들 기계의 한글 이름 → 내부 ID. ID 는 세이브 키가 되므로 손으로 정한다.</summary>
         private static readonly string[,] NewMachineIds =
@@ -234,12 +222,8 @@ namespace ProjectCraft.EditorTools
             return end > start ? note.Substring(start, end - start) : "";
         }
 
-        private static string Normalize(string machine)
-        {
-            for (int i = 0; i < MachineAlias.GetLength(0); i++)
-                if (MachineAlias[i, 0] == machine) return MachineAlias[i, 1];
-            return machine;
-        }
+        // 기계 별칭은 MachineAliases 한 곳에만 둔다(사본을 두면 반드시 한쪽이 낡는다).
+        private static string Normalize(string machine) => MachineAliases.Resolve(machine);
 
         // ── 생성 ──────────────────────────────────────────────────
         private static MachineBlock CreateBlock(string koreanName, Demand demand, Sprite placeholder,
@@ -294,7 +278,11 @@ namespace ProjectCraft.EditorTools
         }
 
         /// <summary>기존 기계 프리팹을 복제해 스프라이트만 플레이스홀더로 바꾼다(콜라이더 구성을 물려받는다).</summary>
-        private static GameObject EnsureWorldPrefab(string id, Sprite placeholder)
+        /// <summary>
+        /// 월드에 세울 프리팹을 확보한다(없으면 AlloySmelter 를 복제해 그림만 갈아 끼운다).
+        /// <see cref="ExtractorSetup"/> 도 같은 방식으로 기계를 만들어야 해서 internal 이다.
+        /// </summary>
+        internal static GameObject EnsureWorldPrefab(string id, Sprite placeholder)
         {
             string path = $"{BlockFolder}/{id}.prefab";
             GameObject existing = AssetDatabase.LoadAssetAtPath<GameObject>(path);
@@ -364,23 +352,38 @@ namespace ProjectCraft.EditorTools
                 EditorUtility.SetDirty(recipe);
                 changed++;
             }
+
+            // 레시피만 갈아 끼우면 부족하다. 지형·파이프의 배치 역인덱스가 dropItem 에 걸려 있어
+            // 그걸 두고 아이템을 지우면 블록이 떨구는 것이 사라진다. ItemMerger 의 것을 그대로 쓴다.
+            int blocks = ItemMerger.RewriteBlocks(replace);
             AssetDatabase.SaveAssets();
 
             Report.AppendLine();
             Report.AppendLine("## 기계 플레이스홀더 → 실제 기계 아이템");
             Report.AppendLine();
-            Report.AppendLine($"- 레시피 {changed}개에서 참조 {hits}건 치환");
+            Report.AppendLine($"- 레시피 {changed}개에서 참조 {hits}건 치환 · 블록 {blocks}개 dropItem 수정");
             Report.AppendLine();
 
-            int deleted = 0;
+            // 참조 재작성 → 저장 → <b>그 다음에만</b> 삭제. 순서를 뒤집거나 검사를 빼면
+            // 남은 참조 자리에 {fileID: 0} 이 생겨 재료 한 줄이 조용히 사라진다.
+            HashSet<Items> stillUsed = ItemMerger.CollectReferenced();
+
+            int deleted = 0, kept = 0;
             foreach (KeyValuePair<Items, Items> pair in replace)
             {
                 string path = AssetDatabase.GetAssetPath(pair.Key);
+                if (stillUsed.Contains(pair.Key))
+                {
+                    Report.AppendLine($"- ⚠ `{path}` 는 아직 참조가 남아 지우지 않았습니다.");
+                    kept++;
+                    continue;
+                }
+
                 Report.AppendLine($"- `{pair.Key.itemName}` → `{pair.Value.itemName}` (`{path}` 삭제)");
                 if (AssetDatabase.DeleteAsset(path)) deleted++;
             }
             Report.AppendLine();
-            Report.AppendLine($"- 삭제한 플레이스홀더 {deleted}개");
+            Report.AppendLine($"- 삭제한 플레이스홀더 {deleted}개 · 참조가 남아 보존한 것 {kept}개");
             AssetDatabase.SaveAssets();
         }
 

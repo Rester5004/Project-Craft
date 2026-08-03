@@ -62,32 +62,16 @@ public class Inventory : Singleton<Inventory>, IItemContainer
         return added;
     }
 
-    public bool AddItem(Items item, int amount)
-    {
-        foreach (ItemStack stack in slots)
-        {
-            // 개체 데이터가 붙은 칸(도구)에는 절대 합치지 않는다.
-            if (stack.item == item && stack.IsPlain && stack.count < item.maxStack)
-            {
-                stack.count += amount;
-                OnChanged?.Invoke();
-                return true;
-            }
-        }
-
-        foreach (ItemStack stack in slots)
-        {
-            if (stack.item == null)
-            {
-                stack.item = item;
-                stack.count = amount;
-                OnChanged?.Invoke();
-                return true;
-            }
-        }
-
-        return false;
-    }
+    /// <summary>
+    /// 전부 넣었으면 true. 넣을 자리가 모자라면 <b>들어간 만큼만 들어가고</b> false 다.
+    ///
+    /// 직접 슬롯을 뒤지지 않고 <see cref="AddPartial"/>(→ <see cref="RecipeSolver.AddItems"/>)에 맡긴다.
+    /// 예전에는 여기서 <c>stack.count += amount</c> 로 <b>maxStack 을 넘겨 버렸고</b>,
+    /// 그렇게 부푼 칸은 파이프·기계·드래그 어디서도 쪼갤 수 없는 "박제된" 스택이 됐다
+    /// (모두 <c>count &gt;= maxStack</c> 을 보고 그 칸을 건너뛰기 때문).
+    /// <b>개수 클램프의 정본은 RecipeSolver 하나뿐이다.</b>
+    /// </summary>
+    public bool AddItem(Items item, int amount) => AddPartial(item, amount) == amount;
 
     public ItemStack GetSelectedStack()
     {

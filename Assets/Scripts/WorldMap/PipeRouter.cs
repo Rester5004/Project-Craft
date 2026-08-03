@@ -145,9 +145,13 @@ public static class PipeRouter
     /// (등급이 균일하면 결과가 BFS 와 같다). 비용에는 지나는 파이프 칸이 모두 들어가고,
     /// 기계로 나가는 마지막 한 걸음은 0 이다.
     ///
-    /// <paramref name="exclude"/> 는 짐을 꺼낸 기계다 — 자기 산출물을 자기가 도로 먹으면 안 된다.
+    /// <b>결과는 출발 파이프와 위상에만 의존한다</b> — 호출자에 따라 달라지는 조건(예: 짐을 꺼낸 기계 제외)을
+    /// 여기에 넣으면 안 된다. 호출자들이 이 목록을 <c>TopologyVersion</c> 하나를 키로 캐시해 함께 쓰기 때문에,
+    /// 한쪽 사정으로 걸러진 목록을 다른 쪽이 그대로 재사용해 <b>있는 도착지를 없다고 판단</b>하게 된다
+    /// (실제로 기계 A↔파이프↔기계 B 왕복에서 한쪽 방향이 영영 죽었다).
+    /// 자기 산출물 회수 방지 같은 <b>호출자 사정은 목록을 쓰는 자리에서</b> 거른다.
     /// </summary>
-    public static void FindSinks(Vector2Int start, PipeKind kind, Vector2Int exclude, List<Sink> results)
+    public static void FindSinks(Vector2Int start, PipeKind kind, List<Sink> results)
     {
         results.Clear();
         best.Clear();
@@ -178,8 +182,6 @@ public static class PipeRouter
             for (int d = 0; d < Directions.Length; d++)
             {
                 Vector2Int next = cell + Directions[d];
-                if (next == exclude) continue;   // 꺼내온 기계로 되돌려 주지 않는다
-
                 PipeFaceMode face = FaceOf(record, d);
                 if (face == PipeFaceMode.Cut || FaceAt(next, Opposite(d)) == PipeFaceMode.Cut) continue;
 

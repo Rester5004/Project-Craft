@@ -17,7 +17,7 @@ MonoBehaviour:
   tier: 2
   inputs: []
   outputs:
-  - item: {fileID: 11400000, guid: 0996f0339b9932e4abed063098c4b66d, type: 2}
+  - item: {fileID: 11400000, guid: cbf81a8ef9f71bc4aa1d7e74c3bff2b1, type: 2}
     count: 1
   requiredTools: []
   craftTime: 1

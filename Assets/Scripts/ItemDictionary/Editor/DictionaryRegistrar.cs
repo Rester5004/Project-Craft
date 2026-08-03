@@ -249,6 +249,11 @@ namespace ProjectCraft.EditorTools
                 return 0;
             }
 
+            // 삭제된 에셋이 남긴 빈 칸을 먼저 걷어낸다. ItemDictionary.Awake 의 경고가
+            // "Register All Assets 로 정리하세요" 라고 안내하므로 여기서 실제로 정리해야 한다.
+            for (int i = list.arraySize - 1; i >= 0; i--)
+                if (list.GetArrayElementAtIndex(i).objectReferenceValue == null) list.DeleteArrayElementAtIndex(i);
+
             HashSet<Object> existing = new HashSet<Object>();
             for (int i = 0; i < list.arraySize; i++)
                 existing.Add(list.GetArrayElementAtIndex(i).objectReferenceValue);

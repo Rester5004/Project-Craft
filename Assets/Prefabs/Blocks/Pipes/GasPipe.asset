@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8819b725f101d846a6287e07024b41e, type: 3}
   m_Name: GasPipe
   m_EditorClassIdentifier: Assembly-CSharp::PipeBlock
-  blockName: "\uAE30\uCCB4 \uD30C\uC774\uD504"
+  blockName: gas_pipe
   displayName: "\uAE30\uCCB4 \uD30C\uC774\uD504"
   dropItem: {fileID: 11400000, guid: e0fc7a2b8c185e141ae02653d2c872ac, type: 2}
   dropCount: 1

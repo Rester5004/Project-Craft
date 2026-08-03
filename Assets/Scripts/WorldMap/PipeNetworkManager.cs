@@ -250,7 +250,7 @@ public class PipeNetworkManager : MonoBehaviour
         // 짐이 날아가는 사이에 렌치로 길을 끊거나 뒤집었을 수 있다. 위상이 바뀌었을 때만 다시 확인한다.
         if (pipe.routeVersion != TopologyVersion)
         {
-            PipeRouter.FindSinks(pipe.cell, pipe.block.kind, new Vector2Int(int.MinValue, int.MinValue), pipe.sinks);
+            PipeRouter.FindSinks(pipe.cell, pipe.block.kind, pipe.sinks);
             pipe.routeVersion = TopologyVersion;
 
             bool stillReachable = false;
@@ -294,7 +294,7 @@ public class PipeNetworkManager : MonoBehaviour
         Items item = ItemDictionary.Instance != null ? ItemDictionary.Instance.GetItem(pipe.parcel.itemName) : null;
         if (item == null) return;
 
-        PipeRouter.FindSinks(pipe.cell, pipe.block.kind, new Vector2Int(int.MinValue, int.MinValue), pipe.sinks);
+        PipeRouter.FindSinks(pipe.cell, pipe.block.kind, pipe.sinks);
         pipe.routeVersion = TopologyVersion;
 
         MapGenerator map = MapGenerator.Active;
@@ -364,7 +364,10 @@ public class PipeNetworkManager : MonoBehaviour
 
         if (pipe.routeVersion != TopologyVersion)
         {
-            PipeRouter.FindSinks(pipe.cell, pipe.block.kind, sourceCell, pipe.sinks);
+            // 출발 기계를 여기서 빼면 안 된다 — 이 목록은 TopologyVersion 하나를 키로 캐시돼
+            // 배달 쪽과 함께 쓰이므로, 걸러 두면 다른 방향의 배달이 도착지를 잃는다.
+            // 자기 산출물 회수 방지는 아래 루프의 sourceCell 검사가 맡는다.
+            PipeRouter.FindSinks(pipe.cell, pipe.block.kind, pipe.sinks);
             pipe.routeVersion = TopologyVersion;
         }
         if (pipe.sinks.Count == 0) { pipe.nextAttemptTime = clock + RetryDelay; return; }
@@ -401,6 +404,9 @@ public class PipeNetworkManager : MonoBehaviour
 
             stack.count -= take;
             if (stack.count <= 0) stack.Clear();
+            // 개체는 짐에 실려 갔다. 남은 스택이 같은 ToolInstance 객체를 계속 붙들고 있으면
+            // 한쪽 내구도를 깎을 때 다른 쪽도 같이 닳는다. 배달 쪽(TryDeliver)과 같은 규약이다.
+            else if (pipe.parcel.instance != null) stack.instance = null;
             source.inventory.NotifyChanged();
             source.Flush();
 

@@ -220,7 +220,10 @@ public static class RecipeSolver
         if (slots == null || item == null) return 0;
 
         int max = MaxStackOf(item);
-        int room = 0;
+        // <b>long 으로 센다.</b> maxStack 이 0(미설정)이면 MaxStackOf 가 int.MaxValue 를 돌려주는데,
+        // int 로 더하면 빈 칸 두 개만에 음수로 넘쳐(2147483647 + 2147483647 = -2) 호출자가
+        // "자리 없음" 으로 읽는다 — 빈 칸이 짝수인 동안만 운송이 멈추는 형태로 나타났다.
+        long room = 0;
         for (int i = 0; i < slots.Count; i++)
         {
             ItemStack stack = slots[i];
@@ -232,7 +235,7 @@ public static class RecipeSolver
             if (hasInstance) continue;
             if (stack.item == item && stack.IsPlain && stack.count < max) room += max - stack.count;
         }
-        return room;
+        return room > int.MaxValue ? int.MaxValue : (int)room;
     }
 
     /// <summary>
@@ -259,12 +262,18 @@ public static class RecipeSolver
             }
         }
 
+        // 개체 데이터가 붙은 짐은 <b>칸당 하나</b>다. 개체마다 내용(내구도)이 다른데 한 칸에 여러 개를 넣으면
+        // 인스턴스는 하나뿐이라, 그 하나가 닳아 없어질 때 stack.Clear() 로 N 개가 통째로 사라진다.
+        // 지금은 개체를 다는 아이템(ToolItem)이 전부 maxStack 1 이라 실제로는 걸리지 않지만,
+        // 그 규약은 에셋 값이라 언제든 어긋날 수 있다 — 여기서 구조적으로 막는다.
+        int perSlot = instance == null ? max : 1;
+
         bool first = true;
         for (int i = 0; i < slots.Count && remaining > 0; i++)
         {
             ItemStack stack = slots[i];
             if (stack == null || stack.item != null) continue;
-            int moved = Mathf.Min(max, remaining);
+            int moved = Mathf.Min(perSlot, remaining);
             stack.item = item;
             stack.count = moved;
             // 여러 칸에 나뉘어 들어가면 칸마다 별개의 개체여야 한다.

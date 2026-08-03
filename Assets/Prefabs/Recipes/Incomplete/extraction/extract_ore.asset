@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d1635fa976c21145835b252e45d6313, type: 3}
   m_Name: extract_ore
   m_EditorClassIdentifier: Assembly-CSharp::Recipe
-  machine: {fileID: 11400000, guid: 0632430f755ac2e47b015fdc9d19d9e0, type: 2}
+  machine: {fileID: 11400000, guid: ea55fe72f9315554a8ffdcf795dd1b7e, type: 2}
   category: {fileID: 11400000, guid: a63365af4ccd3904a91ebf59b6456c84, type: 2}
   tier: 1
   inputs: []
   outputs:
-  - item: {fileID: 11400000, guid: 5bc683203fd5c414aade6a335df13fa4, type: 2}
+  - item: {fileID: 11400000, guid: 3b3ecc29dd70a9d409676129a61c5bdf, type: 2}
     count: 1
   requiredTools: []
   craftTime: 1

@@ -60,14 +60,6 @@ namespace ProjectCraft.EditorTools
             { "가공대", "tmp_crafter" },
         };
 
-        /// <summary>JSON 기계 이름 → MachineBlock 표시 이름(나머지는 표시 이름이 그대로 일치한다).</summary>
-        private static readonly string[,] MachineAlias =
-        {
-            { "분쇄기", "전기 분쇄기" },
-            { "수동 분쇄기", "전기 분쇄기" },
-            { "전기분해기", "전기 분해기" },
-        };
-
         // ── 임포트 상태 ───────────────────────────────────────
         private static Dictionary<string, Items> itemsByDisplay;
         private static Dictionary<string, Items> itemsById;
@@ -176,8 +168,9 @@ namespace ProjectCraft.EditorTools
                 }
             }
 
-            for (int i = 0; i < MachineAlias.GetLength(0); i++)
-                aliases[ItemDictionary.NormalizeName(MachineAlias[i, 0])] = ItemDictionary.NormalizeName(MachineAlias[i, 1]);
+            // 기계 별칭은 MachineAliases 한 곳에서 온다. 여기 사본을 두면 반드시 한쪽이 낡는다.
+            foreach (KeyValuePair<string, string> pair in MachineAliases.All)
+                aliases[pair.Key] = pair.Value;
         }
 
         // ── 파일 하나 ────────────────────────────────────────
@@ -405,6 +398,12 @@ namespace ProjectCraft.EditorTools
 
             if (itemsByDisplay.TryGetValue(name, out Items byDisplay)) return CountIfPlaceholder(name, byDisplay);
             if (itemsById.TryGetValue(name, out Items byId)) return CountIfPlaceholder(name, byId);
+
+            // 통합돼 사라진 이름이면 정본으로 돌린다.
+            // 이 줄이 없으면 다시 임포트할 때마다 지운 플레이스홀더가 되살아나 원점이 된다.
+            string canonical = ItemAliases.Resolve(name);
+            if (canonical != name && itemsById.TryGetValue(canonical, out Items merged))
+                return CountIfPlaceholder(canonical, merged);
 
             return CountIfPlaceholder(name, CreatePlaceholder(name));
         }

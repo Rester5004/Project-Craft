@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d1635fa976c21145835b252e45d6313, type: 3}
   m_Name: geothermal
   m_EditorClassIdentifier: Assembly-CSharp::Recipe
-  machine: {fileID: 11400000, guid: 0632430f755ac2e47b015fdc9d19d9e0, type: 2}
+  machine: {fileID: 11400000, guid: 70a77e919bfe09d4da0b315ceaed8c28, type: 2}
   category: {fileID: 0}
   tier: 0
   inputs: []
   outputs: []
+  requiredTools: []
   craftTime: 1
   importNote: "[\uCD9C\uCC98] extraction.json / id=geothermal\r\n[\uD544\uC694 \uC9C0\uD615]
     \uC9C0\uC5F4 \uC9C0\uD615\r\n[\uBE44\uACE0] \uC9C0\uC5F4 \uBC1C\uC804\uAE30 \uC804\uC6A9

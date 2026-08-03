@@ -29,6 +29,11 @@ public abstract class ItemSlot : MonoBehaviour,
     protected bool insertable = true;
 
     private static ItemSlot draggedFrom;
+    // 이 슬롯이 실제로 드래그를 시작했는가. static draggedFrom 만으로는 판정할 수 없다 —
+    // 유니티는 OnBeginDrag 에서 조기 return 한 슬롯에도 OnEndDrag 를 보내기 때문.
+    private bool dragging;
+    // 드래그 도중 창이 닫혀 아이콘이 캔버스에 남아 있다. 다시 켜질 때 제자리로 돌린다.
+    private bool pendingRestore;
     private Transform iconStartParent;
     private Vector3 iconStartPos;
     private Transform countStartParent;
@@ -72,8 +77,16 @@ public abstract class ItemSlot : MonoBehaviour,
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        if (!iconImage.enabled) return;
+        // 빈 칸(또는 배선이 덜 된 슬롯)에서 시작한 드래그는 <b>draggedFrom 을 반드시 지운다.</b>
+        // 예전에는 그냥 return 해서, 직전 드래그 도중 창이 닫혀 살아남은 draggedFrom 이 그대로 남았고
+        // 다음 드롭이 손대지도 않은 슬롯의 아이템을 옮겼다.
+        if (iconImage == null || countText == null || canvas == null || !iconImage.enabled)
+        {
+            draggedFrom = null;
+            return;
+        }
 
+        dragging = true;
         draggedFrom = this;
         iconStartParent = iconImage.transform.parent;
         iconStartPos = iconImage.rectTransform.position;
@@ -86,18 +99,63 @@ public abstract class ItemSlot : MonoBehaviour,
 
     public void OnDrag(PointerEventData eventData)
     {
-        if (draggedFrom == this)
+        // 캔버스가 Screen Space - Overlay 라 화면 좌표가 곧 월드 좌표다.
+        // 다른 렌더 모드로 바꾸면 여기서 좌표 변환이 필요해진다(TooltipUI.FollowCursor 참고).
+        if (dragging && draggedFrom == this)
             iconImage.rectTransform.position = eventData.position;
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        iconImage.transform.SetParent(iconStartParent);
-        iconImage.rectTransform.position = iconStartPos;
-        countText.transform.SetParent(countStartParent);
-        countText.rectTransform.position = countStartPos;
-        countText.transform.SetAsLastSibling();
-        draggedFrom = null;
+        // 시작하지 않은 드래그를 되돌리면 iconStartParent 가 null 이라
+        // SetParent(null) 로 아이콘이 슬롯 계층에서 통째로 떨어져 나가 영영 안 보이게 된다.
+        if (!dragging) return;
+        dragging = false;
+        RestoreDragVisuals();
+        if (draggedFrom == this) draggedFrom = null;
+    }
+
+    /// <summary>
+    /// 드래그 중 창이 닫히면 유니티는 <c>OnEndDrag</c> 를 배달하지 않는다.
+    /// 그대로 두면 캔버스로 옮겨 둔 아이콘이 화면에 남고 static <c>draggedFrom</c> 도 살아남아,
+    /// 다음 드롭이 손대지도 않은 슬롯의 아이템을 옮긴다.
+    ///
+    /// <b>여기서 SetParent 를 부르면 안 된다</b> — 부모가 비활성화되는 중에 부모를 바꾸는 것은
+    /// 유니티가 거부한다("Cannot set the parent ... while activating or deactivating"). 그래서
+    /// 지금은 숨기기만 하고, 실제 복구는 다시 켜질 때 <see cref="OnEnable"/> 에서 한다.
+    /// </summary>
+    protected virtual void OnDisable()
+    {
+        if (!dragging) return;
+        dragging = false;
+        if (draggedFrom == this) draggedFrom = null;
+
+        if (iconImage != null) iconImage.enabled = false;   // 캔버스에 뜬 채로 남지 않게
+        pendingRestore = true;
+    }
+
+    protected virtual void OnEnable()
+    {
+        if (!pendingRestore) return;
+        pendingRestore = false;
+        RestoreDragVisuals();
+        Refresh();   // 아이콘 표시 여부를 데이터 기준으로 되돌린다
+    }
+
+    /// <summary>드래그로 캔버스에 옮겨 뒀던 아이콘·개수 텍스트를 슬롯 제자리로 되돌린다.</summary>
+    private void RestoreDragVisuals()
+    {
+        if (iconImage != null)
+        {
+            iconImage.transform.SetParent(iconStartParent);
+            iconImage.rectTransform.position = iconStartPos;
+        }
+        if (countText != null)
+        {
+            countText.transform.SetParent(countStartParent);
+            countText.rectTransform.position = countStartPos;
+            countText.transform.SetAsLastSibling();
+        }
     }
 
     public void OnDrop(PointerEventData eventData)

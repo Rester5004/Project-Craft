@@ -125,21 +125,25 @@ public class ItemDictionary : Singleton<ItemDictionary>
     }
 
     /// <summary>blockId 로 파이프 정보를 조회한다. 없거나 파이프가 아니면 null.</summary>
-    public PipeBlock GetPipeInfo(string blockId)
-    {
-        if (!string.IsNullOrEmpty(blockId) && blockDictionary.TryGetValue(blockId, out BlockBase block))
-            return block as PipeBlock;
-        return null;
-    }
+    public PipeBlock GetPipeInfo(string blockId) => GetBlock(blockId) as PipeBlock;
     /// <summary>itemName 으로 Items 를 조회한다(placeable 인벤토리 복원 등에 사용).</summary>
     public Items GetItem(string itemName)
     {
-        if (!string.IsNullOrEmpty(itemName) && itemDictionary.TryGetValue(itemName, out Items item))
-            return item;
+        if (string.IsNullOrEmpty(itemName)) return null;
+        if (itemDictionary.TryGetValue(itemName, out Items item)) return item;
+
+        // 통합돼 사라진 이름일 수 있다. 옛 세이브·인벤토리가 그 이름을 들고 있어도
+        // 이 폴백 덕분에 정본으로 읽힌다 — 없으면 그 칸이 조용히 비어 버린다.
+        string canonical = ItemAliases.Resolve(itemName);
+        if (canonical != itemName && itemDictionary.TryGetValue(canonical, out Items merged)) return merged;
+
         return null;
     }
     /// <summary>등록된 모든 아이템 ID(명령어 자동완성·오타 안내용).</summary>
     public IEnumerable<string> ItemNames => itemDictionary.Keys;
+
+    /// <summary>등록된 아이템 전부. 목록을 통째로 보여 주는 화면(아이템 브라우저)이 쓴다.</summary>
+    public IEnumerable<Items> AllItems => itemDictionary.Values;
 
     /// <summary>등록된 모든 한글 표시 이름.</summary>
     public IEnumerable<string> DisplayNames => displayNameDictionary.Keys;
@@ -169,21 +173,26 @@ public class ItemDictionary : Singleton<ItemDictionary>
         return null;
     }
 
-    /// <summary>blockId(=blockName) 로 블록을 조회한다(종류 무관). 없으면 null.</summary>
+    /// <summary>
+    /// blockId(=blockName) 로 블록을 조회한다(종류 무관). 없으면 null.
+    ///
+    /// 배치물은 <c>blockId == itemName == blockName</c> 규약이라 아이템 이름이 바뀌면 블록 이름도 바뀐다.
+    /// 그래서 <b>아이템과 같은 별칭 표</b>를 폴백으로 쓴다 — 없으면 세이브에 이미 놓인 파이프·기계가
+    /// 이름이 바뀐 순간 통째로 사라진다.
+    /// </summary>
     public BlockBase GetBlock(string blockId)
     {
-        if (!string.IsNullOrEmpty(blockId) && blockDictionary.TryGetValue(blockId, out BlockBase block))
-            return block;
+        if (string.IsNullOrEmpty(blockId)) return null;
+        if (blockDictionary.TryGetValue(blockId, out BlockBase block)) return block;
+
+        string canonical = ItemAliases.Resolve(blockId);
+        if (canonical != blockId && blockDictionary.TryGetValue(canonical, out BlockBase renamed)) return renamed;
+
         return null;
     }
 
     /// <summary>blockId(=blockName) 로 기계 정보(MachineBlock)를 조회한다. 없거나 기계가 아니면 null.</summary>
-    public MachineBlock GetMachineInfo(string blockId)
-    {
-        if (!string.IsNullOrEmpty(blockId) && blockDictionary.TryGetValue(blockId, out BlockBase block))
-            return block as MachineBlock;
-        return null;
-    }
+    public MachineBlock GetMachineInfo(string blockId) => GetBlock(blockId) as MachineBlock;
     // 아래 둘은 예전에 무조건 캐스팅을 했다. 파이프처럼 MainBlock/MachineBlock 이 아닌 블록이 생기면
     // InvalidCastException 이 나므로 타입 검사로 바꾼다.
     public TileBase GetTileFromBlockDictionary(string name)

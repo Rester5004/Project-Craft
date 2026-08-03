@@ -27,11 +27,27 @@ public static class PipeSetup
 
     private static readonly PipeSpec[] Specs =
     {
-        new PipeSpec { itemName = "아이템 파이프",      assetName = "ItemPipe",   kind = PipeKind.Item,   tier = 0, secondsPerCell = 0.40f, throughput = 8,  tint = Color.white },
-        new PipeSpec { itemName = "고체 운송 파이프",   assetName = "SolidPipe",  kind = PipeKind.Item,   tier = 1, secondsPerCell = 0.12f, throughput = 16, tint = new Color(1f, 0.85f, 0.55f) },
-        new PipeSpec { itemName = "액체 파이프",        assetName = "LiquidPipe", kind = PipeKind.Liquid, tier = 0, secondsPerCell = 0.30f, throughput = 1,  tint = Color.white },
-        new PipeSpec { itemName = "기체 파이프",        assetName = "GasPipe",    kind = PipeKind.Gas,    tier = 0, secondsPerCell = 0.30f, throughput = 1,  tint = Color.white },
+        // itemName 은 영어 규약이다(세이브 키). 표시명은 아이템 에셋의 displayName 이 들고 있다.
+        new PipeSpec { itemName = "item_pipe",   assetName = "ItemPipe",   kind = PipeKind.Item,   tier = 0, secondsPerCell = 0.40f, throughput = 8,  tint = Color.white },
+        new PipeSpec { itemName = "solid_pipe",  assetName = "SolidPipe",  kind = PipeKind.Item,   tier = 1, secondsPerCell = 0.12f, throughput = 16, tint = new Color(1f, 0.85f, 0.55f) },
+        new PipeSpec { itemName = "liquid_pipe", assetName = "LiquidPipe", kind = PipeKind.Liquid, tier = 0, secondsPerCell = 0.30f, throughput = 1,  tint = Color.white },
+        new PipeSpec { itemName = "gas_pipe",    assetName = "GasPipe",    kind = PipeKind.Gas,    tier = 0, secondsPerCell = 0.30f, throughput = 1,  tint = Color.white },
     };
+
+    /// <summary>경로의 모든 단계를 AssetDatabase 로 만든다(이미 있으면 그대로). 다른 툴들과 같은 방식이다.</summary>
+    private static void EnsureFolder(string folder)
+    {
+        if (AssetDatabase.IsValidFolder(folder)) return;
+
+        string[] parts = folder.Split('/');
+        string path = parts[0];                       // "Assets"
+        for (int i = 1; i < parts.Length; i++)
+        {
+            string next = path + "/" + parts[i];
+            if (!AssetDatabase.IsValidFolder(next)) AssetDatabase.CreateFolder(path, parts[i]);
+            path = next;
+        }
+    }
 
     /// <summary>PipeKind → 아틀라스 파일 이름 조각(시트의 밴드 이름과 같다).</summary>
     private static string AtlasNameFor(PipeKind kind)
@@ -54,8 +70,9 @@ public static class PipeSetup
             if (item != null && !string.IsNullOrEmpty(item.itemName)) itemsByName[item.itemName] = item;
         }
 
-        if (!AssetDatabase.IsValidFolder(BlockFolder))
-            System.IO.Directory.CreateDirectory(BlockFolder);
+        // AssetDatabase 를 거쳐 만든다. Directory.CreateDirectory 로 만들면 디스크에는 생기지만
+        // AssetDatabase 는 모르는 상태라 바로 뒤의 CreateAsset 이 "Couldn't create asset file" 로 죽는다.
+        EnsureFolder(BlockFolder);
 
         StringBuilder report = new StringBuilder();
         report.AppendLine("# 파이프 에셋 설정");

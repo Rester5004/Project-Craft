@@ -97,30 +97,44 @@ namespace ProjectCraft.EditorTools
 
         private static int ApplyToScenes(TMP_FontAsset font)
         {
+            // 씬을 통째로 갈아 끼우기 전에 저장하지 않은 작업을 먼저 처리한다.
+            // 이게 없으면 메뉴를 누르는 순간 열려 있던 씬의 미저장 변경이 확인 없이 날아간다.
+            if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo())
+            {
+                Debug.Log("[KoreanFontSetup] 사용자가 취소했습니다. 씬은 건드리지 않았습니다.");
+                return 0;
+            }
+
             string previousScene = SceneManager.GetActiveScene().path;
             int changed = 0;
 
-            string[] guids = AssetDatabase.FindAssets("t:Scene");
-            for (int i = 0; i < guids.Length; i++)
+            try
             {
-                string path = AssetDatabase.GUIDToAssetPath(guids[i]);
-                if (path.StartsWith("Packages/")) continue;
-
-                Scene scene = EditorSceneManager.OpenScene(path, OpenSceneMode.Single);
-                int n = 0;
-                GameObject[] roots = scene.GetRootGameObjects();
-                for (int r = 0; r < roots.Length; r++) n += ApplyToHierarchy(roots[r], font);
-
-                if (n > 0)
+                string[] guids = AssetDatabase.FindAssets("t:Scene");
+                for (int i = 0; i < guids.Length; i++)
                 {
-                    EditorSceneManager.MarkSceneDirty(scene);
-                    EditorSceneManager.SaveScene(scene);
-                    changed += n;
+                    string path = AssetDatabase.GUIDToAssetPath(guids[i]);
+                    if (path.StartsWith("Packages/")) continue;
+
+                    Scene scene = EditorSceneManager.OpenScene(path, OpenSceneMode.Single);
+                    int n = 0;
+                    GameObject[] roots = scene.GetRootGameObjects();
+                    for (int r = 0; r < roots.Length; r++) n += ApplyToHierarchy(roots[r], font);
+
+                    if (n > 0)
+                    {
+                        EditorSceneManager.MarkSceneDirty(scene);
+                        EditorSceneManager.SaveScene(scene);
+                        changed += n;
+                    }
                 }
             }
-
-            if (!string.IsNullOrEmpty(previousScene))
-                EditorSceneManager.OpenScene(previousScene, OpenSceneMode.Single);
+            finally
+            {
+                // 중간에 터져도 원래 씬으로는 반드시 돌아온다. 안 그러면 마지막으로 연 남의 씬이 열린 채 남는다.
+                if (!string.IsNullOrEmpty(previousScene))
+                    EditorSceneManager.OpenScene(previousScene, OpenSceneMode.Single);
+            }
 
             return changed;
         }

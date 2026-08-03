@@ -23,6 +23,13 @@ public class PlayerSave : MonoBehaviour
     private bool loaded;   // 로드 전 저장으로 기존 파일을 덮어쓰지 않도록 하는 가드
     private Rigidbody2D body;
 
+    /// <summary>
+    /// <b>종료 시점에 Inventory.Instance 를 부르면 늦다.</b> Inventory 가 먼저 OnApplicationQuit 을 받으면
+    /// 그 뒤로 Instance 는 null 을 돌려주고, Save 가 "저장할 게 없다"로 오해해 조용히 빠져나간다
+    /// — 마지막 자동 저장 이후의 인벤토리가 통째로 날아갔다. 그래서 참조를 미리 붙들어 둔다.
+    /// </summary>
+    private Inventory inventory;
+
     private void Awake()
     {
         body = GetComponent<Rigidbody2D>();
@@ -31,6 +38,7 @@ public class PlayerSave : MonoBehaviour
 
     private void Start()
     {
+        inventory = Inventory.Instance;
         Load();
         if (WorldMap.Instance != null)
             WorldMap.Instance.OnBeforeSave += Save; // 월드가 저장될 때 플레이어도 함께 저장
@@ -38,8 +46,9 @@ public class PlayerSave : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (WorldMap.Instance != null)
-            WorldMap.Instance.OnBeforeSave -= Save;
+        // 파괴 경로에서 Instance 를 부르면 종료 중엔 null 이고, 에디트 모드에선 유령 오브젝트를 만든다.
+        WorldMap map = WorldMap.InstanceIfAlive;
+        if (map != null) map.OnBeforeSave -= Save;
     }
 
     private void OnApplicationQuit() => Save();
@@ -54,12 +63,12 @@ public class PlayerSave : MonoBehaviour
     {
         if (!loaded) return;
 
-        Inventory inventory = Inventory.Instance;
+        // Start 에서 붙들어 둔 참조를 쓴다. 여기서 Inventory.Instance 를 부르면 종료 시점에 null 이다.
         if (inventory == null || inventory.slots == null) return;
 
-        try
+        // 임시 파일에 다 쓴 뒤에야 교체한다(WorldMap 과 같은 규약).
+        SafeFile.WriteAtomic(savePath, writer =>
         {
-            using BinaryWriter writer = new(File.Open(savePath, FileMode.Create));
             writer.Write(SaveMagic);
             writer.Write(SaveVersion);
 
@@ -76,11 +85,7 @@ public class PlayerSave : MonoBehaviour
                 writer.Write(has ? stack.count : 0);
                 ItemInstanceSerializer.Write(writer, has ? stack.instance : null);
             }
-        }
-        catch (System.Exception e)
-        {
-            Debug.LogError($"[PlayerSave] 저장 실패: {e.Message}");
-        }
+        });
     }
 
     /// <summary>저장 파일이 있으면 플레이어 상태를 복원한다.</summary>
@@ -89,7 +94,7 @@ public class PlayerSave : MonoBehaviour
         loaded = true; // 파일이 없어도 이후 저장은 허용
         if (!File.Exists(savePath)) return;
 
-        Inventory inventory = Inventory.Instance;
+        if (inventory == null) inventory = Inventory.Instance;   // Start 보다 먼저 불릴 경우 대비
         if (inventory == null || inventory.slots == null) return;
 
         try
@@ -134,8 +139,9 @@ public class PlayerSave : MonoBehaviour
         }
         catch (System.Exception e)
         {
+            // 지우지 않고 옆으로 치운다(WorldMap 과 같은 규약). 포맷 오류인지 일시적 IO 오류인지 구분할 수 없다.
             Debug.LogWarning($"[PlayerSave] 세이브 파일 로드 실패, 새로 시작합니다: {e.Message}");
-            File.Delete(savePath);
+            SafeFile.Quarantine(savePath);
         }
     }
 

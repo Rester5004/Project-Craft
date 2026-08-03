@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8819b725f101d846a6287e07024b41e, type: 3}
   m_Name: ItemPipe
   m_EditorClassIdentifier: Assembly-CSharp::PipeBlock
-  blockName: "\uC544\uC774\uD15C \uD30C\uC774\uD504"
+  blockName: item_pipe
   displayName: "\uC544\uC774\uD15C \uD30C\uC774\uD504"
   dropItem: {fileID: 11400000, guid: 30c61bd1e34ec7f46972a5bee6299014, type: 2}
   dropCount: 1

@@ -11,7 +11,7 @@ namespace ProjectCraft.EditorTools
     /// <c>Recipes/Notion</c>(최신 기획본)을 <c>Recipes/Incomplete</c>(구 임포트본)로 흡수시키고 Notion 폴더를 없앤다.
     ///
     /// 같은 레시피인지는 <b>(기계 이름, 대표 산출물)</b> 로 판정한다. 기계 이름은 두 트리 사이에 개편이 있어
-    /// <see cref="MachineAlias"/> 로 구 이름을 신 이름에 맞춘 뒤 비교한다.
+    /// <see cref="MachineAliases"/> 로 구 이름을 신 이름에 맞춘 뒤 비교한다.
     /// 겹치는 레시피의 <b>필요 재료는 합집합</b>이 되어 어느 쪽 정보도 잃지 않는다.
     ///
     /// 살아남는 쪽은 Notion 에셋이다 — 현재 딕셔너리에 등록된 레시피가 전부 Notion 에셋이고,
@@ -24,25 +24,6 @@ namespace ProjectCraft.EditorTools
         private const string NotionFolder = "Assets/Prefabs/Recipes/Notion";
         private const string TargetFolder = "Assets/Prefabs/Recipes/Incomplete";
         private const string ReportPath = "Assets/Prefabs/Recipes/_MergeReport.md";
-
-        /// <summary>구 Incomplete 기계 어휘 → Notion 어휘. Notion 개편 때의 이름 변경·통합 내역이다.</summary>
-        private static readonly string[,] MachineAlias =
-        {
-            { "용광로", "화로" },
-            { "유리 제조기", "화로" },
-            { "가공대", "조합대" },
-            { "철근 공장", "조합대" },
-            { "파이프 공장", "조합대" },
-            { "파이프 공장 (2티어 업그레이드)", "조합대" },
-            { "망치", "조합대" },
-            { "수동 0-0티어 추출기", "조합대" },
-            { "수전해기", "전기 분해기" },
-            { "벽돌 공장", "압연기" },
-            { "벽돌 공장 (1티어 업그레이드)", "시멘트 공장" },
-            { "파이프 공장 (1티어 업그레이드)", "유리 가공기" },
-            { "화력발전소", "화력 발전기" },
-            { "화력발전소 (1티어 업그레이드)", "화력 발전기" },
-        };
 
         /// <summary>키가 같은 레시피들의 묶음.</summary>
         private class Group
@@ -259,12 +240,9 @@ namespace ProjectCraft.EditorTools
             return end > start ? note.Substring(start, end - start) : "";
         }
 
-        private static string Normalize(string machine)
-        {
-            for (int i = 0; i < MachineAlias.GetLength(0); i++)
-                if (MachineAlias[i, 0] == machine) return MachineAlias[i, 1];
-            return machine;
-        }
+        // 기계 별칭은 MachineAliases 한 곳에만 둔다. 여기 사본을 두면 반드시 한쪽이 낡는다
+        // (실제로 이 표에만 '수동 0-0티어 추출기 → 조합대' 가 남아 추출기 레시피를 조합대로 보냈다).
+        private static string Normalize(string machine) => MachineAliases.Resolve(machine);
 
         // ── 필드 병합 ─────────────────────────────────────────────
         private static void MergeFields(List<Group> groups)

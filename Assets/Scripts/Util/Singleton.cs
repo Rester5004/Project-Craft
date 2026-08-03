@@ -42,6 +42,16 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// <b>이미 살아 있는 인스턴스만</b> 돌려준다. 찾지도, 만들지도 않는다.
+    ///
+    /// 종료·파괴 경로(<c>OnApplicationQuit</c>·<c>OnDestroy</c>)는 반드시 이쪽을 쓴다.
+    /// 거기서 <see cref="Instance"/> 를 부르면 <c>_applicationIsQuitting</c> 때문에 <b>null 이 돌아오고</b>,
+    /// 그것을 "저장할 게 없다"로 오해해 조용히 건너뛰게 된다(실제로 인벤토리가 통째로 날아갔다).
+    /// 에디트 모드에서도 씬에 유령 오브젝트를 만들지 않는다.
+    /// </summary>
+    public static T InstanceIfAlive => _instance;
+
     protected virtual void Awake()
     {
         // 씬에 이미 인스턴스가 존재하는데 다른 오브젝트가 또 생성되었다면 중복 제거

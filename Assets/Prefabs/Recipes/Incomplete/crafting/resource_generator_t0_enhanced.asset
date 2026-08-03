@@ -18,10 +18,10 @@ MonoBehaviour:
   inputs:
   - item: {fileID: 11400000, guid: 36673d165a5f895419b19e358bce9cea, type: 2}
     count: 1
-  - item: {fileID: 11400000, guid: 31831e3d5b25ac743af686c7294097a9, type: 2}
+  - item: {fileID: 11400000, guid: 60246d1619e584a448bee0887214374e, type: 2}
     count: 1
   outputs:
-  - item: {fileID: 11400000, guid: 16a8cfbed65d77049bd3c55f78d9a29b, type: 2}
+  - item: {fileID: 11400000, guid: b4f730bc42573354397b7ca044a53936, type: 2}
     count: 1
   requiredTools: []
   craftTime: 1

@@ -18,12 +18,12 @@ MonoBehaviour:
   inputs:
   - item: {fileID: 11400000, guid: cb5fecda99ffdb74382a0c1f5e8bef4d, type: 2}
     count: 2
-  - item: {fileID: 11400000, guid: 35e1d89837b1aca4986036e5aab82e23, type: 2}
+  - item: {fileID: 11400000, guid: f36f2d7d70af9c047b0ce0c9b1728e49, type: 2}
     count: 1
   - item: {fileID: 11400000, guid: d18d224dc7f833d49b47f7b7fcf32950, type: 2}
     count: 1
   outputs:
-  - item: {fileID: 11400000, guid: 2b3ac7e929359c34c9d717898398a79d, type: 2}
+  - item: {fileID: 11400000, guid: 4d8760c7b532f9040a23bd82f95502d5, type: 2}
     count: 1
   requiredTools: []
   craftTime: 1

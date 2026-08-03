@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8819b725f101d846a6287e07024b41e, type: 3}
   m_Name: LiquidPipe
   m_EditorClassIdentifier: Assembly-CSharp::PipeBlock
-  blockName: "\uC561\uCCB4 \uD30C\uC774\uD504"
+  blockName: liquid_pipe
   displayName: "\uC561\uCCB4 \uD30C\uC774\uD504"
   dropItem: {fileID: 11400000, guid: 2b6b2d7a82ce4344ea34c1ea08fbde07, type: 2}
   dropCount: 1

@@ -41,9 +41,11 @@ public class PlayerInteraction : MonoBehaviour
 
     private void OnDisable()
     {
-        if (InputActionManager.Instance != null){
-            InputActionManager.Instance.OnUsePerformed -= HandleUsePerformed;
-            InputActionManager.Instance.OnInteractPerformed -= HandleInteractPerformed;
+        // 구독 해제는 InstanceIfAlive 로 찾는다. Instance 는 종료 중 null 을 돌려줘 해제가 조용히 건너뛰어진다.
+        InputActionManager input = InputActionManager.InstanceIfAlive;
+        if (input != null){
+            input.OnUsePerformed -= HandleUsePerformed;
+            input.OnInteractPerformed -= HandleInteractPerformed;
         }
     }
 
@@ -130,18 +132,36 @@ public class PlayerInteraction : MonoBehaviour
                 return;
 
             PlaceableRecord pipeRecord = new PlaceableRecord(selectedItemStack.item.itemName);
-            chunk.SetPlaceable(localCell, pipeRecord);
-            mapGenerator.SpawnPlaceableAt(targetCell, pipeRecord);   // 안에서 파이프로 갈라진다
+            if (!TryPlaceRecord(chunk, localCell, targetCell, pipeRecord)) return;
             ConsumeSelected(selectedItemStack);
             return;
         }
 
         // 2-c) 기계는 프리팹을 세운다.
+        // 지형·파이프와 달리 예전에는 여기에만 자리 검사가 없어 플레이어가 선 칸에도 기계를 세울 수 있었다.
+        if (!IsCellClearForWall(targetCell))
+            return;
+
         PlaceableRecord record = new PlaceableRecord(selectedItemStack.item.itemName);
-        chunk.SetPlaceable(localCell, record);
-        mapGenerator.SpawnPlaceableAt(targetCell, record);
+        if (!TryPlaceRecord(chunk, localCell, targetCell, record)) return;
 
         ConsumeSelected(selectedItemStack);
+    }
+
+    /// <summary>
+    /// 레코드를 청크에 박고 실제로 세운다. <b>세우지 못하면 레코드를 되돌린다.</b>
+    ///
+    /// 되돌리지 않으면 그 칸은 <c>GetPlaceable() != null</c> 이라 다시 놓을 수 없고,
+    /// 기계도 파이프도 아니고 바닥이라 <see cref="UpdateMining"/> 의 세 분기가 전부 탈락해
+    /// <b>캘 수조차 없는 칸</b>이 되어 세이브에 영구히 남는다.
+    /// </summary>
+    private bool TryPlaceRecord(Chunk chunk, Vector2Int localCell, Vector2Int targetCell, PlaceableRecord record)
+    {
+        chunk.SetPlaceable(localCell, record);
+        if (mapGenerator.SpawnPlaceableAt(targetCell, record)) return true;
+
+        chunk.RemovePlaceable(localCell);
+        return false;
     }
 
     /// <summary>

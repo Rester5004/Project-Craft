@@ -15,6 +15,6 @@ MonoBehaviour:
   itemName: wrench
   displayName: "\uB80C\uCE58"
   placeable: 0
-  Icon: {fileID: 21300000, guid: 4a4d2640fbd603542be3906e18903c59, type: 3}
+  Icon: {fileID: 21300000, guid: bb5db49e7dc2000429a4943e26d29ccb, type: 3}
   maxStack: 1
   burnEnergy: 0

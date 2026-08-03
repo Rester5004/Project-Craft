@@ -12,6 +12,7 @@ public class InputActionManager : Singleton<InputActionManager>
     private InputAction toggleInventoryAction;
     private InputAction interactAction;
     private InputAction consoleAction;
+    private InputAction itemBrowserAction;
 
     private readonly InputAction[] hotbarSlotActions = new InputAction[10];
 
@@ -21,6 +22,7 @@ public class InputActionManager : Singleton<InputActionManager>
     public event Action OnInteractPerformed;
     public event Action OnToggleInventoryPerformed;
     public event Action OnConsolePerformed;         // Enter: 명령어 입력창 열기
+    public event Action OnItemBrowserPerformed;     // P: 아이템 목록 열고 닫기
     public event Action<int> OnHotbarSlotSelected; // 0~9 (핫바 내 슬롯 인덱스)
 
     public Vector2 MoveValue => moveAction?.ReadValue<Vector2>() ?? Vector2.zero;
@@ -62,6 +64,9 @@ public class InputActionManager : Singleton<InputActionManager>
         consoleAction.AddBinding("<Keyboard>/numpadEnter");
         consoleAction.performed += HandleConsolePerformed;
 
+        itemBrowserAction = playerMap.AddAction("ItemBrowser", type: InputActionType.Button, binding: "<Keyboard>/p");
+        itemBrowserAction.performed += HandleItemBrowserPerformed;
+
         moveAction.performed += HandleMovePerformed;
         moveAction.canceled += HandleMovePerformed;
         useAction.performed += HandleUsePerformed;
@@ -85,6 +90,7 @@ public class InputActionManager : Singleton<InputActionManager>
     private void HandleInteractPerformed(InputAction.CallbackContext ctx) => OnInteractPerformed?.Invoke();
     private void HandleToggleInventoryPerformed(InputAction.CallbackContext ctx) => OnToggleInventoryPerformed?.Invoke();
     private void HandleConsolePerformed(InputAction.CallbackContext ctx) => OnConsolePerformed?.Invoke();
+    private void HandleItemBrowserPerformed(InputAction.CallbackContext ctx) => OnItemBrowserPerformed?.Invoke();
 
     /// <summary>
     /// 플레이어 입력 전체를 켜고 끈다. 명령어 입력창처럼 텍스트를 입력받는 동안에는

@@ -19,8 +19,8 @@ public class InventoryToggle : MonoBehaviour
 
     void OnDisable()
     {
-        if (InputActionManager.Instance != null)
-            InputActionManager.Instance.OnToggleInventoryPerformed -= Toggle;
+        InputActionManager input = InputActionManager.InstanceIfAlive;   // 종료 중엔 Instance 가 null 이다
+        if (input != null) input.OnToggleInventoryPerformed -= Toggle;
     }
 
     private void Toggle()

@@ -55,8 +55,8 @@ public class MapGenerator : MonoBehaviour
     void OnDestroy()
     {
         if (Active == this) Active = null;
-        if (WorldMap.Instance != null)
-            WorldMap.Instance.OnBeforeSave -= FlushAll;
+        WorldMap map = WorldMap.InstanceIfAlive;   // 종료 중엔 Instance 가 null 이다
+        if (map != null) map.OnBeforeSave -= FlushAll;
     }
 
     private void EnsurePlaceableContainer()
@@ -124,9 +124,13 @@ public class MapGenerator : MonoBehaviour
         }
 
         // 1. 범위 내 청크 데이터 일괄 로드
-        for (int x = playerChunk.x - renderDistance; x <= playerChunk.x + renderDistance - 1; x++)
+        // 로드 범위와 위 언로드 판정(체비셰프 거리 > renderDistance)은 <b>반드시 같은 창</b>이어야 한다.
+        // 예전에는 여기가 +renderDistance-1 이라 +renderDistance 청크가 새로 로드되지는 않는데
+        // 이미 로드돼 있으면 언로드도 안 됐다 — 같은 자리인데 접근 경로에 따라 IsCellLoaded 가 달라져
+        // 파이프 배달·전력 링크 판정 결과가 갈렸다.
+        for (int x = playerChunk.x - renderDistance; x <= playerChunk.x + renderDistance; x++)
         {
-            for (int y = playerChunk.y - renderDistance; y <= playerChunk.y + renderDistance - 1; y++)
+            for (int y = playerChunk.y - renderDistance; y <= playerChunk.y + renderDistance; y++)
             {
                 var id = new Vector2Int(x, y);
                 if (!LoadedChunks.ContainsKey(id))
@@ -216,6 +220,18 @@ public class MapGenerator : MonoBehaviour
         if (drop != null) loadedDrops[record] = drop;
     }
 
+    /// <summary>
+    /// 주워서 사라진 드랍을 표시 목록에서 지운다. <b>줍기 경로가 반드시 불러야 한다.</b>
+    ///
+    /// <see cref="UnLoadChunk"/> 는 <c>chunk.Drops</c> 를 순회해 정리하는데, 주운 레코드는
+    /// 이미 청크에서 빠져 있어 그 순회에 절대 걸리지 않는다. 그래서 이 통지가 없으면
+    /// (파괴된 오브젝트 + 레코드) 짝이 주울 때마다 하나씩 영구히 쌓인다.
+    /// </summary>
+    public void NotifyDropRemoved(DropRecord record)
+    {
+        if (record != null) loadedDrops.Remove(record);
+    }
+
     /// <summary>필드에 아이템을 떨어뜨린다. 청크에 기록되므로 세이브에도 남는다.</summary>
     public void SpawnDrop(Vector2 worldPos, Items item, int count, ItemInstance instance = null)
     {
@@ -247,16 +263,20 @@ public class MapGenerator : MonoBehaviour
     }
 
     // ── placeable 스폰/디스폰/조회 ──────────────────────────────────────
-    public void SpawnPlaceableAt(Vector2Int worldCell, PlaceableRecord record) => SpawnPlaceable(worldCell, record);
+    /// <summary>
+    /// 배치물을 실제로 세운다. <b>성공 여부를 돌려준다</b> — 배치 경로가 실패를 알아야
+    /// 레코드를 되돌리고 아이템을 소모하지 않을 수 있다(안 그러면 아무것도 못 놓고 캘 수도 없는 칸이 남는다).
+    /// </summary>
+    public bool SpawnPlaceableAt(Vector2Int worldCell, PlaceableRecord record) => SpawnPlaceable(worldCell, record);
 
-    private void SpawnPlaceable(Vector2Int worldCell, PlaceableRecord record)
+    private bool SpawnPlaceable(Vector2Int worldCell, PlaceableRecord record)
     {
-        if (record == null || loadedMachines.ContainsKey(worldCell)) return;
+        if (record == null || loadedMachines.ContainsKey(worldCell)) return false;
 
         // 파이프는 프리팹을 세우지 않고 타일맵에 그린다. 아래 기계 경로를 타면
         // MachineInstance 가 붙어 "유령 기계"가 되므로 반드시 여기서 갈라야 한다.
         PipeBlock pipe = ItemDictionary.Instance != null ? ItemDictionary.Instance.GetPipeInfo(record.blockId) : null;
-        if (pipe != null) { SpawnPipe(worldCell, record, pipe); return; }
+        if (pipe != null) return SpawnPipe(worldCell, record, pipe);
 
         EnsurePlaceableContainer();
 
@@ -264,7 +284,7 @@ public class MapGenerator : MonoBehaviour
         if (prefab == null)
         {
             Debug.LogError($"[MapGenerator] placeable 프리팹 '{record.blockId}' 를 찾을 수 없습니다.");
-            return;
+            return false;
         }
 
         GameObject go = Instantiate(prefab, placeableContainer);
@@ -281,18 +301,20 @@ public class MapGenerator : MonoBehaviour
 
         // 기계가 생기면 옆 파이프가 이쪽으로 붙는 모양으로 바뀐다.
         if (PipeNetworkManager.Active != null) PipeNetworkManager.Active.MarkTopologyDirty(worldCell);
+        return true;
     }
 
     /// <summary>파이프 한 칸을 등록하고 타일로 그린다(GameObject 를 만들지 않는다).</summary>
-    private void SpawnPipe(Vector2Int worldCell, PlaceableRecord record, PipeBlock block)
+    private bool SpawnPipe(Vector2Int worldCell, PlaceableRecord record, PipeBlock block)
     {
-        if (loadedPipes.ContainsKey(worldCell)) return;
+        if (loadedPipes.ContainsKey(worldCell)) return false;
 
         PipeNetworkManager.EnsureCreated(placeableObjectsTilemap != null ? placeableObjectsTilemap.transform.parent : null);
 
         PipeCell pipe = new PipeCell(worldCell, block, record);
         loadedPipes[worldCell] = pipe;
         if (PipeNetworkManager.Active != null) PipeNetworkManager.Active.OnPipeLoaded(pipe);
+        return true;
     }
 
     public bool TryGetMachineAt(Vector2Int worldCell, out MachineInstance instance)

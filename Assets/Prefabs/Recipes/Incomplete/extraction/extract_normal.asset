@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d1635fa976c21145835b252e45d6313, type: 3}
   m_Name: extract_normal
   m_EditorClassIdentifier: Assembly-CSharp::Recipe
-  machine: {fileID: 11400000, guid: 0632430f755ac2e47b015fdc9d19d9e0, type: 2}
+  machine: {fileID: 11400000, guid: efda1e5c6b35fa44dbdae20882c5db2e, type: 2}
   category: {fileID: 11400000, guid: a63365af4ccd3904a91ebf59b6456c84, type: 2}
   tier: 0
   inputs: []
   outputs:
-  - item: {fileID: 11400000, guid: 29fee7036998d5342a8fe6235e16d829, type: 2}
+  - item: {fileID: 11400000, guid: a377e0a4d5d6c8d4aa8d532ab54dcba5, type: 2}
     count: 1
   requiredTools: []
   craftTime: 1

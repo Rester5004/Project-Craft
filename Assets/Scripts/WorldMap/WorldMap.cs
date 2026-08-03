@@ -478,16 +478,21 @@ public class WorldMap : Singleton<WorldMap>
     {
         if (!isLoaded) return;
         OnBeforeSave?.Invoke(); // 로드된 기계 인벤토리를 레코드로 동기화한 뒤 직렬화
-        using BinaryWriter writer = new(File.Open(path, FileMode.Create));
-        writer.Write(SaveMagic);
-        writer.Write(SaveVersion);
-        writer.Write(chunks.Count);
-        foreach (var kvp in chunks)
+
+        // 임시 파일에 다 쓴 뒤에야 교체한다. 예전처럼 원본을 먼저 비우고 쓰면
+        // 기록 도중 프로세스가 죽었을 때 잘린 파일이 남고, 그것이 다음 실행에서 월드 전손으로 이어졌다.
+        SafeFile.WriteAtomic(path, writer =>
         {
-            writer.Write(kvp.Key.x);
-            writer.Write(kvp.Key.y);
-            kvp.Value.Save(writer);
-        }
+            writer.Write(SaveMagic);
+            writer.Write(SaveVersion);
+            writer.Write(chunks.Count);
+            foreach (var kvp in chunks)
+            {
+                writer.Write(kvp.Key.x);
+                writer.Write(kvp.Key.y);
+                kvp.Value.Save(writer);
+            }
+        });
     }
 
     public void Load(string path)
@@ -513,9 +518,16 @@ public class WorldMap : Singleton<WorldMap>
         }
         catch (System.Exception e)
         {
+            // 지우지 않고 옆으로 치운다. 포맷 오류인지 일시적 IO 오류(파일 잠김 등)인지 여기서는 구분할 수 없는데,
+            // 예전에는 둘 다 File.Delete 로 처리해 멀쩡한 월드가 사라졌다.
             Debug.LogWarning($"[WorldMap] 세이브 파일 로드 실패, 새로 생성합니다: {e.Message}");
             chunks.Clear();
-            File.Delete(path);
+            SafeFile.Quarantine(path);
+        }
+        finally
+        {
+            // <b>반드시 선다.</b> 예전에는 격리(옛 File.Delete)가 던지면 이 줄에 닿지 못해
+            // isLoaded 가 false 로 남았고, Save 첫 줄의 가드 때문에 그 세션 내내 저장이 조용히 무시됐다.
             isLoaded = true;
         }
     }

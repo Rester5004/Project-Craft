@@ -39,8 +39,23 @@ public class InventoryHotBarUI : MonoBehaviour
 
     void OnDisable()
     {
-        if (InputActionManager.Instance != null)
-            InputActionManager.Instance.OnHotbarSlotSelected -= HandleHotbarSlotSelected;
+        InputActionManager input = InputActionManager.InstanceIfAlive;   // 종료 중엔 Instance 가 null 이다
+        if (input != null) input.OnHotbarSlotSelected -= HandleHotbarSlotSelected;
+    }
+
+    /// <summary>
+    /// 전체 인벤토리 인덱스(0~39)로 핫바 칸을 고른다. 핫바 범위 밖이면 아무것도 하지 않는다.
+    ///
+    /// 인벤토리 창의 슬롯 클릭이 이리로 들어온다. 예전에는 그쪽에서 <c>Inventory.SelectSlot</c> 을
+    /// 직접 불렀는데, 그 함수는 받은 값을 그대로 쓰는 반면 핫바는 +30 규약이라
+    /// <b>핫바 하이라이트는 1번인데 실제로는 5번 칸의 아이템이 소모되는</b> 어긋남이 났다.
+    /// "지금 든 것" 의 정본은 핫바 하나뿐이어야 한다.
+    /// </summary>
+    public void SelectByInventoryIndex(int inventoryIndex)
+    {
+        int slot = inventoryIndex - hotBarStartIndex;
+        if (slot < 0 || slot >= hotBarSize) return;
+        HandleHotbarSlotSelected(slot);
     }
 
     private void HandleHotbarSlotSelected(int slot)

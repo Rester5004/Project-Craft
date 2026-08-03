@@ -21,10 +21,8 @@ MonoBehaviour:
   - item: {fileID: 11400000, guid: cb5fecda99ffdb74382a0c1f5e8bef4d, type: 2}
     count: 1
   - item: {fileID: 11400000, guid: 3dffad9903e5f8f438998dce2a07e10f, type: 2}
-    count: 4
+    count: 8
   - item: {fileID: 11400000, guid: e28e21cfbb23d8c42869f75d13aba7e5, type: 2}
-    count: 4
-  - item: {fileID: 11400000, guid: 811560942e050d84598eb0a71e9597d2, type: 2}
     count: 4
   outputs:
   - item: {fileID: 11400000, guid: 7339db20c6b26a546a7f548eba5d445c, type: 2}

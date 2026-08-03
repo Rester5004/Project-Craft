@@ -48,6 +48,15 @@ public class MachineBlock : BlockBase
     [Tooltip("가동 중 1초에 쓰는 전력. 0 이면 maxEnergyAmount 의 10% 를 쓴다.")]
     [Min(0f)] public float energyUseRate = 0f;
 
+    [Header("등급 배율 (추출기 계열)")]
+    [Tooltip("가공 시간을 나누는 값. 2 면 두 배 빠르다.\n" +
+             "같은 계열의 상위 등급이 같은 레시피를 더 빨리 돌게 하는 데 쓴다.")]
+    [Min(0.1f)] public float speedMultiplier = 1f;
+
+    [Tooltip("확률 산출에 곱하는 값. 1.5 면 부산물이 1.5배 자주 나온다.\n" +
+             "확률은 레시피에 한 벌만 두고 등급차는 여기서 낸다 — 등급마다 레시피를 복제하지 않기 위해서다.")]
+    [Min(0.1f)] public float chanceMultiplier = 1f;
+
     /// <summary>
     /// 입력/출력 슬롯이 둘 다 0 이어도 "미설정"으로 보지 않고 그대로 적용할지.
     /// 조합대처럼 슬롯이 없는 기계가 기본값(3/6)으로 폴백되지 않게 한다.
