@@ -33,8 +33,7 @@
       "outputs": [
         { "item": "파쇄 광석", "qty": 1, "chance": 1.0, "role": "main" },
         { "item": "유황석", "qty": 1, "chance": 0.10, "grade": "일반" },
-        { "item": "반짝이는 돌", "qty": 1, "chance": 0.05, "grade": "고급" },
-        { "item": "미가공 우라늄", "qty": 1, "chance": 0.01, "grade": "희귀" }
+        { "item": "탁한 우라늄", "qty": 1, "chance": 0.01, "grade": "희귀" }
       ] },
 
     { "id": "crush_crushed_ore", "tier": 1, "input": "파쇄 광석",

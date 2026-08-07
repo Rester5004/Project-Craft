@@ -3,17 +3,15 @@
   "machine": "가공대",
   "description": "수동 조작, 전력 불필요. 도구는 소모품이 아니며 내구도가 소모된다. 전용 공장 대비 저효율.",
   "recipes": [
-    { "id": "craft_stick",           "output": "막대",        "inputs": [ { "item": "돌", "qty": 1 } ] },
-    { "id": "craft_stone_blade",     "output": "돌 칼날",      "inputs": [ { "item": "돌", "qty": 2 } ] },
-    { "id": "craft_stone_hammerhead","output": "돌 망치 머리", "inputs": [ { "item": "돌", "qty": 2 } ] },
-    { "id": "craft_stone_knife",     "output": "돌 칼",        "inputs": [ { "item": "막대", "qty": 1 }, { "item": "돌 칼날", "qty": 1 } ] },
-    { "id": "craft_stone_hammer",    "output": "돌 망치",      "inputs": [ { "item": "막대", "qty": 1 }, { "item": "돌 망치 머리", "qty": 1 } ] },
-    { "id": "craft_iron_blade",      "output": "철 칼날",      "inputs": [ { "item": "철 주괴", "qty": 1 } ] },
-    { "id": "craft_iron_hammerhead", "output": "철 망치 머리", "inputs": [ { "item": "철 주괴", "qty": 1 } ] },
-    { "id": "craft_iron_knife",      "output": "철 칼",        "inputs": [ { "item": "막대", "qty": 1 }, { "item": "철 칼날", "qty": 1 } ] },
-    { "id": "craft_iron_hammer",     "output": "철 망치",      "inputs": [ { "item": "막대", "qty": 1 }, { "item": "철 망치 머리", "qty": 1 } ] },
-    { "id": "craft_iron_plate",      "output": "철판",        "inputs": [ { "item": "철 주괴", "qty": 1 } ], "tool": "망치", "note": "도구 내구도 소모" },
-    { "id": "craft_bucket",          "output": "양동이",      "inputs": [ { "item": "철판", "qty": 3 } ], "tool": "망치", "note": "도구 내구도 소모" },
-    { "id": "craft_brick",           "output": "벽돌",        "inputs": [ { "item": "모래", "qty": 2 }, { "item": "물", "qty": 1, "fluid": true } ] }
+    { "id": "stick",           "output": "막대",        "inputs": [ { "item": "돌", "qty": 1 } ] },
+    { "id": "stone_blade",     "output": "돌 칼날",      "inputs": [ { "item": "돌", "qty": 2 } ] },
+    { "id": "stone_hammerhead","output": "돌 망치 머리", "inputs": [ { "item": "돌", "qty": 2 } ] },
+    { "id": "stone_knife",     "output": "돌 칼",        "inputs": [ { "item": "막대", "qty": 1 }, { "item": "돌 칼날", "qty": 1 } ] },
+    { "id": "iron_blade",      "output": "철 칼날",      "inputs": [ { "item": "철 주괴", "qty": 1 } ] },
+    { "id": "iron_hammerhead", "output": "철 망치 머리", "inputs": [ { "item": "철 주괴", "qty": 1 } ] },
+    { "id": "iron_knife",      "output": "철 칼",        "inputs": [ { "item": "막대", "qty": 1 }, { "item": "철 칼날", "qty": 1 } ] },
+    { "id": "iron_plate",      "output": "철판",        "inputs": [ { "item": "철 주괴", "qty": 1 } ], "tool": "망치", "note": "도구 내구도 소모" },
+    { "id": "bucket",          "output": "양동이",      "inputs": [ { "item": "철판", "qty": 3 } ], "tool": "망치", "note": "도구 내구도 소모" },
+    { "id": "brick",           "output": "벽돌",        "inputs": [ { "item": "모래", "qty": 2 }, { "item": "물", "qty": 1, "fluid": true } ] }
   ]
 }

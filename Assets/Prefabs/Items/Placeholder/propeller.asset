@@ -15,6 +15,6 @@ MonoBehaviour:
   itemName: propeller
   displayName: "\uD504\uB85C\uD3A0\uB7EC"
   placeable: 0
-  Icon: {fileID: 21300000, guid: 4a4d2640fbd603542be3906e18903c59, type: 3}
+  Icon: {fileID: 3905769135109041898, guid: cbe785553f8a087429b55d8ce1e44cc7, type: 3}
   maxStack: 64
   burnEnergy: 0

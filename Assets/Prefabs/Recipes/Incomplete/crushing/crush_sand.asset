@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d1635fa976c21145835b252e45d6313, type: 3}
+  m_Name: crush_sand
+  m_EditorClassIdentifier: Assembly-CSharp::Recipe
+  machine: {fileID: 11400000, guid: 2290bdb0a27272d4eb44b866581bb18e, type: 2}
+  category: {fileID: 0}
+  tier: 0
+  inputs:
+  - item: {fileID: 11400000, guid: 4df3ae1290e85d346a34ede0f4a5c053, type: 2}
+    count: 1
+  outputs:
+  - item: {fileID: 11400000, guid: 4234355d128895145abd4edb5299b560, type: 2}
+    count: 1
+  requiredTools: []
+  craftTime: 1
+  importNote: "[\uC218\uB3D9] \uB3CC \uBD84\uC1C4 \uC0AC\uC2AC \uD1B5\uD569(\uB3CC
+    \u2192 \uC790\uAC08 \u2192 \uBAA8\uB798 \u2192 \uB3CC \uAC00\uB8E8)\uC758 \uB9C8\uC9C0\uB9C9
+    \uB2E8\uACC4.\nJSON \uCD9C\uCC98\uAC00 \uC5C6\uB294 \uC190\uC73C\uB85C \uB9CC\uB4E0
+    \uB808\uC2DC\uD53C\uC774\uBBC0\uB85C Import JSON Recipes \uAC00 \uAC74\uB4DC\uB9AC\uC9C0
+    \uC54A\uB294\uB2E4."

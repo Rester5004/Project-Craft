@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d1635fa976c21145835b252e45d6313, type: 3}
+  m_Name: extract_ore_grain
+  m_EditorClassIdentifier: Assembly-CSharp::Recipe
+  machine: {fileID: 11400000, guid: 2a1607846353d954eb1bf755339d2b4c, type: 2}
+  category: {fileID: 0}
+  tier: 0
+  inputs:
+  - item: {fileID: 11400000, guid: 8b7fe263cb72f4c4da31319c4635510f, type: 2}
+    count: 1
+  outputs: []
+  chanceOutputs:
+  - item: {fileID: 11400000, guid: b61227cfa59eec64e8e253e559178f97, type: 2}
+    count: 1
+    chance: 0.03
+  - item: {fileID: 11400000, guid: d92f6fb405a80874a93ef156e66d8374, type: 2}
+    count: 1
+    chance: 0.00001
+  requiredTools: []
+  craftTime: 1
+  importNote: 

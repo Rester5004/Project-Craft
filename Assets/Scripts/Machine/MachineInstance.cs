@@ -93,10 +93,31 @@ public class MachineInstance : MonoBehaviour
     /// <summary>진행 중인 레시피(없으면 null).</summary>
     public Recipe ActiveRecipe => activeRecipe;
 
+    /// <summary>
+    /// 이 기계에서 지금 레시피가 실제로 걸리는 시간(초). <see cref="MachineBlock.speedMultiplier"/> 로 나눈 값이다.
+    ///
+    /// <b>진행도 비교·진행률 표시·수동 한 걸음 크기가 모두 이 하나를 봐야 한다.</b>
+    /// 세 곳이 각자 craftTime 을 나누면 언젠가 한 곳만 고쳐져 "게이지는 다 찼는데 안 나온다" 가 된다.
+    /// </summary>
+    public float EffectiveCraftTime
+    {
+        get
+        {
+            if (activeRecipe == null) return 0f;
+            float speed = Info != null ? Info.speedMultiplier : 1f;
+            return speed > 0f ? activeRecipe.craftTime / speed : activeRecipe.craftTime;
+        }
+    }
+
     /// <summary>진행도 0~1. 진행 중이 아니면 0.</summary>
-    public float ProgressRatio => activeRecipe != null && activeRecipe.craftTime > 0f
-        ? Mathf.Clamp01(progress / activeRecipe.craftTime)
-        : 0f;
+    public float ProgressRatio
+    {
+        get
+        {
+            float total = EffectiveCraftTime;
+            return total > 0f ? Mathf.Clamp01(progress / total) : 0f;
+        }
+    }
 
     // UI가 읽는 공개 설정값
     public int InputCount => inputSlotCount;
@@ -109,11 +130,23 @@ public class MachineInstance : MonoBehaviour
     public float MaxGas => MaxGasAmount;
     public float MaxEnergy => MaxEnergyAmount;
 
+    // ── 가동 표시 ────────────────────────────────────────────────
+    // 프리팹의 그림. 프리팹을 만드는 쪽(MachineBlockFiller·FurnaceSetup)이 자식까지 훑어 넣으므로
+    // 여기서도 자식을 포함해 찾는다.
+    private SpriteRenderer bodyRenderer;
+    // 배치 시점의 그림 = 멈춰 있을 때. <b>정지 그림의 정본은 프리팹</b>이라 SO 에 따로 두지 않는다.
+    private Sprite idleSprite;
+    private bool running;
+
     public void Bind(PlaceableRecord record, Vector2Int worldCell)
     {
         Record = record;
         this.worldCell = worldCell;
         blockId = record.blockId;
+
+        bodyRenderer = GetComponentInChildren<SpriteRenderer>(true);
+        idleSprite = bodyRenderer != null ? bodyRenderer.sprite : null;
+        running = false;
 
         ApplyConfig(ItemDictionary.Instance != null ? ItemDictionary.Instance.GetMachineInfo(blockId) : null);
 
@@ -126,9 +159,10 @@ public class MachineInstance : MonoBehaviour
         inputGas = CreateGasSlots(InputGasSlotCount);
         outputGas = CreateGasSlots(OutputGasSlotCount);
         // 전력은 여기서 0으로 리셋하지 않는다 — LoadFrom 이 레코드에서 복원한 값을 지워 버리게 된다.
+        // <b>진행도도 같다.</b> 예전엔 여기서 progress = 0 을 했는데, LoadFrom 다음이라
+        // v10 에서 복원한 진행도가 매번 지워졌다(수동 기계는 20번 누른 것이 통째로 사라진다).
 
-        activeRecipe = null;
-        progress = 0f;
+        activeRecipe = null;   // 레시피는 저장하지 않는다. Tick 이 다시 고르고 progress 를 craftTime 으로 자른다
         recipeDirty = true;
     }
 
@@ -202,6 +236,10 @@ public class MachineInstance : MonoBehaviour
         burnRemaining = record.burnRemaining;
         burnTotal = record.burnTotal;
 
+        // 진행도는 복원만 하고 레시피는 다시 고른다. Tick 이 그때 craftTime 으로 잘라 준다
+        // (레시피 선택 지점에서 progress 를 0 으로 밀지 않는 이유가 이것이다).
+        progress = Mathf.Max(0f, record.progress);
+
         currentEnergy = Mathf.Clamp(record.energy, 0f, MaxEnergyAmount);
         links.Clear();
         if (record.links != null) links.AddRange(record.links);
@@ -243,6 +281,7 @@ public class MachineInstance : MonoBehaviour
         record.energy = currentEnergy;
         record.roundRobinCursor = roundRobinCursor;
         record.links = links.Count > 0 ? links.ToArray() : System.Array.Empty<Vector2Int>();
+        record.progress = progress;
     }
 
     private static void WriteSlots(System.Collections.Generic.List<ItemStack> slots,
@@ -272,26 +311,70 @@ public class MachineInstance : MonoBehaviour
         if (Record != null) WriteBack(Record);
     }
 
+    /// <summary>
+    /// 가동 표시를 바꾼다. <b>상태가 바뀔 때만</b> 스프라이트를 건드린다 —
+    /// 매 프레임 대입하면 SpriteRenderer 가 계속 더티가 되어 배칭이 깨진다.
+    ///
+    /// <b>가동 그림이 지정되지 않은 기계는 그냥 넘어간다.</b> 47대 중 대부분이 그렇다.
+    /// </summary>
+    private void SetRunning(bool value)
+    {
+        if (running == value) return;
+        running = value;
+
+        Sprite target = Info != null ? Info.runningSprite : null;
+        if (target == null || bodyRenderer == null) return;
+
+        bodyRenderer.sprite = value ? target : idleSprite;
+    }
+
     // ── 가공 (input → progress → output) ────────────────────────
     private void Update()
     {
-        if (inventory == null) return;
+        if (inventory == null) { SetRunning(false); return; }
         if (isGenerator) { TickGenerator(Time.deltaTime); return; }   // 발전기는 레시피를 보지 않는다
-        if (Info != null && !Info.AutoProcess) return;                // 조합대는 버튼을 눌러야 만든다
+        if (Info != null && !Info.AutoProcess) { SetRunning(false); return; }   // 조합대는 버튼을 눌러야 만든다
+
+        // 수동 기계는 시간이 아니라 클릭으로 진행한다(ManualStep).
+        // 여기서 SetRunning(false) 를 부르므로, 수동 기계에 runningSprite 를 주면
+        // 크랭크를 돌린 <b>한 프레임만</b> 보이고 곧바로 정지 그림으로 돌아간다 — 비워 두는 것이 맞다.
+        if (Info != null && Info.IsManual) { SetRunning(false); return; }
+
         Tick(Time.deltaTime);
+    }
+
+    /// <summary>
+    /// 수동 기계를 버튼 한 번만큼 돌린다. <c>craftTime × manualStepRatio</c> 만큼 진행한다.
+    ///
+    /// 재료·출력자리·연료·전력 판정은 <see cref="Tick"/> 이 이미 다 하므로 <b>그대로 재사용</b>한다.
+    /// 여기에 판정을 또 쓰면 두 곳이 갈라져, 언젠가 한쪽만 고쳐지고 조용히 어긋난다.
+    /// </summary>
+    public void ManualStep()
+    {
+        if (inventory == null || Info == null || !Info.IsManual) return;
+
+        if (activeRecipe == null) Tick(0f);   // 레시피부터 고르게 한다(0초라 진행은 없다)
+        if (activeRecipe == null) return;     // 지금 만들 수 있는 것이 없다
+
+        Tick(EffectiveCraftTime * Info.manualStepRatio);
     }
 
     private void Tick(float deltaTime)
     {
         if (activeRecipe == null)
         {
-            if (!recipeDirty) return;      // 입력이 그대로면 매 프레임 다시 훑지 않는다
+            if (!recipeDirty) { SetRunning(false); return; }   // 입력이 그대로면 매 프레임 다시 훑지 않는다
             recipeDirty = false;
 
             activeRecipe = SelectRecipe();
-            progress = 0f;
+
+            // 여기서 progress 를 0 으로 밀면 <b>세이브에서 복원한 진행도가 지워진다.</b>
+            // 완료(아래 progress = 0)·취소(CanCraft 실패) 경로가 이미 0 으로 만들어 두므로,
+            // 이 지점에 0 이 아닌 값이 남아 있는 경우는 '로드 직후' 뿐이다. 새 레시피 길이로만 잘라 준다.
+            progress = activeRecipe != null ? Mathf.Min(progress, EffectiveCraftTime) : 0f;
+
             PushProgress();
-            if (activeRecipe == null) return;
+            if (activeRecipe == null) { SetRunning(false); return; }
         }
 
         // 진행 중에 재료나 도구를 빼가면 취소하고 처음부터
@@ -300,6 +383,7 @@ public class MachineInstance : MonoBehaviour
             activeRecipe = null;
             progress = 0f;
             recipeDirty = true;
+            SetRunning(false);
             PushProgress();
             return;
         }
@@ -307,8 +391,10 @@ public class MachineInstance : MonoBehaviour
         // 출력이 가득 차 있으면 <b>연료·전력을 쓰기 전에</b> 멈춘다.
         // 이 검사가 아래(완성 시점)에만 있으면, 진행도가 100% 에 멈춘 채로도 매 프레임 연료가 계속 타고
         // 다 타면 Ignite 가 새 연료를 또 집는다 — 화면에 아무 단서 없이 석탄 한 스택이 통째로 증발한다.
-        if (!RecipeSolver.CanStoreOutputs(inventory.outputSlots, activeRecipe))
+        // 확률 부산물도 함께 자리를 잡아 둔다(blockId 를 넘기는 이유) — 굴린 뒤 자리가 없어 버리지 않도록.
+        if (!RecipeSolver.CanStoreOutputs(inventory.outputSlots, activeRecipe, blockId))
         {
+            SetRunning(false);
             PushProgress();
             return;
         }
@@ -316,6 +402,7 @@ public class MachineInstance : MonoBehaviour
         // 연료를 쓰는 기계는 불이 붙어 있는 동안에만 진행한다.
         if (UsesFuel && !BurnFuel(deltaTime))
         {
+            SetRunning(false);
             PushProgress();
             return;
         }
@@ -324,12 +411,16 @@ public class MachineInstance : MonoBehaviour
         // 여기까지 왔다는 건 레시피가 잡혀 있고 재료도 있다는 뜻이라, 놀고 있는 기계는 전기를 먹지 않는다.
         if (IsUseEnergy && !ConsumeEnergy(deltaTime))
         {
+            SetRunning(false);
             PushProgress();
             return;
         }
 
+        // 여기까지 왔으면 이번 프레임에 실제로 일이 진행된다 — 그것이 곧 '가동 중' 이다.
+        SetRunning(true);
+
         progress += deltaTime;
-        if (progress < activeRecipe.craftTime)
+        if (progress < EffectiveCraftTime)
         {
             PushProgress();
             return;
@@ -339,6 +430,7 @@ public class MachineInstance : MonoBehaviour
         RecipeSolver.ConsumeInputs(inventory.inputSlots, activeRecipe);
         RecipeSolver.ConsumeTools(inventory.inputSlots, activeRecipe);   // 도구는 내구도만 닳는다
         RecipeSolver.StoreOutputs(inventory.outputSlots, activeRecipe);
+        RollChanceOutputs(activeRecipe);
 
         activeRecipe = null;
         progress = 0f;
@@ -347,6 +439,37 @@ public class MachineInstance : MonoBehaviour
         Flush();                     // 레코드 동기화(중간 저장/디스폰 대비)
         inventory.NotifyChanged();   // 슬롯 뷰 갱신 + recipeDirty 재설정
         PushProgress();
+    }
+
+    /// <summary>
+    /// 확률 부산물을 굴려 적재한다. <b>항목마다 독립 굴림</b>이라 한 번에 여러 개가 나올 수 있고,
+    /// 하나도 안 나올 수도 있다(추출은 원래 그렇다).
+    ///
+    /// 최종 확률 = 레시피의 기본값 × <see cref="ExtractionTable"/> 배수 × <c>chanceMultiplier</c>.
+    /// 배수가 0 이면 그 기계는 그 산출물을 못 얻는다 — 등급 상속도 표가 구현한다.
+    /// 자리 확인은 이미 <see cref="RecipeSolver.CanStoreOutputs"/> 가 <b>나올 수 있는 것 전부</b>에 대해
+    /// 해 뒀으므로, 여기서 넣지 못하는 일은 없다.
+    /// </summary>
+    private void RollChanceOutputs(Recipe recipe)
+    {
+        if (recipe == null || recipe.chanceOutputs == null || recipe.chanceOutputs.Count == 0) return;
+
+        float bonus = Info != null ? Info.chanceMultiplier : 1f;
+
+        for (int i = 0; i < recipe.chanceOutputs.Count; i++)
+        {
+            ChanceOutput roll = recipe.chanceOutputs[i];
+            if (roll == null || roll.item == null || roll.count <= 0) continue;
+
+            float multiplier = ExtractionTable.Multiplier(blockId, roll.item);
+            if (multiplier <= 0f) continue;
+
+            float chance = roll.chance * multiplier * bonus;
+            if (chance <= 0f) continue;
+            if (chance < 1f && Random.value >= chance) continue;   // 1 이상이면 확정
+
+            RecipeSolver.TryAdd(inventory.outputSlots, roll.item, roll.count);
+        }
     }
 
     /// <summary>
@@ -400,8 +523,16 @@ public class MachineInstance : MonoBehaviour
     /// </summary>
     private void TickGenerator(float deltaTime)
     {
+        bool burning = false;
         if (currentEnergy < MaxEnergyAmount && BurnFuel(deltaTime, out float burned) && burned > 0f)
+        {
             SetEnergy(currentEnergy + burned);   // SetEnergy 가 클램프와 UI 반영까지 맡는다
+            burning = true;
+        }
+
+        // 연료를 <b>실제로 태운 프레임</b>만 가동이다. 버퍼가 가득 차면 태우지 않으므로(위 조건)
+        // 연료가 남아 있어도 정지 그림이 된다 — 그게 실제로 벌어지는 일이다.
+        SetRunning(burning);
 
         Distribute();
     }

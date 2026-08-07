@@ -23,6 +23,10 @@ public class Recipe : ScriptableObject
     [Tooltip("생산할 아이템. 첫 항목이 조합대 목록에 표시되는 대표 산출물이다.")]
     public List<ItemStack> outputs = new();
 
+    [Tooltip("확률로 나오는 부산물(추출기). 여기 적는 확률은 '가장 낮은 값' 이고,\n" +
+             "어느 기계가 얼마나 얻는지는 ExtractionTable 이 정한다.")]
+    public List<ChanceOutput> chanceOutputs = new();
+
     [Tooltip("필요한 도구. 소모되지 않고 내구도만 닳는다(내구도가 0 이 되면 도구가 사라진다).")]
     public List<ToolRequirement> requiredTools = new();
 
@@ -39,9 +43,17 @@ public class Recipe : ScriptableObject
     /// </summary>
     public string MachineBlockId => machine != null ? machine.RecipeGroupId : "";
 
-    /// <summary>조합대 목록에 아이콘으로 표시할 대표 산출물.</summary>
-    public Items PrimaryOutput => outputs != null && outputs.Count > 0 ? outputs[0].item : null;
+    /// <summary>
+    /// 조합대 목록에 아이콘으로 표시할 대표 산출물.
+    /// 확정 산출이 없으면 <b>첫 확률 부산물</b>로 폴백한다 — 추출 레시피처럼 확률 산출만 있는 것도
+    /// 목록·중복 검사에서 대표를 가져야 하기 때문이다(없으면 null 참조로 터진다).
+    /// </summary>
+    public Items PrimaryOutput => outputs != null && outputs.Count > 0
+        ? outputs[0].item
+        : (chanceOutputs != null && chanceOutputs.Count > 0 ? chanceOutputs[0].item : null);
 
     /// <summary>대표 산출물의 개수.</summary>
-    public int PrimaryOutputAmount => outputs != null && outputs.Count > 0 ? outputs[0].count : 0;
+    public int PrimaryOutputAmount => outputs != null && outputs.Count > 0
+        ? outputs[0].count
+        : (chanceOutputs != null && chanceOutputs.Count > 0 ? chanceOutputs[0].count : 0);
 }

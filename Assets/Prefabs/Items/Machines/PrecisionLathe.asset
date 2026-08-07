@@ -15,6 +15,6 @@ MonoBehaviour:
   itemName: Machine:PrecisionLathe
   displayName: "\uC815\uBC00 \uC138\uACF5\uAE30"
   placeable: 1
-  Icon: {fileID: 21300000, guid: 4a4d2640fbd603542be3906e18903c59, type: 3}
+  Icon: {fileID: -2931192073792008173, guid: e57dacd7f932f9a4687a17b8b5ad16d6, type: 3}
   maxStack: 64
   burnEnergy: 0

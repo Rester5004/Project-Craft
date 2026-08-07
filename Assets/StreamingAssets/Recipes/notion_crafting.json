@@ -16,9 +16,6 @@
     { "id": "stone_knife", "tier": 0, "output": "돌 칼", "outputQty": 1,
       "inputs": [ { "item": "막대", "qty": 1 }, { "item": "돌 칼날", "qty": 1 } ] },
 
-    { "id": "stone_hammer", "tier": 0, "output": "돌 망치", "outputQty": 1,
-      "inputs": [ { "item": "막대", "qty": 1 }, { "item": "돌 망치 머리", "qty": 1 } ] },
-
     { "id": "crank", "tier": 0, "output": "크랭크", "outputQty": 1,
       "inputs": [ { "item": "돌", "qty": 2 } ],
       "tools": [ "칼" ] },
@@ -53,13 +50,6 @@
 
     { "id": "iron_knife", "tier": 1, "output": "철 칼", "outputQty": 1,
       "inputs": [ { "item": "막대", "qty": 1 }, { "item": "철 칼날", "qty": 1 } ] },
-
-    { "id": "iron_hammer", "tier": 1, "output": "철 망치", "outputQty": 1,
-      "inputs": [ { "item": "막대", "qty": 1 }, { "item": "철 망치 머리", "qty": 1 } ] },
-
-    { "id": "driver", "tier": 1, "output": "드라이버", "outputQty": 1,
-      "inputs": [ { "item": "금속판", "qty": 2 } ],
-      "tools": [ "망치", "칼" ] },
 
     { "id": "computer_chip", "tier": 1, "output": "컴퓨터 칩", "outputQty": 1,
       "inputs": [

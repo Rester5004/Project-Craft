@@ -92,9 +92,15 @@ Assets/Scenes/MapTest.unity   ← 유일한 실사용 씬. Tilemap 이 있는 �
   | 7 | 기계 보유 전력 · 라운드로빈 커서 · 발전기 링크 |
   | 8 | 파이프 운반 중인 짐 `ParcelRecord[]` |
   | 9 | 파이프 네 면 상태 `faceModes`(1바이트) |
+  | 10 | 기계 가공 진행도 `progress`(초) |
 
-  `Chunk.Save` 순서: placeable 루프 안에 slots → burn → energy/cursor/links → parcels → faceModes, 루프 뒤 drops.
-  `Chunk.Load` 는 `if (version >= N)`, **참조형은 `else` 로 빈 배열을 넣어야** 이전 세이브에서 NRE 가 안 난다.
+  `Chunk.Save` 순서: placeable 루프 안에 slots → burn → energy/cursor/links → parcels → faceModes → progress,
+  루프 뒤 drops. `Chunk.Load` 는 `if (version >= N)`,
+  **참조형은 `else` 로 빈 배열을 넣어야** 이전 세이브에서 NRE 가 안 난다(값형은 기본값이 곧 "없음"이라 불필요).
+- ⚠ **`Bind` 에서 `LoadFrom` 이 복원한 값을 다시 0 으로 밀지 말 것.** 전력이 그래서 사라졌고,
+  진행도도 같은 자리에서 지워지고 있었다(`progress = 0f` 가 `LoadFrom` 일곱 줄 뒤에 있었다).
+  레시피는 저장하지 않고 `Tick` 이 다시 고르며 `craftTime` 으로 잘라 준다 — 그래서 레시피 선택 지점에서도
+  `progress` 를 0 으로 밀면 안 된다.
 
 ### 아이템 · 딕셔너리
 - `Items.itemName` = 세이브 키. **반드시 영어(snake_case)**, `displayName` = **반드시 한글**. 예외 없다.
@@ -109,30 +115,140 @@ Assets/Scenes/MapTest.unity   ← 유일한 실사용 씬. Tilemap 이 있는 �
   (삭제된 에셋이 남긴 빈 칸도 이때 걷어낸다).
 - **`MachineAliases`**(에디터) = 옛 기계 이름 → 정본 **표시 이름**. `RecipeTreeMerger` · `MachineBlockFiller` ·
   `RecipeJsonImporter` 가 **같은 표 하나를 본다**(예전엔 세 벌로 갈라져 실제로 어긋났다).
+- **`ItemAliases.Resolve` 는 한 단계만 푼다.** 그래서 플레이스홀더를 기계로 승격시킬 때
+  `한글 → 옛영문 → Machine:*` 처럼 사슬을 만들면 안 되고, **한글 줄도 최종 이름을 직접 가리켜야** 한다.
+- **기계의 `dropItem` 은 비워 둔다.** 기계는 `MapGenerator.DropSelf(record.blockId)` 로 자기 자신을 떨어뜨린다
+  (`blockId == itemName` 규약). `dropItem` 은 지형·파이프 전용이다.
 - **`ItemAliases`** = 통합돼 사라진 옛 이름 → 정본 `itemName`. **한 표를 세 곳이 함께 본다**:
   `ItemDictionary.GetItem` 폴백(옛 세이브 호환) · `RecipeJsonImporter.ResolveItem`(재임포트 내성) · `ItemMerger`(참조 재작성).
   `itemName` 이 세이브 키라 **이 폴백이 아이템을 지워도 세이브가 안 깨지게 하는 유일한 안전망**이다.
 - 중복 정리 흐름: `아이템 중복 조사`(리포트만) → `ItemAliases` 표에 줄 추가 → `중복 아이템 통합` → 다시 조사해 0 확인.
 
 ### 기계 · 레시피
+
+#### ⚠ 티어는 두 축이고, **기계에는 티어가 없다**
+`tier` 라는 같은 이름이 서로 다른 두 가지를 가리킨다. 섞으면 없는 충돌을 만든다(실제로 그랬다).
+
+| 축 | 누가 비교하나 | 뜻 |
+|---|---|---|
+| **해금** | 건설 레시피의 `Recipe.tier` vs `CoreCrafter.tier` (`RecipeDictionary.cs:79,114`) | 코어가 이 티어 이상이어야 조합 목록에 뜬다 |
+| **처리** | `MachineBlock.tier` vs 가공 레시피의 `Recipe.tier` (`MachineInstance.cs:633`) | 이 기계가 어느 레시피까지 돌리나 |
+
+- **`MachineBlock.tier` 는 "기계의 티어" 가 아니라 처리 범위다** (`MachineBlock.cs:22` 주석이 정본).
+- **`n티어 기계` 라는 것은 없다** — `n티어에서 만들 수 있다` 만 있다. 그래서
+  **같은 기계가 n티어에도 m티어에도 있으면 안 된다.** 업그레이드는 `화로 → 전기로 → 고전압 전기로`
+  처럼 **이름이 다른 별개 기계**로 표현한다. (이 규칙 위반이라 `2티어 합금 재련기` 와 `정유기` 를 지웠다 —
+  용광로는 `합금 재련기 ×1` 을 먹고, 원유 처리는 **증류기** 하나가 한다)
+- ⚠ **`Recipe.tier` 한 필드가 두 뜻을 겸한다** — 건설 레시피에선 해금, 가공 레시피에선 처리 요구.
+  지금은 가공 레시피가 조합대 목록에 안 떠서 부딪히지 않는다.
+- **제련 규칙**: 화로는 **티어와 무관하게 모든 광석을 재련한다. 티타늄만 용광로.**
+  (2026-08-07 사용자 결정. `smelt_*` 의 `Recipe.tier` 가 이 규칙과 어긋나 있다 — `TODO.md` §F)
+
+- **레시피 에셋 이름은 만들어지는 것의 이름 하나뿐이다** — `craft_` · `build_` 접두사도, `_2` 꼬리도 붙이지 않는다
+  (`hammer` / `craft_hammer` 처럼 갈라져 양쪽 다 반쯤 고장 나 있었다). 기계 건설 레시피는 블록 이름을 따른다
+  (`extractor00plus` `extractor01` `extractor02` `extractor03`).
+  ⚠ **이름을 바꾸면 `StreamingAssets/Recipes/*.json` 의 `id` 도 같이 바꿔야 한다** —
+  `RecipeJsonImporter` 가 에셋 경로를 `Sanitize(id) + ".asset"` 으로 만들기 때문에, 안 맞추면
+  `Import JSON Recipes` 가 **옛 이름으로 통째로 되살린다.** 지운 레시피는 JSON 에서도 지워야 같은 이유로 안 살아난다.
+- **도구 조립 레시피의 정본은 `ToolRecipe`**(`Prefabs/Recipes/Tools/` 의 `hammer` `driver` `pickaxe`) 다.
+  재료가 부품 **종류**라 `inputs` 가 비어 있는 것이 정상 — 조합대가 부품 칸을 따로 띄운다.
+  재질을 고정한 옛 조립 레시피 7개는 `ToolAssetGenerator` 가 산출 참조를 끊어 놓은 껍데기였고 **지웠다.**
+  부품 레시피(`stick` `hammer_head` `stone_hammerhead` `iron_hammerhead`)는 살아 있는 정상 레시피다.
 - `MachineBlock`(SO) → `MachineInstance`(런타임) + `MachineInventory`(input/output/fuel).
 - `MachineInstance.ApplyConfig` 조건에 `|| info.fuelSlotCount > 0` 이 있다 — 빼면 발전기가 3/6 으로 폴백한다.
+- ⚠ **`SelectRecipe` 는 "지금 만들 수 있는 첫 레시피" 를 고른다** — 우선순위도 플레이어 선택도 없다.
+  **같은 재료를 받는 레시피를 한 기계에 둘 이상 두면 목록에서 앞선 것만 영원히 돈다**(실제로 그래서
+  분쇄기가 `돌 → 돌` 만 반복했다). 재료가 겹치는 레시피는 서로 다른 기계나 티어로 갈라 둘 것.
+- **수동 기계**는 `MachineBlock.manualStepRatio`(0 이면 자동, 0.05 면 20클릭에 1개)로 표현한다.
+  `MachineInstance.ManualStep` 이 **`Tick` 을 그대로 재사용**하므로 재료·출력자리·연료·전력 판정이 한 곳에 남는다.
+  `AutoProcess=false`(조합대)와는 다르다 — 조합대는 자기 슬롯을 안 쓰고 플레이어 인벤토리로 만든다.
+  **수동 기계에 `runningSprite` 를 주지 말 것**: `Update` 가 매 프레임 `SetRunning(false)` 라 한 프레임만 보인다.
+- **새 기계를 늘리는 데 에디터 툴은 필요 없다.** 기존 `MachineBlock` 을 복제해
+  `recipeGroupId`(레시피 목록 공유) · `tier`(처리 범위) · `uiPrefab`(UI 공유) 세 필드만 맞추고,
+  `itemName == blockName` 인 `Items` 를 함께 만든 뒤 `Register All Assets` 를 돌리면 된다.
+  화로 3종 · 조합대 2종 · 추출기 12종이 전부 이 방식으로 붙어 있다 —
+  **그래서 계열 생성 툴(`ExtractorSetup` 등)은 만들지 않는다.** 표와 에셋이 갈라져 값이 되돌아갈 뿐이다.
 - `RecipeSolver` 가 재료 확인·소모·적재를 전담: `CanCraft` `ConsumeInputs` `CanStoreOutputs` `AddItems`
   `CountFreeSpace`(넣어 보지 않고 여유 세기) `CountItem`.
 - **`RecipeSolver.AddItems` 는 통지하지 않는다.** 외부에서 슬롯을 건드렸으면
   `inventory.NotifyChanged()` + `instance.Flush()` 를 직접 불러야 UI 갱신·재가공이 걸린다.
 - `Recipe.tier` = 조합대 티어 요구. `MachineBlock.recipeGroupId` 로 0/1/2티어 화로가 같은 목록을 공유.
+- **가동 중 그림**: `MachineBlock.runningSprite` 가 **비어 있으면 그림을 바꾸지 않는다**(47대 중 45대가 그렇다).
+  **정지 그림의 정본은 SO 가 아니라 `machinePrefab` 의 `SpriteRenderer`** — `MachineInstance.Bind` 가
+  배치 시점에 기억했다가 되돌린다. 두 곳에 두면 언젠가 어긋난다.
+  교체는 `SetRunning` 한 곳에서만 하고 **상태가 바뀔 때만** 대입한다(매 프레임 대입하면 배칭이 깨진다).
+  가동 판정 = **그 프레임에 실제로 진행됐는가**. 재료가 있어도 연료·전력·출력자리가 없으면 정지고,
+  발전기는 **연료를 실제로 태운 프레임**만 가동이라 버퍼가 차면 정지 그림이 된다.
 
-### 추출 체계 (정본 = `자원과 그 가공방식.canvas`)
+### 추출 체계 (정본 = `자원과 그 가공방식.canvas`, Obsidian Vault 에 있다)
+
 메인자원을 **분쇄기로 1/2/3회 분쇄** → 그 분쇄물을 **추출기**에 넣어 부산물을 확률로 얻는다.
 0티어 = **돌** · 1티어 = **마력석** · 2티어 = **운석**. 금속 산출은 `raw_*_ore`(조각), 재련하면 `*_ingot`.
-- 기계 이름은 **`{메인티어}-{등급}티어 추출기`** 12종(`Machine:Extractor00`~`23`).
+
+**분쇄 사슬 세 줄.** 분쇄기들은 `recipeGroupId = "Pulverizer"` 로 목록을 공유하므로,
+새 분쇄기는 그 값만 주면 사슬이 그대로 붙는다. 사슬 레시피의 `tier` 가 계열 번호다
+(그래서 **tier 1 인 전기 분쇄기는 운석 사슬을 못 돌린다** — 2티어 분쇄기가 아직 없다).
+분쇄기는 **`Machine:ManualPulverizer`(수동 분쇄기, tier 0, `manualStepRatio 0.05`, 무전력)** 와
+**`Machine:ElectricPulverizer`(전기 분쇄기, tier 1)** 둘이다 — 추출기의 `Extractor00`/`Extractor00Plus` 와 같은 꼴.
+수동판은 `돌 10 + 크랭크 1`(크랭크가 `돌 ×2`)로 만들 수 있어 **0티어 부트스트랩이 여기서 풀린다.**
+
+| 계열 | 메인자원 | 1회 | 2회 | 3회 |
+|---|---|---|---|---|
+| 0 | `stone` | `gravel` 자갈 | `sand` 모래 | `stone_powder` 돌 가루 |
+| 1 | `manastone` | `manastone_shard` 마력석 조각 | `manastone_dust` 마력석 가루 | `manastone_fine_dust` 미세한 마력석 가루 |
+| 2 | `meteorite` | `meteorite_shard` 운석 조각 | `meteorite_dust` 운석 가루 | `meteorite_fine_dust` 운석 미세 가루 |
+
+조각난·부숴진·바스라진 돌덩이는 0계열에 흡수돼 사라졌다(`ItemAliases` 가 분쇄 횟수가 같은 것으로 잇는다).
+1계열은 원래 `파쇄 광석 → 광석 알갱이 → 반짝이는 가루` 였는데, **어느 메인자원의 분쇄물인지가 이름에 없어서**
+`마력석 조각/가루/미세한 가루` 로 통일했다(운석 사슬과 같은 꼴). 옛 이름은 `ItemAliases` 가 잇는다.
+⚠ 사슬 레시피 파일 이름(`crush_ore` · `crush_crushed_ore` · `crush_ore_grains` ·
+`extract_crushed_ore` · `extract_ore_grain` · `extract_shiny_powder`)은 **아직 옛 이름 그대로다.**
+운석 사슬은 원래 `에너지 결정 → 마력 결정 → 마법 가루` 였는데, **그 둘이 2계열 추출 산출(6%)이라
+분쇄가 100% 로 주면 추출기가 쓸모없어져** 중립적인 이름으로 갈아 끼웠다. `magic_powder`(마법 가루)는
+그래서 **지금 아무 레시피도 안 쓴다** — 아이템은 남겨 뒀으니 쓸 곳이 정해지면 붙이면 된다.
+
+**추출 산출은 반드시 "가공 전" 형태여야 한다.** 완제품을 바로 주면 그 뒤 기계가 쓸모없어지기 때문이다.
+그래서 0계열 상위 등급 둘은 아래처럼 한 단계를 더 거친다 — **표(`ExtractionTable`)와 레시피가 짝이다.**
+
+| 등급 | 추출 산출 | 그다음 |
+|---|---|---|
+| 0-2 | `sulfur_ore` 유황석 5% | 화학 처리기 `chem_sulfur_powder` → `황 가루` → `chem_acid` → `산성 용액` |
+| 0-3 | `turbid_uranium` 탁한 우라늄 1% | 화학 처리기 `chem_uranium`(+산성 용액 ×2) → `우라늄 조각` → 전기로 `smelt_uranium` → `우라늄 주괴` → 압축기 `uranium_concentrate`(×10) → `우라늄 농축물` |
+
+`turbid_uranium` 은 옛 `unrefined_uranium`(미가공 우라늄)을 개명한 것이다 — 그쪽이 획득처가 없어 죽어 있었다.
+`uranium_powder`(우라늄 가루)는 `Pulverize_RawUraniumOre` 산출로 남아 있지만 **소비처가 아직 없다.**
+
+- 기계 이름은 **`{메인티어}-{등급}티어 추출기`** 12종(`Machine:Extractor00`~`23`) + `Extractor00Plus`.
 - **등급차를 레시피 복제로 표현하지 않는다.** 같은 계열은 `recipeGroupId`(`Extractor0/1/2`)로 목록을 공유하고,
-  `tier` 가 "등급 N 은 0~N 의 산출을 모두 가진다" 를 그대로 구현하며,
-  속도·확률차는 `MachineBlock.speedMultiplier` / `chanceMultiplier` 가 낸다. **확률 산출 동작은 아직 미구현.**
+  레시피는 **(계열 × 분쇄단계) 당 한 개, 총 9개**다. 산출물마다 레시피를 쪼개면 자갈을 받는 레시피가
+  7개가 되어 `SelectRecipe` 가 **첫 번째만 영원히 돌린다**.
+
+#### 확률 산출 — 표가 정본이다
+- 레시피는 `chanceOutputs`(`ChanceOutput`)에 **그 레시피에서의 가장 낮은 확률**만 갖는다. **등급을 적지 않는다.**
+- **어느 기계가 무엇을 얼마나 얻는지는 `ExtractionTable`(static) 한 곳**이 정한다.
+  표에는 **"그 등급에서 처음 열리는 산출물"만** 적고 상위 등급이 하위 줄을 물려받는다
+  (= 캔버스의 "N티어 추출기는 0~N-1 의 결과물을 모두 가짐"). 표에 없으면 배수 0 = **못 얻는다**.
+  배수 예외는 따로 적는다(지금은 `전도체 결정 @ 1-1 이상 = ×2` 하나).
+- 최종 확률 = `chance × ExtractionTable.Multiplier × chanceMultiplier`, **항목마다 독립 굴림**
+  (한 번에 여러 개가 나올 수도, 아무것도 안 나올 수도 있다).
+- **출력이 9칸인 이유**: `RecipeSolver.CanStoreOutputs` 가 **나올 수 있는 산출물 전부**의 자리를 확인해야
+  진행한다(한 레시피의 후보가 최대 7종). 굴린 뒤 자리가 없어 버리는 일도, 자리가 날 때까지 다시 굴리는
+  편법도 이래야 없다. 대신 **출력이 차면 재료를 먹지 않고 그냥 멈춘다.**
+- `speedMultiplier` 는 **`MachineInstance.EffectiveCraftTime` 한 곳에서만** 나눈다
+  (진행 비교·진행률·수동 한 걸음이 다 이걸 본다). 수동 클릭 수는 배수와 무관하다.
+- ⚠ `DictionaryRegistrar.HasAnyOutput` 은 **확률 산출도 산출로 친다.** 여기서 빠뜨리면 확률 전용 레시피가
+  "재료만 먹는 위험한 레시피"로 걸러져 딕셔너리에 등록되지 않고, 기계가 영원히 논다(실제로 한 번 걸렸다).
+- **전부 입력 1 / 출력 9 로 통일**돼 있고 UI 도 `Prefabs/ui/Machines/Extractor01_UI.prefab` **한 장을 공유**한다
+  (`uiPrefab`). 등급이 올라도 산출 종류만 늘 뿐 칸 수는 그대로라, 등급마다 UI 를 만들 이유가 없다.
+- **0-0티어만 두 갈래다** — `Extractor00`(수동, "수동 0-0티어 추출기") · `Extractor00Plus`(전기 자동, "0-0티어 추출기").
+  수동은 `MachineBlock.manualStepRatio = 0.05`(20클릭에 1개)이고 UI 는 전력바 대신 작동 버튼을 둔
+  `Extractor00_UI.prefab` 을 혼자 쓴다. 나머지 12종은 전기 전용 + 공유 UI.
 - **지형에 설치해 메인자원·유체를 뽑는 것은 추출기가 아니다** — `자원 생성기`·`펌프`·`지열 발전기` 쪽이다
   (`extraction.json` 의 `terrain` 필드가 그 표시). 입력 0 / 출력 1 로 둬야 3/6 폴백에 안 걸린다.
-- 생성: `Tools/Project Craft/Machines/추출기 계열 설정` → 이어서 `중복 아이템 통합`(같은 이름 플레이스홀더 흡수).
+  **위의 9칸·공유 UI 는 여기엔 적용하지 않는다.**
+- ⚠ 생성 툴 `ExtractorSetup`(`추출기 계열 설정`) 은 **삭제했다.** 12종이 이미 다 있는데 `Spec` 표가
+  `outputSlotCount` 를 조건 없이 덮어써, 손으로 맞춘 값을 되돌리는 함정이었다(실제로 표는 1, 에셋은 9였다).
+  이제 **에셋이 유일한 정본**이고 설계 정본은 `자원과 그 가공방식.canvas` 다.
 
 ### 전력
 - `MachineBlock`: `isGenerator` `powerRange` `energyUseRate`. 발전 = 연료 연소.
@@ -174,6 +290,17 @@ Assets/Scenes/MapTest.unity   ← 유일한 실사용 씬. Tilemap 이 있는 �
 - `UIManager` 가 이름으로 패널을 켜고 끈다(`AddUI` → `OpenUI`/`CloseUI`, `isAnyUIOpen`).
   **`AddUI` 를 열 때마다 다시 부른다** — 등록이 빠지면 `OpenUI` 가 조용히 실패해 영구히 못 연다.
 - 런타임 UI 구성이 규약(`CommandConsole` `PowerLinkMode` `ItemBrowser`) — 씬 파일을 건드리지 않기 위해.
+- **기계 UI 프리팹은 여러 기계가 나눠 쓴다** — `DefaultMachineUI` 가 자식의 `MachineUIElement` 를 역할별로
+  긁어모아 **남는 칸은 끄고 모자라면 경고 후 클램프**하므로, N칸짜리 한 장이 N칸 이하 전부를 감당한다
+  (전력바도 `isUseEnergy` 가 아니면 자동으로 꺼진다). 실제 공유: `Furnace_UI` 3종 · `Generator_UI` 2종 ·
+  `CraftingTable_UI` 2종 · `Extractor01_UI` 12종. 프리팹 이름이 사용자 중 하나만 가리키는 것은 정상이다
+  (`MachineUIFactoryWindow` 가 `{기계 이름}_UI.prefab` 로 저장하므로 **이름을 바꾸면 다음 저장 때 파일이 하나 더 생긴다**).
+- ⚠ `MachineUIHost.Resolve` 의 캐시 키는 프리팹이 아니라 **`blockId`** 다 — 한 프리팹을 12종이 공유해도
+  인스턴스는 12개 생긴다(열어 볼 때만 지연 생성).
+- 버튼을 붙이는 방법은 셋이다 — ① **코드 생성**(`BuildPowerLinkButton`. 공유 기본 패널에 프리팹을 못 고칠 때) ·
+  ② **서브클래스 + `SerializeField`**(`CraftingTableUI.craftButton`) · ③ **`MachineUIElement` 역할**
+  (`ManualButton`. 프리팹에서 위치를 잡고 싶을 때). 어느 쪽이든 **`Open` 마다 `onClick.RemoveAllListeners()`** —
+  안 하면 기계를 열 때마다 리스너가 쌓여 한 번 눌렀는데 예전에 열었던 기계까지 함께 돈다.
 - **비활성 오브젝트는 레이아웃 재계산이 통째로 무시된다.** 켠 다음에 짓고 `LayoutRebuilder.ForceRebuildLayoutImmediate`.
 - 툴팁은 `TooltipUI.Show(Func<string>)` 로 넘겨야 실시간 갱신된다(문자열을 넘기면 고정).
 - 아이콘은 `ItemIconView.Apply` — 도구는 자루+머리를 겹쳐 그린다.
@@ -240,7 +367,6 @@ Tools/Project Craft/Dictionary/Register All Assets      ← 에셋 만들면 이
 Tools/Project Craft/Dictionary/아이템 중복 조사 · 중복 아이템 통합
 Tools/Project Craft/Machines/전력 기본값 채우기
 Tools/Project Craft/Machines/Fill Missing Machine Blocks
-Tools/Project Craft/Machines/추출기 계열 설정
 Tools/Project Craft/Pipes/파이프 에셋 설정
 Tools/Project Craft/Tool/Generate Tool Assets · 렌치 에셋 설정
 Tools/Project Craft/Recipes/Import JSON Recipes · Assign Recipe Categories · Merge ...
@@ -273,9 +399,17 @@ Tools/Tiles/Build Tile Atlas · Slice Pipe Sheet · Build Pipe Atlas   (슬라�
 
 - `StreamingAssets/DefaultWorldmap.dat` 은 매직 도입 이전 포맷이라 매번 로드 실패 → 이제 `.corrupt` 로 치워지고 새 월드 생성.
 - 유체·기체 운반 미구현(`GasDefine` 에셋이 0개). 산성/유리 파이프 미구현.
-- **확률 산출 미구현** — `speedMultiplier`/`chanceMultiplier` 는 필드만 있고 `MachineInstance` 가 아직 안 본다.
-  캔버스의 추출 레시피 36종과 마력석·운석의 1/2/3회 분쇄 아이템 6종도 아직 없다.
+- **2계열 분쇄물은 게임 안에서 못 만든다** — 운석 사슬 레시피가 tier 2 인데 분쇄기는 `ManualPulverizer`(tier 0) ·
+  `ElectricPulverizer`(tier 1) 둘뿐이다. 2티어 분쇄기가 생기면 풀린다. 0·1계열은 정상.
+- **마력 파편의 최초 획득처가 없다**(있는 것은 증식 `마력파편1 + 구리주괴10 → 2` 뿐). 그래서
+  **수동 0-0티어 추출기(`돌10 + 크랭크 + 마력파편`)를 아직 만들 수 없고**, 0티어 마법 전체가 막혀 있다.
+  분쇄기 경로(`돌10 + 크랭크`)는 마력 파편을 안 쓰므로 정상 작동한다. → 추가 예정(사용자 결정).
+- `uranium_powder`(우라늄 가루)를 쓰는 레시피가 없다 — 0-3 추출 산출이 `turbid_uranium` 으로 바뀌면서
+  `Pulverize_RawUraniumOre` 의 산출로만 남았다.
+- `magic_powder`(마법 가루)를 **쓰는 레시피가 하나도 없다** — 운석 사슬 재편으로 자리를 잃었다(아이템은 남겨 뒀다).
+- `energy_crystal`·`magic_crystal` 은 이제 2계열 추출로만 나온다(마력 결정은 제단·CoreCrafter 경로도 있다).
 - `extract_ore`·`extract_meteorite` 는 **`machine` 이 비어 있다** — 1·2티어 자원 생성기가 아직 없어서다.
+  (지형 설치형이라 추출기 9종과는 별개다.)
 - 지열 발전기는 연료 없이 발전해야 하는데 `IsGenerator` 가 `fuelSlotCount > 0` 을 요구해 **발전을 못 한다**.
 - 전력 밸런스: 화력 발전기 20/s vs 전기 화로 100/s.
 - 렌치·파이프 아이콘이 전부 `assetPlaceHolder`. 파이프 레시피가 아직 `Recipes/Incomplete` 안에 있음.
@@ -292,4 +426,8 @@ Tools/Tiles/Build Tile Atlas · Slice Pipe Sheet · Build Pipe Atlas   (슬라�
   `PipeRouter` 가 칸마다 `Singleton.Instance` 의 lock 을 잡는다(탐색 1회에 ~8,700회).
 - `ItemDictionary` 의 주 색인은 `NormalizeName` 을 안 거친다(폴백인 `ItemAliases` 는 거친다) — 에셋이 NFD 면 조회 실패.
 - `ToolDictionary` 의 네 조회 함수가 실패 시 **로그 없이 null**. `EnsureIndex` 가 `materials` 만 보고 복구 판단.
-- `MachineAliases` 의 `{수동 분쇄기 → 전기 분쇄기}` 는 **임시** — 수동 분쇄기가 정식 기계가 되면 그 줄을 지운다.
+- ⚠ **에디트 모드에서는 `ItemDictionary`·`RecipeDictionary` 의 색인이 비어 있다**(`Awake` 가 안 돌아서).
+  그래서 `GetItem`/`GetMachineInfo` 가 전부 null 이고 `MachineInstance.Bind` 도 `Info == null` 이 된다.
+  **기계 동작을 검증하려면 플레이 모드에서** 임시 `GameObject` + `MachineInstance.Bind(new PlaceableRecord(), cell)`
+  로 돌린다 — `Bind` 는 `ItemDictionary` 만 보므로 **월드에 아무것도 배치되지 않아 세이브가 안 바뀐다.**
+  `Tick` 은 private 이라 리플렉션으로 부른다(수동 기계는 공개 `ManualStep` 이 있다).

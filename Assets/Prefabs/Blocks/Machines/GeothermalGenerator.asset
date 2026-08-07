@@ -18,6 +18,7 @@ MonoBehaviour:
   dropCount: 1
   machinePrefab: {fileID: 2613032363430261748, guid: 6540c6591b0eb1f4d818d2244239423e, type: 3}
   uiPrefab: {fileID: 0}
+  runningSprite: {fileID: 0}
   tier: 0
   recipeGroupId: Geothermal
   inputSlotCount: 0

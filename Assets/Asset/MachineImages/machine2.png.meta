@@ -131,7 +131,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: furnace_off
+      name: furnace
       rect:
         serializedVersion: 2
         x: 0
@@ -153,7 +153,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: furnace_on
+      name: furnace_running
       rect:
         serializedVersion: 2
         x: 16
@@ -284,6 +284,28 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: machine2_0
+      rect:
+        serializedVersion: 2
+        x: 156
+        y: 107
+        width: 2
+        height: 1
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8c4d09db82159c24781ec5365fa43108
+      internalID: -11399762
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
@@ -300,9 +322,10 @@ TextureImporter:
     nameFileIdTable:
       basic_altar: -3352506169372124624
       basic_altar_icon: -8995579320420008560
+      furnace: -3379492403191271098
       furnace_icon: 4887756226536358156
-      furnace_off: -3379492403191271098
-      furnace_on: 3736081619946847288
+      furnace_running: 3736081619946847288
+      machine2_0: -11399762
       manual_pulverizer: 3978108984300557741
       manual_pulverizer_icon: 4570791286804880453
   mipmapLimitGroupName: 

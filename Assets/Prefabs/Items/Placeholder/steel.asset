@@ -15,6 +15,6 @@ MonoBehaviour:
   itemName: steel
   displayName: "\uAC15\uCCA0"
   placeable: 0
-  Icon: {fileID: 21300000, guid: 4a4d2640fbd603542be3906e18903c59, type: 3}
+  Icon: {fileID: 6171144539048142750, guid: cbe785553f8a087429b55d8ce1e44cc7, type: 3}
   maxStack: 64
   burnEnergy: 0

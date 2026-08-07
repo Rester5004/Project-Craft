@@ -24,9 +24,6 @@
     { "id": "knife", "tier": 0, "output": "칼", "outputQty": 1,
       "inputs": [ { "item": "막대", "qty": 1 }, { "item": "칼날", "qty": 1 } ] },
 
-    { "id": "hammer", "tier": 0, "output": "망치", "outputQty": 1,
-      "inputs": [ { "item": "막대", "qty": 1 }, { "item": "망치 머리", "qty": 1 } ] },
-
     { "id": "dowsing_rod_t0", "tier": 0, "output": "0티어 다우징 로드", "outputQty": 1,
       "tools": [ "칼", "망치" ],
       "inputs": [ { "item": "돌", "qty": 5 } ] },
@@ -43,11 +40,11 @@
       "tools": [ "칼" ],
       "inputs": [ { "item": "돌", "qty": 2 } ] },
 
-    { "id": "manual_crusher", "tier": 0, "output": "수동 분쇄기", "outputQty": 1,
-      "inputs": [ { "item": "크랭크", "qty": 1 }, { "item": "철 주괴", "qty": 2 }, { "item": "철판", "qty": 2 }, { "item": "돌", "qty": 4 } ] },
+    { "id": "manual_pulverizer", "tier": 0, "output": "수동 분쇄기", "outputQty": 1,
+      "inputs": [ { "item": "돌", "qty": 10 }, { "item": "크랭크", "qty": 1 } ] },
 
     { "id": "manual_extractor_t00", "tier": 0, "output": "수동 0-0티어 추출기", "outputQty": 1,
-      "inputs": [ { "item": "크랭크", "qty": 1 }, { "item": "구리 주괴", "qty": 2 }, { "item": "구리판", "qty": 2 }, { "item": "돌", "qty": 4 } ] },
+      "inputs": [ { "item": "돌", "qty": 10 }, { "item": "크랭크", "qty": 1 }, { "item": "마력 파편", "qty": 1 } ] },
 
     { "id": "thermal_generator", "tier": 0, "output": "화력 발전기", "outputQty": 1,
       "inputs": [ { "item": "화로", "qty": 2 }, { "item": "마력 파편", "qty": 1 }, { "item": "철 주괴", "qty": 4 }, { "item": "전도체 가루", "qty": 4 } ],
@@ -84,15 +81,11 @@
       "output": "중급 재단", "outputQty": 1,
       "inputs": [ { "item": "초급 재단", "qty": 1 }, { "item": "금 주괴", "qty": 10 } ] },
 
-    { "id": "screwdriver", "tier": 1, "output": "드라이버", "outputQty": 1,
-      "tools": [ "망치", "칼" ],
-      "inputs": [ { "item": "금속판", "qty": 2 } ] },
-
     { "id": "crusher", "tier": 1, "output": "분쇄기", "outputQty": 1,
       "tools": [ "드라이버" ],
       "inputs": [ { "item": "철 주괴", "qty": 3 }, { "item": "철판", "qty": 3 }, { "item": "돌", "qty": 4 }, { "item": "전도체 가루", "qty": 4 } ] },
 
-    { "id": "extractor_t01", "tier": 1, "output": "0-1티어 추출기", "outputQty": 1,
+    { "id": "extractor01", "tier": 1, "output": "0-1티어 추출기", "outputQty": 1,
       "tools": [ "드라이버" ],
       "inputs": [ { "item": "구리 주괴", "qty": 3 }, { "item": "구리판", "qty": 3 }, { "item": "돌", "qty": 4 }, { "item": "전도체 가루", "qty": 4 } ] },
 

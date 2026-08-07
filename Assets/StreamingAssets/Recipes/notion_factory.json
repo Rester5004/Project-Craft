@@ -30,23 +30,14 @@
       "inputs": [ { "item": "유리 파이프", "qty": 1 } ],
       "note": "산성 용액 수송 전용" },
 
-    { "id": "appraise_gems", "machine": "감별기", "tier": 0,
-      "inputs": [ { "item": "반짝이는 돌", "qty": 1 } ],
-      "outputs": [
-        { "item": "루비", "chance": null },
-        { "item": "사파이어", "chance": null },
-        { "item": "다이아몬드", "chance": null }
-      ],
-      "note": "확률적 분류, 비율 미정" },
-
     { "id": "sulfur_powder", "machine": "화학 처리기", "tier": 1, "output": "황 가루", "outputQty": 1,
       "inputs": [ { "item": "유황석", "qty": 2 } ] },
 
     { "id": "acid_solution", "machine": "화학 처리기", "tier": 1, "output": "산성 용액", "outputQty": 1,
       "inputs": [ { "item": "황 가루", "qty": 1 }, { "item": "물", "qty": 2 } ] },
 
-    { "id": "uranium_concentrate", "machine": "화학 처리기", "tier": 1, "output": "우라늄 농축물", "outputQty": 1,
-      "inputs": [ { "item": "미가공 우라늄", "qty": 1 }, { "item": "산성 용액", "qty": 2 } ] },
+    { "id": "uranium_concentrate", "machine": "압축기", "tier": 1, "output": "우라늄 농축물", "outputQty": 1,
+      "inputs": [ { "item": "우라늄 주괴", "qty": 10 } ] },
 
     { "id": "electro_aluminum", "machine": "전기 분해기", "tier": 1, "power": "고전압",
       "output": "알루미늄 주괴", "outputQty": 1,
@@ -66,9 +57,6 @@
 
     { "id": "drill_crude_oil", "machine": "원유 채굴기", "tier": 1, "output": "원유", "outputQty": 1,
       "fluid": true, "terrain": "석유 지형", "note": "석유 지형 설치 필수" },
-
-    { "id": "refine_oil", "machine": "정유기", "tier": 1, "output": "석유", "outputQty": 1,
-      "inputs": [ { "item": "원유", "qty": 1, "fluid": true } ] },
 
     { "id": "compress_metal_plate", "machine": "압축기", "tier": 1, "output": "금속 판", "outputQty": 1,
       "inputs": [ { "item": "금속 주괴", "qty": 1 } ] },

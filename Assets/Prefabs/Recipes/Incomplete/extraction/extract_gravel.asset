@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d1635fa976c21145835b252e45d6313, type: 3}
+  m_Name: extract_gravel
+  m_EditorClassIdentifier: Assembly-CSharp::Recipe
+  machine: {fileID: 11400000, guid: 453c977a51055754f85f43c665c9407a, type: 2}
+  category: {fileID: 0}
+  tier: 0
+  inputs:
+  - item: {fileID: 11400000, guid: 3e77ee2cf1bcb094ebd04df4ec60ecae, type: 2}
+    count: 1
+  outputs: []
+  chanceOutputs:
+  - item: {fileID: 11400000, guid: cbd5f06094595c74da7f0bbc3dee3100, type: 2}
+    count: 1
+    chance: 0.1
+  - item: {fileID: 11400000, guid: e33422ece4b16744993508f9c9c9214f, type: 2}
+    count: 1
+    chance: 0.15
+  - item: {fileID: 11400000, guid: 9a383ce1f3803c54ba6208e1bcb7e296, type: 2}
+    count: 1
+    chance: 0.05
+  - item: {fileID: 11400000, guid: 61d1cac0182ab314a952cc8caac13d75, type: 2}
+    count: 1
+    chance: 0.1
+  - item: {fileID: 11400000, guid: 1ef010f537329d24793cb769d85d68d4, type: 2}
+    count: 1
+    chance: 0.03
+  - item: {fileID: 11400000, guid: 8c4963df4c439da42b2a9cdfd9a1b655, type: 2}
+    count: 1
+    chance: 0.1
+  - item: {fileID: 11400000, guid: 5f425707509fadc44acc7d9302c2104e, type: 2}
+    count: 1
+    chance: 0.05
+  requiredTools: []
+  craftTime: 1
+  importNote: 

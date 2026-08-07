@@ -15,6 +15,6 @@ MonoBehaviour:
   itemName: upgrade_speed
   displayName: "\uC5C5\uADF8\uB808\uC774\uB4DC \uBAA8\uB4C8 - \uC18D\uB3C4"
   placeable: 0
-  Icon: {fileID: 21300000, guid: 4a4d2640fbd603542be3906e18903c59, type: 3}
+  Icon: {fileID: 7765863113674148754, guid: cbe785553f8a087429b55d8ce1e44cc7, type: 3}
   maxStack: 64
   burnEnergy: 0

@@ -17,6 +17,9 @@ namespace ProjectCraft.UIFactory.EditorTools
         public const string GasBarPrefab = BuildingBlockFolder + "/GasBar.prefab";
         public const string NameTextPrefab = BuildingBlockFolder + "/MachineNameText.prefab";
 
+        /// <summary>손으로 돌리는 기계의 "작동" 버튼.</summary>
+        public const string ManualButtonPrefab = BuildingBlockFolder + "/ManualButton.prefab";
+
         /// <summary>조합대 목록의 레시피 칸(MachineSlot 아트에서 파생, 드래그 없는 클릭 전용).</summary>
         public const string CraftRecipeSlotPrefab = BuildingBlockFolder + "/CraftRecipeSlot.prefab";
 
@@ -37,6 +40,7 @@ namespace ProjectCraft.UIFactory.EditorTools
             MachineUIRole.InputGasBar => GasBarPrefab,
             MachineUIRole.OutputGasBar => GasBarPrefab,
             MachineUIRole.MachineName => NameTextPrefab,
+            MachineUIRole.ManualButton => ManualButtonPrefab,
             _ => null
         };
     }

@@ -31,7 +31,8 @@ namespace ProjectCraft.EditorTools
         /// <summary>새로 만들 기계의 한글 이름 → 내부 ID. ID 는 세이브 키가 되므로 손으로 정한다.</summary>
         private static readonly string[,] NewMachineIds =
         {
-            { "감별기", "Appraiser" },
+            // '감별기' 는 유일한 재료였던 '반짝이는 돌' 과 함께 삭제됐다(보석은 1계열 추출이 낸다).
+            // 여기 줄을 되살리면 이 툴이 기계를 다시 만들어 낸다.
             { "마나 용해기", "ManaDissolver" },
             { "마법부여기", "Enchanter" },
             { "변압기", "Transformer" },
@@ -40,7 +41,8 @@ namespace ProjectCraft.EditorTools
             { "원유 채굴기", "OilDrill" },
             { "유리 가공기", "GlassWorks" },
             { "정밀 세공기", "PrecisionLathe" },
-            { "정유기", "Refinery" },
+            // '정유기' 는 삭제됐다 — 원유 처리는 '증류기'(Distiller) 하나로 모았다.
+            // 같은 일을 하는 기계가 티어별로 갈리면 안 된다는 규칙 때문이다(CLAUDE.md §4).
             { "중급 재단", "IntermediateAltar" },
             { "초급 재단", "BasicAltar" },
             { "핵발전소", "NuclearPlant" },
@@ -277,10 +279,12 @@ namespace ProjectCraft.EditorTools
             return null;
         }
 
-        /// <summary>기존 기계 프리팹을 복제해 스프라이트만 플레이스홀더로 바꾼다(콜라이더 구성을 물려받는다).</summary>
         /// <summary>
-        /// 월드에 세울 프리팹을 확보한다(없으면 AlloySmelter 를 복제해 그림만 갈아 끼운다).
-        /// <see cref="ExtractorSetup"/> 도 같은 방식으로 기계를 만들어야 해서 internal 이다.
+        /// 월드에 세울 프리팹을 확보한다(없으면 AlloySmelter 를 복제해 그림만 갈아 끼운다 —
+        /// 콜라이더 구성을 물려받으려고 새로 만들지 않고 복제한다).
+        ///
+        /// 다른 에디터 툴도 같은 방식으로 기계를 세워야 해서 <c>internal</c> 이다.
+        /// 지금은 이 파일 안에서만 쓰지만, 새 기계를 늘리는 표준 경로라 좁히지 않는다.
         /// </summary>
         internal static GameObject EnsureWorldPrefab(string id, Sprite placeholder)
         {

@@ -19,8 +19,9 @@ MonoBehaviour:
   - item: {fileID: 11400000, guid: 6cfc9e4024e051b49beb76c302434db7, type: 2}
     count: 1
   outputs:
-  - item: {fileID: 11400000, guid: b293e29fe29e871449d10dfae5bbfb23, type: 2}
+  - item: {fileID: 11400000, guid: 6e83046e8ffa0e44f8a0b5855663815e, type: 2}
     count: 1
+  chanceOutputs: []
   requiredTools: []
   craftTime: 1
   importNote: "[\uBCD1\uD569] Assets/Prefabs/Recipes/Incomplete/crushing/crush_meteorite.asset

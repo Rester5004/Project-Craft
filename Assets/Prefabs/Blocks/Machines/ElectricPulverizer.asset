@@ -18,8 +18,9 @@ MonoBehaviour:
   dropCount: 1
   machinePrefab: {fileID: 2401623937405327994, guid: 787fbed919a8b05458dfc1727af4f62a, type: 3}
   uiPrefab: {fileID: 7616947571060291691, guid: 5ba53f04f8f8a4a47ad0285fdd003b13, type: 3}
+  runningSprite: {fileID: 0}
   tier: 1
-  recipeGroupId: 
+  recipeGroupId: Pulverizer
   inputSlotCount: 1
   outputSlotCount: 1
   fuelSlotCount: 0
@@ -32,3 +33,5 @@ MonoBehaviour:
   isGenerator: 0
   powerRange: 0
   energyUseRate: 10
+  speedMultiplier: 1
+  chanceMultiplier: 1

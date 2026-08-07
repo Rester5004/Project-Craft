@@ -38,7 +38,7 @@ public static class ItemAliases
         { "인바(invar) 판", "인바 판" },
         { "인바(invar)", "인바" },
 
-        // 추출기 계열이 정식 기계가 되면서 흡수된 플레이스홀더 (ExtractorSetup 을 먼저 돌려야 한다)
+        // 추출기 계열이 정식 기계가 되면서 흡수된 플레이스홀더 (Machine:Extractor00~23 12종은 이미 다 있다)
         // 뭉뚱그린 옛 '추출기' 는 전력을 쓰는 첫 등급(0-1)으로 본다 — 옛 세이브에 놓여 있어도 안 사라지게.
         { "Machine:Extractor", "Machine:Extractor01" },
         { "수동 0-0티어 추출기", "Machine:Extractor00" },
@@ -59,11 +59,19 @@ public static class ItemAliases
         { "석회", "lime" },             { "시멘트", "cement" },       { "유리", "glass" },
         { "모래", "sand" },             { "자갈", "gravel" },         { "흙", "dirt" },
         { "벽돌", "brick" },            { "운석", "meteorite" },      { "유황석", "sulfur_ore" },
-        { "파쇄 광석", "crushed_ore" }, { "광석 알갱이", "ore_grain" },
-        { "조각난 돌덩이", "chipped_stone" }, { "부숴진 돌덩이", "broken_stone" },
-        { "바스라진 돌덩이", "crumbled_stone" },
-        { "반짝이는 돌", "shiny_stone" },     { "반짝이는 가루", "shiny_powder" },
-        { "미가공 우라늄", "unrefined_uranium" }, { "우라늄 농축물", "uranium_concentrate" },
+        // 마력석 분쇄 사슬은 '마력석 조각 → 마력석 가루 → 미세한 마력석 가루' 로 이름을 통일했다
+        // (운석 사슬과 같은 꼴). <b>Resolve 는 한 단계만 푸므로 한글 줄도 최종 이름을 직접 가리켜야 한다.</b>
+        { "파쇄 광석", "manastone_shard" },      { "crushed_ore", "manastone_shard" },
+        { "광석 알갱이", "manastone_dust" },     { "ore_grain", "manastone_dust" },
+        // 돌덩이 3단 사슬은 '돌 → 자갈 → 모래 → 돌 가루' 로 통합됐다.
+        // <b>분쇄 횟수가 같은 것끼리</b> 이어야 옛 세이브의 그 칸이 뜻을 잃지 않는다.
+        { "조각난 돌덩이", "gravel" },   { "chipped_stone",  "gravel" },        // 1회 분쇄
+        { "부숴진 돌덩이", "sand" },     { "broken_stone",   "sand" },          // 2회 분쇄
+        { "바스라진 돌덩이", "stone_powder" }, { "crumbled_stone", "stone_powder" }, // 3회 분쇄
+        { "반짝이는 가루", "manastone_fine_dust" }, { "shiny_powder", "manastone_fine_dust" },
+        // '미가공 우라늄' 은 '탁한 우라늄' 으로 개명됐다 — 0-3 추출이 이걸 내고 화학 처리기가 우라늄 조각으로 바꾼다.
+        { "미가공 우라늄", "turbid_uranium" }, { "unrefined_uranium", "turbid_uranium" },
+        { "우라늄 농축물", "uranium_concentrate" },
 
         // 판 · 부품
         { "철판", "iron_plate" },       { "구리판", "copper_plate" },   { "금 판", "gold_plate" },
@@ -95,11 +103,21 @@ public static class ItemAliases
         { "업그레이드 모듈 - 효율", "upgrade_efficiency" },
 
         // 아직 정식 기계가 아닌 기계 아이템 (승격되면 Machine:* 로 다시 옮긴다)
-        { "수동 분쇄기", "manual_crusher" },   { "용광로", "blast_furnace" },
-        { "자동 조합기", "auto_crafter" },     { "고급 조합기", "advanced_crafter" },
-        { "가스 발전기", "gas_generator" },    { "증류기", "distiller" },
-        { "수경 재배기", "hydroponics" },      { "아이템 강화기", "item_enhancer" },
+        { "자동 조합기", "auto_crafter" },
         { "공동 탐색기", "cavity_scanner" },
+
+        // ── 정식 기계로 승격된 것 (플레이스홀더 → Machine:*) ──────────────────
+        // <b>Resolve 는 한 단계만 푼다.</b> 그래서 한글 줄도 최종 이름을 직접 가리켜야 한다 —
+        // "가스 발전기" → "gas_generator" 로 두면 그 다음 단계를 안 밟아 죽은 이름이 된다.
+        { "수동 분쇄기", "Machine:ManualPulverizer" }, { "manual_crusher", "Machine:ManualPulverizer" },
+        { "가스 발전기", "Machine:GasGenerator" },   { "gas_generator", "Machine:GasGenerator" },
+        { "용광로", "Machine:BlastFurnace" },        { "blast_furnace", "Machine:BlastFurnace" },
+        // '정유기' 는 삭제하고 원유 처리를 '증류기' 하나로 모았다 — 옛 세이브에 놓여 있어도 안 사라지게 잇는다.
+        { "증류기", "Machine:Distiller" },           { "distiller", "Machine:Distiller" },
+        { "정유기", "Machine:Distiller" },           { "Machine:Refinery", "Machine:Distiller" },
+        { "고급 조합기", "Machine:AdvancedCrafter" }, { "advanced_crafter", "Machine:AdvancedCrafter" },
+        { "아이템 강화기", "Machine:ItemEnhancer" },  { "item_enhancer", "Machine:ItemEnhancer" },
+        { "수경 재배기", "Machine:Hydroponics" },     { "hydroponics", "Machine:Hydroponics" },
 
         // 배치물 — 아이템 이름을 바꾸면 blockName 도 같이 바꿔야 한다(파이프 에셋 설정이 복사해 간다)
         { "돌", "stone" },              { "마력석", "manastone" },

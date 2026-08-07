@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d1635fa976c21145835b252e45d6313, type: 3}
+  m_Name: thermal_generator
+  m_EditorClassIdentifier: Assembly-CSharp::Recipe
+  machine: {fileID: 11400000, guid: ea55fe72f9315554a8ffdcf795dd1b7e, type: 2}
+  category: {fileID: 11400000, guid: ad974e9d9fcf5f549a933df79a03218c, type: 2}
+  tier: 0
+  inputs:
+  - item: {fileID: 11400000, guid: 3d2032d6931bd614c88734a7b8e2983e, type: 2}
+    count: 1
+  - item: {fileID: 11400000, guid: cca3c885de98d894484003bf9ff633bf, type: 2}
+    count: 2
+  - item: {fileID: 11400000, guid: e1648015ff586bd4f8acecff314c4abb, type: 2}
+    count: 1
+  - item: {fileID: 11400000, guid: 956eb8dcb573269499f30f7c84b58ecb, type: 2}
+    count: 4
+  - item: {fileID: 11400000, guid: e28e21cfbb23d8c42869f75d13aba7e5, type: 2}
+    count: 4
+  outputs:
+  - item: {fileID: 11400000, guid: 450965d5d2a4c2b4682ac4692e737eb0, type: 2}
+    count: 1
+  requiredTools: []
+  craftTime: 1
+  importNote: "[\uBCD1\uD569] Assets/Prefabs/Recipes/Incomplete/crafting/thermal_generator.asset
+    \uB97C \uD761\uC218\uD568\r\n[\uCD9C\uCC98] notion_machines.json / id=build_thermal_generator\r\n[\uAE30\uACC4]
+    '\uC870\uD569\uB300' \u2014 \uB300\uC751\uD558\uB294 MachineBlock \uC774 \uC5C6\uC5B4
+    \uBE44\uC6CC \uB460\r\n[\uC218\uB7C9 \uBBF8\uD45C\uAE30] \uC7AC\uB8CC '\uBCBD\uB3CC'
+    \uC744 1\uAC1C\uB85C \uAC04\uC8FC\r\n[\uBE44\uACE0] \uAC08\uD0C4 200 / \uC11D\uD0C4
+    400 / \uC218\uC18C 1\uC591\uB3D9\uC774 1000 Energy\r\n[\uC6D0\uBB38] {\"id\":\"build_thermal_generator\",\"tier\":0,\"output\":\"\uD654\uB825
+    \uBC1C\uC804\uAE30\",\"outputQty\":1,\"inputs\":[{\"item\":\"\uBCBD\uB3CC\",\"qty\":null},{\"item\":\"\uD654\uB85C\",\"qty\":2},{\"item\":\"\uB9C8\uB825
+    \uD30C\uD3B8\",\"qty\":1},{\"item\":\"\uCCA0 \uC8FC\uAD34\",\"qty\":4},{\"item\":\"\uC804\uB3C4\uCCB4
+    \uAC00\uB8E8\",\"qty\":4}],\"note\":\"\uAC08\uD0C4 200 / \uC11D\uD0C4 400 / \uC218\uC18C
+    1\uC591\uB3D9\uC774 1000 Energy\"}\r\n\r\n--- \uD761\uC218\uB41C \uC6D0\uBCF8
+    ---\r\n[\uCD9C\uCC98] crafting.json / id=thermal_generator\r\n[\uBE44\uACE0]
+    \uC5F0\uB8CC\uBCC4 \uBC1C\uC804\uB7C9\uC740 machine_processing.json \uCC38\uC870\r\n[\uC6D0\uBB38]
+    {\"id\":\"thermal_generator\",\"tier\":0,\"output\":\"\uD654\uB825 \uBC1C\uC804\uAE30\",\"outputQty\":1,\"inputs\":[{\"item\":\"\uD654\uB85C\",\"qty\":2},{\"item\":\"\uB9C8\uB825
+    \uD30C\uD3B8\",\"qty\":1},{\"item\":\"\uCCA0 \uC8FC\uAD34\",\"qty\":4},{\"item\":\"\uC804\uB3C4\uCCB4
+    \uAC00\uB8E8\",\"qty\":4}],\"note\":\"\uC5F0\uB8CC\uBCC4 \uBC1C\uC804\uB7C9\uC740
+    machine_processing.json \uCC38\uC870\"}\r\n"

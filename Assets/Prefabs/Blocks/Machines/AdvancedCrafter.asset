@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a24973a23734aa4b91a9495052645a0, type: 3}
+  m_Name: AdvancedCrafter
+  m_EditorClassIdentifier: Assembly-CSharp::CraftingTableBlock
+  blockName: Machine:AdvancedCrafter
+  displayName: "\uACE0\uAE09 \uC870\uD569\uAE30"
+  dropItem: {fileID: 0}
+  dropCount: 1
+  machinePrefab: {fileID: 2613032363430261748, guid: a880b1c9106e1e84c9ebcec2843a137a, type: 3}
+  uiPrefab: {fileID: 779414532576868518, guid: 06eab2c4533376848ad7a643051ba2cf, type: 3}
+  tier: 1
+  recipeGroupId: 
+  inputSlotCount: 3
+  outputSlotCount: 6
+  fuelSlotCount: 0
+  fuelBurnRate: 20
+  inputGasSlotCount: 0
+  outputGasSlotCount: 0
+  maxGasAmount: 0
+  maxEnergyAmount: 0
+  isUseEnergy: 0
+  isGenerator: 0
+  powerRange: 0
+  energyUseRate: 0
+  speedMultiplier: 1
+  chanceMultiplier: 1

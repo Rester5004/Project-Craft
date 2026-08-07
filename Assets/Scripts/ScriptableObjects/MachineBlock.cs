@@ -8,6 +8,16 @@ public class MachineBlock : BlockBase
     [Tooltip("이 기계 전용 UI 프리팹(Machine UI Factory 로 제작). 비우면 기본 패널을 사용한다.")]
     public GameObject uiPrefab;
 
+    [Header("가동 중 그림")]
+    [Tooltip("가동 중일 때 보여줄 스프라이트. 비워 두면 그림을 바꾸지 않는다(대부분의 기계가 그렇다).\n" +
+             "멈춰 있을 때의 그림은 여기가 아니라 machinePrefab 의 SpriteRenderer 가 정본이다.")]
+    public Sprite runningSprite;
+
+    [Header("수동 작동")]
+    [Tooltip("0 이면 자동으로 가공한다. 0보다 크면 버튼 1회에 craftTime 의 이 비율만큼 진행한다.\n" +
+             "0.05 = 20번 눌러야 하나가 완성된다.")]
+    [Range(0f, 1f)] public float manualStepRatio = 0f;
+
     [Header("등급 · 레시피 연결")]
     [Tooltip("이 기계의 티어. recipe.tier 가 이 값 이하인 레시피만 처리한다.")]
     [Min(0)] public int tier;
@@ -72,6 +82,14 @@ public class MachineBlock : BlockBase
 
     /// <summary>연료를 태워 돌아가는 기계인가.</summary>
     public bool UsesFuel => fuelSlotCount > 0;
+
+    /// <summary>
+    /// 버튼을 눌러야 진행하는 기계인가(손으로 돌리는 것).
+    /// <see cref="AutoProcess"/> 가 false 인 조합대와는 다르다 — 조합대는 자기 슬롯을 아예 안 쓰고
+    /// 플레이어 인벤토리로 만들지만, 수동 기계는 <b>레시피·슬롯 흐름이 자동 기계와 완전히 같고</b>
+    /// 진행이 시간 대신 클릭으로 일어날 뿐이다.
+    /// </summary>
+    public bool IsManual => manualStepRatio > 0f;
 
     /// <summary>
     /// 연료를 태워 전력을 만드는 발전기인가. 연료 칸이 없으면 태울 것이 없으므로 발전기가 아니다.

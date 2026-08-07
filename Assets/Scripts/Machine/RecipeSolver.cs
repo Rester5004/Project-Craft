@@ -136,10 +136,21 @@ public static class RecipeSolver
         return true;
     }
 
-    /// <summary>산출물을 전부 넣을 자리가 있는가(슬롯을 변경하지 않고 시뮬레이션).</summary>
-    public static bool CanStoreOutputs(IList<ItemStack> slots, Recipe recipe)
+    /// <summary>
+    /// 산출물을 전부 넣을 자리가 있는가(슬롯을 변경하지 않고 시뮬레이션).
+    ///
+    /// <paramref name="blockId"/> 를 주면 <b>확률 부산물까지 자리를 잡아 둔다</b> —
+    /// 무엇이 당첨될지 모르므로 <b>나올 수 있는 것 전부</b>가 들어갈 자리가 있을 때만 진행한다.
+    /// 그래야 굴린 뒤 자리가 없어 버리는 일도, 자리가 날 때까지 매 프레임 다시 굴리는 편법도 없다.
+    /// 추출기 출력이 9칸인 이유가 이것이다(한 레시피의 후보가 최대 7종).
+    /// </summary>
+    public static bool CanStoreOutputs(IList<ItemStack> slots, Recipe recipe, string blockId = null)
     {
-        if (recipe == null || recipe.outputs == null || recipe.outputs.Count == 0) return true;
+        if (recipe == null) return true;
+
+        bool hasFixed = recipe.outputs != null && recipe.outputs.Count > 0;
+        bool hasChance = recipe.chanceOutputs != null && recipe.chanceOutputs.Count > 0;
+        if (!hasFixed && !hasChance) return true;
         if (slots == null) return false;
 
         simItems.Clear();
@@ -154,35 +165,50 @@ public static class RecipeSolver
             simPlain.Add(has && stack.IsPlain);   // 도구가 든 칸은 "차 있지만 합칠 수 없는" 칸
         }
 
-        for (int o = 0; o < recipe.outputs.Count; o++)
-        {
-            ItemStack produce = recipe.outputs[o];
-            if (produce == null || produce.item == null || produce.count <= 0) continue;
-
-            int remaining = produce.count;
-            int max = MaxStackOf(produce.item);
-
-            // 같은 아이템이 있는 칸부터 채우고, 남으면 빈 칸을 쓴다(TryAdd 와 동일한 순서).
-            for (int i = 0; i < simItems.Count && remaining > 0; i++)
+        if (hasFixed)
+            for (int o = 0; o < recipe.outputs.Count; o++)
             {
-                if (!simPlain[i] || simItems[i] != produce.item || simCounts[i] >= max) continue;
-                int moved = Mathf.Min(max - simCounts[i], remaining);
-                simCounts[i] += moved;
-                remaining -= moved;
-            }
-            for (int i = 0; i < simItems.Count && remaining > 0; i++)
-            {
-                if (simItems[i] != null) continue;
-                int moved = Mathf.Min(max, remaining);
-                simItems[i] = produce.item;
-                simCounts[i] = moved;
-                simPlain[i] = true;
-                remaining -= moved;
+                ItemStack produce = recipe.outputs[o];
+                if (produce == null || produce.item == null || produce.count <= 0) continue;
+                if (!SimulateAdd(produce.item, produce.count)) return false;
             }
 
-            if (remaining > 0) return false;
-        }
+        if (hasChance)
+            for (int o = 0; o < recipe.chanceOutputs.Count; o++)
+            {
+                ChanceOutput produce = recipe.chanceOutputs[o];
+                if (produce == null || produce.item == null || produce.count <= 0) continue;
+                if (ExtractionTable.Multiplier(blockId, produce.item) <= 0f) continue;  // 이 기계는 못 얻는다
+                if (!SimulateAdd(produce.item, produce.count)) return false;
+            }
+
         return true;
+    }
+
+    /// <summary>시뮬레이션 슬롯에 넣어 본다(실제 슬롯은 건드리지 않는다). 다 넣었으면 true.</summary>
+    private static bool SimulateAdd(Items item, int count)
+    {
+        int remaining = count;
+        int max = MaxStackOf(item);
+
+        // 같은 아이템이 있는 칸부터 채우고, 남으면 빈 칸을 쓴다(TryAdd 와 동일한 순서).
+        for (int i = 0; i < simItems.Count && remaining > 0; i++)
+        {
+            if (!simPlain[i] || simItems[i] != item || simCounts[i] >= max) continue;
+            int moved = Mathf.Min(max - simCounts[i], remaining);
+            simCounts[i] += moved;
+            remaining -= moved;
+        }
+        for (int i = 0; i < simItems.Count && remaining > 0; i++)
+        {
+            if (simItems[i] != null) continue;
+            int moved = Mathf.Min(max, remaining);
+            simItems[i] = item;
+            simCounts[i] = moved;
+            simPlain[i] = true;
+            remaining -= moved;
+        }
+        return remaining <= 0;
     }
 
     /// <summary>산출물을 슬롯에 적재한다. 전부 넣었으면 true(부분 적재 시 false).</summary>

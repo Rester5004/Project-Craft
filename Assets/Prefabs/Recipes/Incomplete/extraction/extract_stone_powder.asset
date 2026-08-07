@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d1635fa976c21145835b252e45d6313, type: 3}
+  m_Name: extract_stone_powder
+  m_EditorClassIdentifier: Assembly-CSharp::Recipe
+  machine: {fileID: 11400000, guid: 453c977a51055754f85f43c665c9407a, type: 2}
+  category: {fileID: 0}
+  tier: 0
+  inputs:
+  - item: {fileID: 11400000, guid: 4234355d128895145abd4edb5299b560, type: 2}
+    count: 1
+  outputs: []
+  chanceOutputs:
+  - item: {fileID: 11400000, guid: e28e21cfbb23d8c42869f75d13aba7e5, type: 2}
+    count: 1
+    chance: 0.05
+  - item: {fileID: 11400000, guid: b96f0701cb6112949a93d4401eb7ab77, type: 2}
+    count: 1
+    chance: 0.01
+  - item: {fileID: 11400000, guid: a3855fd0454f0964ab3f42c22f3c301c, type: 2}
+    count: 1
+    chance: 0.03
+  - item: {fileID: 11400000, guid: 37f13f503a33efa419e68c92b3716206, type: 2}
+    count: 1
+    chance: 0.05
+  - item: {fileID: 11400000, guid: c6aca57598c78e04cac26751857c2e86, type: 2}
+    count: 1
+    chance: 0.01
+  requiredTools: []
+  craftTime: 1
+  importNote: 

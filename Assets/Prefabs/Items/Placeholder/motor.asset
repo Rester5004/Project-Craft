@@ -15,6 +15,6 @@ MonoBehaviour:
   itemName: motor
   displayName: "\uBAA8\uD130"
   placeable: 0
-  Icon: {fileID: 21300000, guid: 4a4d2640fbd603542be3906e18903c59, type: 3}
+  Icon: {fileID: -2842513354615048019, guid: cbe785553f8a087429b55d8ce1e44cc7, type: 3}
   maxStack: 64
   burnEnergy: 0

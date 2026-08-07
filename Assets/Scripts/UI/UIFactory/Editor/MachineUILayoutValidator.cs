@@ -68,6 +68,10 @@ namespace ProjectCraft.UIFactory.EditorTools
                         if (e.GetComponent<TMPro.TMP_Text>() == null)
                             issues.Add(Err($"'{e.name}' (MachineName) 에 TMP_Text 컴포넌트가 없습니다.", e));
                         break;
+                    case MachineUIRole.ManualButton:
+                        if (e.GetComponent<UnityEngine.UI.Button>() == null)
+                            issues.Add(Err($"'{e.name}' (ManualButton) 에 Button 컴포넌트가 없습니다.", e));
+                        break;
                 }
             }
 
@@ -82,6 +86,7 @@ namespace ProjectCraft.UIFactory.EditorTools
             CheckSingle(byRole, MachineUIRole.EnergyBar, issues);
             CheckSingle(byRole, MachineUIRole.ProgressBar, issues);
             CheckSingle(byRole, MachineUIRole.MachineName, issues);
+            CheckSingle(byRole, MachineUIRole.ManualButton, issues);
 
             // MachineBlock 설정과 개수 비교
             if (target != null)
@@ -97,6 +102,13 @@ namespace ProjectCraft.UIFactory.EditorTools
                     issues.Add(Warn("이 기계는 에너지를 사용하지만 EnergyBar 요소가 없습니다."));
                 if (!target.isUseEnergy && hasEnergy)
                     issues.Add(Warn("이 기계는 에너지를 사용하지 않지만 EnergyBar 요소가 있습니다(런타임에 숨겨짐)."));
+
+                // 작동 버튼이 없으면 수동 기계는 <b>영원히 진행할 수 없다</b> — 경고가 아니라 오류다.
+                bool hasManual = Count(byRole, MachineUIRole.ManualButton) > 0;
+                if (target.IsManual && !hasManual)
+                    issues.Add(Err("이 기계는 수동(manualStepRatio > 0)인데 ManualButton 요소가 없어 작동시킬 수 없습니다."));
+                if (!target.IsManual && hasManual)
+                    issues.Add(Warn("이 기계는 수동이 아니지만 ManualButton 요소가 있습니다(런타임에 숨겨짐)."));
             }
 
             return issues;

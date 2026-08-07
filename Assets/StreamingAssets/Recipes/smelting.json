@@ -11,6 +11,7 @@
     { "id": "smelt_lead",     "output": "납 주괴",   "inputs": [ { "item": "납 조각",   "qty": 4 } ] },
     { "id": "smelt_nickel",   "output": "니켈 주괴", "inputs": [ { "item": "니켈 조각", "qty": 4 } ] },
     { "id": "smelt_tin",      "output": "주석 주괴", "inputs": [ { "item": "주석 조각", "qty": 4 } ] },
+    { "id": "smelt_uranium",  "output": "우라늄 주괴", "inputs": [ { "item": "우라늄 조각", "qty": 4 } ] },
     { "id": "smelt_titanium", "output": "티타늄 주괴","inputs": [ { "item": "티타늄 조각","qty": 4 } ] },
     { "id": "smelt_lime",     "output": "석회",     "inputs": [ { "item": "뼈 가루",   "qty": 2 } ] }
   ]

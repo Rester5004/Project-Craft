@@ -4,20 +4,17 @@
   "machine": "조합대",
   "description": "공장 건설 레시피. 건설 재료 = 티어 기본 재료(0티어 벽돌 / 1티어 철근 콘크리트) + 공장별 부품을 함께 요구한다. 재료가 미정인 2티어 공장은 inputs 를 비워 두었다.",
   "recipes": [
-    { "id": "build_pulverizer", "tier": 0, "output": "분쇄기", "outputQty": 1,
+    { "id": "pulverizer", "tier": 0, "output": "전기 분쇄기", "outputQty": 1,
       "inputs": [
-        { "item": "벽돌", "qty": null },
         { "item": "크랭크", "qty": 1 },
         { "item": "철 주괴", "qty": 2 },
         { "item": "철판", "qty": 2 },
         { "item": "돌", "qty": 4 }
       ],
-      "manual": true,
-      "note": "0티어는 크랭크 수동(무전력). 1티어 업그레이드: 드라이버 + 철 주괴 3 + 철판 3 + 돌 4 + 전도체 가루 4 → 저전압" },
+      "note": "수동판은 crafting.json 의 manual_pulverizer(돌 10 + 크랭크 1)" },
 
-    { "id": "build_extractor", "tier": 0, "output": "추출기", "outputQty": 1,
+    { "id": "extractor00plus", "tier": 0, "output": "0-0티어 추출기", "outputQty": 1,
       "inputs": [
-        { "item": "벽돌", "qty": null },
         { "item": "크랭크", "qty": 1 },
         { "item": "구리 주괴", "qty": 2 },
         { "item": "구리판", "qty": 2 },
@@ -26,7 +23,7 @@
       "manual": true,
       "note": "0티어는 크랭크 수동(무전력). 1티어: 드라이버 + 구리 주괴 3 + 구리판 3 + 돌 4 + 전도체 가루 4 → 저전압 / 2티어: 컴퓨터 칩 2 + 니켈 주괴 1 / 3티어 미정" },
 
-    { "id": "build_furnace", "tier": 0, "output": "화로", "outputQty": 1,
+    { "id": "furnace", "tier": 0, "output": "화로", "outputQty": 1,
       "inputs": [
         { "item": "벽돌", "qty": null },
         { "item": "갈탄", "qty": 1 },
@@ -36,7 +33,7 @@
       "manual": true,
       "note": "갈탄/석탄 직접 연소(무전력). 유리 제조기 통합. 1티어 저전압 전기로 / 2티어 고전압 전기로" },
 
-    { "id": "build_thermal_generator", "tier": 0, "output": "화력 발전기", "outputQty": 1,
+    { "id": "thermal_generator", "tier": 0, "output": "화력 발전기", "outputQty": 1,
       "inputs": [
         { "item": "벽돌", "qty": null },
         { "item": "화로", "qty": 2 },
@@ -46,17 +43,12 @@
       ],
       "note": "갈탄 200 / 석탄 400 / 수소 1양동이 1000 Energy" },
 
-    { "id": "build_roller", "tier": 0, "output": "압연기", "outputQty": 1,
+    { "id": "roller", "tier": 0, "output": "압연기", "outputQty": 1,
       "inputs": [ { "item": "벽돌", "qty": null } ],
       "power": "저전압",
       "note": "벽돌 공장 통합. 부품 레시피 미정" },
 
-    { "id": "build_appraiser", "tier": 0, "output": "감별기", "outputQty": 1,
-      "inputs": [ { "item": "벽돌", "qty": null } ],
-      "power": "저전압",
-      "note": "부품 레시피 미정" },
-
-    { "id": "build_electrolyzer", "tier": 1, "output": "전기 분해기", "outputQty": 1,
+    { "id": "electrolyzer", "tier": 1, "output": "전기 분해기", "outputQty": 1,
       "inputs": [
         { "item": "철근 콘크리트", "qty": null },
         { "item": "드라이버", "qty": 1 },
@@ -68,7 +60,7 @@
       "power": "고전압",
       "note": "수전해기 통합" },
 
-    { "id": "build_compressor", "tier": 1, "output": "압축기", "outputQty": 1,
+    { "id": "compressor", "tier": 1, "output": "압축기", "outputQty": 1,
       "inputs": [
         { "item": "철근 콘크리트", "qty": null },
         { "item": "드라이버", "qty": 1 },
@@ -77,7 +69,7 @@
       ],
       "power": "저전압" },
 
-    { "id": "build_alloy_smelter", "tier": 1, "output": "합금 재련기", "outputQty": 1,
+    { "id": "alloy_smelter", "tier": 1, "output": "합금 재련기", "outputQty": 1,
       "inputs": [
         { "item": "철근 콘크리트", "qty": null },
         { "item": "화로", "qty": 1 },
@@ -86,7 +78,7 @@
       ],
       "power": "저전압" },
 
-    { "id": "build_bio_incubator", "tier": 1, "output": "유기물 배양기", "outputQty": 1,
+    { "id": "bio_incubator", "tier": 1, "output": "유기물 배양기", "outputQty": 1,
       "inputs": [
         { "item": "철근 콘크리트", "qty": null },
         { "item": "드라이버", "qty": 1 },
@@ -96,7 +88,7 @@
       ],
       "power": "저전압" },
 
-    { "id": "build_laser_processor", "tier": 1, "output": "레이저 가공기", "outputQty": 1,
+    { "id": "laser_processor", "tier": 1, "output": "레이저 가공기", "outputQty": 1,
       "inputs": [
         { "item": "철근 콘크리트", "qty": null },
         { "item": "드라이버", "qty": 1 },
@@ -107,7 +99,7 @@
       "power": "저전압",
       "note": "루비 사용" },
 
-    { "id": "build_auto_crafter", "tier": 1, "output": "자동 조합기", "outputQty": 1,
+    { "id": "auto_crafter", "tier": 1, "output": "자동 조합기", "outputQty": 1,
       "inputs": [
         { "item": "철근 콘크리트", "qty": null },
         { "item": "드라이버", "qty": 1 },
@@ -117,7 +109,7 @@
       "power": "저전압",
       "note": "구 '가공대'. 중앙 코어와 같은 범위를 자동화" },
 
-    { "id": "build_mana_dissolver", "tier": 1, "output": "마나 용해기", "outputQty": 1,
+    { "id": "mana_dissolver", "tier": 1, "output": "마나 용해기", "outputQty": 1,
       "inputs": [
         { "item": "철근 콘크리트", "qty": null },
         { "item": "마력 결정", "qty": 1 },
@@ -126,28 +118,28 @@
       ],
       "power": "저전압" },
 
-    { "id": "build_advanced_crafter", "tier": 2, "output": "고급 조합기", "outputQty": 1,
+    { "id": "advanced_crafter", "tier": 2, "output": "고급 조합기", "outputQty": 1,
       "inputs": [],
       "note": "조합법 미정. 여기서만 만들 수 있는 전용 아이템이 있어 중앙 코어로 대체 불가" },
 
-    { "id": "build_blast_furnace", "tier": 2, "output": "용광로", "outputQty": 1,
+    { "id": "blast_furnace", "tier": 2, "output": "용광로", "outputQty": 1,
       "inputs": [],
       "note": "조합법 미정. 화로와 별개인 상위 제련 기계(강철·티타늄)" },
 
-    { "id": "build_precision_fabricator", "tier": 2, "output": "정밀 세공기", "outputQty": 1,
+    { "id": "precision_fabricator", "tier": 2, "output": "정밀 세공기", "outputQty": 1,
       "inputs": [],
       "note": "조합법 미정. 모터 / 베어링 / 프로펠러 생산" },
 
-    { "id": "build_extractor_t3", "tier": 2, "output": "0-3티어 추출기", "outputQty": 1,
+    { "id": "extractor03", "tier": 2, "output": "0-3티어 추출기", "outputQty": 1,
       "inputs": [],
       "note": "조합법 미정. 추출기 최종 티어" },
 
-    { "id": "build_pump", "tier": 2, "output": "펌프", "outputQty": 1, "inputs": [], "note": "조합법 미정" },
-    { "id": "build_distiller", "tier": 2, "output": "증류기", "outputQty": 1, "inputs": [], "note": "조합법 미정" },
-    { "id": "build_gas_generator", "tier": 2, "output": "가스 발전기", "outputQty": 1, "inputs": [], "note": "조합법 미정. 기체 연료 → 전력" },
-    { "id": "build_hydroponics", "tier": 2, "output": "수경 재배기", "outputQty": 1, "inputs": [], "note": "조합법 미정" },
-    { "id": "build_item_enhancer", "tier": 2, "output": "아이템 강화기", "outputQty": 1, "inputs": [], "note": "조합법 미정" },
-    { "id": "build_upgrade_module_speed", "tier": 2, "output": "업그레이드 모듈 - 속도", "outputQty": 1, "inputs": [], "note": "조합법 미정. 기계에 장착해 처리 속도 향상" },
-    { "id": "build_upgrade_module_efficiency", "tier": 2, "output": "업그레이드 모듈 - 효율", "outputQty": 1, "inputs": [], "note": "조합법 미정. 기계에 장착해 효율 향상" }
+    { "id": "pump", "tier": 2, "output": "펌프", "outputQty": 1, "inputs": [], "note": "조합법 미정" },
+    { "id": "distiller", "tier": 2, "output": "증류기", "outputQty": 1, "inputs": [], "note": "조합법 미정" },
+    { "id": "gas_generator", "tier": 2, "output": "가스 발전기", "outputQty": 1, "inputs": [], "note": "조합법 미정. 기체 연료 → 전력" },
+    { "id": "hydroponics", "tier": 2, "output": "수경 재배기", "outputQty": 1, "inputs": [], "note": "조합법 미정" },
+    { "id": "item_enhancer", "tier": 2, "output": "아이템 강화기", "outputQty": 1, "inputs": [], "note": "조합법 미정" },
+    { "id": "upgrade_module_speed", "tier": 2, "output": "업그레이드 모듈 - 속도", "outputQty": 1, "inputs": [], "note": "조합법 미정. 기계에 장착해 처리 속도 향상" },
+    { "id": "upgrade_module_efficiency", "tier": 2, "output": "업그레이드 모듈 - 효율", "outputQty": 1, "inputs": [], "note": "조합법 미정. 기계에 장착해 효율 향상" }
   ]
 }

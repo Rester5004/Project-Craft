@@ -51,6 +51,16 @@ public class PlaceableRecord
     /// </summary>
     public byte faceModes;
 
+    /// <summary>
+    /// 지금 가공 중인 진행도(초). 기계가 아니면 0 이다.
+    ///
+    /// 자동 기계는 몇 초면 다시 채워지므로 없어도 티가 안 났지만, <b>수동 기계는 20번을 눌러야 하나가 나온다</b>
+    /// — 19번 누른 뒤 청크가 내려가면 그 노동이 통째로 사라진다. 그래서 v10 부터 저장한다.
+    /// 어느 레시피의 진행도인지는 저장하지 않는다: 청크가 내려가 있는 동안에는 입력 슬롯을 바꿀 수단이
+    /// 없으므로, 다시 올라올 때 <see cref="MachineInstance"/> 가 고르는 레시피가 저장 시점과 같다.
+    /// </summary>
+    public float progress;
+
     public PlaceableRecord() { }
 
     public PlaceableRecord(string blockId)
@@ -171,6 +181,9 @@ public class Chunk
 
             // v9: 렌치로 지정한 네 면의 상태. 파이프가 아니면 언제나 0 이라 1바이트로 끝난다.
             writer.Write(rec.faceModes);
+
+            // v10: 가공 진행도(초). 기계가 아니면 언제나 0 이다.
+            writer.Write(rec.progress);
         }
 
         writer.Write(drops.Count);
@@ -278,6 +291,9 @@ public class Chunk
             // parcels 와 달리 else 가 없어도 된다. byte 의 기본값 0 이 곧 "네 면 모두 기본" 이다.
             if (version >= 9) rec.faceModes = reader.ReadByte();
 
+            // 같은 이유로 else 가 필요 없다. float 기본값 0 이 곧 "진행 없음" 이다.
+            if (version >= 10) rec.progress = reader.ReadSingle();
+
             chunk.placeables[new Vector2Int(lx, ly)] = rec;
         }
 
@@ -320,8 +336,9 @@ public class WorldMap : Singleton<WorldMap>
     // v7: 기계의 보유 전력·라운드로빈 커서·발전기의 전력 링크 목록을 추가했다.
     // v8: 파이프가 운반 중인 짐(ParcelRecord)을 배치물마다 저장한다.
     // v9: 렌치로 지정한 파이프 네 면의 상태(faceModes 1바이트)를 배치물마다 저장한다.
+    // v10: 기계의 가공 진행도(progress). 수동 기계는 20번을 눌러야 하나가 나오므로 잃으면 안 된다.
     private const int SaveMagic = 0x50435730; // 'PCW0'
-    private const int SaveVersion = 9;
+    private const int SaveVersion = 10;
     private const int MinReadableVersion = 3;
 
     private Dictionary<Vector2Int, Chunk> chunks;

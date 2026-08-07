@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d1635fa976c21145835b252e45d6313, type: 3}
+  m_Name: auto_crafter
+  m_EditorClassIdentifier: Assembly-CSharp::Recipe
+  machine: {fileID: 11400000, guid: ea55fe72f9315554a8ffdcf795dd1b7e, type: 2}
+  category: {fileID: 11400000, guid: a63365af4ccd3904a91ebf59b6456c84, type: 2}
+  tier: 1
+  inputs:
+  - item: {fileID: 11400000, guid: 0330312b77a14f343994e156d6909149, type: 2}
+    count: 1
+  - item: {fileID: 11400000, guid: cb5fecda99ffdb74382a0c1f5e8bef4d, type: 2}
+    count: 5
+  - item: {fileID: 11400000, guid: 3dffad9903e5f8f438998dce2a07e10f, type: 2}
+    count: 2
+  outputs:
+  - item: {fileID: 11400000, guid: 33fbe473f48b5da46871367c1b8dedef, type: 2}
+    count: 1
+  requiredTools:
+  - tool: {fileID: 11400000, guid: 10ee7e00132852840bfb6daadcaa45b2, type: 2}
+    durabilityCost: 1
+  craftTime: 1
+  importNote: "[\uBCD1\uD569] Assets/Prefabs/Recipes/Incomplete/crafting/auto_crafter.asset
+    \uB97C \uD761\uC218\uD568\r\n[\uCD9C\uCC98] notion_machines.json / id=build_auto_crafter\r\n[\uAE30\uACC4]
+    '\uC870\uD569\uB300' \u2014 \uB300\uC751\uD558\uB294 MachineBlock \uC774 \uC5C6\uC5B4
+    \uBE44\uC6CC \uB460\r\n[\uC218\uB7C9 \uBBF8\uD45C\uAE30] \uC7AC\uB8CC '\uCCA0\uADFC
+    \uCF58\uD06C\uB9AC\uD2B8' \uC744 1\uAC1C\uB85C \uAC04\uC8FC\r\n[\uC804\uB825]
+    \uC800\uC804\uC555\r\n[\uBE44\uACE0] \uAD6C '\uAC00\uACF5\uB300'. \uC911\uC559
+    \uCF54\uC5B4\uC640 \uAC19\uC740 \uBC94\uC704\uB97C \uC790\uB3D9\uD654\r\n[\uC6D0\uBB38]
+    {\"id\":\"build_auto_crafter\",\"tier\":1,\"output\":\"\uC790\uB3D9 \uC870\uD569\uAE30\",\"outputQty\":1,\"inputs\":[{\"item\":\"\uCCA0\uADFC
+    \uCF58\uD06C\uB9AC\uD2B8\",\"qty\":null},{\"item\":\"\uB4DC\uB77C\uC774\uBC84\",\"qty\":1},{\"item\":\"\uCEF4\uD4E8\uD130
+    \uCE69\",\"qty\":5},{\"item\":\"\uC778\uBC14 \uD310\",\"qty\":2}],\"power\":\"\uC800\uC804\uC555\",\"note\":\"\uAD6C
+    '\uAC00\uACF5\uB300'. \uC911\uC559 \uCF54\uC5B4\uC640 \uAC19\uC740 \uBC94\uC704\uB97C
+    \uC790\uB3D9\uD654\"}\r\n\r\n--- \uD761\uC218\uB41C \uC6D0\uBCF8 ---\r\n[\uCD9C\uCC98]
+    crafting.json / id=auto_crafter\r\n[\uB3C4\uAD6C] \uB4DC\uB77C\uC774\uBC84 (\uB0B4\uAD6C\uB3C4\uB9CC
+    \uC18C\uBAA8, \uC7AC\uB8CC \uC544\uB2D8)\r\n[\uC6D0\uBB38] {\"id\":\"auto_crafter\",\"tier\":1,\"output\":\"\uC790\uB3D9
+    \uC870\uD569\uAE30\",\"outputQty\":1,\"tools\":[\"\uB4DC\uB77C\uC774\uBC84\"],\"inputs\":[{\"item\":\"\uCEF4\uD4E8\uD130
+    \uCE69\",\"qty\":5},{\"item\":\"\uC778\uBC14 \uD310\",\"qty\":2}]}\r\n"

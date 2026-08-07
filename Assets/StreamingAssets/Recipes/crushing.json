@@ -50,8 +50,7 @@
       "outputs": [
         { "item": "파쇄 광석", "qty": 1, "chance": 1.0, "role": "main" },
         { "item": "유황석", "qty": 1, "chance": 0.10, "grade": "common" },
-        { "item": "반짝이는 돌", "qty": 1, "chance": 0.05, "grade": "uncommon" },
-        { "item": "미가공 우라늄", "qty": 1, "chance": 0.01, "grade": "rare" }
+        { "item": "탁한 우라늄", "qty": 1, "chance": 0.01, "grade": "rare" }
       ]
     },
     {

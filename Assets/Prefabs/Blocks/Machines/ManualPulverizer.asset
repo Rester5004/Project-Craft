@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9e72bd956b65294a846c4174caf0f0f, type: 3}
+  m_Name: ManualPulverizer
+  m_EditorClassIdentifier: Assembly-CSharp::MachineBlock
+  blockName: Machine:ManualPulverizer
+  displayName: "\uC218\uB3D9 \uBD84\uC1C4\uAE30"
+  dropItem: {fileID: 0}
+  dropCount: 1
+  machinePrefab: {fileID: 2401623937405327994, guid: db33b35fb4c6f9449a511216dbdf6e30, type: 3}
+  uiPrefab: {fileID: 7188906163150270401, guid: 02768a093277daa41a2d1e8afd6f7419, type: 3}
+  runningSprite: {fileID: 0}
+  manualStepRatio: 0.05
+  tier: 0
+  recipeGroupId: Pulverizer
+  inputSlotCount: 1
+  outputSlotCount: 1
+  fuelSlotCount: 0
+  fuelBurnRate: 20
+  inputGasSlotCount: 0
+  outputGasSlotCount: 0
+  maxGasAmount: 0
+  maxEnergyAmount: 0
+  isUseEnergy: 0
+  isGenerator: 0
+  powerRange: 0
+  energyUseRate: 0
+  speedMultiplier: 1
+  chanceMultiplier: 1

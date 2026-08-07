@@ -18,7 +18,8 @@ namespace ProjectCraft.EditorTools
         private static readonly string[,] Table =
         {
             // ── Notion 개편 때의 이름 변경·통합 ──────────────────────────
-            { "용광로", "화로" },
+            // '용광로 → 화로' 는 뺐다. 용광로가 Machine:BlastFurnace 로 정식 기계가 됐으므로
+            // 화로로 보내면 그 레시피가 엉뚱한 기계에 붙는다(설계 JSON 도 "화로와 별개인 상위 제련 기계" 라고 적고 있다).
             { "유리 제조기", "화로" },
             { "가공대", "조합대" },
             { "철근 공장", "조합대" },
@@ -36,13 +37,11 @@ namespace ProjectCraft.EditorTools
             { "분쇄기", "전기 분쇄기" },
             { "전기분해기", "전기 분해기" },
 
-            // ⚠ 임시. '수동 분쇄기' 는 별개 기계로 두기로 했지만 아직 MachineBlock 이 없어,
-            //    빼면 그 레시피들이 갈 곳을 잃는다. 정식 기계가 되면 <b>이 줄을 지워야 한다</b>.
-            { "수동 분쇄기", "전기 분쇄기" },
-
+            // ⚠ 여기에 '수동 분쇄기 → 전기 분쇄기' 를 <b>다시 넣지 말 것.</b>
+            //    Machine:ManualPulverizer 가 실재하는 기계가 됐으므로, 전기 쪽으로 보내면
+            //    수동 사슬 레시피가 엉뚱한 기계에 붙는다.
             // ⚠ 여기에 '수동 0-0티어 추출기 → 조합대' 를 <b>다시 넣지 말 것.</b>
-            //    ExtractorSetup 이 Machine:Extractor00 을 진짜로 만들어 주므로,
-            //    조합대로 보내면 그 기계의 레시피가 엉뚱한 곳에 붙는다.
+            //    Machine:Extractor00 이 실재하는 기계이므로, 조합대로 보내면 그 레시피가 엉뚱한 곳에 붙는다.
         };
 
         private static readonly System.Collections.Generic.Dictionary<string, string> map

@@ -18,6 +18,7 @@ MonoBehaviour:
   dropCount: 1
   machinePrefab: {fileID: 2613032363430261748, guid: 5d6ef73bd00b5df46aa76046423db3a5, type: 3}
   uiPrefab: {fileID: 723616340984963795, guid: dc2ac8fe2a1dc494a9bb4dce816ffc3b, type: 3}
+  runningSprite: {fileID: 0}
   tier: 1
   recipeGroupId: 
   inputSlotCount: 0
@@ -32,3 +33,5 @@ MonoBehaviour:
   isGenerator: 1
   powerRange: 8
   energyUseRate: 0
+  speedMultiplier: 1
+  chanceMultiplier: 1

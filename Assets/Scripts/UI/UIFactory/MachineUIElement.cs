@@ -16,7 +16,12 @@ public enum MachineUIRole
     /// <summary>연료를 넣는 칸(화로 등). 컨테이너 평면 인덱스는 [입력][출력][연료] 순서다.</summary>
     FuelSlot = 7,
     /// <summary>지금 타고 있는 연료의 잔량(0~1).</summary>
-    FuelBar = 8
+    FuelBar = 8,
+    /// <summary>
+    /// 손으로 돌리는 기계의 작동 버튼(<see cref="MachineBlock.IsManual"/>). 누를 때마다 진행도가 오른다.
+    /// 자동 기계의 패널에 들어 있어도 런타임에 꺼지므로, 공유 프리팹에 넣어도 안전하다.
+    /// </summary>
+    ManualButton = 9
 }
 
 /// <summary>

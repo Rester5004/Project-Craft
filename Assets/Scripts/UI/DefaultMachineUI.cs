@@ -32,6 +32,8 @@ public class DefaultMachineUI : MonoBehaviour
     private BarEntry fuelBar;
     private BarEntry progressBar;
     private TMP_Text machineNameText;
+    private Button manualButton;          // 손으로 돌리는 기계에서만 보이는 "작동" 버튼
+    private GameObject manualButtonGO;
 
     private MachineInventory sharedInventory;            // 인스턴스 없이 열 때 폴백
     private readonly List<ItemSlot> boundSlots = new();  // 현재 바인딩된(활성) 슬롯
@@ -63,6 +65,8 @@ public class DefaultMachineUI : MonoBehaviour
         fuelBar = null;
         progressBar = null;
         machineNameText = null;
+        manualButton = null;
+        manualButtonGO = null;
 
         List<MachineUIElement> inputEls = new();
         List<MachineUIElement> outputEls = new();
@@ -73,6 +77,7 @@ public class DefaultMachineUI : MonoBehaviour
         MachineUIElement fuelBarEl = null;
         MachineUIElement progressEl = null;
         MachineUIElement nameEl = null;
+        MachineUIElement manualEl = null;
 
         foreach (MachineUIElement element in GetComponentsInChildren<MachineUIElement>(true))
         {
@@ -87,6 +92,7 @@ public class DefaultMachineUI : MonoBehaviour
                 case MachineUIRole.FuelBar: fuelBarEl = Prefer(fuelBarEl, element); break;
                 case MachineUIRole.ProgressBar: progressEl = Prefer(progressEl, element); break;
                 case MachineUIRole.MachineName: nameEl = Prefer(nameEl, element); break;
+                case MachineUIRole.ManualButton: manualEl = Prefer(manualEl, element); break;
             }
         }
 
@@ -109,6 +115,13 @@ public class DefaultMachineUI : MonoBehaviour
             machineNameText = nameEl.GetComponent<TMP_Text>();
             if (machineNameText == null)
                 Debug.LogError($"[DefaultMachineUI] '{nameEl.name}' 에 TMP_Text 가 없습니다.", nameEl);
+        }
+        if (manualEl != null)
+        {
+            manualButtonGO = manualEl.gameObject;
+            manualButton = manualEl.GetComponent<Button>();
+            if (manualButton == null)
+                Debug.LogError($"[DefaultMachineUI] '{manualEl.name}' (ManualButton) 에 Button 이 없습니다.", manualEl);
         }
 
         sharedInventory = new MachineInventory(inputs.Count, outputs.Count, fuels.Count);
@@ -246,6 +259,7 @@ public class DefaultMachineUI : MonoBehaviour
             machineNameText.text = MachineTitle(instance);
 
         BindPowerLinkButton(instance);
+        BindManualButton(instance);
 
         gameObject.SetActive(true);
         RefreshAll();
@@ -280,6 +294,30 @@ public class DefaultMachineUI : MonoBehaviour
         {
             if (PowerLinkMode.Instance != null) PowerLinkMode.Instance.Enter(captured);
         });
+    }
+
+    /// <summary>
+    /// "작동" 버튼을 이 기계에 맞게 붙인다. 손으로 돌리는 기계에서만 보인다.
+    ///
+    /// 전력 전송 버튼과 달리 <b>프리팹의 요소</b>(<see cref="MachineUIRole.ManualButton"/>)를 쓴다 —
+    /// 전력바가 빠진 자리에 버튼을 놓는 등, 위치를 레이아웃에서 잡고 싶기 때문이다.
+    /// 버튼이 없는 프리팹(자동 기계용)에서는 아무 일도 하지 않는다.
+    /// </summary>
+    private void BindManualButton(MachineInstance instance)
+    {
+        if (manualButtonGO == null) return;
+
+        bool manual = instance != null && instance.Info != null && instance.Info.IsManual;
+        manualButtonGO.SetActive(manual);
+
+        if (manualButton == null) return;
+
+        // 리스너를 지우지 않으면 기계를 열 때마다 쌓여, 한 번 눌렀는데 <b>예전에 열었던 기계까지</b> 함께 돈다.
+        manualButton.onClick.RemoveAllListeners();
+        if (!manual) return;
+
+        MachineInstance captured = instance;
+        manualButton.onClick.AddListener(() => captured.ManualStep());
     }
 
     private Button BuildPowerLinkButton()

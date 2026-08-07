@@ -18,6 +18,7 @@ MonoBehaviour:
   dropCount: 1
   machinePrefab: {fileID: 2613032363430261748, guid: 4390e6c4fde3bcc49a4fb0fb30aeef78, type: 3}
   uiPrefab: {fileID: 0}
+  runningSprite: {fileID: 0}
   tier: 0
   recipeGroupId: ResourceGenerator
   inputSlotCount: 0

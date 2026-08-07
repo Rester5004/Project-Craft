@@ -211,11 +211,20 @@ namespace ProjectCraft.EditorTools
             foreach (string key in keys) Report.AppendLine($"- `{key}` : {byMachine[key]}개");
         }
 
+        /// <summary>
+        /// 낼 것이 하나라도 있는가. <b>확률 부산물만 있는 레시피도 산출이 있는 것</b>이다
+        /// (추출기가 그렇다) — 여기서 빠뜨리면 딕셔너리에 등록되지 않아 기계가 영원히 놀게 된다.
+        /// </summary>
         private static bool HasAnyOutput(Recipe recipe)
         {
-            if (recipe.outputs == null) return false;
-            foreach (ItemStack stack in recipe.outputs)
-                if (stack != null && stack.item != null && stack.count > 0) return true;
+            if (recipe.outputs != null)
+                foreach (ItemStack stack in recipe.outputs)
+                    if (stack != null && stack.item != null && stack.count > 0) return true;
+
+            if (recipe.chanceOutputs != null)
+                foreach (ChanceOutput roll in recipe.chanceOutputs)
+                    if (roll != null && roll.item != null && roll.count > 0 && roll.chance > 0f) return true;
+
             return false;
         }
 
