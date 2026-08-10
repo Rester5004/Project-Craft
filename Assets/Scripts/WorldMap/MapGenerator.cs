@@ -23,6 +23,7 @@ public class MapGenerator : MonoBehaviour
     private readonly Dictionary<Vector2Int, MachineInstance> loadedMachines = new();
     // 로드된 청크에 깔린 파이프들. 파이프는 오브젝트가 아니라 타일이라 순수 데이터만 든다.
     private readonly Dictionary<Vector2Int, PipeCell> loadedPipes = new();
+    private readonly Dictionary<Vector2Int, CropInstance> loadedCrops = new();
     private Transform placeableContainer;
 
     // 로드된 청크에 스폰된 필드 드랍들(레코드 → 표시 오브젝트)
@@ -251,7 +252,10 @@ public class MapGenerator : MonoBehaviour
 
     private void SpawnPlaceable(Vector2Int worldCell, PlaceableRecord record)
     {
-        if (record == null || loadedMachines.ContainsKey(worldCell)) return;
+        if (record == null || loadedMachines.ContainsKey(worldCell) || loadedCrops.ContainsKey(worldCell)) return;
+
+        CropBlock crop = ItemDictionary.Instance != null ? ItemDictionary.Instance.GetCropInfo(record.blockId) : null;
+        if (crop != null) { SpawnCrop(worldCell, record, crop); return; }
 
         // 파이프는 프리팹을 세우지 않고 타일맵에 그린다. 아래 기계 경로를 타면
         // MachineInstance 가 붙어 "유령 기계"가 되므로 반드시 여기서 갈라야 한다.
@@ -283,6 +287,17 @@ public class MapGenerator : MonoBehaviour
         if (PipeNetworkManager.Active != null) PipeNetworkManager.Active.MarkTopologyDirty(worldCell);
     }
 
+    private void SpawnCrop(Vector2Int worldCell, PlaceableRecord record, CropBlock crop)
+    {
+        EnsurePlaceableContainer();
+        GameObject go = new GameObject(crop.DisplayName);
+        go.transform.SetParent(placeableContainer, false);
+        go.transform.position = placeableObjectsTilemap.GetCellCenterWorld(new Vector3Int(worldCell.x, worldCell.y, 0));
+        CropInstance instance = go.AddComponent<CropInstance>();
+        instance.Bind(crop, record, worldCell);
+        loadedCrops[worldCell] = instance;
+    }
+
     /// <summary>파이프 한 칸을 등록하고 타일로 그린다(GameObject 를 만들지 않는다).</summary>
     private void SpawnPipe(Vector2Int worldCell, PlaceableRecord record, PipeBlock block)
     {
@@ -301,6 +316,9 @@ public class MapGenerator : MonoBehaviour
     /// <summary>로드된 청크에 깔려 있는 파이프(월드 셀 → 상태). loadedMachines 와 대칭이다.</summary>
     public bool TryGetPipeAt(Vector2Int worldCell, out PipeCell pipe)
         => loadedPipes.TryGetValue(worldCell, out pipe);
+
+    public bool TryGetCropAt(Vector2Int worldCell, out CropInstance crop)
+        => loadedCrops.TryGetValue(worldCell, out crop);
 
     public IEnumerable<KeyValuePair<Vector2Int, PipeCell>> LoadedPipes => loadedPipes;
 
@@ -365,6 +383,25 @@ public class MapGenerator : MonoBehaviour
         return true;
     }
 
+    /// <summary>다 자란 작물을 수확하고 설정된 수확물/씨앗을 떨어뜨린다.</summary>
+    public bool HarvestCropAt(Vector2Int worldCell)
+    {
+        if (!loadedCrops.TryGetValue(worldCell, out CropInstance instance) || instance == null || !instance.IsMature)
+            return false;
+
+        CropBlock crop = instance.Crop;
+        Vector3 pos = new Vector3(worldCell.x, worldCell.y, 0f);
+        Chunk chunk = WorldMap.Instance.GetOrCreateChunk(Chunk.GetChunkId(pos));
+        chunk.RemovePlaceable(Chunk.GetLocalCellPositionInChunk(pos));
+        loadedCrops.Remove(worldCell);
+        Destroy(instance.gameObject);
+
+        if (crop.harvestItem != null) SpawnDrop(worldCell, new ItemStack { item = crop.harvestItem, count = crop.harvestCount });
+        if (crop.dropItem != null && crop.seedReturnCount > 0)
+            SpawnDrop(worldCell, new ItemStack { item = crop.dropItem, count = crop.seedReturnCount });
+        return true;
+    }
+
     /// <summary>배치물 자신을 아이템으로 돌려준다(아이템 ID 는 blockName 과 같다는 규약).</summary>
     private void DropSelf(Vector2Int worldCell, PlaceableRecord record)
     {
@@ -425,6 +462,11 @@ public class MapGenerator : MonoBehaviour
             {
                 loadedPipes.Remove(worldCell);
                 if (PipeNetworkManager.Active != null) PipeNetworkManager.Active.OnPipeUnloaded(worldCell);
+            }
+            else if (loadedCrops.TryGetValue(worldCell, out CropInstance crop))
+            {
+                if (crop != null) Destroy(crop.gameObject);
+                loadedCrops.Remove(worldCell);
             }
         }
 

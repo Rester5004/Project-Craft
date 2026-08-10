@@ -664,6 +664,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemDictionary
   itemsList:
+  - {fileID: 11400000, guid: 7ac52f013f15490f9aa676f485f0cb7c, type: 2}
+  - {fileID: 11400000, guid: 12e75074341e4c4aa53aa685cf2a40e0, type: 2}
+  - {fileID: 11400000, guid: 08047e0c1a5545bf830cdac400679001, type: 2}
   - {fileID: 11400000, guid: cbd5f06094595c74da7f0bbc3dee3100, type: 2}
   - {fileID: 11400000, guid: e33422ece4b16744993508f9c9c9214f, type: 2}
   - {fileID: 11400000, guid: 9a383ce1f3803c54ba6208e1bcb7e296, type: 2}
@@ -887,6 +890,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6b9a68024d0cc4748ae64faa9b1577bd, type: 2}
   - {fileID: 11400000, guid: 3b3ecc29dd70a9d409676129a61c5bdf, type: 2}
   blocksList:
+  - {fileID: 11400000, guid: c81f57f16b044b008d0aaf92333ea6c9, type: 2}
+  - {fileID: 11400000, guid: e13e5efde68e418ba15531303b15dc63, type: 2}
   - {fileID: 11400000, guid: b0993c14880dfe640a2a1dd71de15a88, type: 2}
   - {fileID: 11400000, guid: ae686f65c4060264bac6c596db8425cc, type: 2}
   - {fileID: 11400000, guid: 2290bdb0a27272d4eb44b866581bb18e, type: 2}
@@ -5407,6 +5412,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: ebef7700ab3487e4fb8b275b43a7c56a, type: 2}
   - {fileID: 11400000, guid: fa68ae5afc1666945acc17eeac1901af, type: 2}
   - {fileID: 11400000, guid: 88de46fe9d225ba4680417fa8541585e, type: 2}
+  - {fileID: 11400000, guid: 7ac52f013f15490f9aa676f485f0cb7c, type: 2}
+  - {fileID: 11400000, guid: 12e75074341e4c4aa53aa685cf2a40e0, type: 2}
   amount: 1
 --- !u!4 &1827728955
 Transform:
