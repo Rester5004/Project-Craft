@@ -146,6 +146,15 @@ public class PlayerInteraction : MonoBehaviour
                 return;
             }
 
+            // 농지 같은 바닥 블록은 현재 바닥 한 칸을 교체한다.
+            if (Chunk.IsFloor(terrain.blockName))
+            {
+                if (!WorldMap.Instance.PlaceFloor(chunkId, localCell, terrain.blockName)) return;
+                mapGenerator.RefreshTile(targetCell);
+                ConsumeSelected(selectedItemStack);
+                return;
+            }
+
             if (!IsCellClearForWall(targetCell))
                 return; // 플레이어나 기계 위에 벽을 세우면 갇히거나 겹친다
             if (!WorldMap.Instance.Place(chunkId, localCell, terrain.blockName))
@@ -190,7 +199,7 @@ public class PlayerInteraction : MonoBehaviour
             return;
         }
 
-        // 2-c) 기계는 프리팹을 세운다.
+        // 2-d) 기계는 프리팹을 세운다.
         // 지형·파이프와 달리 예전에는 여기에만 자리 검사가 없어 플레이어가 선 칸에도 기계를 세울 수 있었다.
         if (!IsCellClearForWall(targetCell))
             return;
@@ -416,6 +425,7 @@ public class PlayerInteraction : MonoBehaviour
 
         if (target == MineTarget.Machine) MineMachine(mineCell);
         else if (target == MineTarget.Pipe) mapGenerator.RemoveMachineAt(mineCell);   // 안에서 파이프로 갈라진다
+        else if (target == MineTarget.Crop) mapGenerator.HarvestCropAt(mineCell);
         else if (target == MineTarget.Crop) mapGenerator.HarvestCropAt(mineCell);
         else if (MineWall(mineCell, chunkId, localCell)) WearMiningTool();            // 실제로 캔 경우에만 닳는다
 

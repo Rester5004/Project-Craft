@@ -17,6 +17,7 @@ public class ItemDictionary : Singleton<ItemDictionary>
     // '채워진 양동이' 아이템 → 그 안에 든 유체. bucketItem 의 역인덱스라 어긋날 수 없다.
     private Dictionary<Items, FluidDefine> fluidByBucket = new Dictionary<Items, FluidDefine>();
     private Dictionary<Items, CropBlock> cropBySeed = new Dictionary<Items, CropBlock>();
+    private Dictionary<Items, CropBlock> cropBySeed = new Dictionary<Items, CropBlock>();
 
     /// <summary>
     /// 한글 이름을 키로 비교할 때는 NFC 로 통일한다.
@@ -232,6 +233,20 @@ public class ItemDictionary : Singleton<ItemDictionary>
 
     /// <summary>blockId 로 파이프 정보를 조회한다. 없거나 파이프가 아니면 null.</summary>
     public PipeBlock GetPipeInfo(string blockId) => GetBlock(blockId) as PipeBlock;
+
+    private void RegisterCropPlacement(BlockBase block)
+    {
+        CropBlock crop = block as CropBlock;
+        if (crop == null || crop.dropItem == null) return;
+        if (!cropBySeed.ContainsKey(crop.dropItem)) cropBySeed.Add(crop.dropItem, crop);
+    }
+
+    public CropBlock GetCropForSeed(Items item)
+        => item != null && cropBySeed.TryGetValue(item, out CropBlock crop) ? crop : null;
+
+    public CropBlock GetCropInfo(string blockId)
+        => !string.IsNullOrEmpty(blockId) && blockDictionary.TryGetValue(blockId, out BlockBase block)
+            ? block as CropBlock : null;
 
     private void RegisterCropPlacement(BlockBase block)
     {

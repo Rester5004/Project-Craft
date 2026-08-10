@@ -24,6 +24,7 @@ public class MapGenerator : MonoBehaviour
     // 로드된 청크에 깔린 파이프들. 파이프는 오브젝트가 아니라 타일이라 순수 데이터만 든다.
     private readonly Dictionary<Vector2Int, PipeCell> loadedPipes = new();
     private readonly Dictionary<Vector2Int, CropInstance> loadedCrops = new();
+    private readonly Dictionary<Vector2Int, CropInstance> loadedCrops = new();
     private Transform placeableContainer;
 
     // 로드된 청크에 스폰된 필드 드랍들(레코드 → 표시 오브젝트)
@@ -272,7 +273,10 @@ public class MapGenerator : MonoBehaviour
 
     private bool SpawnPlaceable(Vector2Int worldCell, PlaceableRecord record)
     {
-        if (record == null || loadedMachines.ContainsKey(worldCell) || loadedCrops.ContainsKey(worldCell)) return false;
+        if (record == null || loadedMachines.ContainsKey(worldCell) || loadedCrops.ContainsKey(worldCell) || loadedCrops.ContainsKey(worldCell)) return false;
+
+        CropBlock crop = ItemDictionary.Instance != null ? ItemDictionary.Instance.GetCropInfo(record.blockId) : null;
+        if (crop != null) { SpawnCrop(worldCell, record, crop); return; }
 
         CropBlock crop = ItemDictionary.Instance != null ? ItemDictionary.Instance.GetCropInfo(record.blockId) : null;
         if (crop != null) { SpawnCrop(worldCell, record, crop); return; }
@@ -306,6 +310,17 @@ public class MapGenerator : MonoBehaviour
         // 기계가 생기면 옆 파이프가 이쪽으로 붙는 모양으로 바뀐다.
         if (PipeNetworkManager.Active != null) PipeNetworkManager.Active.MarkTopologyDirty(worldCell);
         return true;
+    }
+
+    private void SpawnCrop(Vector2Int worldCell, PlaceableRecord record, CropBlock crop)
+    {
+        EnsurePlaceableContainer();
+        GameObject go = new GameObject(crop.DisplayName);
+        go.transform.SetParent(placeableContainer, false);
+        go.transform.position = placeableObjectsTilemap.GetCellCenterWorld(new Vector3Int(worldCell.x, worldCell.y, 0));
+        CropInstance instance = go.AddComponent<CropInstance>();
+        instance.Bind(crop, record, worldCell);
+        loadedCrops[worldCell] = instance;
     }
 
     private void SpawnCrop(Vector2Int worldCell, PlaceableRecord record, CropBlock crop)
@@ -459,6 +474,25 @@ public class MapGenerator : MonoBehaviour
         return true;
     }
 
+    /// <summary>다 자란 작물을 수확하고 설정된 수확물/씨앗을 떨어뜨린다.</summary>
+    public bool HarvestCropAt(Vector2Int worldCell)
+    {
+        if (!loadedCrops.TryGetValue(worldCell, out CropInstance instance) || instance == null || !instance.IsMature)
+            return false;
+
+        CropBlock crop = instance.Crop;
+        Vector3 pos = new Vector3(worldCell.x, worldCell.y, 0f);
+        Chunk chunk = WorldMap.Instance.GetOrCreateChunk(Chunk.GetChunkId(pos));
+        chunk.RemovePlaceable(Chunk.GetLocalCellPositionInChunk(pos));
+        loadedCrops.Remove(worldCell);
+        Destroy(instance.gameObject);
+
+        if (crop.harvestItem != null) SpawnDrop(worldCell, new ItemStack { item = crop.harvestItem, count = crop.harvestCount });
+        if (crop.dropItem != null && crop.seedReturnCount > 0)
+            SpawnDrop(worldCell, new ItemStack { item = crop.dropItem, count = crop.seedReturnCount });
+        return true;
+    }
+
     /// <summary>배치물 자신을 아이템으로 돌려준다(아이템 ID 는 blockName 과 같다는 규약).</summary>
     private void DropSelf(Vector2Int worldCell, PlaceableRecord record)
     {
@@ -526,6 +560,11 @@ public class MapGenerator : MonoBehaviour
             {
                 loadedPipes.Remove(worldCell);
                 if (PipeNetworkManager.Active != null) PipeNetworkManager.Active.OnPipeUnloaded(worldCell);
+            }
+            else if (loadedCrops.TryGetValue(worldCell, out CropInstance crop))
+            {
+                if (crop != null) Destroy(crop.gameObject);
+                loadedCrops.Remove(worldCell);
             }
             else if (loadedCrops.TryGetValue(worldCell, out CropInstance crop))
             {

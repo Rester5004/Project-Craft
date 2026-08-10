@@ -87,6 +87,9 @@ public class PlaceableRecord
     /// <summary>작물을 심은 UTC 시각. 작물이 아닌 배치물은 0.</summary>
     public long plantedAtUtcTicks;
 
+    /// <summary>작물을 심은 UTC 시각. 작물이 아닌 배치물은 0.</summary>
+    public long plantedAtUtcTicks;
+
     public PlaceableRecord() { }
 
     public PlaceableRecord(string blockId)
@@ -229,6 +232,7 @@ public class Chunk
             // v12: 업그레이드 모듈 칸 + 업그레이드로 올린 티어.
             WriteSlotArray(writer, rec.upgradeItemNames, rec.upgradeCounts, rec.upgradeInstances);
             writer.Write(rec.tier);
+            writer.Write(rec.plantedAtUtcTicks);
             writer.Write(rec.plantedAtUtcTicks);
         }
 
@@ -399,6 +403,8 @@ public class Chunk
                 rec.upgradeCounts = new int[0];
                 rec.upgradeInstances = new ItemInstance[0];
             }
+
+            if (version >= 9) rec.plantedAtUtcTicks = reader.ReadInt64();
 
             if (version >= 9) rec.plantedAtUtcTicks = reader.ReadInt64();
 
