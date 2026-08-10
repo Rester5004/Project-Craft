@@ -13,6 +13,10 @@ public class CraftingTableBlock : MachineBlock
 {
     // 티어는 MachineBlock 으로 올라갔다(모든 기계가 티어로 레시피를 거른다). 필드 이름이 같아 기존 에셋은 그대로 읽힌다.
 
+    [Tooltip("업그레이드 칸에 아이템을 넣어 티어를 올릴 수 있는 조합대인가(코어 조합기만 켠다).\n" +
+             "켜면 그 칸은 성능 모듈이 아니라 CoreUpgradeTable 의 재료를 받고, 넣으면 소모된다.")]
+    public bool acceptsTierUpgrade = false;
+
     /// <summary>조합대는 입출력 슬롯이 0 인 것이 정상이므로 기본값으로 폴백하지 않는다.</summary>
     public override bool AllowsZeroSlots => true;
 

@@ -192,6 +192,7 @@ namespace ProjectCraft.EditorTools
 
                 bool touched = ReplaceIn(recipe.inputs, replacement);
                 touched |= ReplaceIn(recipe.outputs, replacement);
+                touched |= ReplaceIn(recipe.chanceOutputs, replacement);
                 if (!touched) continue;
 
                 EditorUtility.SetDirty(recipe);
@@ -236,6 +237,30 @@ namespace ProjectCraft.EditorTools
                 }
             }
             return true;
+        }
+
+        /// <summary>
+        /// 확률 산출 줄의 아이템 참조를 정본으로 바꾼다.
+        ///
+        /// <b>여기서는 같은 아이템이 두 줄이 돼도 합치지 않는다</b> — <see cref="ChanceOutput.chance"/> 가
+        /// 줄마다 달라서, 개수를 더하는 순간 두 확률 중 하나가 조용히 사라진다.
+        /// (재료 줄은 확률이 없으므로 <see cref="ReplaceIn(List{ItemStack}, Dictionary{Items, Items})"/> 가 합친다.)
+        /// </summary>
+        private static bool ReplaceIn(List<ChanceOutput> outputs, Dictionary<Items, Items> replacement)
+        {
+            if (outputs == null) return false;
+
+            bool touched = false;
+            for (int i = 0; i < outputs.Count; i++)
+            {
+                ChanceOutput row = outputs[i];
+                if (row == null || row.item == null) continue;
+                if (!replacement.TryGetValue(row.item, out Items canonical)) continue;
+
+                row.item = canonical;
+                touched = true;
+            }
+            return touched;
         }
 
         /// <summary>
@@ -342,6 +367,7 @@ namespace ProjectCraft.EditorTools
                 if (recipe == null) continue;
                 Collect(recipe.inputs, result);
                 Collect(recipe.outputs, result);
+                Collect(recipe.chanceOutputs, result);   // 확률 전용 산출물도 '쓰이는 중' 이다
             }
 
             foreach (string guid in AssetDatabase.FindAssets("t:BlockBase"))
@@ -357,6 +383,18 @@ namespace ProjectCraft.EditorTools
             if (stacks == null) return;
             for (int i = 0; i < stacks.Count; i++)
                 if (stacks[i] != null && stacks[i].item != null) into.Add(stacks[i].item);
+        }
+
+        /// <summary>
+        /// <b><see cref="DictionaryRegistrar"/> 의 <c>HasAnyOutput</c> 과 같은 규약</b> —
+        /// 확률 산출도 산출로 친다. 여기서 빠뜨리면 확률로만 나오는 아이템이
+        /// "아무도 안 쓴다" 로 판정돼 지워지고, 레시피에 <c>{fileID: 0}</c> 줄만 남는다.
+        /// </summary>
+        private static void Collect(List<ChanceOutput> outputs, HashSet<Items> into)
+        {
+            if (outputs == null) return;
+            for (int i = 0; i < outputs.Count; i++)
+                if (outputs[i] != null && outputs[i].item != null) into.Add(outputs[i].item);
         }
     }
 }

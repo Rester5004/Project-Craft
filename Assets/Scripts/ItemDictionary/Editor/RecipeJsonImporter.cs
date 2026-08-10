@@ -271,7 +271,7 @@ namespace ProjectCraft.EditorTools
 
                 if (IsTrue(item["fluid"]))
                 {
-                    note.AppendLine("[유체 재료] " + name + " x" + QuantityText(item["qty"]) + " (아이템이 아니라 옮기지 않음)");
+                    if (!AddFluid(recipe.fluidInputs, name, item["qty"], note, "재료")) continue;
                     continue;
                 }
 
@@ -297,7 +297,7 @@ namespace ProjectCraft.EditorTools
                 int qty = Quantity(entry["outputQty"]);
 
                 if (IsTrue(entry["outputFluid"]))
-                    note.AppendLine("[유체 산출] " + name + " x" + qty + " (아이템이 아니라 옮기지 않음)");
+                    AddFluid(recipe.fluidOutputs, name, entry["outputQty"], note, "산출");
                 else
                     AddStack(recipe.outputs, name, qty);
             }
@@ -321,7 +321,7 @@ namespace ProjectCraft.EditorTools
 
                 if (IsTrue(output["fluid"]))
                 {
-                    note.AppendLine("[유체 산출] " + name + " x" + QuantityText(output["qty"]));
+                    AddFluid(recipe.fluidOutputs, name, output["qty"], note, "산출");
                     continue;
                 }
 
@@ -376,6 +376,45 @@ namespace ProjectCraft.EditorTools
         {
             if (token == null || token.Type == JTokenType.Null) return;
             note.AppendLine("[" + label + "] " + token.ToString(Newtonsoft.Json.Formatting.None).Trim('"'));
+        }
+
+        /// <summary>
+        /// JSON 의 <c>"fluid": true</c> 항목을 유체 입출력으로 옮긴다.
+        ///
+        /// 예전에는 여기서 importNote 문자열로만 적고 버렸다 — 그래서 전기 분해기·마나 용해기가
+        /// <b>재료도 산출도 없는 껍데기</b>로 임포트됐다. 유체 에셋이 없으면 옮길 곳이 없으므로
+        /// 그때만 note 로 남긴다(에셋을 만든 뒤 다시 임포트하면 제대로 들어간다).
+        ///
+        /// 수량 규약: JSON 은 양동이 단위로 적혀 있고 <see cref="FluidDefine.bucketAmount"/>(=1000) 를 곱한다.
+        /// </summary>
+        private static bool AddFluid(List<FluidStack> list, string rawName, JToken qty, StringBuilder note, string label)
+        {
+            FluidDefine fluid = ResolveFluid(rawName);
+            if (fluid == null)
+            {
+                note.AppendLine("[유체 " + label + "] " + rawName + " x" + QuantityText(qty)
+                    + " (대응하는 FluidDefine 에셋이 없어 옮기지 못함)");
+                return false;
+            }
+
+            list.Add(new FluidStack { fluid = fluid, amount = Mathf.Max(1, Quantity(qty)) * fluid.bucketAmount });
+            return true;
+        }
+
+        /// <summary>한글 표시 이름 또는 fluidId 로 유체 에셋을 찾는다(없으면 null — 만들지는 않는다).</summary>
+        private static FluidDefine ResolveFluid(string rawName)
+        {
+            string name = ItemDictionary.NormalizeName(rawName);
+            if (string.IsNullOrEmpty(name)) return null;
+
+            foreach (string guid in AssetDatabase.FindAssets("t:FluidDefine"))
+            {
+                FluidDefine fluid = AssetDatabase.LoadAssetAtPath<FluidDefine>(AssetDatabase.GUIDToAssetPath(guid));
+                if (fluid == null) continue;
+                if (fluid.fluidId == name) return fluid;
+                if (ItemDictionary.NormalizeName(fluid.DisplayName) == name) return fluid;
+            }
+            return null;
         }
 
         // ── 해석 ─────────────────────────────────────────────

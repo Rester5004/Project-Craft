@@ -3,30 +3,30 @@
   "source": "Notion 기획 백로그 (1) — 6. 레시피 / 가공 레시피 (전용 공장)",
   "description": "전용 공장 레시피. 전력만 산출하는 항목(화력 발전기·변압기·핵발전소)은 아이템이 아니라 note 로만 남긴다.",
   "recipes": [
-    { "id": "roll_iron_plate", "machine": "압연기", "tier": 0, "output": "철판", "outputQty": 1,
+    { "id": "compress_iron_plate", "machine": "압축기", "tier": 0, "output": "철판", "outputQty": 1,
       "inputs": [ { "item": "철 주괴", "qty": 1 } ],
       "note": "조합대보다 고효율" },
 
-    { "id": "roll_brick", "machine": "압연기", "tier": 0, "output": "벽돌", "outputQty": 1,
+    { "id": "compress_brick", "machine": "압축기", "tier": 0, "output": "벽돌", "outputQty": 1,
       "inputs": [ { "item": "모래", "qty": 2 }, { "item": "물", "qty": 1 } ],
-      "note": "벽돌 공장이 압연기로 통합됨. 조합대보다 고효율" },
+      "note": "벽돌 공장·압연기가 압축기로 통합됨. 조합대보다 고효율" },
 
-    { "id": "roll_silicon_plate", "machine": "압연기", "tier": 0, "output": "실리콘 판", "outputQty": 1,
+    { "id": "compress_silicon_plate", "machine": "압축기", "tier": 0, "output": "실리콘 판", "outputQty": 1,
       "inputs": [ { "item": "실리콘", "qty": 1 } ],
-      "note": "자원 목록 기준: 실리콘 → 압연기 → 실리콘 판" },
+      "note": "자원 목록 기준: 실리콘 → 압축기 → 실리콘 판" },
 
-    { "id": "cement", "machine": "시멘트 공장", "tier": 1, "output": "시멘트", "outputQty": 1,
+    { "id": "cement", "machine": "코어 조합기", "tier": 1, "output": "시멘트", "outputQty": 1,
       "inputs": [ { "item": "석회", "qty": 1 }, { "item": "자갈", "qty": null }, { "item": "물", "qty": null } ],
-      "note": "자갈·물 수량 미정. 벽돌 공장이 압연기로 통합되면서 독립 공장이 됨" },
+      "note": "자갈·물 수량 미정. 벽돌 공장이 압축기로 통합되면서 독립 공장이 됨" },
 
-    { "id": "glass_pipe", "machine": "유리 가공기", "tier": 1, "output": "유리 파이프", "outputQty": 1,
+    { "id": "glass_pipe", "machine": "코어 조합기", "tier": 1, "output": "유리 파이프", "outputQty": 1,
       "inputs": [ { "item": "유리", "qty": 2 } ],
       "note": "산성 용액 수송용" },
 
-    { "id": "glass_container", "machine": "유리 가공기", "tier": 1, "output": "유리 용기", "outputQty": 1,
+    { "id": "glass_container", "machine": "코어 조합기", "tier": 1, "output": "유리 용기", "outputQty": 1,
       "inputs": [ { "item": "유리", "qty": 1 } ] },
 
-    { "id": "acid_pipe", "machine": "유리 가공기", "tier": 1, "output": "산성 파이프", "outputQty": 1,
+    { "id": "acid_pipe", "machine": "코어 조합기", "tier": 1, "output": "산성 파이프", "outputQty": 1,
       "inputs": [ { "item": "유리 파이프", "qty": 1 } ],
       "note": "산성 용액 수송 전용" },
 
@@ -68,6 +68,10 @@
     { "id": "alloy_invar", "machine": "합금 재련기", "tier": 1, "output": "인바(invar)", "outputQty": 2,
       "inputs": [ { "item": "니켈", "qty": 1 }, { "item": "철", "qty": 2 } ],
       "note": "광석·주괴 상관 없이 투입 가능" },
+
+    { "id": "special_alloy", "machine": "합금 재련기", "tier": 1, "output": "특수합금", "outputQty": 5,
+      "inputs": [ { "item": "강철", "qty": 5 }, { "item": "알루미늄 주괴", "qty": 5 }, { "item": "마력 파편", "qty": 50 } ],
+      "note": "고급 재단·3티어 저장 장치의 기본 재료" },
 
     { "id": "bio_soil", "machine": "유기물 배양기", "tier": 1, "output": "흙", "outputQty": 1,
       "chance": 0.1, "inputs": [ { "item": "돌", "qty": 1 } ],

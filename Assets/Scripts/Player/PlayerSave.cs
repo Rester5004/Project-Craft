@@ -72,7 +72,12 @@ public class PlayerSave : MonoBehaviour
             writer.Write(SaveMagic);
             writer.Write(SaveVersion);
 
-            Vector3 position = transform.position;
+            // <b>지하 좌표를 쓰면 안 된다.</b> 지하맵은 저장되지 않으므로 다음 실행에는 그 방이 없고,
+            // 좌표만 남으면 암반 한가운데(혹은 허공)에서 시작한다. 대신 내려가기 직전의 지상 자리를 쓴다.
+            // 인벤토리는 지하에서 주운 것까지 그대로 저장한다 — 들고 나온 것과 같으니 그것이 맞다.
+            Vector2 position = UndergroundSession.IsActive
+                ? UndergroundSession.SurfaceReturnPosition
+                : (Vector2)transform.position;
             writer.Write(position.x);
             writer.Write(position.y);
             writer.Write(inventory.SelectedSlotIndex);
@@ -92,6 +97,11 @@ public class PlayerSave : MonoBehaviour
     public void Load()
     {
         loaded = true; // 파일이 없어도 이후 저장은 허용
+
+        // 지하에서는 아무것도 복원하지 않는다. 좌표를 복원하면 방 밖(지상 자리)으로 순간이동하고,
+        // 인벤토리를 복원하면 살아 있는 Inventory 싱글톤이 들고 온 지금 내용을 디스크의 옛 내용으로 덮어쓴다.
+        if (UndergroundSession.IsActive) return;
+
         if (!File.Exists(savePath)) return;
 
         if (inventory == null) inventory = Inventory.Instance;   // Start 보다 먼저 불릴 경우 대비

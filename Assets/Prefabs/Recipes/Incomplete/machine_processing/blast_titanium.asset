@@ -12,15 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d1635fa976c21145835b252e45d6313, type: 3}
   m_Name: blast_titanium
   m_EditorClassIdentifier: Assembly-CSharp::Recipe
-  machine: {fileID: 11400000, guid: 63f0a8bb17e98434a90c04565e332cf7, type: 2}
+  machine: {fileID: 11400000, guid: f31c6e72b5484f24a97b23dfd2c3a26c, type: 2}
   category: {fileID: 11400000, guid: a63365af4ccd3904a91ebf59b6456c84, type: 2}
-  tier: 1
+  tier: 2
   inputs:
   - item: {fileID: 11400000, guid: 5f425707509fadc44acc7d9302c2104e, type: 2}
     count: 4
   outputs:
   - item: {fileID: 11400000, guid: 62a82c5a0c9a8ba4490131e0534d6f97, type: 2}
     count: 1
+  fluidInputs: []
+  fluidOutputs: []
+  chanceOutputs: []
   requiredTools: []
   craftTime: 1
   importNote: "[\uBCD1\uD569] Assets/Prefabs/Recipes/Incomplete/smelting/smelt_titanium.asset

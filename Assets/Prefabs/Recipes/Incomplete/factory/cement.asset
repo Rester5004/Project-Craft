@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d1635fa976c21145835b252e45d6313, type: 3}
   m_Name: cement
   m_EditorClassIdentifier: Assembly-CSharp::Recipe
-  machine: {fileID: 11400000, guid: 30af54bbaad888d4ba110894eaf9f11f, type: 2}
+  machine: {fileID: 11400000, guid: ea55fe72f9315554a8ffdcf795dd1b7e, type: 2}
   category: {fileID: 11400000, guid: a63365af4ccd3904a91ebf59b6456c84, type: 2}
   tier: 1
   inputs:
@@ -25,26 +25,28 @@ MonoBehaviour:
   outputs:
   - item: {fileID: 11400000, guid: c972bd5d28e711446bc096d3f1daf05e, type: 2}
     count: 1
+  fluidInputs: []
+  fluidOutputs: []
+  chanceOutputs: []
   requiredTools: []
   craftTime: 1
-  importNote: "[\uBCD1\uD569] Assets/Prefabs/Recipes/Incomplete/factory/cement.asset
-    \uB97C \uD761\uC218\uD568\r\n[\uCD9C\uCC98] notion_factory.json / id=cement\r\n[\uAE30\uACC4]
+  importNote: "[\uC720\uCCB4 \uC544\uB2D8] \uC774 \uAE30\uACC4\uB294 \uD0F1\uD06C\uAC00
+    \uC5C6\uB2E4 \u2014 \uBB3C\xB7\uC6A9\uC554\uC740 '\uCC44\uC6CC\uC9C4 \uC591\uB3D9\uC774'(\uC544\uC774\uD15C)\uB85C
+    \uC8FC\uACE0\uBC1B\uB294\uB2E4.\n[\uBCD1\uD569] Assets/Prefabs/Recipes/Incomplete/factory/cement.asset
+    \uB97C \uD761\uC218\uD568\n[\uCD9C\uCC98] notion_factory.json / id=cement\n[\uAE30\uACC4]
     '\uC2DC\uBA58\uD2B8 \uACF5\uC7A5' \u2014 \uB300\uC751\uD558\uB294 MachineBlock
-    \uC774 \uC5C6\uC5B4 \uBE44\uC6CC \uB460\r\n[\uC218\uB7C9 \uBBF8\uD45C\uAE30]
-    \uC7AC\uB8CC '\uC790\uAC08' \uC744 1\uAC1C\uB85C \uAC04\uC8FC\r\n[\uC218\uB7C9
-    \uBBF8\uD45C\uAE30] \uC7AC\uB8CC '\uBB3C' \uC744 1\uAC1C\uB85C \uAC04\uC8FC\r\n[\uBE44\uACE0]
-    \uC790\uAC08\xB7\uBB3C \uC218\uB7C9 \uBBF8\uC815. \uBCBD\uB3CC \uACF5\uC7A5\uC774
-    \uC555\uC5F0\uAE30\uB85C \uD1B5\uD569\uB418\uBA74\uC11C \uB3C5\uB9BD \uACF5\uC7A5\uC774
-    \uB428\r\n[\uC6D0\uBB38] {\"id\":\"cement\",\"machine\":\"\uC2DC\uBA58\uD2B8
-    \uACF5\uC7A5\",\"tier\":1,\"output\":\"\uC2DC\uBA58\uD2B8\",\"outputQty\":1,\"inputs\":[{\"item\":\"\uC11D\uD68C\",\"qty\":1},{\"item\":\"\uC790\uAC08\",\"qty\":null},{\"item\":\"\uBB3C\",\"qty\":null}],\"note\":\"\uC790\uAC08\xB7\uBB3C
+    \uC774 \uC5C6\uC5B4 \uBE44\uC6CC \uB460\n[\uC218\uB7C9 \uBBF8\uD45C\uAE30] \uC7AC\uB8CC
+    '\uC790\uAC08' \uC744 1\uAC1C\uB85C \uAC04\uC8FC\n[\uC218\uB7C9 \uBBF8\uD45C\uAE30]
+    \uC7AC\uB8CC '\uBB3C' \uC744 1\uAC1C\uB85C \uAC04\uC8FC\n[\uBE44\uACE0] \uC790\uAC08\xB7\uBB3C
     \uC218\uB7C9 \uBBF8\uC815. \uBCBD\uB3CC \uACF5\uC7A5\uC774 \uC555\uC5F0\uAE30\uB85C
-    \uD1B5\uD569\uB418\uBA74\uC11C \uB3C5\uB9BD \uACF5\uC7A5\uC774 \uB428\"}\r\n\r\n---
-    \uD761\uC218\uB41C \uC6D0\uBCF8 ---\r\n[\uCD9C\uCC98] factory.json / id=cement\r\n[\uAE30\uACC4]
+    \uD1B5\uD569\uB418\uBA74\uC11C \uB3C5\uB9BD \uACF5\uC7A5\uC774 \uB428\n[\uC6D0\uBB38]
+    {\"id\":\"cement\",\"machine\":\"\uC2DC\uBA58\uD2B8 \uACF5\uC7A5\",\"tier\":1,\"output\":\"\uC2DC\uBA58\uD2B8\",\"outputQty\":1,\"inputs\":[{\"item\":\"\uC11D\uD68C\",\"qty\":1},{\"item\":\"\uC790\uAC08\",\"qty\":null},{\"item\":\"\uBB3C\",\"qty\":null}],\"note\":\"\uC790\uAC08\xB7\uBB3C
+    \uC218\uB7C9 \uBBF8\uC815. \uBCBD\uB3CC \uACF5\uC7A5\uC774 \uC555\uC5F0\uAE30\uB85C
+    \uD1B5\uD569\uB418\uBA74\uC11C \uB3C5\uB9BD \uACF5\uC7A5\uC774 \uB428\"}\n\n---
+    \uD761\uC218\uB41C \uC6D0\uBCF8 ---\n[\uCD9C\uCC98] factory.json / id=cement\n[\uAE30\uACC4]
     '\uBCBD\uB3CC \uACF5\uC7A5 (1\uD2F0\uC5B4 \uC5C5\uADF8\uB808\uC774\uB4DC)' \u2014
-    \uB300\uC751\uD558\uB294 MachineBlock \uC774 \uC5C6\uC5B4 \uBE44\uC6CC \uB460\r\n[\uC218\uB7C9
-    \uBBF8\uD45C\uAE30] \uC7AC\uB8CC '\uC790\uAC08' \uC744 1\uAC1C\uB85C \uAC04\uC8FC\r\n[\uC720\uCCB4
-    \uC7AC\uB8CC] \uBB3C x? (\uC544\uC774\uD15C\uC774 \uC544\uB2C8\uB77C \uC62E\uAE30\uC9C0
-    \uC54A\uC74C)\r\n[\uC804\uB825] \uC800\uC804\uC555\r\n[\uBE44\uACE0] \uC790\uAC08+\uBB3C
-    \uC218\uB7C9 \uBBF8\uC815\r\n[\uC6D0\uBB38] {\"id\":\"cement\",\"machine\":\"\uBCBD\uB3CC
-    \uACF5\uC7A5 (1\uD2F0\uC5B4 \uC5C5\uADF8\uB808\uC774\uB4DC)\",\"tier\":1,\"power\":\"\uC800\uC804\uC555\",\"output\":\"\uC2DC\uBA58\uD2B8\",\"inputs\":[{\"item\":\"\uC11D\uD68C\",\"qty\":1},{\"item\":\"\uC790\uAC08\",\"qty\":null},{\"item\":\"\uBB3C\",\"qty\":null,\"fluid\":true}],\"note\":\"\uC790\uAC08+\uBB3C
-    \uC218\uB7C9 \uBBF8\uC815\"}\r\n"
+    \uB300\uC751\uD558\uB294 MachineBlock \uC774 \uC5C6\uC5B4 \uBE44\uC6CC \uB460\n[\uC218\uB7C9
+    \uBBF8\uD45C\uAE30] \uC7AC\uB8CC '\uC790\uAC08' \uC744 1\uAC1C\uB85C \uAC04\uC8FC\n[\uC804\uB825]
+    \uC800\uC804\uC555\n[\uBE44\uACE0] \uC790\uAC08+\uBB3C \uC218\uB7C9 \uBBF8\uC815\n[\uC6D0\uBB38]
+    {\"id\":\"cement\",\"machine\":\"\uBCBD\uB3CC \uACF5\uC7A5 (1\uD2F0\uC5B4 \uC5C5\uADF8\uB808\uC774\uB4DC)\",\"tier\":1,\"power\":\"\uC800\uC804\uC555\",\"output\":\"\uC2DC\uBA58\uD2B8\",\"inputs\":[{\"item\":\"\uC11D\uD68C\",\"qty\":1},{\"item\":\"\uC790\uAC08\",\"qty\":null},{\"item\":\"\uBB3C\",\"qty\":null,\"fluid\":true}],\"note\":\"\uC790\uAC08+\uBB3C
+    \uC218\uB7C9 \uBBF8\uC815\"}\n"

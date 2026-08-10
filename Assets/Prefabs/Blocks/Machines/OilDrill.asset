@@ -18,17 +18,21 @@ MonoBehaviour:
   dropCount: 1
   machinePrefab: {fileID: 2613032363430261748, guid: e1aec99a6d8b9f946a90ab095e242195, type: 3}
   uiPrefab: {fileID: 0}
+  runningSprite: {fileID: 0}
+  manualStepRatio: 0
   tier: 1
   recipeGroupId: 
   inputSlotCount: 1
   outputSlotCount: 1
   fuelSlotCount: 0
   fuelBurnRate: 20
-  inputGasSlotCount: 0
-  outputGasSlotCount: 0
-  maxGasAmount: 0
+  inputFluidSlotCount: 0
+  outputFluidSlotCount: 1
+  maxFluidAmount: 8000
   maxEnergyAmount: 1000
   isUseEnergy: 1
   isGenerator: 0
   powerRange: 0
   energyUseRate: 100
+  speedMultiplier: 1
+  chanceMultiplier: 1

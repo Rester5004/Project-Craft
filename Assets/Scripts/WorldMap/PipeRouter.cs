@@ -113,6 +113,55 @@ public static class PipeRouter
         => mode == PipeFaceMode.Default || mode == PipeFaceMode.Extract;
 
     /// <summary>
+    /// 저장 기계(상자·아이템 저장소)는 <b>렌치로 방향을 지정해야만</b> 파이프가 손댈 수 있다.
+    /// <c>Default</c> 면으로는 넣지도 빼지도 않는다.
+    ///
+    /// 일반 기계는 입력칸과 출력칸이 나뉘어 있어 방향이 저절로 정해지지만, 저장소는 한 칸이 둘을 겸한다.
+    /// 그래서 Default 를 양방향으로 두면 <b>상자 두 개를 파이프로 이으면 아이템이 영원히 왕복한다.</b>
+    /// 방향을 강제하면 그 고리가 구조적으로 생기지 않는다 —
+    /// <c>Extract</c> 면인 저장소는 <see cref="CanInsertInto"/> 가 false 라 <see cref="FindSinks"/> 의 도착지에 오르지도 않는다.
+    ///
+    /// <b>넣기와 빼기 판정을 반드시 이 짝으로 함께 쓴다.</b> 한쪽만 고치면 방향이 어긋난다.
+    /// 경로 탐색은 레코드만 보고(<see cref="StorageAt"/>) 배달·추출은 살아 있는 인스턴스를 보므로
+    /// 규칙은 <c>bool isStorage</c> 를 받는 이 두 함수에 두고 나머지는 넘겨 주기만 한다.
+    /// </summary>
+    public static bool CanInsertInto(bool isStorage, PipeFaceMode mode)
+        => isStorage ? mode == PipeFaceMode.Insert : CanInsert(mode);
+
+    /// <inheritdoc cref="CanInsertInto(bool, PipeFaceMode)"/>
+    public static bool CanExtractFrom(bool isStorage, PipeFaceMode mode)
+        => isStorage ? mode == PipeFaceMode.Extract : CanExtract(mode);
+
+    /// <inheritdoc cref="CanInsertInto(bool, PipeFaceMode)"/>
+    public static bool CanInsertInto(MachineInstance machine, PipeFaceMode mode)
+        => CanInsertInto(machine != null && machine.IsStorage, mode);
+
+    /// <inheritdoc cref="CanInsertInto(bool, PipeFaceMode)"/>
+    public static bool CanExtractFrom(MachineInstance machine, PipeFaceMode mode)
+        => CanExtractFrom(machine != null && machine.IsStorage, mode);
+
+    /// <summary>
+    /// 이 셀의 배치물이 저장 블록인가. <b><see cref="MachineAt"/> 과 같은 규약으로 레코드만 본다</b> —
+    /// 경로 탐색은 청크가 안 불려 있어도 같은 답을 내야 한다.
+    /// </summary>
+    public static bool StorageAt(Vector2Int cell)
+    {
+        PlaceableRecord record = WorldMap.Instance != null ? WorldMap.Instance.GetPlaceableAt(cell) : null;
+        if (record == null || ItemDictionary.Instance == null) return false;
+        return ItemDictionary.Instance.GetMachineInfo(record.blockId) is StorageBlock;
+    }
+
+    /// <summary>
+    /// 파이프가 <b>꺼내 갈</b> 수 있는 칸. 일반 기계는 출력칸이고, 저장소는 저장칸(= 입력 구간) 전부다.
+    /// 방향은 <see cref="CanExtractFrom"/> 이 이미 걸렀으므로 여기서는 어디를 볼지만 정한다.
+    /// </summary>
+    public static IList<ItemStack> SourceSlots(MachineInstance machine)
+    {
+        if (machine == null || machine.inventory == null) return null;
+        return machine.IsStorage ? machine.inventory.inputSlots : machine.inventory.outputSlots;
+    }
+
+    /// <summary>
     /// 4방향 연결 마스크(N=1, E=2, S=4, W=8).
     /// 저장하지 않고 필요할 때마다 계산한다 — 파생 상태를 저장하면 이웃이 바뀔 때 어긋난다.
     ///
@@ -200,7 +249,9 @@ public static class PipeRouter
 
                 // 파이프가 아니면 기계인지 본다. 기계는 종점이라 더 뻗지 않는다.
                 // 꺼내기 전용(빨강) 면으로는 넣을 수 없으므로 도착 후보에서 뺀다.
-                if (CanInsert(face) && MachineAt(next)) AddSink(results, next, cost);
+                // 저장 기계는 넣기 면(파랑)일 때만 도착지가 된다. "이웃이 저장소인가 + 그 면이 무엇인가" 는
+                // 둘 다 위상이라 여기서 걸러도 캐시 계약을 깨지 않는다(면을 바꾸면 MarkTopologyDirty 가 돈다).
+                if (MachineAt(next) && CanInsertInto(StorageAt(next), face)) AddSink(results, next, cost);
             }
         }
 
@@ -231,6 +282,10 @@ public static class PipeRouter
     {
         if (machine == null || item == null || machine.inventory == null) return null;
 
+        // 저장소는 레시피가 없어 아래 필터를 타면 언제나 null 이다. 무엇이든 받는 것이 정체성이므로
+        // 여기서 갈라 준다 — 방향(넣기만/빼기만)은 이미 렌치 면이 정했다(CanInsertInto).
+        if (machine.IsStorage) return machine.inventory.inputSlots;
+
         // 연료는 연료 칸으로 (발전기·화로에 석탄을 자동 공급할 수 있게)
         if (machine.UsesFuel && item.IsFuel) return machine.inventory.fuelSlots;
 
@@ -247,6 +302,32 @@ public static class PipeRouter
             {
                 ItemStack need = recipe.inputs[j];
                 if (need != null && need.item == item && need.count > 0) return machine.inventory.inputSlots;
+            }
+        }
+        return null;
+    }
+
+    /// <summary>
+    /// 이 기계가 이 유체를 받아 줄 탱크(못 받으면 null). <see cref="TargetSlots"/> 의 유체판이고
+    /// <b>레시피를 근거로 거르는 것도 똑같다</b> — 이게 없으면 전기 분해기가 자기가 뽑은 수소를 도로 먹는다.
+    /// </summary>
+    public static IList<FluidStack> TargetTanks(MachineInstance machine, FluidDefine fluid)
+    {
+        if (machine == null || fluid == null || machine.InputTanks == null || machine.InputTanks.Count == 0) return null;
+
+        RecipeDictionary dictionary = RecipeDictionary.Instance;
+        if (dictionary == null) return null;
+
+        IReadOnlyList<Recipe> recipes = dictionary.GetRecipesFor(machine.RecipeKey);
+        for (int i = 0; i < recipes.Count; i++)
+        {
+            Recipe recipe = recipes[i];
+            if (recipe == null || recipe.tier > machine.Tier || recipe.fluidInputs == null) continue;
+
+            for (int j = 0; j < recipe.fluidInputs.Count; j++)
+            {
+                FluidStack need = recipe.fluidInputs[j];
+                if (need != null && need.fluid == fluid && need.amount > 0) return machine.InputTanks;
             }
         }
         return null;

@@ -26,14 +26,18 @@ public class DefaultMachineUI : MonoBehaviour
     private readonly List<SlotEntry> inputs = new();
     private readonly List<SlotEntry> outputs = new();
     private readonly List<SlotEntry> fuels = new();
-    private readonly List<BarEntry> inputGasBars = new();
-    private readonly List<BarEntry> outputGasBars = new();
+    private readonly List<SlotEntry> upgrades = new();
+    private readonly List<BarEntry> inputFluidBars = new();
+    private readonly List<BarEntry> outputFluidBars = new();
     private BarEntry energyBar;
     private BarEntry fuelBar;
     private BarEntry progressBar;
     private TMP_Text machineNameText;
     private Button manualButton;          // 손으로 돌리는 기계에서만 보이는 "작동" 버튼
     private GameObject manualButtonGO;
+    private Button coreUpgradeButton;     // 코어 조합기에서만 보이는 "티어 업그레이드" 버튼
+    private GameObject coreUpgradeButtonGO;
+    private TMP_Text coreUpgradeLabel;
 
     private MachineInventory sharedInventory;            // 인스턴스 없이 열 때 폴백
     private readonly List<ItemSlot> boundSlots = new();  // 현재 바인딩된(활성) 슬롯
@@ -48,8 +52,20 @@ public class DefaultMachineUI : MonoBehaviour
     public int InputElementCount => inputs.Count;
     public int OutputElementCount => outputs.Count;
     public int FuelElementCount => fuels.Count;
-    public int InputGasElementCount => inputGasBars.Count;
-    public int OutputGasElementCount => outputGasBars.Count;
+    public int UpgradeElementCount => upgrades.Count;
+    public int InputFluidElementCount => inputFluidBars.Count;
+    public int OutputFluidElementCount => outputFluidBars.Count;
+
+    // ── 코어 업그레이드 (CraftingTableUI 가 쓴다) ────────────────
+    // 칸·버튼 모두 <b>프리팹에 있는 요소</b>다. 예전에는 코드로 만들었는데, 그러면 위치·크기를
+    // 씬에서 못 옮기고 팩토리 검증기도 볼 수 없었다. 코어가 아닌 조합대에서는 Open 이 꺼 준다.
+
+    /// <summary>첫 업그레이드 칸(프리팹에 없으면 null). 코어 조합기의 티어 재료 자리다.</summary>
+    protected ItemSlot FirstUpgradeSlot => upgrades.Count > 0 ? upgrades[0].slot : null;
+
+    protected Button CoreUpgradeButton => coreUpgradeButton;
+    protected GameObject CoreUpgradeButtonObject => coreUpgradeButtonGO;
+    protected TMP_Text CoreUpgradeLabel => coreUpgradeLabel;
 
     /// <summary>패널이 비활성으로 시작할 수 있으므로 Awake 대신 필요 시점에 초기화한다.</summary>
     private void EnsureInitialized()
@@ -59,54 +75,75 @@ public class DefaultMachineUI : MonoBehaviour
         inputs.Clear();
         outputs.Clear();
         fuels.Clear();
-        inputGasBars.Clear();
-        outputGasBars.Clear();
+        upgrades.Clear();
+        inputFluidBars.Clear();
+        outputFluidBars.Clear();
         energyBar = null;
         fuelBar = null;
         progressBar = null;
         machineNameText = null;
         manualButton = null;
         manualButtonGO = null;
+        coreUpgradeButton = null;
+        coreUpgradeButtonGO = null;
+        coreUpgradeLabel = null;
 
         List<MachineUIElement> inputEls = new();
         List<MachineUIElement> outputEls = new();
         List<MachineUIElement> fuelEls = new();
-        List<MachineUIElement> inputGasEls = new();
-        List<MachineUIElement> outputGasEls = new();
+        List<MachineUIElement> upgradeEls = new();
+        List<MachineUIElement> inputFluidEls = new();
+        List<MachineUIElement> outputFluidEls = new();
         MachineUIElement energyEl = null;
         MachineUIElement fuelBarEl = null;
         MachineUIElement progressEl = null;
         MachineUIElement nameEl = null;
         MachineUIElement manualEl = null;
+        MachineUIElement coreUpgradeEl = null;
+        bool hasPlainInput = false;
+        bool hasStorage = false;
 
         foreach (MachineUIElement element in GetComponentsInChildren<MachineUIElement>(true))
         {
+            if (element.role == MachineUIRole.InputSlot) hasPlainInput = true;
+            if (element.role == MachineUIRole.StorageSlot) hasStorage = true;
             switch (element.role)
             {
-                case MachineUIRole.InputSlot: inputEls.Add(element); break;
+                // 저장 칸은 새 구간이 아니라 입력 구간에 산다(StorageBlock 주석 참조) — 같은 목록에 담는다.
+                case MachineUIRole.InputSlot:
+                case MachineUIRole.StorageSlot: inputEls.Add(element); break;
                 case MachineUIRole.OutputSlot: outputEls.Add(element); break;
                 case MachineUIRole.FuelSlot: fuelEls.Add(element); break;
-                case MachineUIRole.InputGasBar: inputGasEls.Add(element); break;
-                case MachineUIRole.OutputGasBar: outputGasEls.Add(element); break;
+                case MachineUIRole.UpgradeSlot: upgradeEls.Add(element); break;
+                case MachineUIRole.InputFluidBar: inputFluidEls.Add(element); break;
+                case MachineUIRole.OutputFluidBar: outputFluidEls.Add(element); break;
                 case MachineUIRole.EnergyBar: energyEl = Prefer(energyEl, element); break;
                 case MachineUIRole.FuelBar: fuelBarEl = Prefer(fuelBarEl, element); break;
                 case MachineUIRole.ProgressBar: progressEl = Prefer(progressEl, element); break;
                 case MachineUIRole.MachineName: nameEl = Prefer(nameEl, element); break;
                 case MachineUIRole.ManualButton: manualEl = Prefer(manualEl, element); break;
+                case MachineUIRole.CoreUpgradeButton: coreUpgradeEl = Prefer(coreUpgradeEl, element); break;
             }
         }
+
+        // 둘은 같은 평면 인덱스를 노린다 — 섞여 있으면 index 가 겹쳐 두 칸이 같은 스택을 그린다.
+        if (hasPlainInput && hasStorage)
+            Debug.LogError($"[DefaultMachineUI] '{name}' 에 InputSlot 과 StorageSlot 이 섞여 있습니다. " +
+                           "저장 칸은 입력 구간에 살아 인덱스가 겹칩니다 — 한 종류만 쓰세요.", this);
 
         SortByIndex(inputEls);
         SortByIndex(outputEls);
         SortByIndex(fuelEls);
-        SortByIndex(inputGasEls);
-        SortByIndex(outputGasEls);
+        SortByIndex(upgradeEls);
+        SortByIndex(inputFluidEls);
+        SortByIndex(outputFluidEls);
 
         foreach (MachineUIElement e in inputEls) inputs.Add(MakeSlot(e));
         foreach (MachineUIElement e in outputEls) outputs.Add(MakeSlot(e));
         foreach (MachineUIElement e in fuelEls) fuels.Add(MakeSlot(e));
-        foreach (MachineUIElement e in inputGasEls) inputGasBars.Add(MakeBar(e));
-        foreach (MachineUIElement e in outputGasEls) outputGasBars.Add(MakeBar(e));
+        foreach (MachineUIElement e in upgradeEls) upgrades.Add(MakeSlot(e));
+        foreach (MachineUIElement e in inputFluidEls) inputFluidBars.Add(MakeBar(e));
+        foreach (MachineUIElement e in outputFluidEls) outputFluidBars.Add(MakeBar(e));
         if (energyEl != null) energyBar = MakeBar(energyEl);
         if (fuelBarEl != null) fuelBar = MakeBar(fuelBarEl);
         if (progressEl != null) progressBar = MakeBar(progressEl);
@@ -123,8 +160,17 @@ public class DefaultMachineUI : MonoBehaviour
             if (manualButton == null)
                 Debug.LogError($"[DefaultMachineUI] '{manualEl.name}' (ManualButton) 에 Button 이 없습니다.", manualEl);
         }
+        if (coreUpgradeEl != null)
+        {
+            coreUpgradeButtonGO = coreUpgradeEl.gameObject;
+            coreUpgradeButton = coreUpgradeEl.GetComponent<Button>();
+            // 라벨은 자식에서 찾는다 — 버튼과 글자를 따로 배선하게 하면 한쪽만 빠뜨린다.
+            coreUpgradeLabel = coreUpgradeEl.GetComponentInChildren<TMP_Text>(true);
+            if (coreUpgradeButton == null)
+                Debug.LogError($"[DefaultMachineUI] '{coreUpgradeEl.name}' (CoreUpgradeButton) 에 Button 이 없습니다.", coreUpgradeEl);
+        }
 
-        sharedInventory = new MachineInventory(inputs.Count, outputs.Count, fuels.Count);
+        sharedInventory = new MachineInventory(inputs.Count, outputs.Count, fuels.Count, upgrades.Count);
         initialized = true;
     }
 
@@ -160,7 +206,7 @@ public class DefaultMachineUI : MonoBehaviour
         return new BarEntry { go = element.gameObject, bar = bar };
     }
 
-    /// <summary>지정한 기계의 설정/인벤토리에 맞춰 슬롯·가스·에너지 UI를 구성하고 패널을 연다.</summary>
+    /// <summary>지정한 기계의 설정/인벤토리에 맞춰 슬롯·유체·에너지 UI를 구성하고 패널을 연다.</summary>
     public virtual void Open(MachineInstance instance)
     {
         EnsureInitialized();
@@ -172,9 +218,11 @@ public class DefaultMachineUI : MonoBehaviour
         int containerOutputCount = instance != null ? instance.OutputCount : outputs.Count;
         int visibleInputCount = containerInputCount;
         int visibleOutputCount = containerOutputCount;
-        int visibleFuelCount = instance != null ? instance.FuelCount : fuels.Count;
-        int inputGasCount = instance != null ? instance.InputGasCount : 0;
-        int outputGasCount = instance != null ? instance.OutputGasCount : 0;
+        int containerFuelCount = instance != null ? instance.FuelCount : fuels.Count;
+        int visibleFuelCount = containerFuelCount;
+        int visibleUpgradeCount = instance != null ? instance.UpgradeCount : upgrades.Count;
+        int inputFluidCount = instance != null ? instance.InputTankCount : 0;
+        int outputFluidCount = instance != null ? instance.OutputTankCount : 0;
         // 발전기는 전력을 쓰지 않지만(isUseEnergy=0) 자기 발전 버퍼는 보여야 한다.
         bool usesEnergy = instance != null && (instance.UsesEnergy || instance.IsGenerator);
 
@@ -194,16 +242,11 @@ public class DefaultMachineUI : MonoBehaviour
             WarnShortage("연료", visibleFuelCount, fuels.Count);
             visibleFuelCount = fuels.Count;
         }
-        if (inputGasCount > inputGasBars.Count)
-        {
-            WarnShortage("입력 가스", inputGasCount, inputGasBars.Count);
-            inputGasCount = inputGasBars.Count;
-        }
-        if (outputGasCount > outputGasBars.Count)
-        {
-            WarnShortage("출력 가스", outputGasCount, outputGasBars.Count);
-            outputGasCount = outputGasBars.Count;
-        }
+        // 업그레이드 칸과 유체 바는 <b>조용히</b> 클램프한다. 기존 UI 프리팹 11장에 아직 요소가 없어서,
+        // 경고를 내면 기계를 열 때마다 11종 × 매번 로그가 쏟아진다(그러면 진짜 경고가 묻힌다).
+        if (visibleUpgradeCount > upgrades.Count) visibleUpgradeCount = upgrades.Count;
+        if (inputFluidCount > inputFluidBars.Count) inputFluidCount = inputFluidBars.Count;
+        if (outputFluidCount > outputFluidBars.Count) outputFluidCount = outputFluidBars.Count;
 
         boundSlots.Clear();
 
@@ -248,10 +291,24 @@ public class DefaultMachineUI : MonoBehaviour
         }
         if (fuelBar != null && fuelBar.go != null) fuelBar.go.SetActive(visibleFuelCount > 0);
 
-        for (int k = 0; k < inputGasBars.Count; k++)
-            if (inputGasBars[k].go != null) inputGasBars[k].go.SetActive(k < inputGasCount);
-        for (int k = 0; k < outputGasBars.Count; k++)
-            if (outputGasBars[k].go != null) outputGasBars[k].go.SetActive(k < outputGasCount);
+        // 업그레이드 슬롯: 컨테이너 평면 인덱스 [입력 + 출력 + 연료 .. ]
+        int upgradeBase = containerInputCount + containerOutputCount + containerFuelCount;
+        for (int u = 0; u < upgrades.Count; u++)
+        {
+            bool active = u < visibleUpgradeCount;
+            if (upgrades[u].go != null) upgrades[u].go.SetActive(active);
+            if (active && upgrades[u].slot != null)
+            {
+                upgrades[u].slot.Bind(container, upgradeBase + u);
+                upgrades[u].slot.SetInsertable(true);
+                boundSlots.Add(upgrades[u].slot);
+            }
+        }
+
+        for (int k = 0; k < inputFluidBars.Count; k++)
+            if (inputFluidBars[k].go != null) inputFluidBars[k].go.SetActive(k < inputFluidCount);
+        for (int k = 0; k < outputFluidBars.Count; k++)
+            if (outputFluidBars[k].go != null) outputFluidBars[k].go.SetActive(k < outputFluidCount);
 
         if (energyBar != null && energyBar.go != null) energyBar.go.SetActive(usesEnergy);
 
@@ -260,6 +317,10 @@ public class DefaultMachineUI : MonoBehaviour
 
         BindPowerLinkButton(instance);
         BindManualButton(instance);
+
+        // 코어 업그레이드는 조합대 하나가 쓰는 것이라 기본은 꺼 둔다.
+        // 조합대 패널을 5종이 나눠 쓰므로, 켜는 것은 CraftingTableUI 가 코어일 때만 한다.
+        if (coreUpgradeButtonGO != null) coreUpgradeButtonGO.SetActive(false);
 
         gameObject.SetActive(true);
         RefreshAll();
@@ -396,13 +457,13 @@ public class DefaultMachineUI : MonoBehaviour
     public void RefreshSlots() => RefreshAll();
 
     // ── 바 호버 툴팁 ───────────────────────────────────────────
-    /// <summary>가스/에너지/진행도 바에 표시할 문구. <see cref="BarTooltip"/> 이 호출한다.</summary>
+    /// <summary>유체·에너지·진행도 바에 표시할 문구. <see cref="BarTooltip"/> 이 호출한다.</summary>
     public string GetBarTooltip(MachineUIRole role, int index)
     {
         switch (role)
         {
-            case MachineUIRole.InputGasBar: return GasTooltip(boundInstance != null ? boundInstance.GetInputGas(index) : null);
-            case MachineUIRole.OutputGasBar: return GasTooltip(boundInstance != null ? boundInstance.GetOutputGas(index) : null);
+            case MachineUIRole.InputFluidBar: return FluidTooltip(boundInstance != null ? boundInstance.GetInputTank(index) : null);
+            case MachineUIRole.OutputFluidBar: return FluidTooltip(boundInstance != null ? boundInstance.GetOutputTank(index) : null);
             case MachineUIRole.EnergyBar: return EnergyTooltip();
             case MachineUIRole.FuelBar: return FuelTooltip();
             case MachineUIRole.ProgressBar: return ProgressTooltip();
@@ -417,11 +478,11 @@ public class DefaultMachineUI : MonoBehaviour
         return $"연소 중  {boundInstance.BurnRemaining:N0}";
     }
 
-    private string GasTooltip(Gas gas)
+    private string FluidTooltip(FluidStack tank)
     {
-        float max = boundInstance != null ? boundInstance.MaxGas : 0f;
-        string name = gas != null && gas.gas != null ? gas.gas.gasName : "비어 있음";
-        float amount = gas != null ? gas.amount : 0f;
+        int max = boundInstance != null ? boundInstance.MaxFluid : 0;
+        string name = tank != null && tank.fluid != null ? tank.fluid.DisplayName : "비어 있음";
+        int amount = tank != null ? tank.amount : 0;
         return $"{name}  {amount:N0} / {max:N0}";
     }
 
@@ -455,11 +516,29 @@ public class DefaultMachineUI : MonoBehaviour
         if (fuelBar != null && fuelBar.bar != null) fuelBar.bar.FillAmount = ratio;
     }
 
-    /// <summary>입력 가스 잔량(0~1) 표시.</summary>
-    public void SetInputGas(int gasIndex, float ratio) => SetBar(inputGasBars, gasIndex, ratio);
+    /// <summary>
+    /// 입력 탱크 잔량(0~1)과 담긴 유체를 표시한다.
+    ///
+    /// <b>색이 아니라 유체 이름을 받는다</b> — 그림이 없어도 색으로 구분되게 하는 것이 목적이고,
+    /// 무슨 색으로 그릴지는 <see cref="FluidColors"/> 한 곳만 안다. 색을 넘겨받으면
+    /// 부르는 쪽마다 색을 정하게 되어 언젠가 서로 달라진다.
+    /// </summary>
+    public void SetInputFluid(int index, float ratio, string fluidId)
+        => SetFluidBar(inputFluidBars, index, ratio, fluidId);
 
-    /// <summary>출력 가스 잔량(0~1) 표시.</summary>
-    public void SetOutputGas(int gasIndex, float ratio) => SetBar(outputGasBars, gasIndex, ratio);
+    /// <summary>출력 탱크 잔량(0~1)과 담긴 유체를 표시한다.</summary>
+    public void SetOutputFluid(int index, float ratio, string fluidId)
+        => SetFluidBar(outputFluidBars, index, ratio, fluidId);
+
+    private static void SetFluidBar(List<BarEntry> bars, int index, float ratio, string fluidId)
+    {
+        if (index < 0 || index >= bars.Count) return;
+        FillingSlot bar = bars[index].bar;
+        if (bar == null) return;
+
+        bar.FillAmount = ratio;
+        bar.FillColor = FluidColors.Of(fluidId);   // 빈 탱크·모르는 유체는 회색
+    }
 
     private static void SetBar(List<BarEntry> bars, int index, float ratio)
     {

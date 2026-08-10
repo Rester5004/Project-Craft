@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1030906746972518623}
   - component: {fileID: 1031954557547092838}
-  - component: {fileID: 2334451535599565022}
+  - component: {fileID: 1152029240811255172}
   m_Layer: 0
   m_Name: tmp_crafter
   m_TagString: Untagged
@@ -82,7 +82,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: 414a5f1d74ab93340b2215c63ed7a215, type: 3}
+  m_Sprite: {fileID: 4606889362251067478, guid: f652335c1f874c64aa8ebd86204aeea0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -92,8 +92,8 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!61 &2334451535599565022
-BoxCollider2D:
+--- !u!58 &1152029240811255172
+CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -127,14 +127,4 @@ BoxCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
-  m_EdgeRadius: 0
+  m_Radius: 1.28125

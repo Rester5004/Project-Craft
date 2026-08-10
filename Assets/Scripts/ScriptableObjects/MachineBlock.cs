@@ -35,16 +35,26 @@ public class MachineBlock : BlockBase
 
     [Tooltip("가동 중 1초에 태우는 연료 에너지. 석탄 1개(400)면 이 값으로 나눈 만큼 버틴다.")]
     [Min(0.01f)] public float fuelBurnRate = 20f;
-    [Tooltip("가스 입력 슬롯 수")]
+
+    [Tooltip("업그레이드 모듈 칸 수. 일반 기계는 2(속도·효율), 조합대·재단은 0, 코어 조합기만 1(티어 상승용).\n" +
+             "모듈은 소모되지 않고 칸에 들어 있는 개수만큼 효과가 붙는다.")]
+    [Min(0)] public int upgradeSlotCount = 2;
+    [Header("유체 (액체·기체를 한 계층으로 다룬다)")]
+    [Tooltip("입력 탱크 수. 레시피의 fluidInputs 를 여기서 가져간다.\n" +
+             "탱크 한 칸에는 한 종류만 담기므로, 두 종류를 먹는 레시피는 2칸 이상이 필요하다.")]
+    [UnityEngine.Serialization.FormerlySerializedAs("inputGasSlotCount")]
     [UnityEngine.Serialization.FormerlySerializedAs("gasSlotCount")]
-    public int inputGasSlotCount = 0;
+    [Min(0)] public int inputFluidSlotCount = 0;
 
-    [Tooltip("가스 출력 슬롯 수")]
-    public int outputGasSlotCount = 0;
+    [Tooltip("출력 탱크 수. 레시피의 fluidOutputs 가 여기 쌓인다.\n" +
+             "산출 종류 수보다 적으면 자리를 못 잡아 기계가 영원히 멈춘다.")]
+    [UnityEngine.Serialization.FormerlySerializedAs("outputGasSlotCount")]
+    [Min(0)] public int outputFluidSlotCount = 0;
 
-    [Tooltip("모든 가스 슬롯(입력/출력)이 공유하는 최대 저장량")]
-    [UnityEngine.Serialization.FormerlySerializedAs("maxGasAmountForSlot1")]
-    public float maxGasAmount = 0f;
+    // 옛 maxGasAmount 는 float 였다. 타입이 달라 FormerlySerializedAs 로는 못 물려받으므로
+    // 값이 있던 3개 에셋(BioIncubator·Electrolyzer·LasorProcessor)은 손으로 다시 넣었다.
+    [Tooltip("탱크 한 칸의 최대 저장량. 1 양동이 = 1000 이 규약이므로 8000 이면 8양동이다.")]
+    [Min(0)] public int maxFluidAmount = 0;
     public float maxEnergyAmount = 0f;
     public bool isUseEnergy = false;
 

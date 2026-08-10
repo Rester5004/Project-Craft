@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d1635fa976c21145835b252e45d6313, type: 3}
   m_Name: acid_pipe
   m_EditorClassIdentifier: Assembly-CSharp::Recipe
-  machine: {fileID: 11400000, guid: e2abadf2aa582324e907369859c9c9fe, type: 2}
+  machine: {fileID: 11400000, guid: ea55fe72f9315554a8ffdcf795dd1b7e, type: 2}
   category: {fileID: 11400000, guid: a63365af4ccd3904a91ebf59b6456c84, type: 2}
   tier: 1
   inputs:
@@ -21,6 +21,9 @@ MonoBehaviour:
   outputs:
   - item: {fileID: 11400000, guid: a3569c4151d68b34f9f870b1e13b7fe0, type: 2}
     count: 1
+  fluidInputs: []
+  fluidOutputs: []
+  chanceOutputs: []
   requiredTools: []
   craftTime: 1
   importNote: "[\uBCD1\uD569] Assets/Prefabs/Recipes/Incomplete/factory/acid_pipe.asset

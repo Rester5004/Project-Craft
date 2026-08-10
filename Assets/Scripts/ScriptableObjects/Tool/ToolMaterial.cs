@@ -30,6 +30,18 @@ public class ToolMaterial : ScriptableObject
     [Tooltip("채굴 등급(아직 채굴 로직이 쓰지 않는다. 확장용).")]
     [Min(0)] public int miningTier;
 
+    [Tooltip("이 재질로 부품을 만들 때 넣는 아이템(철 주괴 · 돌 …).\n" +
+             "비어 있으면 그 재질의 부품은 만들 수 없다(나무는 아직 아이템이 없어 비어 있다).")]
+    public Items sourceItem;
+
+    /// <summary>
+    /// 이 재질로 부품을 만들 수 있는가. <see cref="ToolPartRecipe"/> 가 재질 목록을 추릴 때 본다.
+    ///
+    /// <b>재질 개수와 만들 수 있는 재질 개수는 다르다</b> — 스프라이트·수치가 있어도
+    /// 게임에 그 재료 아이템이 없으면(나무) 만들 수 없다.
+    /// </summary>
+    public bool CanCraft => sourceItem != null;
+
     /// <summary>표시에 쓸 이름(displayName 이 비면 materialId, 그것도 비면 에셋 이름).</summary>
     public string DisplayName
     {

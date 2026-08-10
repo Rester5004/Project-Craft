@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d1635fa976c21145835b252e45d6313, type: 3}
+  m_Name: compress_gold_plate
+  m_EditorClassIdentifier: Assembly-CSharp::Recipe
+  machine: {fileID: 11400000, guid: 469f291fb0ccb7e4d90a3686a3b0a794, type: 2}
+  category: {fileID: 11400000, guid: a63365af4ccd3904a91ebf59b6456c84, type: 2}
+  tier: 0
+  inputs:
+  - item: {fileID: 11400000, guid: 88de46fe9d225ba4680417fa8541585e, type: 2}
+    count: 1
+  outputs:
+  - item: {fileID: 11400000, guid: b7e8552055763794b96b71a826ce9a6c, type: 2}
+    count: 1
+  fluidInputs: []
+  fluidOutputs: []
+  chanceOutputs: []
+  requiredTools: []
+  craftTime: 1
+  importNote: 

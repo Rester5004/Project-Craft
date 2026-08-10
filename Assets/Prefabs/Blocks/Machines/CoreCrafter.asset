@@ -14,13 +14,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CraftingTableBlock
   blockName: CoreCrafter
   displayName: "\uCF54\uC5B4 \uC870\uD569\uAE30"
+  dropItem: {fileID: 0}
+  dropCount: 1
   machinePrefab: {fileID: 3893713344455811406, guid: 36ddf6ef812fb7542a908ab599cecdd1, type: 3}
-  uiPrefab: {fileID: 779414532576868518, guid: 06eab2c4533376848ad7a643051ba2cf, type: 3}
+  uiPrefab: {fileID: 3451240410240030169, guid: 3179cb264a02be04d917411836f87474, type: 3}
+  runningSprite: {fileID: 0}
+  manualStepRatio: 0
+  tier: 0
+  recipeGroupId: 
   inputSlotCount: 3
   outputSlotCount: 6
-  inputGasSlotCount: 0
-  outputGasSlotCount: 0
-  maxGasAmount: 0
+  fuelSlotCount: 0
+  fuelBurnRate: 20
+  upgradeSlotCount: 1
+  inputFluidSlotCount: 0
+  outputFluidSlotCount: 0
+  maxFluidAmount: 0
   maxEnergyAmount: 0
   isUseEnergy: 0
-  tier: 0
+  isGenerator: 0
+  powerRange: 0
+  energyUseRate: 0
+  speedMultiplier: 1
+  chanceMultiplier: 1
+  acceptsTierUpgrade: 1

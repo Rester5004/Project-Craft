@@ -2,13 +2,13 @@
   "recipeType": "factory",
   "description": "전용 공장 가공 레시피. 각 레시피의 machine 필드가 해당 공장을 가리킨다. 유체 입력/출력은 fluid=true, 전력 산출은 type=power. (미정) 값은 null + note로 표기.",
   "recipes": [
-    { "id": "rolling_iron_plate", "machine": "압연기", "power": "저전압", "output": "철판",
+    { "id": "compress_iron_plate", "machine": "압축기", "power": "저전압", "output": "철판",
       "inputs": [ { "item": "철 주괴", "qty": 1 } ], "note": "가공대보다 고효율" },
 
     { "id": "rebar_factory_rebar", "machine": "철근 공장", "power": "저전압", "output": "철근",
       "inputs": [ { "item": "철판", "qty": 2 } ] },
 
-    { "id": "brick_factory_brick", "machine": "벽돌 공장", "power": "저전압", "output": "벽돌",
+    { "id": "compress_brick", "machine": "압축기", "power": "저전압", "output": "벽돌",
       "inputs": [ { "item": "모래", "qty": 2 }, { "item": "물", "qty": 1, "fluid": true } ], "note": "가공대보다 고효율" },
 
     { "id": "cement", "machine": "벽돌 공장 (1티어 업그레이드)", "tier": 1, "power": "저전압", "output": "시멘트",
@@ -17,10 +17,10 @@
     { "id": "glass", "machine": "유리 제조기", "power": "저전압", "output": "유리",
       "inputs": [ { "item": "모래", "qty": 3 }, { "item": "물", "qty": 1, "fluid": true } ] },
 
-    { "id": "glass_pipe", "machine": "유리 가공기", "power": "저전압", "output": "유리 파이프",
+    { "id": "glass_pipe", "machine": "코어 조합기", "power": "저전압", "output": "유리 파이프",
       "inputs": [ { "item": "유리", "qty": 2 } ], "note": "산성 용액 수송용" },
 
-    { "id": "glass_container", "machine": "유리 가공기", "power": "저전압", "output": "유리 용기",
+    { "id": "glass_container", "machine": "코어 조합기", "power": "저전압", "output": "유리 용기",
       "inputs": [ { "item": "유리", "qty": 1 } ] },
 
     { "id": "solid_pipe", "machine": "파이프 공장", "tier": 0, "power": "저전압", "output": "고체 운송 파이프",
@@ -46,10 +46,6 @@
 
     { "id": "electrolysis_lithium", "machine": "전기분해기", "power": "고전압", "output": "리튬 주괴",
       "inputs": [ { "item": "리튬 조각", "qty": 4 } ], "note": "고전압 필수" },
-
-    { "id": "electrolyzer_water", "machine": "수전해기", "power": "고전압",
-      "outputs": [ { "item": "수소", "fluid": true }, { "item": "산소", "fluid": true } ],
-      "inputs": [ { "item": "물", "qty": 2, "fluid": true } ], "note": "고전압 필수" },
 
     { "id": "oil_extract", "machine": "원유 채굴기", "power": "저전압", "output": "원유",
       "inputs": [], "note": "석유 지형에만 설치, 지형에서 채굴" },

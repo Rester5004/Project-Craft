@@ -14,13 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Recipe
   machine: {fileID: 11400000, guid: ea55fe72f9315554a8ffdcf795dd1b7e, type: 2}
   category: {fileID: 11400000, guid: a63365af4ccd3904a91ebf59b6456c84, type: 2}
-  tier: 1
+  tier: 0
   inputs:
   - item: {fileID: 11400000, guid: c9392aeebd648724fa65fd8e7b65dcef, type: 2}
     count: 3
   outputs:
   - item: {fileID: 11400000, guid: 6b0d12ed06f23454c911d4cee8eead3a, type: 2}
     count: 1
+  fluidInputs: []
+  fluidOutputs: []
+  chanceOutputs: []
   requiredTools: []
   craftTime: 1
   importNote: "[\uBCD1\uD569] Assets/Prefabs/Recipes/Incomplete/crafting/bucket.asset

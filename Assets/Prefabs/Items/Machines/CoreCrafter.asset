@@ -15,8 +15,9 @@ MonoBehaviour:
   itemName: CoreCrafter
   displayName: "\uCF54\uC5B4 \uC870\uD569\uAE30"
   placeable: 1
-  Icon: {fileID: 21300000, guid: 414a5f1d74ab93340b2215c63ed7a215, type: 3}
+  Icon: {fileID: 4606889362251067478, guid: f652335c1f874c64aa8ebd86204aeea0, type: 3}
   maxStack: 64
+  burnEnergy: 0
   machineType: 0
   machineLevel: 0
   voltageLevel: 0

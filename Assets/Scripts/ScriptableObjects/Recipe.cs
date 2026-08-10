@@ -23,6 +23,12 @@ public class Recipe : ScriptableObject
     [Tooltip("생산할 아이템. 첫 항목이 조합대 목록에 표시되는 대표 산출물이다.")]
     public List<ItemStack> outputs = new();
 
+    [Tooltip("소모할 유체. 기계의 입력 탱크에서 가져간다. 양은 단위 없는 정수이고 1 양동이 = 1000 이 규약이다.")]
+    public List<FluidStack> fluidInputs = new();
+
+    [Tooltip("생산할 유체. 기계의 출력 탱크에 쌓인다. 자리가 없으면 재료를 먹지 않고 멈춘다.")]
+    public List<FluidStack> fluidOutputs = new();
+
     [Tooltip("확률로 나오는 부산물(추출기). 여기 적는 확률은 '가장 낮은 값' 이고,\n" +
              "어느 기계가 얼마나 얻는지는 ExtractionTable 이 정한다.")]
     public List<ChanceOutput> chanceOutputs = new();

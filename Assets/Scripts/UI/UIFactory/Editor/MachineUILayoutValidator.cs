@@ -53,14 +53,16 @@ namespace ProjectCraft.UIFactory.EditorTools
                     case MachineUIRole.InputSlot:
                     case MachineUIRole.OutputSlot:
                     case MachineUIRole.FuelSlot:
+                    case MachineUIRole.UpgradeSlot:
+                    case MachineUIRole.StorageSlot:
                         if (e.GetComponent<ItemSlot>() == null)
                             issues.Add(Err($"'{e.name}' ({e.role}) 에 ItemSlot 컴포넌트가 없습니다.", e));
                         break;
                     case MachineUIRole.ProgressBar:
                     case MachineUIRole.EnergyBar:
                     case MachineUIRole.FuelBar:
-                    case MachineUIRole.InputGasBar:
-                    case MachineUIRole.OutputGasBar:
+                    case MachineUIRole.InputFluidBar:
+                    case MachineUIRole.OutputFluidBar:
                         if (e.GetComponent<FillingSlot>() == null)
                             issues.Add(Err($"'{e.name}' ({e.role}) 에 FillingSlot 컴포넌트가 없습니다.", e));
                         break;
@@ -72,6 +74,13 @@ namespace ProjectCraft.UIFactory.EditorTools
                         if (e.GetComponent<UnityEngine.UI.Button>() == null)
                             issues.Add(Err($"'{e.name}' (ManualButton) 에 Button 컴포넌트가 없습니다.", e));
                         break;
+                    case MachineUIRole.CoreUpgradeButton:
+                        if (e.GetComponent<UnityEngine.UI.Button>() == null)
+                            issues.Add(Err($"'{e.name}' (CoreUpgradeButton) 에 Button 컴포넌트가 없습니다.", e));
+                        // 라벨이 현재 티어·재료 상태를 알려 주는 유일한 표시다 — 없으면 무엇이 필요한지 알 수 없다.
+                        else if (e.GetComponentInChildren<TMPro.TMP_Text>(true) == null)
+                            issues.Add(Err($"'{e.name}' (CoreUpgradeButton) 아래에 TMP_Text 가 없어 안내 문구를 띄울 수 없습니다.", e));
+                        break;
                 }
             }
 
@@ -79,23 +88,38 @@ namespace ProjectCraft.UIFactory.EditorTools
             CheckIndices(byRole, MachineUIRole.InputSlot, issues);
             CheckIndices(byRole, MachineUIRole.OutputSlot, issues);
             CheckIndices(byRole, MachineUIRole.FuelSlot, issues);
-            CheckIndices(byRole, MachineUIRole.InputGasBar, issues);
-            CheckIndices(byRole, MachineUIRole.OutputGasBar, issues);
+            CheckIndices(byRole, MachineUIRole.UpgradeSlot, issues);
+            CheckIndices(byRole, MachineUIRole.StorageSlot, issues);
+            CheckIndices(byRole, MachineUIRole.InputFluidBar, issues);
+            CheckIndices(byRole, MachineUIRole.OutputFluidBar, issues);
 
             // 단일 역할 중복
             CheckSingle(byRole, MachineUIRole.EnergyBar, issues);
             CheckSingle(byRole, MachineUIRole.ProgressBar, issues);
             CheckSingle(byRole, MachineUIRole.MachineName, issues);
             CheckSingle(byRole, MachineUIRole.ManualButton, issues);
+            CheckSingle(byRole, MachineUIRole.CoreUpgradeButton, issues);
 
             // MachineBlock 설정과 개수 비교
+            // 저장 칸은 입력 구간에 살아 평면 인덱스가 겹친다 — 한 프리팹에 둘 다 두면 두 칸이 같은 스택을 그린다.
+            if (Count(byRole, MachineUIRole.InputSlot) > 0 && Count(byRole, MachineUIRole.StorageSlot) > 0)
+                issues.Add(Err("InputSlot 과 StorageSlot 이 섞여 있습니다. 저장 칸은 입력 구간에 살아 인덱스가 겹칩니다 — 한 종류만 쓰세요."));
+
             if (target != null)
             {
-                CompareCount(issues, "입력 슬롯", Count(byRole, MachineUIRole.InputSlot), target.inputSlotCount);
-                CompareCount(issues, "출력 슬롯", Count(byRole, MachineUIRole.OutputSlot), target.outputSlotCount);
+                // 저장 블록은 저장 칸이 입력 칸을 대신한다(ApplyConfig 가 storageSlotCount 로 덮어쓴다).
+                StorageBlock storage = target as StorageBlock;
+                if (storage != null)
+                    CompareCount(issues, "저장 슬롯", Count(byRole, MachineUIRole.StorageSlot), storage.storageSlotCount);
+                else
+                    CompareCount(issues, "입력 슬롯", Count(byRole, MachineUIRole.InputSlot), target.inputSlotCount);
+
+                CompareCount(issues, "출력 슬롯", Count(byRole, MachineUIRole.OutputSlot),
+                             storage != null ? 0 : target.outputSlotCount);
                 CompareCount(issues, "연료 슬롯", Count(byRole, MachineUIRole.FuelSlot), target.fuelSlotCount);
-                CompareCount(issues, "입력 가스 바", Count(byRole, MachineUIRole.InputGasBar), target.inputGasSlotCount);
-                CompareCount(issues, "출력 가스 바", Count(byRole, MachineUIRole.OutputGasBar), target.outputGasSlotCount);
+                CompareCount(issues, "업그레이드 칸", Count(byRole, MachineUIRole.UpgradeSlot), target.upgradeSlotCount);
+                CompareCount(issues, "입력 유체 바", Count(byRole, MachineUIRole.InputFluidBar), target.inputFluidSlotCount);
+                CompareCount(issues, "출력 유체 바", Count(byRole, MachineUIRole.OutputFluidBar), target.outputFluidSlotCount);
 
                 bool hasEnergy = Count(byRole, MachineUIRole.EnergyBar) > 0;
                 if (target.isUseEnergy && !hasEnergy)

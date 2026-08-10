@@ -18,7 +18,7 @@ public class PipeNetworkManager : MonoBehaviour
     /// 파이프와 기계는 셀당 배치물 1개 규칙 때문에 <b>같은 칸에 있을 수 없어</b> 겹치지 않는다.
     /// 벽 앞면(2)도 벽 칸에만 그려지고 파이프는 바닥 칸에만 놓이므로 마찬가지다.
     /// </summary>
-    private const int PipeSortingOrder = 2;
+    private const int PipeSortingOrder = 120;
 
     public static PipeNetworkManager Active { get; private set; }
 
@@ -266,6 +266,8 @@ public class PipeNetworkManager : MonoBehaviour
             return;
         }
 
+        if (pipe.parcel.IsFluid) { DeliverFluid(pipe, target); return; }
+
         Items item = ItemDictionary.Instance != null ? ItemDictionary.Instance.GetItem(pipe.parcel.itemName) : null;
         IList<ItemStack> slots = PipeRouter.TargetSlots(target, item);
         if (slots == null)
@@ -274,7 +276,13 @@ public class PipeNetworkManager : MonoBehaviour
             return;
         }
 
-        int moved = RecipeSolver.AddItems(slots, item, pipe.parcel.count, pipe.parcel.instance);
+        // 개체 데이터가 붙은 아이템(도구)은 고유 최대치를 쓰는 저장소에 넣지 않는다 —
+        // 한 칸에 수천 개인데 인스턴스는 하나뿐이라 그 하나가 사라질 때 전부가 사라진다.
+        if (pipe.parcel.instance != null && !target.AcceptsInstanceItems) { Retarget(pipe); return; }
+
+        // 칸 상한은 대상 기계에 묻는다(저장소는 maxStack 이 아니다). CountFreeSpace 와 반드시 같은 값이어야 한다.
+        int moved = RecipeSolver.AddItems(slots, item, pipe.parcel.count, pipe.parcel.instance,
+                                          target.InputSlotCapacity(item));
         if (moved <= 0) return;   // 가득 찼다 — 여기서 기다린다(필드에 쏟지 않는다)
 
         // AddItems 는 알려 주지 않는다. 직접 불러야 UI 가 갱신되고 기계가 새 레시피를 다시 찾는다.
@@ -288,11 +296,36 @@ public class PipeNetworkManager : MonoBehaviour
         pipe.WriteBack();
     }
 
+    /// <summary>유체 짐을 대상 기계의 입력 탱크에 붓는다. 아이템 쪽과 계약이 같다(못 넣으면 기다린다).</summary>
+    private void DeliverFluid(PipeCell pipe, MachineInstance target)
+    {
+        FluidDefine fluid = ItemDictionary.Instance != null ? ItemDictionary.Instance.GetFluid(pipe.parcel.fluidId) : null;
+        IList<FluidStack> tanks = PipeRouter.TargetTanks(target, fluid);
+        if (tanks == null)
+        {
+            Retarget(pipe);
+            return;
+        }
+
+        int moved = RecipeSolver.AddFluid(tanks, fluid, pipe.parcel.amount, target.MaxFluid);
+        if (moved <= 0) return;   // 탱크가 찼다 — 짐을 든 채 기다린다
+
+        // AddFluid 도 통지하지 않는다. NotifyFluidChanged 가 UI 갱신 + 레시피 재탐색 + Flush 를 한다.
+        target.NotifyFluidChanged();
+
+        pipe.parcel.amount -= moved;
+        if (pipe.parcel.amount <= 0) pipe.parcel = null;
+
+        pipe.WriteBack();
+    }
+
     /// <summary>도착지가 사라졌을 때 같은 짐으로 다른 기계를 한 번 다시 찾는다.</summary>
     private void Retarget(PipeCell pipe)
     {
-        Items item = ItemDictionary.Instance != null ? ItemDictionary.Instance.GetItem(pipe.parcel.itemName) : null;
-        if (item == null) return;
+        ItemDictionary dictionary = ItemDictionary.Instance;
+        Items item = !pipe.parcel.IsFluid && dictionary != null ? dictionary.GetItem(pipe.parcel.itemName) : null;
+        FluidDefine fluid = pipe.parcel.IsFluid && dictionary != null ? dictionary.GetFluid(pipe.parcel.fluidId) : null;
+        if (item == null && fluid == null) return;
 
         PipeRouter.FindSinks(pipe.cell, pipe.block.kind, pipe.sinks);
         pipe.routeVersion = TopologyVersion;
@@ -303,7 +336,10 @@ public class PipeNetworkManager : MonoBehaviour
             Vector2Int cell = pipe.sinks[i].machineCell;
             if (!map.IsCellLoaded(cell)) continue;
             if (!map.TryGetMachineAt(cell, out MachineInstance machine) || machine == null) continue;
-            if (PipeRouter.TargetSlots(machine, item) == null) continue;
+            if (fluid != null ? PipeRouter.TargetTanks(machine, fluid) == null
+                              : PipeRouter.TargetSlots(machine, item) == null) continue;
+            // 개체 데이터가 붙은 짐은 고유 최대치 저장소로 다시 보내지 않는다(TryDeliver 와 같은 규약).
+            if (pipe.parcel.instance != null && !machine.AcceptsInstanceItems) continue;
 
             pipe.parcel.destX = cell.x;
             pipe.parcel.destY = cell.y;
@@ -328,15 +364,22 @@ public class PipeNetworkManager : MonoBehaviour
         }
     }
 
-    /// <summary>옆 기계의 출력칸에서 짐을 하나 싣는다.</summary>
+    /// <summary>
+    /// 옆 기계의 출력칸(또는 출력 탱크)에서 짐을 하나 싣는다.
+    ///
+    /// 아이템과 유체는 <b>싣는 대상만</b> 다르고 경로 탐색·라운드로빈·면 규칙은 완전히 같다.
+    /// 그래서 <see cref="ParcelRecord"/> 한 종류로 두고 여기서만 갈라진다.
+    /// </summary>
     private void TryExtract(PipeCell pipe)
     {
         if (pipe.parcel != null) return;                       // 한 칸에 짐 하나
-        if (pipe.block == null || !pipe.block.CarriesItems) return;   // 유체·기체는 아직 나르지 않는다
+        if (pipe.block == null) return;
         if (clock < pipe.nextAttemptTime) return;
 
         MapGenerator map = MapGenerator.Active;
         if (map == null) return;
+
+        if (!pipe.block.CarriesItems) { TryExtractFluid(pipe, map); return; }
 
         // 출발 기계 찾기 — N, E, S, W 고정 순서라 결정적이다.
         MachineInstance source = null;
@@ -344,16 +387,22 @@ public class PipeNetworkManager : MonoBehaviour
         ItemStack stack = null;
         for (int d = 0; d < PipeRouter.Directions.Length && source == null; d++)
         {
-            // 넣기 전용(파랑) 면으로는 꺼내지 않는다. 끊긴 면도 마찬가지다.
-            if (!PipeRouter.CanExtract(PipeRouter.FaceOf(pipe.record, d))) continue;
-
             Vector2Int cell = pipe.cell + PipeRouter.Directions[d];
             if (!map.TryGetMachineAt(cell, out MachineInstance machine) || machine == null) continue;
             if (machine.inventory == null) continue;
 
-            foreach (ItemStack candidate in machine.inventory.outputSlots)
+            // 넣기 전용(파랑) 면으로는 꺼내지 않는다. 끊긴 면도 마찬가지다.
+            // <b>저장소는 꺼내기 면(빨강)일 때만</b> 꺼낼 수 있어서 기계를 찾은 뒤에 판정한다.
+            if (!PipeRouter.CanExtractFrom(machine, PipeRouter.FaceOf(pipe.record, d))) continue;
+
+            // 일반 기계는 출력칸, 저장소는 저장칸 전부.
+            IList<ItemStack> from = PipeRouter.SourceSlots(machine);
+            if (from == null) continue;
+
+            for (int s = 0; s < from.Count; s++)
             {
-                if (candidate.item == null || candidate.count <= 0) continue;
+                ItemStack candidate = from[s];
+                if (candidate == null || candidate.item == null || candidate.count <= 0) continue;
                 source = machine;
                 sourceCell = cell;
                 stack = candidate;
@@ -387,7 +436,9 @@ public class PipeNetworkManager : MonoBehaviour
 
             IList<ItemStack> slots = PipeRouter.TargetSlots(target, stack.item);
             if (slots == null) continue;
-            if (RecipeSolver.CountFreeSpace(slots, stack.item, stack.instance != null) <= 0) continue;
+            if (stack.instance != null && !target.AcceptsInstanceItems) continue;
+            if (RecipeSolver.CountFreeSpace(slots, stack.item, stack.instance != null,
+                                            target.InputSlotCapacity(stack.item)) <= 0) continue;
 
             int take = Mathf.Min(pipe.block.throughput, stack.count);
             if (stack.instance != null) take = 1;   // 개체 데이터가 붙은 짐(도구)은 하나씩
@@ -416,6 +467,88 @@ public class PipeNetworkManager : MonoBehaviour
         }
 
         pipe.nextAttemptTime = clock + RetryDelay;   // 아무도 안 받는다 — 잠시 쉬었다 다시 본다
+    }
+
+    /// <summary>
+    /// 옆 기계의 <b>출력 탱크</b>에서 유체를 싣는다. 위 <see cref="TryExtract"/> 의 아이템 경로와
+    /// 면 규칙·경로 캐시·라운드로빈이 완전히 같고, 다루는 자료형만 다르다.
+    ///
+    /// 파이프 종류(<see cref="PipeKind"/>)와 유체의 상(<see cref="FluidDefine.phase"/>)이 맞아야 싣는다 —
+    /// 액체 파이프가 수소를 나르면 기체 파이프를 놓을 이유가 없어진다.
+    /// </summary>
+    private void TryExtractFluid(PipeCell pipe, MapGenerator map)
+    {
+        MachineInstance source = null;
+        Vector2Int sourceCell = default;
+        FluidStack tank = null;
+
+        for (int d = 0; d < PipeRouter.Directions.Length && source == null; d++)
+        {
+            if (!PipeRouter.CanExtract(PipeRouter.FaceOf(pipe.record, d))) continue;
+
+            Vector2Int cell = pipe.cell + PipeRouter.Directions[d];
+            if (!map.TryGetMachineAt(cell, out MachineInstance machine) || machine == null) continue;
+            if (machine.OutputTanks == null) continue;
+
+            for (int t = 0; t < machine.OutputTanks.Count; t++)
+            {
+                FluidStack candidate = machine.OutputTanks[t];
+                if (candidate == null || candidate.IsEmpty) continue;
+                if (candidate.fluid.CarriedBy != pipe.block.kind) continue;   // 액체/기체 파이프를 가른다
+                source = machine;
+                sourceCell = cell;
+                tank = candidate;
+                break;
+            }
+        }
+        if (source == null) return;
+
+        if (pipe.routeVersion != TopologyVersion)
+        {
+            PipeRouter.FindSinks(pipe.cell, pipe.block.kind, pipe.sinks);
+            pipe.routeVersion = TopologyVersion;
+        }
+        if (pipe.sinks.Count == 0) { pipe.nextAttemptTime = clock + RetryDelay; return; }
+
+        int cursor = pipe.record != null ? pipe.record.roundRobinCursor : 0;
+        if (cursor < 0 || cursor >= pipe.sinks.Count) cursor = 0;
+
+        for (int i = 0; i < pipe.sinks.Count; i++)
+        {
+            int index = (cursor + i) % pipe.sinks.Count;
+            PipeRouter.Sink sink = pipe.sinks[index];
+            if (sink.machineCell == sourceCell) continue;
+            if (!map.IsCellLoaded(sink.machineCell)) continue;
+            if (!map.TryGetMachineAt(sink.machineCell, out MachineInstance target) || target == null) continue;
+
+            IList<FluidStack> tanks = PipeRouter.TargetTanks(target, tank.fluid);
+            if (tanks == null) continue;
+            if (RecipeSolver.CountFreeFluidSpace(tanks, tank.fluid, target.MaxFluid) <= 0) continue;
+
+            int take = Mathf.Min(pipe.block.throughput, tank.amount);
+            if (take <= 0) continue;
+
+            pipe.parcel = new ParcelRecord
+            {
+                itemName = "",
+                count = 0,
+                fluidId = tank.fluid.fluidId,
+                amount = take,
+                destX = sink.machineCell.x,
+                destY = sink.machineCell.y,
+                remaining = sink.seconds,
+            };
+
+            tank.amount -= take;
+            if (tank.amount <= 0) tank.Clear();
+            source.NotifyFluidChanged();
+
+            if (pipe.record != null) pipe.record.roundRobinCursor = (index + 1) % pipe.sinks.Count;
+            pipe.WriteBack();
+            return;
+        }
+
+        pipe.nextAttemptTime = clock + RetryDelay;
     }
 
     // ── 렌더 ────────────────────────────────────────────────────

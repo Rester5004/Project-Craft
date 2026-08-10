@@ -14,6 +14,9 @@ public class Inventory : Singleton<Inventory>, IItemContainer
     public ItemStack GetStack(int index) => slots[index];
     public void NotifyChanged() => OnChanged?.Invoke();
 
+    /// <summary>플레이어 인벤토리는 언제나 아이템의 maxStack 을 따른다(고유 최대치가 없다).</summary>
+    public int SlotCapacity(int index, Items item) => RecipeSolver.MaxStackOf(item);
+
     protected override void Awake()
     {
         base.Awake();

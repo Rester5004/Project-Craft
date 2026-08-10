@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4cecabaf732519b4bb23d8f04e36093c, type: 3}
+  m_Name: BedrockObject
+  m_EditorClassIdentifier: Assembly-CSharp::MainBlock
+  blockName: wall:bedrock
+  displayName: "\uC554\uBC18"
+  dropItem: {fileID: 0}
+  dropCount: 1
+  assetPath: {fileID: 11400000, guid: 5a661856f98a9b44680fb5f52271dfb7, type: 2}
+  wallAtlas: {fileID: 11400000, guid: fdc897ea41164a14e8dc0e9b53d8c3ab, type: 2}
+  floorSprite: {fileID: 0}

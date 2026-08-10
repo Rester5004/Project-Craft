@@ -14,16 +14,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MachineBlock
   blockName: Machine:ManaDissolver
   displayName: "\uB9C8\uB098 \uC6A9\uD574\uAE30"
+  dropItem: {fileID: 0}
+  dropCount: 1
   machinePrefab: {fileID: 2613032363430261748, guid: d6a7ce307ab767444a005ef9ded07633, type: 3}
-  uiPrefab: {fileID: 0}
+  uiPrefab: {fileID: 6680067307818729307, guid: d8eefd7bd834f3e4e88691b3ddeec0e7, type: 3}
+  runningSprite: {fileID: 0}
+  manualStepRatio: 0
   tier: 1
   recipeGroupId: 
   inputSlotCount: 1
-  outputSlotCount: 1
+  outputSlotCount: 0
   fuelSlotCount: 0
   fuelBurnRate: 20
-  inputGasSlotCount: 0
-  outputGasSlotCount: 0
-  maxGasAmount: 0
+  upgradeSlotCount: 2
+  inputFluidSlotCount: 0
+  outputFluidSlotCount: 1
+  maxFluidAmount: 10000
   maxEnergyAmount: 0
   isUseEnergy: 0
+  isGenerator: 0
+  powerRange: 0
+  energyUseRate: 0
+  speedMultiplier: 1
+  chanceMultiplier: 1

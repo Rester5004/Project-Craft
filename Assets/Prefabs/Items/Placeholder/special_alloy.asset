@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0aa270e77a10f843b1b6fe8950719d0, type: 3}
+  m_Name: special_alloy
+  m_EditorClassIdentifier: Assembly-CSharp::Items
+  itemName: special_alloy
+  displayName: "\uD2B9\uC218\uD569\uAE08"
+  placeable: 0
+  Icon: {fileID: 6171144539048142750, guid: cbe785553f8a087429b55d8ce1e44cc7, type: 3}
+  maxStack: 64
+  burnEnergy: 0

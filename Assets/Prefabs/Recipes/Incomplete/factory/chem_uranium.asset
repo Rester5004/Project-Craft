@@ -18,24 +18,25 @@ MonoBehaviour:
   inputs:
   - item: {fileID: 11400000, guid: c6aca57598c78e04cac26751857c2e86, type: 2}
     count: 1
-  - item: {fileID: 11400000, guid: b9bccd5ed0ebee845bab2eabdda498d2, type: 2}
-    count: 2
   outputs:
   - item: {fileID: 11400000, guid: bc9f5f469d3a5bc47a673f7b12666f12, type: 2}
     count: 1
+  fluidInputs:
+  - fluid: {fileID: 11400000, guid: 5adbf19dd79e4614da6a33df7aff98d1, type: 2}
+    amount: 2000
+  fluidOutputs: []
+  chanceOutputs: []
   requiredTools: []
   craftTime: 1
   importNote: "[\uBCD1\uD569] Assets/Prefabs/Recipes/Incomplete/factory/chem_uranium.asset
-    \uB97C \uD761\uC218\uD568\r\n[\uCD9C\uCC98] notion_factory.json / id=uranium_concentrate\r\n[\uAE30\uACC4]
+    \uB97C \uD761\uC218\uD568\n[\uCD9C\uCC98] notion_factory.json / id=uranium_concentrate\n[\uAE30\uACC4]
     '\uD654\uD559 \uCC98\uB9AC\uAE30' \u2014 \uB300\uC751\uD558\uB294 MachineBlock
-    \uC774 \uC5C6\uC5B4 \uBE44\uC6CC \uB460\r\n[\uC6D0\uBB38] {\"id\":\"uranium_concentrate\",\"machine\":\"\uD654\uD559
+    \uC774 \uC5C6\uC5B4 \uBE44\uC6CC \uB460\n[\uC6D0\uBB38] {\"id\":\"uranium_concentrate\",\"machine\":\"\uD654\uD559
     \uCC98\uB9AC\uAE30\",\"tier\":1,\"output\":\"\uC6B0\uB77C\uB284 \uB18D\uCD95\uBB3C\",\"outputQty\":1,\"inputs\":[{\"item\":\"\uBBF8\uAC00\uACF5
-    \uC6B0\uB77C\uB284\",\"qty\":1},{\"item\":\"\uC0B0\uC131 \uC6A9\uC561\",\"qty\":2}]}\r\n\r\n---
-    \uD761\uC218\uB41C \uC6D0\uBCF8 ---\r\n[\uCD9C\uCC98] factory.json / id=chem_uranium\r\n[\uAE30\uACC4]
+    \uC6B0\uB77C\uB284\",\"qty\":1},{\"item\":\"\uC0B0\uC131 \uC6A9\uC561\",\"qty\":2}]}\n\n---
+    \uD761\uC218\uB41C \uC6D0\uBCF8 ---\n[\uCD9C\uCC98] factory.json / id=chem_uranium\n[\uAE30\uACC4]
     '\uD654\uD559 \uCC98\uB9AC\uAE30' \u2014 \uB300\uC751\uD558\uB294 MachineBlock
-    \uC774 \uC5C6\uC5B4 \uBE44\uC6CC \uB460\r\n[\uC720\uCCB4 \uC7AC\uB8CC] \uC0B0\uC131
-    \uC6A9\uC561 x2 (\uC544\uC774\uD15C\uC774 \uC544\uB2C8\uB77C \uC62E\uAE30\uC9C0
-    \uC54A\uC74C)\r\n[\uC804\uB825] \uC800\uC804\uC555\r\n[\uC6D0\uBB38] {\"id\":\"chem_uranium\",\"machine\":\"\uD654\uD559
-    \uCC98\uB9AC\uAE30\",\"power\":\"\uC800\uC804\uC555\",\"output\":\"\uC6B0\uB77C\uB284
+    \uC774 \uC5C6\uC5B4 \uBE44\uC6CC \uB460\n[\uC804\uB825] \uC800\uC804\uC555\n[\uC6D0\uBB38]
+    {\"id\":\"chem_uranium\",\"machine\":\"\uD654\uD559 \uCC98\uB9AC\uAE30\",\"power\":\"\uC800\uC804\uC555\",\"output\":\"\uC6B0\uB77C\uB284
     \uB18D\uCD95\uBB3C\",\"inputs\":[{\"item\":\"\uBBF8\uAC00\uACF5 \uC6B0\uB77C\uB284\",\"qty\":1},{\"item\":\"\uC0B0\uC131
-    \uC6A9\uC561\",\"qty\":2,\"fluid\":true}]}\r\n"
+    \uC6A9\uC561\",\"qty\":2,\"fluid\":true}]}\n"

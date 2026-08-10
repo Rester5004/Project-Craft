@@ -36,10 +36,9 @@ namespace ProjectCraft.EditorTools
             { "마나 용해기", "ManaDissolver" },
             { "마법부여기", "Enchanter" },
             { "변압기", "Transformer" },
-            { "시멘트 공장", "CementPlant" },
-            { "압연기", "RollingMill" },
+            // '압연기' 는 '압축기' 와 같은 기계라 흡수됐고, '시멘트 공장'·'유리 가공기' 는 삭제됐다.
+            // 여기 줄을 되살리면 이 툴이 지운 기계를 다시 만들어 낸다('감별기' 와 같은 이유).
             { "원유 채굴기", "OilDrill" },
-            { "유리 가공기", "GlassWorks" },
             { "정밀 세공기", "PrecisionLathe" },
             // '정유기' 는 삭제됐다 — 원유 처리는 '증류기'(Distiller) 하나로 모았다.
             // 같은 일을 하는 기계가 티어별로 갈리면 안 된다는 규칙 때문이다(CLAUDE.md §4).

@@ -26,6 +26,19 @@ public class FillingSlot : MonoBehaviour
             UpdateLayout(newValue);
         }
     }
+    /// <summary>
+    /// 채움 부분의 색. 유체 바가 담긴 유체마다 다른 색을 내는 데 쓴다
+    /// (전력·연료·진행도 바는 건드리지 않으므로 프리팹에 칠해 둔 색 그대로다).
+    ///
+    /// <b><see cref="UpdateLayout"/> 이 이 색을 다시 쓰지 않아야</b> 매 프레임 덮이지 않는다 —
+    /// 파티클 색만 매 프레임 계산하고 채움 색은 여기서 한 번 대입하는 것이 그 이유다.
+    /// </summary>
+    public Color FillColor
+    {
+        get { return _fillImage != null ? _fillImage.color : Color.white; }
+        set { if (_fillImage != null) _fillImage.color = value; }
+    }
+
     private bool captured;   // 원래 파티클 색을 이미 기억했는가
 
     /// <summary>

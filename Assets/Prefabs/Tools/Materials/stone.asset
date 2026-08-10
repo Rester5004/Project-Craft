@@ -19,3 +19,4 @@ MonoBehaviour:
   durabilityFactor: 0.5
   handleFactor: 0.95
   miningTier: 1
+  sourceItem: {fileID: 11400000, guid: a377e0a4d5d6c8d4aa8d532ab54dcba5, type: 2}

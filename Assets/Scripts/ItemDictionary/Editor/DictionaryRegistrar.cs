@@ -40,6 +40,7 @@ namespace ProjectCraft.EditorTools
 
             RegisterItems(itemDictionary);
             RegisterBlocks(itemDictionary);
+            RegisterFluids(itemDictionary);
             RegisterRecipes(recipeDictionary);
 
             EditorSceneManager.MarkSceneDirty(itemDictionary.gameObject.scene);
@@ -125,6 +126,44 @@ namespace ProjectCraft.EditorTools
             AppendProblems(problems);
         }
 
+        // ── 유체 ──────────────────────────────────────────────────
+        private static void RegisterFluids(ItemDictionary dictionary)
+        {
+            List<FluidDefine> all = LoadAll<FluidDefine>();
+            List<FluidDefine> valid = new List<FluidDefine>();
+            List<string> problems = new List<string>();
+            HashSet<string> seen = new HashSet<string>();
+
+            foreach (FluidDefine fluid in all)
+            {
+                string path = AssetDatabase.GetAssetPath(fluid);
+
+                if (string.IsNullOrEmpty(fluid.fluidId))
+                {
+                    problems.Add($"fluidId 가 비어 있음: `{path}`");
+                    continue;
+                }
+                if (!seen.Add(fluid.fluidId))
+                {
+                    problems.Add($"fluidId '{fluid.fluidId}' 중복: `{path}`");
+                    continue;
+                }
+                // 한쪽만 있으면 양동이 교환이 반쪽이 된다(채우기만 되고 비우기가 안 되는 식).
+                if ((fluid.bucketItem == null) != (fluid.emptyItem == null))
+                    problems.Add($"'{fluid.fluidId}' 의 bucketItem/emptyItem 중 하나만 지정됨 — 양동이 교환이 동작하지 않습니다: `{path}`");
+
+                valid.Add(fluid);
+            }
+
+            int added = Append(dictionary, "fluidsList", valid);
+            Report.AppendLine();
+            Report.AppendLine($"## 유체");
+            Report.AppendLine();
+            Report.AppendLine($"- 에셋 {all.Count}개 중 {valid.Count}개 등록 대상, 새로 추가 {added}개");
+            RemoveMissing(dictionary, "fluidsList");
+            AppendProblems(problems);
+        }
+
         // ── 레시피 ────────────────────────────────────────────────
         /// <summary>
         /// 등록 조건:
@@ -161,7 +200,10 @@ namespace ProjectCraft.EditorTools
             List<string> shadowed = new List<string>();
             foreach (Recipe recipe in valid)
             {
-                string key = recipe.MachineBlockId + "|" + recipe.PrimaryOutput.itemName;
+                // 유체만 내는 레시피는 PrimaryOutput 이 null 이다(전기 분해기의 물 → 수소·산소).
+                // 그때는 첫 산출 유체를 대표로 쓴다 — 여기서 그냥 .itemName 을 부르면 NRE 로 등록이 통째로 멈춘다.
+                string outKey = recipe.PrimaryOutput != null ? recipe.PrimaryOutput.itemName : FirstFluidId(recipe);
+                string key = recipe.MachineBlockId + "|" + outKey;
                 if (firstByKey.TryGetValue(key, out Recipe first))
                     shadowed.Add($"`{AssetDatabase.GetAssetPath(recipe)}` ← `{AssetDatabase.GetAssetPath(first)}` 가 먼저 잡힘");
                 else firstByKey[key] = recipe;
@@ -225,15 +267,35 @@ namespace ProjectCraft.EditorTools
                 foreach (ChanceOutput roll in recipe.chanceOutputs)
                     if (roll != null && roll.item != null && roll.count > 0 && roll.chance > 0f) return true;
 
+            // 유체만 내는 레시피도 산출이 있는 것이다. 빠뜨리면 전기 분해기·마나 용해기가
+            // "재료만 먹는 위험한 레시피" 로 걸러져 딕셔너리에 등록되지 않고 영원히 논다.
+            if (recipe.fluidOutputs != null)
+                foreach (FluidStack fluid in recipe.fluidOutputs)
+                    if (fluid != null && fluid.fluid != null && fluid.amount > 0) return true;
+
             return false;
         }
 
         private static bool HasAnyInput(Recipe recipe)
         {
-            if (recipe.inputs == null) return false;
-            foreach (ItemStack stack in recipe.inputs)
-                if (stack != null && stack.item != null && stack.count > 0) return true;
+            if (recipe.inputs != null)
+                foreach (ItemStack stack in recipe.inputs)
+                    if (stack != null && stack.item != null && stack.count > 0) return true;
+
+            if (recipe.fluidInputs != null)
+                foreach (FluidStack fluid in recipe.fluidInputs)
+                    if (fluid != null && fluid.fluid != null && fluid.amount > 0) return true;
+
             return false;
+        }
+
+        /// <summary>대표 산출 유체의 id(아이템 산출이 없는 레시피의 중복 검사 키).</summary>
+        private static string FirstFluidId(Recipe recipe)
+        {
+            if (recipe.fluidOutputs != null)
+                foreach (FluidStack fluid in recipe.fluidOutputs)
+                    if (fluid != null && fluid.fluid != null && fluid.amount > 0) return "fluid:" + fluid.fluid.fluidId;
+            return "";
         }
 
         // ── 공용 ──────────────────────────────────────────────────

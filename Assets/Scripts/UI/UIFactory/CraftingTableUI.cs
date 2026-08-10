@@ -62,7 +62,11 @@ public class CraftingTableUI : DefaultMachineUI
     private bool subscribed;
     private bool searchFocused;
 
-    /// <summary>조합대 프리팹에는 MachineUIElement 가 없는 것이 정상이다(부품 칸은 이 클래스가 직접 만든다).</summary>
+    /// <summary>
+    /// 조합대 프리팹에 입출력·연료 요소가 없는 것은 정상이다 — 재료는 플레이어 인벤토리에서 먹고
+    /// 부품 칸은 이 클래스가 직접 만든다. 그래서 개수 부족 경고를 끈다.
+    /// (업그레이드 칸과 코어 업그레이드 버튼은 <b>프리팹 요소</b>이고, 베이스가 조용히 클램프한다.)
+    /// </summary>
     protected override bool WarnOnElementShortage => false;
 
     public override void Open(MachineInstance machine)
@@ -79,9 +83,91 @@ public class CraftingTableUI : DefaultMachineUI
         if (searchField != null) searchField.SetTextWithoutNotify("");
 
         selectedRecipe = null;
+        BindCoreUpgrade(machine);
         BuildTabs();
         RebuildGrid();
         Subscribe();
+    }
+
+    // ── 코어 업그레이드 (조합대 티어 상승) ──────────────────────
+    private bool warnedMissingCoreUpgrade;
+
+    /// <summary>
+    /// 코어 업그레이드 버튼을 이 기계에 맞게 붙인다.
+    ///
+    /// <b>칸도 버튼도 프리팹에 있는 요소다</b>(<see cref="MachineUIRole.UpgradeSlot"/> ·
+    /// <see cref="MachineUIRole.CoreUpgradeButton"/>). 예전에는 코드로 만들었는데, 그러면
+    /// 위치·크기를 씬에서 못 옮기고 팩토리 검증기도 볼 수 없었다.
+    ///
+    /// 이 패널 하나를 코어·고급 조합기와 재단 3종이 함께 쓰지만, 칸은 베이스가
+    /// <c>upgradeSlotCount</c>(재단은 0)로 꺼 주고 버튼은 여기서 코어일 때만 켠다.
+    /// </summary>
+    private void BindCoreUpgrade(MachineInstance machine)
+    {
+        bool accepts = machine != null && machine.AcceptsTierUpgrade && machine.UpgradeCount > 0;
+
+        Button coreUpgradeButton = CoreUpgradeButton;
+        if (coreUpgradeButton == null)
+        {
+            // 코어가 아닌 조합대에서도 매번 경고하면 로그가 묻힌다 — 필요한 기계에서 한 번만 알린다.
+            if (accepts && !warnedMissingCoreUpgrade)
+            {
+                warnedMissingCoreUpgrade = true;
+                Debug.LogWarning($"[CraftingTableUI] '{name}' 에 CoreUpgradeButton 요소가 없어 " +
+                                 "코어 티어를 올릴 수 없습니다. Machine UI Factory 에서 추가하세요.", this);
+            }
+            return;
+        }
+
+        if (CoreUpgradeButtonObject != null) CoreUpgradeButtonObject.SetActive(accepts);
+
+        // 리스너를 지우지 않으면 조합대를 열 때마다 쌓여 한 번 눌렀는데 여러 번 올라간다.
+        coreUpgradeButton.onClick.RemoveAllListeners();
+        if (!accepts) return;
+
+        // 칸 자체는 베이스가 이미 업그레이드 구간에 바인딩했다(평면 인덱스 [입력][출력][연료][업그레이드]).
+        if (FirstUpgradeSlot == null && !warnedMissingCoreUpgrade)
+        {
+            warnedMissingCoreUpgrade = true;
+            Debug.LogWarning($"[CraftingTableUI] '{name}' 에 UpgradeSlot 요소가 없어 " +
+                             "재료를 넣을 칸이 없습니다. Machine UI Factory 에서 추가하세요.", this);
+        }
+
+        MachineInstance captured = machine;
+        coreUpgradeButton.onClick.AddListener(() =>
+        {
+            if (!captured.TryUpgradeTier()) return;
+            tier = captured.Tier;
+            currentCategory = null;
+            selectedRecipe = null;
+            BuildTabs();      // 새로 열린 티어의 탭·레시피가 즉시 보여야 한다
+            RebuildGrid();
+            RefreshCoreUpgrade();
+        });
+        RefreshCoreUpgrade();
+    }
+
+    /// <summary>버튼 라벨로 지금 무엇이 필요한지 알려 준다(현재 티어 · 넣은 재료가 유효한지).</summary>
+    private void RefreshCoreUpgrade()
+    {
+        TMP_Text coreUpgradeLabel = CoreUpgradeLabel;
+        if (coreUpgradeLabel == null || CoreUpgradeButton == null || instance == null) return;
+
+        // 슬롯이 아니라 <b>기계 인벤토리</b>에서 읽는다 — 정본은 저장소 쪽이고 슬롯은 그것을 비출 뿐이다.
+        Items held = null;
+        if (machineInventory != null && machineInventory.UpgradeCount > 0)
+        {
+            ItemStack stack = machineInventory.upgradeSlots[0];
+            if (stack != null && stack.count > 0) held = stack.item;
+        }
+        int target = CoreUpgradeTable.TargetTier(held);
+
+        if (held == null) coreUpgradeLabel.text = $"코어 {instance.Tier}티어 · 재료를 넣으세요";
+        else if (target < 0) coreUpgradeLabel.text = "업그레이드 재료가 아닙니다";
+        else if (target <= instance.Tier) coreUpgradeLabel.text = $"이미 {instance.Tier}티어입니다";
+        else coreUpgradeLabel.text = $"{target}티어로 업그레이드";
+
+        CoreUpgradeButton.interactable = target > instance.Tier;
     }
 
     public override void Close()
@@ -130,6 +216,7 @@ public class CraftingTableUI : DefaultMachineUI
             if (partSlotPool[i].gameObject.activeSelf) partSlotPool[i].Refresh();
 
         RefreshDetail();
+        RefreshCoreUpgrade();   // 업그레이드 칸도 같은 저장소를 쓴다
     }
 
     private void HandleInventoryChanged()
@@ -240,8 +327,13 @@ public class CraftingTableUI : DefaultMachineUI
     /// 도구 레시피는 재료가 인벤토리가 아니라 부품 칸에서 오므로 항상 또렷하게 둔다
     /// (무엇을 넣어야 하는지는 상세 패널과 조합 버튼이 알려 준다).
     /// </summary>
+    /// <summary>
+    /// 목록에서 "만들 수 있음" 으로 밝게 보일지. 도구 조립과 부품 제작은 재료가 <b>인벤토리가 아니라
+    /// 조합대 칸</b>에 들어가므로 여기서 판단하지 않고 늘 밝게 둔다(상세 패널이 부족분을 알려 준다).
+    /// </summary>
     private static bool IsCraftable(Recipe recipe, List<ItemStack> slots)
-        => recipe is ToolRecipe || (slots != null && RecipeSolver.CanCraft(slots, recipe));
+        => recipe is ToolRecipe || recipe is ToolPartRecipe
+           || (slots != null && RecipeSolver.CanCraft(slots, recipe));
 
     private CraftRecipeSlot GetSlot(int index)
     {
@@ -274,7 +366,120 @@ public class CraftingTableUI : DefaultMachineUI
     private void RefreshDetail()
     {
         if (selectedRecipe is ToolRecipe toolRecipe) RefreshToolDetail(toolRecipe);
+        else if (selectedRecipe is ToolPartRecipe partRecipe) RefreshPartDetail(partRecipe);
         else RefreshItemDetail();
+    }
+
+    // ── 부품 제작 상세 (재질 칸) ────────────────────────────────
+    /// <summary>
+    /// 부품은 재료가 <b>고정 아이템이 아니라 재질</b>이라, 재료 목록 대신 재질 칸 하나를 띄운다.
+    /// 무엇이 나오는지는 넣은 재료가 정하므로(돌 → 돌 곡괭이 머리) 지금 든 것을 보고 알려 준다.
+    /// </summary>
+    private void RefreshPartDetail(ToolPartRecipe recipe)
+    {
+        ItemStack held = machineInventory != null && machineInventory.InputCount > 0
+            ? machineInventory.GetStack(0) : null;
+        ToolMaterial material = held != null ? recipe.MaterialOf(held.item) : null;
+        ToolPartItem result = material != null && ToolDictionary.Instance != null
+            ? ToolDictionary.Instance.GetPart(recipe.kind, material) : null;
+
+        int lines = 0;
+        TMP_Text line = GetMaterialLine(lines++);
+        if (material == null)
+            { line.text = "재료를 재질 칸에 넣으세요"; line.color = shortColor; }
+        else
+        {
+            bool enough = held.count >= recipe.materialCost;
+            line.text = $"{held.item.DisplayName} : {held.count} / {recipe.materialCost}";
+            line.color = enough ? enoughColor : shortColor;
+        }
+        line.gameObject.SetActive(true);
+
+        if (result != null)
+        {
+            TMP_Text made = GetMaterialLine(lines++);
+            made.text = $"→ {result.DisplayName}";
+            made.color = enoughColor;
+            made.gameObject.SetActive(true);
+        }
+        HideMaterialLinesFrom(lines);
+
+        RefreshMaterialSlot(recipe);
+        UpdatePartCraftButton(recipe, held, material, result);
+    }
+
+    /// <summary>재질 칸 하나만 띄운다(부품 칸 풀을 그대로 쓴다 — 같은 입력 슬롯 0번을 본다).</summary>
+    private void RefreshMaterialSlot(ToolPartRecipe recipe)
+    {
+        if (partSlotsRoot == null || partSlotTemplate == null) return;
+        if (machineInventory == null || machineInventory.InputCount == 0)
+        {
+            partSlotsRoot.gameObject.SetActive(false);
+            return;
+        }
+
+        ToolPartSlotUI slot = GetPartSlot(0);
+        slot.SetMaterialRequirement(recipe);
+        slot.SetInsertable(true);
+        slot.gameObject.SetActive(true);
+        slot.Bind(machineInventory, 0);
+
+        // 나머지 칸은 남은 것을 꺼내갈 수 있게만 둔다 — 도구 조립에서 넣어 둔 부품이 갇히지 않게.
+        for (int i = 1; i < partSlotPool.Count; i++)
+        {
+            ItemStack leftover = i < machineInventory.InputCount ? machineInventory.GetStack(i) : null;
+            bool keep = leftover != null && leftover.item != null && leftover.count > 0;
+            if (keep)
+            {
+                partSlotPool[i].SetRequirement(null, i);
+                partSlotPool[i].SetInsertable(false);
+                partSlotPool[i].Bind(machineInventory, i);
+            }
+            partSlotPool[i].gameObject.SetActive(keep);
+        }
+        partSlotsRoot.gameObject.SetActive(true);
+    }
+
+    private void UpdatePartCraftButton(ToolPartRecipe recipe, ItemStack held, ToolMaterial material, ToolPartItem result)
+    {
+        if (craftButton == null) return;
+
+        bool enough = material != null && held != null && held.count >= recipe.materialCost;
+        List<ItemStack> inventorySlots = Inventory.Instance != null ? Inventory.Instance.slots : null;
+        bool room = result != null && inventorySlots != null
+                    && RecipeSolver.CountFreeSpace(inventorySlots, result) > 0;
+
+        craftButton.interactable = enough && room;
+
+        if (craftButtonLabel == null) return;
+        if (material == null) craftButtonLabel.text = "재료를 넣으세요";
+        else if (result == null) craftButtonLabel.text = "이 재질의 부품이 없습니다";
+        else if (!enough) craftButtonLabel.text = "재료가 모자랍니다";
+        else if (!room) craftButtonLabel.text = "인벤토리 가득 참";
+        else craftButtonLabel.text = "조합";
+    }
+
+    /// <summary>재질 칸의 재료를 소모하고 그 재질의 부품을 인벤토리에 넣는다.</summary>
+    private void CraftToolPart(ToolPartRecipe recipe)
+    {
+        if (machineInventory == null || machineInventory.InputCount == 0) return;
+
+        ItemStack held = machineInventory.GetStack(0);
+        ToolMaterial material = held != null ? recipe.MaterialOf(held.item) : null;
+        if (material == null || held.count < recipe.materialCost) return;
+
+        ToolPartItem result = ToolDictionary.Instance != null
+            ? ToolDictionary.Instance.GetPart(recipe.kind, material) : null;
+        if (result == null) return;
+
+        Inventory inventory = Inventory.Instance;
+        if (inventory == null || inventory.AddPartial(result, 1) <= 0) return;   // 못 넣으면 재료도 안 먹는다
+
+        held.count -= recipe.materialCost;
+        if (held.count <= 0) held.Clear();
+        machineInventory.NotifyChanged();
+        if (instance != null) instance.Flush();
+        RefreshDetail();
     }
 
     // ── 도구 조립 상세 ─────────────────────────────────────────
@@ -479,6 +684,7 @@ public class CraftingTableUI : DefaultMachineUI
     private void CraftSelected()
     {
         if (selectedRecipe is ToolRecipe toolRecipe) CraftTool(toolRecipe);
+        else if (selectedRecipe is ToolPartRecipe partRecipe) CraftToolPart(partRecipe);
         else Craft(selectedRecipe);
     }
 

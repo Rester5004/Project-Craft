@@ -15,7 +15,7 @@ using UnityEngine;
 public class DroppedItem : MonoBehaviour
 {
     private const float PickupRadius = 0.28f;
-    private const int SortingOrder = 3;
+    private const int SortingOrder = 130;
 
     /// <summary>바닥에 떨어진 아이템은 인벤토리 아이콘보다 작게 보인다.</summary>
     private const float IconScale = 0.5f;

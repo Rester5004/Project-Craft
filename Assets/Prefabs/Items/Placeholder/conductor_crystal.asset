@@ -15,6 +15,6 @@ MonoBehaviour:
   itemName: conductor_crystal
   displayName: "\uC804\uB3C4\uCCB4 \uACB0\uC815"
   placeable: 0
-  Icon: {fileID: 21300000, guid: 4a4d2640fbd603542be3906e18903c59, type: 3}
+  Icon: {fileID: -5898901900833562747, guid: aa9d507c382e03646868e7afb18980dc, type: 3}
   maxStack: 64
   burnEnergy: 0

@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a24973a23734aa4b91a9495052645a0, type: 3}
+  m_Name: AdvancedAltar
+  m_EditorClassIdentifier: Assembly-CSharp::CraftingTableBlock
+  blockName: Machine:AdvancedAltar
+  displayName: "\uACE0\uAE09 \uC7AC\uB2E8"
+  dropItem: {fileID: 0}
+  dropCount: 1
+  machinePrefab: {fileID: 2613032363430261748, guid: 90f06b8f7179ed0499ec843278661f11, type: 3}
+  uiPrefab: {fileID: 779414532576868518, guid: 06eab2c4533376848ad7a643051ba2cf, type: 3}
+  runningSprite: {fileID: 0}
+  manualStepRatio: 0
+  tier: 2
+  recipeGroupId: Altar
+  inputSlotCount: 3
+  outputSlotCount: 6
+  fuelSlotCount: 0
+  fuelBurnRate: 20
+  upgradeSlotCount: 0
+  inputFluidSlotCount: 0
+  outputFluidSlotCount: 0
+  maxFluidAmount: 0
+  maxEnergyAmount: 0
+  isUseEnergy: 0
+  isGenerator: 0
+  powerRange: 0
+  energyUseRate: 0
+  speedMultiplier: 1
+  chanceMultiplier: 1

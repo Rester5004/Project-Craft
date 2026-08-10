@@ -15,6 +15,6 @@ MonoBehaviour:
   itemName: mana_shard
   displayName: "\uB9C8\uB825 \uD30C\uD3B8"
   placeable: 0
-  Icon: {fileID: 21300000, guid: 4a4d2640fbd603542be3906e18903c59, type: 3}
+  Icon: {fileID: 21300000, guid: 1604789e6fd92b74499dce63d355c4cb, type: 3}
   maxStack: 64
   burnEnergy: 0

@@ -16,18 +16,21 @@ MonoBehaviour:
   category: {fileID: 11400000, guid: a63365af4ccd3904a91ebf59b6456c84, type: 2}
   tier: 0
   inputs: []
-  outputs:
-  - item: {fileID: 11400000, guid: 42b880701ef0fe14aad6a13a71f3ba2a, type: 2}
-    count: 1
+  outputs: []
+  fluidInputs: []
+  fluidOutputs:
+  - fluid: {fileID: 11400000, guid: 2cdaa9d61c988844bb2182ca4ab389ba, type: 2}
+    amount: 1000
+  chanceOutputs: []
   requiredTools: []
   craftTime: 1
   importNote: "[\uBCD1\uD569] Assets/Prefabs/Recipes/Incomplete/extraction/extract_water.asset
-    \uB97C \uD761\uC218\uD568\r\n[\uCD9C\uCC98] notion_extraction.json / id=extract_water\r\n[\uD544\uC694
-    \uC9C0\uD615] \uC218\uC0C1 \uC9C0\uD615\r\n[\uC720\uCCB4] true\r\n[\uBE44\uACE0]
-    \uAC15, \uD638\uC218 \uB4F1\r\n[\uC6D0\uBB38] {\"id\":\"extract_water\",\"tier\":0,\"terrain\":\"\uC218\uC0C1
+    \uB97C \uD761\uC218\uD568\n[\uCD9C\uCC98] notion_extraction.json / id=extract_water\n[\uD544\uC694
+    \uC9C0\uD615] \uC218\uC0C1 \uC9C0\uD615\n[\uBE44\uACE0] \uAC15, \uD638\uC218
+    \uB4F1\n[\uC6D0\uBB38] {\"id\":\"extract_water\",\"tier\":0,\"terrain\":\"\uC218\uC0C1
     \uC9C0\uD615\",\"output\":\"\uBB3C\",\"outputQty\":1,\"fluid\":true,\"note\":\"\uAC15,
-    \uD638\uC218 \uB4F1\"}\r\n\r\n--- \uD761\uC218\uB41C \uC6D0\uBCF8 ---\r\n[\uCD9C\uCC98]
-    extraction.json / id=extract_water\r\n[\uD544\uC694 \uC9C0\uD615] \uC218\uC0C1
-    \uC9C0\uD615\r\n[\uC720\uCCB4] true\r\n[\uBE44\uACE0] \uAC15, \uD638\uC218 \uB4F1\r\n[\uC6D0\uBB38]
-    {\"id\":\"extract_water\",\"terrain\":\"\uC218\uC0C1 \uC9C0\uD615\",\"output\":\"\uBB3C\",\"fluid\":true,\"note\":\"\uAC15,
-    \uD638\uC218 \uB4F1\"}\r\n"
+    \uD638\uC218 \uB4F1\"}\n\n--- \uD761\uC218\uB41C \uC6D0\uBCF8 ---\n[\uCD9C\uCC98]
+    extraction.json / id=extract_water\n[\uD544\uC694 \uC9C0\uD615] \uC218\uC0C1
+    \uC9C0\uD615\n[\uBE44\uACE0] \uAC15, \uD638\uC218 \uB4F1\n[\uC6D0\uBB38] {\"id\":\"extract_water\",\"terrain\":\"\uC218\uC0C1
+    \uC9C0\uD615\",\"output\":\"\uBB3C\",\"fluid\":true,\"note\":\"\uAC15, \uD638\uC218
+    \uB4F1\"}\n"

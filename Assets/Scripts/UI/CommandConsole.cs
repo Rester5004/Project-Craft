@@ -167,9 +167,33 @@ public class CommandConsole : MonoBehaviour
         {
             case "give": return CommandGive(tokens);
             case "remove": return CommandRemove(tokens);
-            case "help": return "/give <아이템명> <개수>  |  /remove <슬롯인덱스>";
+            case "underground": return CommandUnderground(tokens);
+            case "help": return "/give <아이템명> <개수>  |  /remove <슬롯인덱스>  |  /underground <등급>";
             default: return $"알 수 없는 명령어: '{command}' (/help 참고)";
         }
+    }
+
+    /// <summary>
+    /// 지하맵을 바로 열고 닫는 디버그 명령. 다우징 로드가 붙기 전까지의 유일한 진입 수단이고,
+    /// 붙은 뒤에도 <b>10% 굴림을 기다리지 않고</b> 방을 확인할 수 있어야 검증이 된다.
+    /// </summary>
+    private string CommandUnderground(string[] tokens)
+    {
+        if (UndergroundSession.IsActive)
+        {
+            UndergroundSession.Exit();
+            return "지상으로 돌아갑니다.";
+        }
+
+        int tier = 0;
+        if (tokens.Length >= 2 && !int.TryParse(tokens[1], out tier))
+            return $"등급이 올바르지 않습니다: '{tokens[1]}' (0·1·2)";
+
+        PlayerForTest player = FindFirstObjectByType<PlayerForTest>();
+        if (player == null) return "플레이어를 찾을 수 없습니다.";
+
+        UndergroundSession.Enter(tier, player.transform.position);
+        return $"{tier}등급 지하맵으로 내려갑니다. (벽 = {UndergroundPalette.WallIdFor(tier)})";
     }
 
     private string CommandGive(string[] tokens)

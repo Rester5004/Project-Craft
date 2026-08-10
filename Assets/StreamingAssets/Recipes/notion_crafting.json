@@ -26,12 +26,12 @@
 
     { "id": "brick", "tier": 0, "output": "벽돌", "outputQty": 1,
       "inputs": [ { "item": "모래", "qty": 2 }, { "item": "물", "qty": 1 } ],
-      "note": "압연기에서 만들면 고효율" },
+      "note": "압축기에서 만들면 고효율" },
 
     { "id": "iron_plate", "tier": 1, "output": "철판", "outputQty": 1,
       "inputs": [ { "item": "철 주괴", "qty": 1 } ],
       "tools": [ "망치" ],
-      "note": "압연기보다 저효율" },
+      "note": "압축기보다 저효율" },
 
     { "id": "metal_plate_by_hammer", "tier": 0, "output": "금속판", "outputQty": 1,
       "inputs": [ { "item": "금속", "qty": 2 } ],

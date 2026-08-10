@@ -23,6 +23,7 @@ Unity 6 · 2D 탑다운 오픈월드 공장 게임. 대화는 한국어, 주석�
 | 파일 삭제·`while(true)` | `safety_checks: false` 필요 |
 | 백그라운드 에디터 | **프레임이 진행되지 않는다.** `Update`/물리가 안 돈다 → `Tick(dt)` 같은 공개 메서드를 직접 부르거나 `UnityEditor.EditorApplication.Step()`(호출당 1프레임) |
 | 스크립트 수정 후 | `refresh_unity(compile: request)` → `read_console(types:["error"])` 로 0 확인 |
+| 에셋의 `m_Script` 를 바꾼 뒤 | ⚠ **이미 로드된 객체의 참조가 죽는다.** 디스크 guid 는 멀쩡한데 `machine == null` 로 읽히고 `ImportAsset(ForceUpdate)` 로도 안 고쳐진다 — `CompilationPipeline.RequestScriptCompilation()` 으로 **도메인 리로드**를 해야 살아난다. 그 전에 `Register All Assets` 를 돌리면 멀쩡한 레시피가 "기계 미지정" 으로 빠진다 |
 | 게임뷰 스크린샷 | `manage_camera(action:"screenshot", capture_source:"game_view", output_folder:"Captures")`. **프로젝트 밖 경로 거부.** 비동기라 직전 프레임이 찍힐 수 있으니 `Step()` 후 다시 찍는다. 다 쓰면 `Captures/` 삭제 |
 | 월드 스크린샷 | 임시 `Camera` + `RenderTexture` + `Render()` 가 동기라 확실하다 (UI 는 안 나온다) |
 
@@ -45,12 +46,15 @@ C:\Users\c\AppData\LocalLow\DefaultCompany\Project Craft\worldmap.dat
 Assets/Scripts/
   WorldMap/      WorldMap(청크·세이브) MapGenerator(로드·스폰) TilemapTextureLoader
                  TileAtlas TerrainPalette
+                 Underground{Session Palette World LootTable Portal SceneSetup}
                  Pipe{Block은 SO에} Atlas·Cell·Router·NetworkManager·FaceMode·FaceOverlay
                  Editor/ PipeSpriteSlicer PipeAtlasBuilder TileAtlasBuilder
-  ScriptableObjects/  Items MainBlock MachineBlock PipeBlock PipeKind WrenchItem Recipe ...
+  ScriptableObjects/  Items MainBlock MachineBlock CraftingTableBlock PipeBlock PipeKind
+                 WrenchItem UpgradeModuleItem FluidDefine Recipe ChanceOutput ...
                  Tool/ ToolDefinition ToolItem ToolMaterial ToolPart* ToolRecipe
                  Editor/ PipeSetup PowerSetup FurnaceSetup MachineBlockFiller WrenchSetup
-  Machine/       MachineInstance MachineInventory RecipeSolver
+  Machine/       MachineInstance MachineInventory RecipeSolver ExtractionTable CoreUpgradeTable
+  Data/          Item(ItemStack) FluidStack ItemInstance ToolInstance
   Player/        PlayerInteraction Inventory PlayerSave
   ItemDictionary/ ItemDictionary RecipeDictionary ToolDictionary
                  Editor/ DictionaryRegistrar RecipeJsonImporter RecipeTreeMerger ...
@@ -58,11 +62,14 @@ Assets/Scripts/
                  MachineInteraction Inventory*  Slot/ ItemSlot ItemIconView BarTooltip
                  UIFactory/ CraftingTableUI MachineUIElement ...
   InputActionManager.cs   Util/Singleton.cs
-Assets/Prefabs/  Blocks/{Machines,Terrain,Pipes} Items/{Placeholder,Resource1,Tools,ToolParts}
+Assets/Prefabs/  Blocks/{Machines,Terrain,Pipes} Items/{Placeholder,Resource1,Tools,ToolParts,Machines}
+                 Fluids/  (FluidDefine 8종: water lava crude_oil petroleum acid_solution mana hydrogen oxygen)
                  Recipes/{,Tools,Category,Incomplete} Tools/{Definitions,Materials,PartKinds}
 Assets/Asset/    BlockImages ItemImages MachineImages Tiles/Atlas assetPlaceHolder.png
                  Player/Female/  Female.controller + 클립 6개(idle·걷기4·깜빡임)
-Assets/Scenes/MapTest.unity   ← 유일한 실사용 씬. Tilemap 이 있는 씬도 여기뿐
+Assets/Prefabs/Core/GameRig.prefab   ← 지상·지하 두 씬이 공유하는 공용 rig(아래 §4 참고)
+Assets/Scenes/MapTest.unity          ← 시작 씬. 지속 싱글톤 8종이 여기에만 산다
+Assets/Scenes/UndergroundScene.unity ← GameRig + UndergroundSceneSetup 둘뿐
 ```
 
 ## 4. 핵심 구조
@@ -93,14 +100,72 @@ Assets/Scenes/MapTest.unity   ← 유일한 실사용 씬. Tilemap 이 있는 �
   | 8 | 파이프 운반 중인 짐 `ParcelRecord[]` |
   | 9 | 파이프 네 면 상태 `faceModes`(1바이트) |
   | 10 | 기계 가공 진행도 `progress`(초) |
+  | 11 | 기계 유체 탱크(입력·출력) + 파이프가 나르는 유체 짐(`ParcelRecord.fluidId`/`amount`) |
+  | 12 | 업그레이드 모듈 칸 + 인스턴스별 티어 `tier`(코어 조합기 업그레이드) |
 
-  `Chunk.Save` 순서: placeable 루프 안에 slots → burn → energy/cursor/links → parcels → faceModes → progress,
-  루프 뒤 drops. `Chunk.Load` 는 `if (version >= N)`,
+  `Chunk.Save` 순서: placeable 루프 안에 slots → burn → energy/cursor/links → parcels → faceModes → progress
+  → 유체 탱크 2개 → 업그레이드 슬롯 → tier, 루프 뒤 drops. `Chunk.Load` 는 `if (version >= N)`,
   **참조형은 `else` 로 빈 배열을 넣어야** 이전 세이브에서 NRE 가 안 난다(값형은 기본값이 곧 "없음"이라 불필요).
 - ⚠ **`Bind` 에서 `LoadFrom` 이 복원한 값을 다시 0 으로 밀지 말 것.** 전력이 그래서 사라졌고,
   진행도도 같은 자리에서 지워지고 있었다(`progress = 0f` 가 `LoadFrom` 일곱 줄 뒤에 있었다).
   레시피는 저장하지 않고 `Tick` 이 다시 고르며 `craftTime` 으로 잘라 준다 — 그래서 레시피 선택 지점에서도
   `progress` 를 0 으로 밀면 안 된다.
+
+### 지하맵 (새 씬 · 저장되지 않는 인스턴스 방)
+
+탐지기(`dowsing_rod`)로 땅을 우클릭 → **10%** 로 그 자리에 포탈 → `E` 로 지하 씬으로 **넘어간다**.
+7×7 빈 방 중앙에 스폰하고, 바깥은 등급이 정한 벽으로 31×31 까지, 그 밖은 못 캐는 암반이다.
+**마력 파편·철 주괴의 최초 획득처**이자 마력석·운석 수급처다.
+
+- **월드를 객체로 나누지 않는다.** `WorldMap` 은 그대로 두고 **청크 생성 델리게이트**(`chunkGenerator`)만
+  갈아 끼운다(`EnterEphemeralWorld` / `ReturnToPersistentWorld`). 그래서 `MapGenerator`·`PlayerInteraction`·
+  `PipeRouter`·`MachineInstance` 의 **호출부가 한 줄도 안 바뀌고** 채굴·드랍·배치·파이프가 지하에서 그대로 돈다.
+- **`WorldMap.IsEphemeral` 이 참이면 `Save()` 가 첫 줄에서 되돌아간다.** 자동 저장·종료 저장·일시정지 저장이
+  **한 줄로 함께** 막힌다 — 호출부마다 가드를 두면 언젠가 하나가 빠져 지하 청크가 지상 세이브를 덮어쓴다.
+  **세이브 포맷은 그대로다(v12).** 지하는 디스크에 닿지 않는다.
+- **월드 교체는 씬을 로드하기 *전에*** 한다(`UndergroundSession.Enter`). `WorldMap` 은 씬을 넘어 살아남으므로
+  교체가 따라오고, 새 씬 `MapGenerator.Start` 가 곧바로 `UpdateChunks` 하는 것과 순서를 다투지 않는다.
+- ⚠ **`EnterEphemeralWorld` 는 들어가기 전에 지상을 `Save()` 한다.** 돌아올 때 그 파일을 다시 읽으므로
+  이 저장을 빼면 마지막 자동 저장 이후의 지상 작업이 통째로 사라진다.
+- ⚠ **`PlayerSave` 에 지하 가드 두 개가 있다.** `Load` 는 지하에서 통째로 건너뛰고(좌표를 복원하면 방 밖으로
+  튕기고, 인벤토리를 복원하면 살아 있는 것을 옛 디스크 내용으로 덮어쓴다), `Save` 는 좌표만
+  `UndergroundSession.SurfaceReturnPosition` 으로 바꿔 쓴다(지하에서 끄면 다음 실행이 허공에서 시작한다).
+- 정본 표 둘: **`UndergroundPalette`**(등급 → 벽·바닥, 방/채굴 반지름, 탐지기 → 등급, 발견 확률) ·
+  **`UndergroundLootTable`**(보상 행). `ExtractionTable` 과 같은 꼴로 static 이다.
+  ⚠ **`iron_ingot` 행을 빼면 0티어가 통째로 막힌다** — 양동이 ← 철판 ← 철 주괴 사슬의 유일한 시작점이다.
+- **못 캐는 경계벽은 새 분기가 아니라 `dropItem` 이 빈 블록**(`wall:bedrock`)이다 —
+  `WorldMap.IsMineable` 이 이미 `dropItem == null` 을 거른다.
+- ⚠ **방은 원점 중심이라 청크 네 장에 걸쳐 있다.** 그래서 물·전리품은 `UndergroundWorld` **생성자에서
+  한 번에** 정하고 `Generate` 는 나눠 담기만 한다. 청크마다 굴리면 경계에서 규칙이 갈린다.
+- **전리품은 칸마다 굴린다** — 후보 칸에서 표를 위에서부터 훑어 처음 맞은 행 하나만 놓는다(한 칸에 한 종류).
+  중앙 3×3 과 물 칸은 후보에서 뺀다(스폰과 동시에 주워지면 안 된다).
+- **포탈은 세이브에 남지 않는다**(런타임 오브젝트). 찾았으면 그 자리에서 들어가야 한다.
+  지상 포탈은 한 번 쓰면 사라진다 — 남기면 탐지기 하나로 무한히 드나든다.
+- 물 타일(`floor:water`)은 **지금 그림뿐**이다. 통행을 막지도, 양동이로 퍼지도 못한다(지형 유체는 별건).
+- 디버그: 콘솔 **`/underground <등급>`** 으로 바로 내려가고, 인자 없이 다시 치면 올라온다.
+
+### 씬 구성 — `GameRig` 프리팹 (⚠ 규칙 하나가 전부다)
+
+지상·지하 두 씬이 **같은 `Assets/Prefabs/Core/GameRig.prefab` 한 장**을 놓는다. UI 를 고칠 때 한 곳만 고친다.
+
+> **`PersistAcrossScenes == true` 인 싱글톤은 반드시 씬 루트로 남는다. 프리팹 안에 넣으면 안 된다.**
+> `DontDestroyOnLoad` 는 루트 오브젝트에만 듣기 때문이다(자식이면 경고만 내고 아무 일도 안 한다).
+
+| | 무엇 |
+|---|---|
+| **`GameRig` 안**(씬마다 새로) | Map(Grid+타일맵) · MapGenerator · TilemapTextureLoader · TestPlayer · Main Camera · CinemachineCamera · Global Light 2D · UIs · UIManager · EventSystem · TooltipUI · CommandConsole · PowerLinkMode · ItemBrowser |
+| **MapTest 루트로만**(씬을 넘어 산다) | ItemDictionary · RecipeDictionary · ToolDictionary · TileAtlasManager · InputAction · PlayerInventory · TrashCan · TestItemGiver |
+
+- **프리팹은 씬 오브젝트를 참조할 수 없다.** rig 안에서 위 8종을 가리켜야 하면 **`Instance` 로 찾는다**
+  (`InventoryUI.trashCan` 이 그래서 직렬화 필드에서 빠졌다).
+- ⚠ **`TooltipUI` 는 `PersistAcrossScenes => false` 다.** `Awake` 에서 패널을 캔버스 아래에 짓는데 캔버스는
+  씬과 함께 죽는다 — 살려 두면 싱글톤만 남고 패널이 없어 **툴팁이 영영 안 뜬다**(`Awake` 는 다시 안 불린다).
+  `UIManager`·`TilemapTextureLoader` 와 같은 규약이다.
+- ⚠ **`Singleton.Awake` 는 `_instance == this` 도 지속 정책을 적용해야 한다.** 누군가 `Awake` 보다 먼저
+  `Instance` 를 부르면 게터가 `FindFirstObjectByType` 으로 찾아 `_instance` 에 넣어 두는데 게터는
+  `DontDestroyOnLoad` 를 걸지 않는다 — 예전에는 그래서 **`InputActionManager` 가 씬과 함께 죽었다**
+  (`PlayerInteraction.OnEnable` 이 먼저 부른다).
+- **플레이는 MapTest 에서 시작해야 한다.** UndergroundScene 을 직접 Play 하면 딕셔너리·인벤토리가 없다.
 
 ### 아이템 · 딕셔너리
 - `Items.itemName` = 세이브 키. **반드시 영어(snake_case)**, `displayName` = **반드시 한글**. 예외 없다.
@@ -113,6 +178,11 @@ Assets/Scenes/MapTest.unity   ← 유일한 실사용 씬. Tilemap 이 있는 �
   / 역인덱스 `GetTerrainBlockFor(item)` `GetPipeBlockFor(item)`.
 - 에셋을 새로 만들면 **`Tools/Project Craft/Dictionary/Register All Assets`** 를 돌려야 씬 딕셔너리에 등록된다
   (삭제된 에셋이 남긴 빈 칸도 이때 걷어낸다).
+- ⚠ **플레이 중 스크립트를 재컴파일하면 도메인 리로드로 색인이 통째로 빈다** — `Dictionary` 필드는 새로
+  만들어지는데 `Awake` 는 다시 안 불린다. 그러면 `GetItem`·`GetBlock`·`GetFluid` 가 전부 null 이 되어
+  **놓여 있던 기계와 탱크 내용이 사라진 것처럼 읽힌다.** `ItemDictionary.EnsureIndex` 가 조회마다
+  이것을 복구한다(`RecipeDictionary.GetRecipesFor` · `ToolDictionary.EnsureIndex` 와 같은 규약) —
+  **새 색인을 추가하면 `BuildIndexes` 의 Clear 목록과 `EnsureIndex` 의 stale 판정에 함께 넣을 것.**
 - **`MachineAliases`**(에디터) = 옛 기계 이름 → 정본 **표시 이름**. `RecipeTreeMerger` · `MachineBlockFiller` ·
   `RecipeJsonImporter` 가 **같은 표 하나를 본다**(예전엔 세 벌로 갈라져 실제로 어긋났다).
 - **`ItemAliases.Resolve` 는 한 단계만 푼다.** 그래서 플레이스홀더를 기계로 승격시킬 때
@@ -123,6 +193,9 @@ Assets/Scenes/MapTest.unity   ← 유일한 실사용 씬. Tilemap 이 있는 �
   `ItemDictionary.GetItem` 폴백(옛 세이브 호환) · `RecipeJsonImporter.ResolveItem`(재임포트 내성) · `ItemMerger`(참조 재작성).
   `itemName` 이 세이브 키라 **이 폴백이 아이템을 지워도 세이브가 안 깨지게 하는 유일한 안전망**이다.
 - 중복 정리 흐름: `아이템 중복 조사`(리포트만) → `ItemAliases` 표에 줄 추가 → `중복 아이템 통합` → 다시 조사해 0 확인.
+- **`레드스톤`은 없다 — `전도체`다.** `redstone_crystal`/`redstone_powder` 는 그림까지 같은 완전한 중복이라
+  `conductor_crystal`/`conductor_powder` 로 흡수했다(2026-08-08). 둘을 잇던 분쇄 레시피는
+  `Prefabs/Recipes/conductor_powder.asset`(전도체 결정 1 → 전도체 가루 2) 하나로 남아 있다.
 
 ### 기계 · 레시피
 
@@ -139,10 +212,30 @@ Assets/Scenes/MapTest.unity   ← 유일한 실사용 씬. Tilemap 이 있는 �
   **같은 기계가 n티어에도 m티어에도 있으면 안 된다.** 업그레이드는 `화로 → 전기로 → 고전압 전기로`
   처럼 **이름이 다른 별개 기계**로 표현한다. (이 규칙 위반이라 `2티어 합금 재련기` 와 `정유기` 를 지웠다 —
   용광로는 `합금 재련기 ×1` 을 먹고, 원유 처리는 **증류기** 하나가 한다)
+- **`압연기`는 없다 — `압축기`다.** 벽돌 공장 → 압연기 → 압축기로 두 번 통합됐다(2026-08-10 사용자 결정).
+  가공 레시피 11개가 전부 `Machine:Compressor` 에 있고 재료가 서로 달라 `SelectRecipe` 함정에 안 걸린다.
+  압축기는 **입력 2칸**이어야 한다 — `compress_brick`(모래2 + 물1) 때문이고, UI 프리팹도 그래서 옛
+  `RollingMill_UI`(입력2 + 업그레이드2)를 `Compressor_UI` 로 물려받았다.
+  ⚠ 옛 이름은 `ItemAliases`(`Machine:RollingMill` → `Machine:Compressor`)와 `MachineAliases`(`압연기`·`벽돌 공장` → `압축기`)가 잇는다.
 - ⚠ **`Recipe.tier` 한 필드가 두 뜻을 겸한다** — 건설 레시피에선 해금, 가공 레시피에선 처리 요구.
   지금은 가공 레시피가 조합대 목록에 안 떠서 부딪히지 않는다.
-- **제련 규칙**: 화로는 **티어와 무관하게 모든 광석을 재련한다. 티타늄만 용광로.**
-  (2026-08-07 사용자 결정. `smelt_*` 의 `Recipe.tier` 가 이 규칙과 어긋나 있다 — `TODO.md` §F)
+- **코어 조합기의 해금 티어는 SO 가 아니라 `PlaceableRecord.tier` 에 산다.**
+  `MachineInstance.Tier = max(Info.tier, record.tier)` 라 다른 기계 47종은 record 가 0 이어서 지금까지와 같다.
+  SO 를 런타임에 고치면 에디터에서 **에셋이 영구히 바뀌고** 코어가 둘일 때 한쪽만 올릴 수도 없다.
+  올리는 재료는 static 정본 표 **`CoreUpgradeTable`**(`ExtractionTable` 과 같은 꼴):
+  `마법이 부여된 전도체 가루 → 1` · `마력 칩 → 2`. `CraftingTableBlock.acceptsTierUpgrade` 를 켠 코어만 받는다.
+  ⚠ **코어를 캤다 다시 놓으면 티어가 0 으로 돌아간다**(레코드가 새로 생긴다) — 의도다.
+  재료 칸은 `MachineUIRole.UpgradeSlot`, 누르는 버튼은 **`MachineUIRole.CoreUpgradeButton = 12`** 로
+  **둘 다 UI 프리팹에 있다**(팩토리 "요소 추가" 에 버튼이 있다). 조합대 프리팹 한 장을 5종이 나눠 쓰지만
+  칸은 `upgradeSlotCount`(재단·고급 조합기는 0)로, 버튼은 `acceptsTierUpgrade` 로 자동으로 꺼진다.
+- 조합대 5종의 현재 값: `코어 조합기 0`(업그레이드로 2까지) · `고급 조합기 2` ·
+  `초급/중급/고급 재단 0/1/2`. **재단 3종은 `CraftingTableBlock` 이고 `recipeGroupId = "Altar"` 로 목록을 공유**한다.
+  고급 조합기·재단은 각자 전용 목록을 가지므로 `recipeGroupId` 를 코어와 합치지 않는다.
+- **제련 규칙**: 화로는 **티어와 무관하게 모든 광석을 재련한다. 티타늄·강철만 용광로.**
+  (2026-08-07 · 2026-08-10 사용자 결정. `smelt_*` 의 `Recipe.tier` 가 이 규칙과 어긋나 있다 — `TODO.md` §F)
+  `blast_titanium`(티타늄 조각 4 → 티타늄 주괴) · `blast_steel`(**철 주괴 2 + 석탄 1** → 강철)이
+  `Machine:BlastFurnace` 목록의 전부다. ⚠ 둘은 원래 `Furnace` 그룹에 있어 화로·전기로가 뽑고 있었고,
+  `blast_steel` 은 **입력이 비어 있어 재료 없이 강철이 나왔다.**
 
 - **레시피 에셋 이름은 만들어지는 것의 이름 하나뿐이다** — `craft_` · `build_` 접두사도, `_2` 꼬리도 붙이지 않는다
   (`hammer` / `craft_hammer` 처럼 갈라져 양쪽 다 반쯤 고장 나 있었다). 기계 건설 레시피는 블록 이름을 따른다
@@ -154,8 +247,11 @@ Assets/Scenes/MapTest.unity   ← 유일한 실사용 씬. Tilemap 이 있는 �
   재료가 부품 **종류**라 `inputs` 가 비어 있는 것이 정상 — 조합대가 부품 칸을 따로 띄운다.
   재질을 고정한 옛 조립 레시피 7개는 `ToolAssetGenerator` 가 산출 참조를 끊어 놓은 껍데기였고 **지웠다.**
   부품 레시피(`stick` `hammer_head` `stone_hammerhead` `iron_hammerhead`)는 살아 있는 정상 레시피다.
-- `MachineBlock`(SO) → `MachineInstance`(런타임) + `MachineInventory`(input/output/fuel).
+- `MachineBlock`(SO) → `MachineInstance`(런타임) + `MachineInventory`(input/output/fuel/upgrade).
 - `MachineInstance.ApplyConfig` 조건에 `|| info.fuelSlotCount > 0` 이 있다 — 빼면 발전기가 3/6 으로 폴백한다.
+- ⚠ **`MachineBlock` 에 필드를 새로 넣으면 기존 에셋 47개는 `0`/`false` 로 읽힌다** — C# 초기값이 아니다.
+  YAML 에 그 줄이 없기 때문이라, 새 필드는 **일괄 스크립트로 값을 써 넣어야** 한다
+  (`CoreCrafter` 가 `speedMultiplier` 를 그렇게 잃었고, `upgradeSlotCount = 2` 도 같은 이유로 손으로 채웠다).
 - ⚠ **`SelectRecipe` 는 "지금 만들 수 있는 첫 레시피" 를 고른다** — 우선순위도 플레이어 선택도 없다.
   **같은 재료를 받는 레시피를 한 기계에 둘 이상 두면 목록에서 앞선 것만 영원히 돈다**(실제로 그래서
   분쇄기가 `돌 → 돌` 만 반복했다). 재료가 겹치는 레시피는 서로 다른 기계나 티어로 갈라 둘 것.
@@ -179,6 +275,61 @@ Assets/Scenes/MapTest.unity   ← 유일한 실사용 씬. Tilemap 이 있는 �
   교체는 `SetRunning` 한 곳에서만 하고 **상태가 바뀔 때만** 대입한다(매 프레임 대입하면 배칭이 깨진다).
   가동 판정 = **그 프레임에 실제로 진행됐는가**. 재료가 있어도 연료·전력·출력자리가 없으면 정지고,
   발전기는 **연료를 실제로 태운 프레임**만 가동이라 버퍼가 차면 정지 그림이 된다.
+
+### 유체 (액체·기체를 한 계층으로)
+
+- **액체와 기체를 나누지 않는다.** `FluidDefine`(SO) 하나에 `phase`(Liquid/Gas)만 두고,
+  실제로 다른 것은 "어느 파이프가 나르는가"뿐이라 `CarriedBy → PipeKind` 로 해결한다.
+  나누면 탱크·`Recipe`·`RecipeSolver`·세이브가 전부 두 벌이 되고 언젠가 한쪽만 고쳐진다.
+- **양은 단위 없는 정수다.** 규약으로 **1 양동이 = `FluidDefine.bucketAmount` = 1000**.
+  코드에 mL 개념이 없으므로 세분화할 때 **레시피 숫자만** 바꾸면 되고 float 누적 오차도 없다.
+- `FluidStack` **하나**가 레시피 항목이자 탱크 한 칸이다(`ItemStack` 과 같은 꼴).
+  **탱크 한 칸에는 한 종류만** 담긴다 → 두 종류를 내는 레시피는 출력 탱크가 2칸 이상이어야 한다.
+- `RecipeSolver` 의 유체 API 는 아이템 쪽과 **이름·계약이 대칭**이다:
+  `CountFluid` `HasFluids` `ConsumeFluids` `CanStoreFluids` `StoreFluids` `AddFluid` `CountFreeFluidSpace`.
+  `AddFluid` 도 **통지하지 않는다** — 밖에서 탱크를 만졌으면 `instance.NotifyFluidChanged()` 를 불러야 한다.
+- ⚠ **탱크 생성은 `ApplyConfig` 안에서 한다.** `Bind` 가 `LoadFrom` **뒤에** 만들면 복원한 유체를 매번 덮어쓴다
+  (옛 `Gas[]` 가 정확히 그 자리에 있었다 — 전력·진행도가 같은 함정에 걸렸던 곳).
+- ⚠ **`SelectRecipe` 와 `Tick` 이 같은 `CanRun(Recipe)` 을 봐야 한다.** 고를 때 유체를 안 보면
+  "물이 없어 영원히 안 도는" 레시피를 물고 기계가 통째로 잠긴다(첫 후보를 잡으면 더 안 찾는다).
+- **양동이 교환은 전용 슬롯 없이 입출력 슬롯으로 한다**(`MachineInstance.ExchangeBuckets`, `Tick` 보다 먼저).
+  채워진 양동이 → 입력 탱크 + 빈 그릇이 출력으로 / 빈 그릇 → 출력 탱크를 퍼내 채워진 것이 출력으로.
+  **빈 그릇 놓을 자리가 없으면 아무것도 하지 않는다.** 덕분에 파이프로 양동이를 넣는 것도 공짜다.
+- **탱크는 유체를 다루는 것이 정체성이고 지금 유체 레시피가 있는 기계만** 준다
+  (전기 분해기 1/2 · 화학 처리기 2/1 · 마나 용해기 0/1 · 펌프 0/1 · 원유 채굴기 0/1).
+  화로·압축기·조합대·재단은 탱크 없이 **`물`(채워진 양동이) 아이템**을 그대로 먹는다.
+  레시피가 없는 기계에 탱크를 주면 값이 안 채워지는 빈 바가 남는다(옛 `Gas[]` 뼈대가 그랬다).
+- 파이프는 아이템과 **같은 짐 방식**이다. `ParcelRecord.fluidId/amount` 로 판별만 하므로
+  `DeliverAll`·다익스트라·라운드로빈·렌치 면 규칙이 전부 그대로 재사용된다.
+  `PipeRouter.TargetTanks` 도 `TargetSlots` 처럼 **레시피를 근거로** 거른다(안 그러면 자기 산출물을 도로 먹는다).
+  ⚠ **파이프를 캐면 안에 있던 유체는 사라진다** — 필드에 유체를 떨어뜨릴 수단이 없다(의도).
+- **유체는 그림 대신 단색으로 그린다.** 색은 `FluidDefine` 이 아니라 **`FluidColors`(static 정본 표)** 가
+  `fluidId → Color` 로 갖는다. 그래서 `MachineInstance.PushFluids` 는 UI 에 **색이 아니라 유체 이름**을
+  넘기고(`SetInputFluid(index, ratio, fluidId)`), 무슨 색인지는 `FluidColors.Of` 한 곳만 안다 —
+  색을 넘겨받게 두면 부르는 쪽마다 색을 정하게 되어 언젠가 서로 달라진다.
+  표에 없는 이름·빈 탱크는 **회색(`Unknown`)** 이라 새 유체를 넣고 줄을 안 적으면 화면에서 티가 난다.
+  칠하는 것은 `FillingSlot.FillColor`(채움 이미지만) — 전력·연료·진행도 바는 건드리지 않는다.
+
+### 업그레이드 모듈
+
+- `UpgradeModuleItem : Items`(`WrenchItem` 과 같은 **타입 판정**) — `kind`(Speed/Efficiency)와
+  `valuePerUnit` 을 **에셋에 둔다**. 밸런스는 반드시 여러 번 바뀌므로 코드 상수로 두면 정본이 흐려진다.
+- **소모되지 않는다.** 칸에 든 **개수**만큼 효과가 붙으므로 상한은 `maxStack`(현재 8)이 정한다.
+- 배수는 **캐시하지 않고 소비 시점에 곱한다.** `energyUseRate`·`fuelBurnRate` 는 `ApplyConfig` 가 `Bind`
+  시점에 복사해 둔 값이라, 거기 곱하면 창을 닫았다 열기 전까지 옛 값이 쓰인다.
+
+  | 값 | 자리 |
+  |---|---|
+  | 속도 | `EffectiveCraftTime` 의 `speed` 에 `× SpeedFactor` |
+  | 전력 | `ConsumeEnergy` 의 `need` 에 `× EfficiencyFactor` |
+  | 연료 | `BurnFuel` 의 `want` 에 `× EfficiencyFactor` (발전기는 `× SpeedFactor`) |
+  | 발전 | `TickGenerator` 에서 `burned / EfficiencyFactor` |
+
+- ⚠ **발전기는 방향이 반대다.** 태운 양 = 발전량이라 소비를 줄이면 출력이 *준다*.
+  효율은 **산출 쪽**(같은 연료로 더 많은 전력), 속도는 **연소 속도**(총 에너지 그대로, 초당 출력↑)에 건다.
+- 평면 인덱스는 **`[입력][출력][연료][업그레이드]`** — 새 구간은 언제나 맨 뒤에 붙인다
+  (앞에 끼우면 기존 UI 프리팹의 바인딩이 통째로 어긋난다).
+- `MapGenerator.RemoveMachineAt` 이 업그레이드 칸도 `DropSlots` 한다 — 빼면 기계를 캘 때 모듈이 증발한다.
 
 ### 추출 체계 (정본 = `자원과 그 가공방식.canvas`, Obsidian Vault 에 있다)
 
@@ -236,8 +387,13 @@ Assets/Scenes/MapTest.unity   ← 유일한 실사용 씬. Tilemap 이 있는 �
   편법도 이래야 없다. 대신 **출력이 차면 재료를 먹지 않고 그냥 멈춘다.**
 - `speedMultiplier` 는 **`MachineInstance.EffectiveCraftTime` 한 곳에서만** 나눈다
   (진행 비교·진행률·수동 한 걸음이 다 이걸 본다). 수동 클릭 수는 배수와 무관하다.
-- ⚠ `DictionaryRegistrar.HasAnyOutput` 은 **확률 산출도 산출로 친다.** 여기서 빠뜨리면 확률 전용 레시피가
-  "재료만 먹는 위험한 레시피"로 걸러져 딕셔너리에 등록되지 않고, 기계가 영원히 논다(실제로 한 번 걸렸다).
+- ⚠ **`chanceOutputs` 를 보는 곳은 `inputs`/`outputs` 를 보는 곳과 반드시 짝이어야 한다.**
+  `DictionaryRegistrar.HasAnyOutput` 은 확률 산출도 산출로 친다 — 빠뜨리면 확률 전용 레시피가
+  "재료만 먹는 위험한 레시피"로 걸러져 등록되지 않고 기계가 영원히 논다(실제로 한 번 걸렸다).
+  `ItemMerger.CollectReferenced`·`RewriteRecipes` 도 같은 규약이다 — 빠뜨리면 **확률로만 나오는 아이템 7종**
+  (`conductor_crystal` `diamond` `energy_crystal` `ruby` `sapphire` `raw_osmium_ore` `raw_thorium_ore`)이
+  "아무도 안 쓴다"로 판정돼 통합 때 지워지고, 레시피에 `{fileID: 0}` 줄만 남는다.
+  단 확률 줄은 **합치지 않는다** — 줄마다 `chance` 가 달라 개수를 더하면 한쪽 확률이 사라진다.
 - **전부 입력 1 / 출력 9 로 통일**돼 있고 UI 도 `Prefabs/ui/Machines/Extractor01_UI.prefab` **한 장을 공유**한다
   (`uiPrefab`). 등급이 올라도 산출 종류만 늘 뿐 칸 수는 그대로라, 등급마다 UI 를 만들 이유가 없다.
 - **0-0티어만 두 갈래다** — `Extractor00`(수동, "수동 0-0티어 추출기") · `Extractor00Plus`(전기 자동, "0-0티어 추출기").
@@ -256,7 +412,7 @@ Assets/Scenes/MapTest.unity   ← 유일한 실사용 씬. Tilemap 이 있는 �
 - `PowerLinkMode` = 전체화면 전송 설정 모드(빨강 미연결 / 초록 연결 / 파랑 발전기). 오버레이 타일맵을 런타임 생성.
 - 값 채우기: `Tools/Project Craft/Machines/전력 기본값 채우기`.
 
-### 파이프 (아이템만 실제 운반. 유체·기체는 배치·오토타일·세이브까지만)
+### 파이프 (아이템 · 액체 · 기체 전부 운반한다)
 - `PipeBlock : BlockBase` — **`MainBlock` 을 상속하면 안 된다**(지형 배치 경로로 새서 조용히 실패).
   `kind` `tier` `secondsPerCell` `throughput` `atlas` `tint`.
 - `PipeNetworkManager` 하나가 **로드된 파이프 전부를 대신 그리고 대신 돌본다**(칸마다 MonoBehaviour 금지).
@@ -267,7 +423,9 @@ Assets/Scenes/MapTest.unity   ← 유일한 실사용 씬. Tilemap 이 있는 �
 - **면 상태를 바꾸면 반드시 `MarkTopologyDirty`.** 안 하면 "설정은 바뀌었는데 물건은 옛길로 간다".
 - `PipeRouter.TargetSlots` 가 **레시피를 근거로** 받을 슬롯을 고른다 — 없으면 화로가 자기 산출물을 도로 먹는다.
 - 짐(`ParcelRecord`)은 출발 파이프의 레코드에 실리고 **남은 시간(초)** 으로 저장한다. 도착지가 없으면
-  **필드에 쏟지 않고 들고 기다린다**. 회수는 파이프를 캘 때만.
+  **필드에 쏟지 않고 들고 기다린다**. 회수는 파이프를 캘 때만(단 **유체 짐은 버린다** — 떨어뜨릴 수단이 없다).
+- 유체는 `TryExtractFluid`/`DeliverFluid` 가 맡고 나머지는 아이템 경로와 완전히 같다.
+  ⚠ 유체 파이프의 `throughput` 은 **한 번에 싣는 양**이라 1000(=1양동이) 단위다. 1 로 두면 물 한 통에 1000번 걸린다.
 - 값 채우기: `Tools/Project Craft/Pipes/파이프 에셋 설정`.
 
 ### 렌치 (파이프 연결면)
@@ -281,10 +439,69 @@ Assets/Scenes/MapTest.unity   ← 유일한 실사용 씬. Tilemap 이 있는 �
 - 표시: `PipeFaceOverlay` 가 `SpriteRenderer` 풀로 파랑/빨강 막대(한 칸에 두 면이 칠해질 수 있어 타일맵 불가).
   **인접 기계가 실제로 있을 때만 그린다**(설정 자체는 기계를 캐도 남긴다).
 
+### 저장소 (상자 · 아이템 저장소)
+
+`StorageBlock : MachineBlock` **한 클래스에 에셋 둘**. 차이는 숫자 세 개뿐이다.
+
+| | `Machine:Chest` 상자 | `Machine:ItemStorage` 아이템 저장소 |
+|---|---|---|
+| `storageSlotCount` | 40 | 1 |
+| `baseCapacity` | 0 = 아이템의 `maxStack` | **1024** |
+| `capacityPerUpgrade` | 0 | **1024** (효율 모듈 1개당, 칸 1개 × maxStack 8 → 최대 **9216**) |
+
+- **저장 칸은 새 구간이 아니라 `inputSlots` 다.** 5번째 구간을 만들면 `PlaceableRecord`·`Chunk.Save/Load`
+  (세이브 버전)·`MapGenerator.DropSlots` 가 전부 따라 늘어난다. 입력 구간에 얹으면
+  **세이브 변경 0 · 드랍 처리 0 · 평면 인덱스 변경 0**. `ApplyConfig` 가 `inputSlotCount` 를
+  `storageSlotCount` 로 덮어쓰므로 에셋에서 두 값을 맞춰 둘 필요가 없다.
+  `AutoProcess = false` 라 `Tick` 이 그 칸을 재료로 볼 일이 없다(`AllowsZeroSlots` 도 켜야 3/6 폴백을 안 탄다).
+- ⚠ **개수 클램프의 정본은 이제 `IItemContainer.SlotCapacity(index, item)` 다.**
+  `RecipeSolver.MaxStackOf` 는 그 기본값일 뿐이고, **`item.maxStack` 을 직접 읽으면 안 된다**
+  (`ItemSlot.OnDrop` 이 그러고 있어서 1칸 저장소가 64개에서 막혔다). `RecipeSolver.AddItems`·
+  `CountFreeSpace` 는 선택 인자 `perSlotCap`(0 = maxStack)으로 같은 값을 받는다 —
+  **둘에 다른 값을 주면** "자리가 있다고 해서 보냈는데 안 들어가는" 짐이 파이프에 영원히 남는다.
+- **최대치는 캐시하지 않는다.** `MachineInventory.capacityOverride` 에 숫자가 아니라 **함수**를 꽂는다
+  (`MachineInstance.SlotCapacityFor`) — 모듈 개수로 런타임에 바뀌기 때문. `SpeedFactor` 와 같은 규약이다.
+  효율 모듈의 `valuePerUnit`(0.10)은 **쓰지 않는다**. 그건 전력·연료 절감률이라 개수와 단위가 다르다.
+- **모듈을 빼서 최대치가 줄어도 내용을 버리지 않는다.** 넘치는 동안 더 못 넣게만 한다.
+- **아이템 저장소는 개체 데이터(`ItemInstance`)를 받지 않는다** — 한 칸에 수천 개인데 인스턴스는 하나뿐이라
+  그것이 사라질 때 전부가 사라진다. 상자는 칸이 40개라 그대로 받는다.
+  판정은 `MachineInstance.AcceptsInstanceItems` 하나, 막는 자리는 셋(`StorageSlotUI.Accepts` ·
+  `PipeNetworkManager.TryDeliver`·`Retarget`).
+- ⚠ **파이프는 `Insert`/`Extract` 면으로만 저장소를 건드린다. `Default` 면은 아무 일도 하지 않는다.**
+  일반 기계는 입력칸·출력칸이 방향을 정해 주지만 저장소는 한 칸이 둘을 겸해서, Default 를 양방향으로 두면
+  **상자 두 개를 이으면 아이템이 영원히 왕복한다.** 규칙은 `PipeRouter.CanInsertInto`/`CanExtractFrom`
+  **한 짝**에 있고, 경로 탐색은 레코드만 보는 `StorageAt` 으로, 배달·추출은 살아 있는 인스턴스로 같은 함수를 부른다.
+  꺼낼 칸은 `PipeRouter.SourceSlots`(일반=출력칸 / 저장소=저장칸).
+- **UI 역할은 `MachineUIRole.StorageSlot = 11`** 이고 `DefaultMachineUI` 가 **`InputSlot` 과 같은 목록**에 담는다
+  (저장 칸이 입력 구간에 살기 때문). ⚠ **한 프리팹에 둘을 섞으면 인덱스가 겹친다** — 오류로 잡는다.
+  빌딩블록은 `Prefabs/UI/Machine/StorageSlot.prefab`(`StorageSlotUI`), 팩토리 "요소 추가" 에 버튼이 있고
+  `CreateNewLayout` 은 저장 블록이면 **10칸씩 줄바꿈**해 놓는다(40칸을 한 줄로 놓으면 화면 밖으로 나간다).
+
 ### 도구 (커스텀 조합)
 `ToolDefinition`(부품 칸 = 그림 레이어) + `ToolPartItem`(재질×종류) + `ToolItem`(완성품, maxStack 1)
 + 스택마다 붙는 `ToolInstance`(재질·내구도). 레시피는 `requiredTools` 로 요구하고 **소모가 아니라 내구도 차감**.
 생성: `Tools/Project Craft/Tool/Generate Tool Assets`.
+
+- **부품도 재질 슬롯으로 만든다** — `ToolPartRecipe : Recipe`(종류 하나당 한 개, `rod`·`hammer_head`·`pickaxe_head`).
+  조합대 도구 탭에서 재질 칸에 재료를 올리면 **그 재질의 부품**이 나온다(돌 → 돌 곡괭이 머리).
+  재질마다 레시피를 복제하면 종류 3 × 재질 16 = **48개**가 되고 재질이 늘 때마다 3개씩 또 는다.
+  값: 막대 ×1 · 망치 머리 ×2 · 곡괭이 머리 ×2.
+- **재료 아이템 ↔ 재질의 정본은 `ToolMaterial.sourceItem` 하나다**(`iron → iron_ingot` · `stone → stone` ·
+  `quartz → quartz_crystal`). 이름 규칙으로 추측하면 `iron_ingot` 과 `raw_iron_ore` 를 구별하지 못한다.
+  ⚠ **`나무`는 비어 있다** — 게임에 나무 아이템이 없어서 나무 부품은 만들 수 없다(시작 도구는 돌이다).
+  `ToolAssetGenerator` 가 **비어 있을 때만** 채우므로 손으로 바꾼 값은 보존된다.
+- ⚠ **`Generate Tool Assets` 는 옛 이름 `Craft_Pickaxe` 를 다시 만들던 버그가 있었다** — 정본이
+  `pickaxe`·`hammer`·`driver` 로 개명된 뒤에도 생성 경로가 그대로여서, 돌릴 때마다 같은 도구의 레시피가
+  하나 더 생겨 서로를 가렸다. 지금은 정본 이름으로 만들고 옛 이름을 지운다.
+
+- **채굴 도구 판정은 `ToolDefinition.canMineBlocks`**(곡괭이만 true). 곡괭이는 망치·드라이버와
+  `ToolItem` 하나를 공유하므로 `WrenchItem` 처럼 **타입으로는 구분되지 않는다** — 에셋 데이터가 정본이라
+  문자열 비교도 씬 참조도 없다(재료 티어별 제한도 나중에 같은 자리에 필드로 붙는다).
+- **곡괭이는 벽에만 요구한다.** 기계·파이프까지 막으면 곡괭이가 부러졌을 때 이미 지은 공장을 못 뜯어 갇힌다.
+  벽 한 칸당 내구도 1, 0 이 되면 `stack.Clear()` — `RecipeSolver.ConsumeTools` 와 **같은 규약**이라
+  도구가 없어지는 방식이 한 가지뿐이다.
+- ⚠ 손에 든 것을 볼 때는 `Inventory.GetSelectedStack()` 을 쓴다. `GetSelectedItem()` 은 선택 칸이 없을 때
+  (`ConsumeSelectedItem` 이 -1 로 만든다) **예외를 던진다**.
 
 ### UI
 - `UIManager` 가 이름으로 패널을 켜고 끈다(`AddUI` → `OpenUI`/`CloseUI`, `isAnyUIOpen`).
@@ -292,15 +509,22 @@ Assets/Scenes/MapTest.unity   ← 유일한 실사용 씬. Tilemap 이 있는 �
 - 런타임 UI 구성이 규약(`CommandConsole` `PowerLinkMode` `ItemBrowser`) — 씬 파일을 건드리지 않기 위해.
 - **기계 UI 프리팹은 여러 기계가 나눠 쓴다** — `DefaultMachineUI` 가 자식의 `MachineUIElement` 를 역할별로
   긁어모아 **남는 칸은 끄고 모자라면 경고 후 클램프**하므로, N칸짜리 한 장이 N칸 이하 전부를 감당한다
-  (전력바도 `isUseEnergy` 가 아니면 자동으로 꺼진다). 실제 공유: `Furnace_UI` 3종 · `Generator_UI` 2종 ·
-  `CraftingTable_UI` 2종 · `Extractor01_UI` 12종. 프리팹 이름이 사용자 중 하나만 가리키는 것은 정상이다
+  (전력바도 `isUseEnergy` 가 아니면 자동으로 꺼진다). **업그레이드 칸과 유체 바만은 조용히 클램프**한다 —
+  기존 프리팹 11장에 아직 요소가 없어서, 경고를 내면 기계를 열 때마다 11종 × 매번 로그가 쏟아진다.
+  실제 공유: `Furnace_UI` 3종 · `Generator_UI` 2종 ·
+  `CraftingTable_UI` 5종(조합대 2 + 재단 3) · `Extractor01_UI` 12종. 프리팹 이름이 사용자 중 하나만 가리키는 것은 정상이다
   (`MachineUIFactoryWindow` 가 `{기계 이름}_UI.prefab` 로 저장하므로 **이름을 바꾸면 다음 저장 때 파일이 하나 더 생긴다**).
 - ⚠ `MachineUIHost.Resolve` 의 캐시 키는 프리팹이 아니라 **`blockId`** 다 — 한 프리팹을 12종이 공유해도
   인스턴스는 12개 생긴다(열어 볼 때만 지연 생성).
 - 버튼을 붙이는 방법은 셋이다 — ① **코드 생성**(`BuildPowerLinkButton`. 공유 기본 패널에 프리팹을 못 고칠 때) ·
   ② **서브클래스 + `SerializeField`**(`CraftingTableUI.craftButton`) · ③ **`MachineUIElement` 역할**
-  (`ManualButton`. 프리팹에서 위치를 잡고 싶을 때). 어느 쪽이든 **`Open` 마다 `onClick.RemoveAllListeners()`** —
-  안 하면 기계를 열 때마다 리스너가 쌓여 한 번 눌렀는데 예전에 열었던 기계까지 함께 돈다.
+  (`ManualButton` · `CoreUpgradeButton`. 프리팹에서 위치를 잡고 싶을 때). 어느 쪽이든
+  **`Open` 마다 `onClick.RemoveAllListeners()`** — 안 하면 기계를 열 때마다 리스너가 쌓여
+  한 번 눌렀는데 예전에 열었던 기계까지 함께 돈다.
+  ⚠ **①은 되도록 쓰지 않는다.** 코드로 만든 것은 씬에서 위치·크기를 못 옮기고 팩토리 검증기에도 안 잡힌다 —
+  코어 업그레이드 칸·버튼이 그래서 ①에서 ③으로 옮겨졌다(`BuildCoreUpgradeUI` 삭제).
+  **한 프리팹을 여러 기계가 나눠 써도 ③이 맞다** — 안 쓰는 기계에서는 베이스가 알아서 꺼 준다
+  (칸은 `upgradeSlotCount`, 버튼은 `CraftingTableUI` 가 `acceptsTierUpgrade` 로).
 - **비활성 오브젝트는 레이아웃 재계산이 통째로 무시된다.** 켠 다음에 짓고 `LayoutRebuilder.ForceRebuildLayoutImmediate`.
 - 툴팁은 `TooltipUI.Show(Func<string>)` 로 넘겨야 실시간 갱신된다(문자열을 넘기면 고정).
 - 아이콘은 `ItemIconView.Apply` — 도구는 자루+머리를 겹쳐 그린다.
@@ -310,6 +534,35 @@ Assets/Scenes/MapTest.unity   ← 유일한 실사용 씬. Tilemap 이 있는 �
 `WASD` 이동 · 좌클릭 채굴(홀드) · 우클릭 Use · `E` 상호작용 · `I` 인벤토리 · `1~0` 핫바 ·
 `Enter` 콘솔 · `P` 아이템 목록. 텍스트 입력 중엔 `SetPlayerInputEnabled(false)`.
 **입력을 끄는 UI 는 자기 토글 키로 못 닫는다** — 콘솔은 ESC, 아이템 목록은 입력을 끄지 않는다.
+
+- ⚠ **`EventSystem.IsPointerOverGameObject()` 를 입력 콜백 안에서 부르면 안 된다.** 콜백은 UI 레이캐스트보다
+  먼저 도는 구간이라 **지난 프레임 값**이 돌아오고(Unity 가 경고를 낸다), 이번 프레임에 뜬 패널 위에서 누른
+  우클릭이 월드로 샌다. 그래서 `PlayerInteraction` 의 우클릭은 **콜백에서 `usePending` 만 세우고
+  판정은 `Update` 로 미룬다**(`isPointerOverUI` 를 갱신한 직후 `PerformUse`).
+  ⚠ `PowerLinkMode.IsActive` 조기 return 분기에서 **`usePending` 을 반드시 지운다** — 안 지우면
+  전송 모드를 끄는 순간 묵은 클릭이 한 번 터진다.
+- **슬롯 드래그: 좌클릭 = 전량 · 우클릭 = 올림 절반.** 씬의 UI 모듈이 `InputSystemUIInputModule` 이라
+  우클릭에도 드래그·드롭 이벤트가 오고 `eventData.button` 으로 갈린다. 월드 우클릭(배치)과는
+  `PlayerInteraction` 의 `IsPointerOverGameObject()` 가드가 이미 갈라 준다.
+- ⚠ **`ItemSlot.draggedAmount` 는 `draggedFrom` 보다 오래 살아남으면 안 된다.** 지우는 자리는 넷
+  (`OnBeginDrag` 의 조기 return · `OnDrop` 의 끝 · `OnEndDrag` · `OnDisable`) — 남겨 두면
+  **다음 드래그가 옛 개수를 물고 간다.**
+- **데이터는 `OnDrop` 에서만 움직인다.** 절반 집기는 "지금 쪼개기" 가 아니라 요청량을 기억해 두는 것이라,
+  "우클릭 절반" 과 "1칸 저장소에서 maxStack 만큼만 꺼내기" 가 **같은 분기 하나**로 처리된다.
+  일부만 옮길 때는 **교환하지 않는다**(든 것보다 많이 돌아오는 교환은 뜻이 성립하지 않는다).
+- **커서를 따라가는 그림은 슬롯의 아이콘이 아니라 별도의 고스트**(`ItemSlot.ghostIcon`, static 하나를 돌려 쓴다).
+  예전에는 `iconImage`·`countText` 를 캔버스로 **옮겨** 썼는데, 그러면 드래그 도중 슬롯이 통째로 비어 보여
+  **절반만 집었을 때 남은 절반이 안 보였다.** 이제 `Refresh` 가 `count - draggedAmount` 를 그리므로
+  슬롯에 남는 몫이 계속 보인다(전량을 집으면 빈 칸으로 보인다).
+  - 고스트는 **`rootCanvas` 의 맨 뒤 + `raycastTarget = false`** — 켜 두면 고스트가 드롭을 가로챈다.
+  - **아이콘·숫자의 자리는 드래그를 시작한 슬롯에서 매번 베낀다**(`CopyPlacement`). 숫자 위치가
+    프리팹마다 달라서(`slot` 은 `(-5, -32.1)`, `MachineSlot`·`hotBarSlot` 은 `(26.6, -14.5)`)
+    좌표를 코드에 박으면 어느 한쪽에서 반드시 어긋난다. 앵커·부모 계층도 제각각이라
+    `anchoredPosition` 을 그대로 베끼지 않고 **월드 좌표 차이 ÷ 루트 캔버스 배율**로 잰다.
+  - 옮기지 않게 되면서 `pendingRestore`·`RestoreDragVisuals`·`OnEnable` 복구 경로가 **통째로 사라졌다**
+    (비활성화 중엔 `SetParent` 가 거부돼 `OnEnable` 까지 미뤄야 했던 그 코드다).
+  - ⚠ 검증할 때: **에디트 모드에서는 `OnDisable` 이 안 불린다**(`ExecuteAlways` 가 없어서).
+    "창을 닫으면 드래그가 정리되는가" 는 플레이 모드이거나 직접 호출해야 확인된다.
 
 ### 애니메이션 (플레이어 · `Assets/Asset/Player/Female/`)
 - **이동·상태 전이에 `Any State` 를 쓰지 않는다.** Any State 전환에는 `Has Exit Time` 이 **아예 없어**
@@ -383,6 +636,8 @@ Tools/Tiles/Build Tile Atlas · Slice Pipe Sheet · Build Pipe Atlas   (슬라�
 - 파일명 = 클래스명 유지(에셋의 `m_Script` 참조).
 - 주석은 한국어로, **"무엇"이 아니라 "왜"** 를 적는다. 함정은 `<b>`로 강조하고 어기면 무슨 일이 나는지 쓴다.
 - 파생 상태는 저장하지 않고 매번 계산한다(연결 마스크 등).
+- **개수 상한은 `IItemContainer.SlotCapacity` 에 묻는다.** `item.maxStack` 을 직접 읽지 말 것 —
+  아이템 저장소가 그 상한을 무시하므로, 직접 읽는 자리가 생기는 즉시 거기서만 64개에서 막힌다.
 - `Tile.transform` 회전을 쓰면 `TileFlags.LockTransform` 필수(기본은 `LockColor` 뿐).
 
 ## 7. 알려진 잠복 버그 · 미구현 (별건, 손대기 전 확인)
@@ -398,12 +653,23 @@ Tools/Tiles/Build Tile Atlas · Slice Pipe Sheet · Build Pipe Atlas   (슬라�
   직접 불러야 한다.
 
 - `StreamingAssets/DefaultWorldmap.dat` 은 매직 도입 이전 포맷이라 매번 로드 실패 → 이제 `.corrupt` 로 치워지고 새 월드 생성.
-- 유체·기체 운반 미구현(`GasDefine` 에셋이 0개). 산성/유리 파이프 미구현.
+- 산성/유리 파이프 미구현(아이템만 있고 `PipeBlock` 에셋이 없다).
+- **증류기·핵발전소에 유체 탱크가 없다** — 증류기는 `원유 → 가스` 레시피도 가스 아이템도 없고,
+  발전기는 `TickGenerator` 가 레시피를 아예 안 본다. 지금 탱크를 주면 값이 안 채워지는 빈 바만 남는다.
+  발전기 산출 훅과 함께 3티어에서 붙인다.
+- **`chem_acid` 는 산성 용액을 출력 탱크에 내는데 `chem_uranium` 은 입력 탱크에서 먹는다** —
+  같은 기계 안에서 이어지지 않아 파이프로 되돌리거나 유리 용기로 퍼 옮겨야 한다(설계 확인 필요).
+- **마나의 수량 스케일이 다르다** — `레시피.md` 정본이 `마나 100 = 마력결정 1` 이라 물(1000/양동이)과 자릿수가 어긋난다.
+- **고급 재단 전용 레시피가 0개**다(중급과 같은 11개만 보인다). `레시피.md` 에도 2티어 마법 레시피가 없다.
+- `강화 합금`(인바5+청동5+철5) 아이템이 아직 없다 — 정밀 세공기 산출물과 3티어가 이것을 먹는다.
 - **2계열 분쇄물은 게임 안에서 못 만든다** — 운석 사슬 레시피가 tier 2 인데 분쇄기는 `ManualPulverizer`(tier 0) ·
   `ElectricPulverizer`(tier 1) 둘뿐이다. 2티어 분쇄기가 생기면 풀린다. 0·1계열은 정상.
-- **마력 파편의 최초 획득처가 없다**(있는 것은 증식 `마력파편1 + 구리주괴10 → 2` 뿐). 그래서
-  **수동 0-0티어 추출기(`돌10 + 크랭크 + 마력파편`)를 아직 만들 수 없고**, 0티어 마법 전체가 막혀 있다.
-  분쇄기 경로(`돌10 + 크랭크`)는 마력 파편을 안 쓰므로 정상 작동한다. → 추가 예정(사용자 결정).
+  (**운석 원석 자체는 이제 2등급 지하맵에서 캔다** — 막힌 것은 분쇄 쪽뿐이다.)
+- ~~마력 파편·철 주괴의 최초 획득처가 없다~~ → **지하맵 전리품으로 풀렸다**(`UndergroundLootTable`).
+  수동 0-0티어 추출기 · 물·용암(`양동이 + 마력파편2`) · 0티어 마법이 여기서 열린다.
+  ⚠ 표에서 `mana_shard`·`iron_ingot` 행을 빼면 그대로 다시 막힌다.
+- **지하맵 아트가 임시다** — `wall:meteorite` 는 마력석 아틀라스를, `wall:bedrock` 은 돌 아틀라스를
+  그대로 쓴다(암반이 돌과 똑같이 보인다). `floor:water` 는 32×32 단색 파랑 한 장이다.
 - `uranium_powder`(우라늄 가루)를 쓰는 레시피가 없다 — 0-3 추출 산출이 `turbid_uranium` 으로 바뀌면서
   `Pulverize_RawUraniumOre` 의 산출로만 남았다.
 - `magic_powder`(마법 가루)를 **쓰는 레시피가 하나도 없다** — 운석 사슬 재편으로 자리를 잃었다(아이템은 남겨 뒀다).

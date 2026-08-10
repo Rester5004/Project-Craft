@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 879faabfccd0f1943ba702adf97a4eee, type: 3}
+  m_Name: lava
+  m_EditorClassIdentifier: Assembly-CSharp::FluidDefine
+  fluidId: lava
+  displayName: "\uC6A9\uC554"
+  color: {r: 1, g: 0.45, b: 0.1, a: 1}
+  phase: 0
+  bucketItem: {fileID: 11400000, guid: 7c1bc2a49afd2c148824ce9427ef30be, type: 2}
+  emptyItem: {fileID: 11400000, guid: 6b0d12ed06f23454c911d4cee8eead3a, type: 2}
+  bucketAmount: 1000

@@ -43,11 +43,6 @@
       ],
       "note": "갈탄 200 / 석탄 400 / 수소 1양동이 1000 Energy" },
 
-    { "id": "roller", "tier": 0, "output": "압연기", "outputQty": 1,
-      "inputs": [ { "item": "벽돌", "qty": null } ],
-      "power": "저전압",
-      "note": "벽돌 공장 통합. 부품 레시피 미정" },
-
     { "id": "electrolyzer", "tier": 1, "output": "전기 분해기", "outputQty": 1,
       "inputs": [
         { "item": "철근 콘크리트", "qty": null },

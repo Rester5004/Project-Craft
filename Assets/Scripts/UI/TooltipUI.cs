@@ -10,6 +10,14 @@ using UnityEngine.UI;
 /// </summary>
 public class TooltipUI : Singleton<TooltipUI>
 {
+    /// <summary>
+    /// <b>씬을 넘겨 살려 두면 안 된다.</b> 이 클래스는 <c>Awake</c> 에서 패널을 캔버스 아래에 짓는데,
+    /// 캔버스는 씬과 함께 죽는다 — 살아남은 싱글톤만 남고 패널은 파괴되어 <see cref="Display"/> 가
+    /// 첫 줄에서 되돌아가고, 그 뒤로 툴팁이 영영 뜨지 않는다(<c>Awake</c> 는 다시 불리지 않는다).
+    /// <see cref="UIManager"/> · <see cref="TilemapTextureLoader"/> 와 같은 규약이다.
+    /// </summary>
+    protected override bool PersistAcrossScenes => false;
+
     [Tooltip("비우면 씬에서 첫 번째 Canvas 를 사용")]
     [SerializeField] private Canvas targetCanvas;
 

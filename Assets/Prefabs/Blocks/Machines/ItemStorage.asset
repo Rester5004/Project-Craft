@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8eb88b946cb785647b9822510aecbc39, type: 3}
+  m_Name: ItemStorage
+  m_EditorClassIdentifier: Assembly-CSharp::StorageBlock
+  blockName: Machine:ItemStorage
+  displayName: "\uC544\uC774\uD15C \uC800\uC7A5\uC18C"
+  dropItem: {fileID: 0}
+  dropCount: 1
+  machinePrefab: {fileID: 5958906552302498310, guid: a1a5d7f48234d344b85f6e6dccdd6b9b, type: 3}
+  uiPrefab: {fileID: 2369147783233937378, guid: d08bbad0980f8bc40aadc4a8a4c206b2, type: 3}
+  runningSprite: {fileID: 0}
+  manualStepRatio: 0
+  tier: 0
+  recipeGroupId: 
+  inputSlotCount: 0
+  outputSlotCount: 0
+  fuelSlotCount: 0
+  fuelBurnRate: 0
+  upgradeSlotCount: 1
+  inputFluidSlotCount: 0
+  outputFluidSlotCount: 0
+  maxFluidAmount: 0
+  maxEnergyAmount: 0
+  isUseEnergy: 0
+  isGenerator: 0
+  powerRange: 0
+  energyUseRate: 0
+  speedMultiplier: 1
+  chanceMultiplier: 1
+  storageSlotCount: 1
+  baseCapacity: 1024
+  capacityPerUpgrade: 1024

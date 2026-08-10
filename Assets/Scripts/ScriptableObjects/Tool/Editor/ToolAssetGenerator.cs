@@ -16,8 +16,11 @@ namespace ProjectCraft.EditorTools
         public float durabilityFactor;
         public float handleFactor;
         public int miningTier;
+        /// <summary>부품을 만들 때 넣는 아이템의 itemName. 비면 그 재질은 만들 수 없다(나무).</summary>
+        public string sourceItemName;
 
-        public MaterialSpec(string id, string korean, bool isMetal, float durabilityFactor, float handleFactor, int miningTier)
+        public MaterialSpec(string id, string korean, bool isMetal, float durabilityFactor, float handleFactor,
+                            int miningTier, string sourceItemName)
         {
             this.id = id;
             this.korean = korean;
@@ -25,6 +28,7 @@ namespace ProjectCraft.EditorTools
             this.durabilityFactor = durabilityFactor;
             this.handleFactor = handleFactor;
             this.miningTier = miningTier;
+            this.sourceItemName = sourceItemName;
         }
     }
 
@@ -59,22 +63,24 @@ namespace ProjectCraft.EditorTools
         // 도구에 쓸 수 있는 재질 16종(사용자 지정 순서: 나무/돌/철/구리/금/주석/석영/니켈/오스뮴/은/납/티타늄/알루미늄/우라늄/리튬/토륨)
         private static readonly MaterialSpec[] Materials =
         {
-            new MaterialSpec("wood",     "나무",     false, 0.25f, 0.90f, 0),
-            new MaterialSpec("stone",    "돌",       false, 0.50f, 0.95f, 1),
-            new MaterialSpec("iron",     "철",       true,  1.00f, 1.10f, 2),
-            new MaterialSpec("copper",   "구리",     true,  0.70f, 1.00f, 2),
-            new MaterialSpec("gold",     "금",       true,  0.20f, 0.90f, 2),
-            new MaterialSpec("tin",      "주석",     true,  0.60f, 0.95f, 1),
-            new MaterialSpec("quartz",   "석영",     false, 0.80f, 0.85f, 2),
-            new MaterialSpec("nickel",   "니켈",     true,  1.20f, 1.15f, 3),
-            new MaterialSpec("osmium",   "오스뮴",   true,  2.20f, 1.30f, 4),
-            new MaterialSpec("silver",   "은",       true,  0.80f, 1.00f, 2),
-            new MaterialSpec("lead",     "납",       true,  0.50f, 1.20f, 1),
-            new MaterialSpec("titanium", "티타늄",   true,  2.00f, 1.25f, 4),
-            new MaterialSpec("aluminum", "알루미늄", true,  0.90f, 0.90f, 3),
-            new MaterialSpec("uranium",  "우라늄",   true,  1.50f, 1.10f, 4),
-            new MaterialSpec("lithium",  "리튬",     true,  0.60f, 0.80f, 3),
-            new MaterialSpec("thorium",  "토륨",     true,  1.80f, 1.15f, 5),
+            // 마지막 열 = 부품을 만들 때 넣는 아이템. <b>나무는 게임에 아이템이 없어 비운다</b>
+            // (그래서 나무 부품은 만들 수 없다 — 시작 도구는 돌이다).
+            new MaterialSpec("wood",     "나무",     false, 0.25f, 0.90f, 0, ""),
+            new MaterialSpec("stone",    "돌",       false, 0.50f, 0.95f, 1, "stone"),
+            new MaterialSpec("iron",     "철",       true,  1.00f, 1.10f, 2, "iron_ingot"),
+            new MaterialSpec("copper",   "구리",     true,  0.70f, 1.00f, 2, "copper_ingot"),
+            new MaterialSpec("gold",     "금",       true,  0.20f, 0.90f, 2, "gold_ingot"),
+            new MaterialSpec("tin",      "주석",     true,  0.60f, 0.95f, 1, "tin_ingot"),
+            new MaterialSpec("quartz",   "석영",     false, 0.80f, 0.85f, 2, "quartz_crystal"),
+            new MaterialSpec("nickel",   "니켈",     true,  1.20f, 1.15f, 3, "nickel_ingot"),
+            new MaterialSpec("osmium",   "오스뮴",   true,  2.20f, 1.30f, 4, "osmium_ingot"),
+            new MaterialSpec("silver",   "은",       true,  0.80f, 1.00f, 2, "silver_ingot"),
+            new MaterialSpec("lead",     "납",       true,  0.50f, 1.20f, 1, "lead_ingot"),
+            new MaterialSpec("titanium", "티타늄",   true,  2.00f, 1.25f, 4, "titanium_ingot"),
+            new MaterialSpec("aluminum", "알루미늄", true,  0.90f, 0.90f, 3, "aluminum_ingot"),
+            new MaterialSpec("uranium",  "우라늄",   true,  1.50f, 1.10f, 4, "uranium_ingot"),
+            new MaterialSpec("lithium",  "리튬",     true,  0.60f, 0.80f, 3, "lithium_ingot"),
+            new MaterialSpec("thorium",  "토륨",     true,  1.80f, 1.15f, 5, "thorium_ingot"),
         };
 
         // 부품 종류: id, 한글, 아이템 이름 접미사("{material}_rod"), 표시 이름 접미사("철 막대")
@@ -243,6 +249,7 @@ namespace ProjectCraft.EditorTools
         {
             Dictionary<string, ToolMaterial> result = new Dictionary<string, ToolMaterial>();
             int created = 0;
+            int filledSource = 0;
 
             foreach (MaterialSpec spec in Materials)
             {
@@ -263,10 +270,20 @@ namespace ProjectCraft.EditorTools
                     AssetDatabase.CreateAsset(material, path);
                     created++;
                 }
+
+                // sourceItem 은 나중에 생긴 필드라 기존 16개 에셋이 전부 비어 있다.
+                // <b>비어 있을 때만</b> 채운다 — 손으로 바꾼 값을 되돌리지 않기 위해서다(다른 팩토리와 같은 규약).
+                if (material.sourceItem == null && !string.IsNullOrEmpty(spec.sourceItemName))
+                {
+                    material.sourceItem = FindItemByName(spec.sourceItemName);
+                    if (material.sourceItem == null)
+                        Report.AppendLine($"- ⚠ 재질 `{spec.id}` 의 재료 아이템 `{spec.sourceItemName}` 을 찾지 못했습니다.");
+                    else { EditorUtility.SetDirty(material); filledSource++; }
+                }
                 result[spec.id] = material;
             }
 
-            Report.AppendLine($"- 재질 {result.Count}종 (새로 만든 것 {created}개)");
+            Report.AppendLine($"- 재질 {result.Count}종 (새로 만든 것 {created}개 · 재료 아이템을 채운 것 {filledSource}개)");
             return result;
         }
 
@@ -473,7 +490,17 @@ namespace ProjectCraft.EditorTools
                 ToolDefinition definition = definitions[id];
                 ToolItem item = toolItems.Find(t => t.definition == definition);
 
-                string path = $"{RecipeFolder}/Craft_{char.ToUpper(id[0])}{id.Substring(1)}.asset";
+                // <b>레시피 에셋 이름은 만들어지는 것의 이름 하나뿐이다</b>(`pickaxe` `hammer` `driver`).
+                // 예전에는 여기서 `Craft_Pickaxe` 로 만들었는데, 정본이 개명된 뒤에도 이 줄이 그대로라
+                // <b>툴을 다시 돌릴 때마다 같은 도구의 레시피가 하나 더 생겨</b> 서로를 가렸다.
+                string path = $"{RecipeFolder}/{id}.asset";
+                string legacy = $"{RecipeFolder}/Craft_{char.ToUpper(id[0])}{id.Substring(1)}.asset";
+                if (AssetDatabase.LoadAssetAtPath<ToolRecipe>(legacy) != null)
+                {
+                    AssetDatabase.DeleteAsset(legacy);
+                    Report.AppendLine($"  - 옛 이름 `{legacy}` 를 지웠습니다(정본은 `{path}`).");
+                }
+
                 ToolRecipe recipe = AssetDatabase.LoadAssetAtPath<ToolRecipe>(path);
                 if (recipe == null)
                 {

@@ -14,16 +14,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MachineBlock
   blockName: Machine:Enchanter
   displayName: "\uB9C8\uBC95\uBD80\uC5EC\uAE30"
+  dropItem: {fileID: 0}
+  dropCount: 1
   machinePrefab: {fileID: 2613032363430261748, guid: be4fc2ca58db6644ea44bcbddbe44778, type: 3}
-  uiPrefab: {fileID: 0}
+  uiPrefab: {fileID: 7148587276163196701, guid: 1b1450e6833a680439f599de876d4172, type: 3}
+  runningSprite: {fileID: 0}
+  manualStepRatio: 0
   tier: 1
   recipeGroupId: 
   inputSlotCount: 1
   outputSlotCount: 1
   fuelSlotCount: 0
   fuelBurnRate: 20
-  inputGasSlotCount: 0
-  outputGasSlotCount: 0
-  maxGasAmount: 0
+  upgradeSlotCount: 2
+  inputFluidSlotCount: 0
+  outputFluidSlotCount: 0
+  maxFluidAmount: 0
   maxEnergyAmount: 0
   isUseEnergy: 0
+  isGenerator: 0
+  powerRange: 0
+  energyUseRate: 0
+  speedMultiplier: 1
+  chanceMultiplier: 1

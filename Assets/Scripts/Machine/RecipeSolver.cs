@@ -35,10 +35,18 @@ public static class RecipeSolver
         return total;
     }
 
-    /// <summary>레시피의 모든 재료가 슬롯에 충분히 있는가. 재료가 없는 레시피는 false.</summary>
+    /// <summary>
+    /// 레시피의 모든 <b>아이템</b> 재료가 슬롯에 충분히 있는가.
+    ///
+    /// 아이템 재료가 하나도 없으면 원래 무조건 false 였다("재료를 안 먹는 레시피"를 막기 위해서다).
+    /// 그런데 <b>유체만 먹는 레시피</b>가 있으므로(전기 분해기의 물 → 수소·산소),
+    /// 아이템도 유체도 없을 때만 거절한다. 유체가 실제로 있는지는 <see cref="HasFluids"/> 가 따로 본다.
+    /// </summary>
     public static bool HasInputs(IList<ItemStack> slots, Recipe recipe)
     {
-        if (slots == null || recipe == null || recipe.inputs == null || recipe.inputs.Count == 0) return false;
+        if (slots == null || recipe == null) return false;
+        if (recipe.inputs == null || recipe.inputs.Count == 0)
+            return recipe.fluidInputs != null && recipe.fluidInputs.Count > 0;
 
         for (int i = 0; i < recipe.inputs.Count; i++)
         {
@@ -241,11 +249,15 @@ public static class RecipeSolver
     /// 지금 이 슬롯들이 이 아이템을 몇 개까지 받을 수 있는지 <b>넣어 보지 않고</b> 센다.
     /// 파이프가 "보내 봐야 못 받는 곳"으로 짐을 실어 보내지 않도록 미리 확인하는 데 쓴다.
     /// </summary>
-    public static int CountFreeSpace(IList<ItemStack> slots, Items item, bool hasInstance = false)
+    /// <param name="perSlotCap">
+    /// 한 칸의 최대치. <b>0 이면 아이템의 maxStack</b> 을 쓴다(지금까지의 동작).
+    /// 아이템 저장소처럼 maxStack 을 무시하는 저장소가 <see cref="IItemContainer.SlotCapacity"/> 값을 넘긴다.
+    /// </param>
+    public static int CountFreeSpace(IList<ItemStack> slots, Items item, bool hasInstance = false, int perSlotCap = 0)
     {
         if (slots == null || item == null) return 0;
 
-        int max = MaxStackOf(item);
+        int max = perSlotCap > 0 ? perSlotCap : MaxStackOf(item);
         // <b>long 으로 센다.</b> maxStack 이 0(미설정)이면 MaxStackOf 가 int.MaxValue 를 돌려주는데,
         // int 로 더하면 빈 칸 두 개만에 음수로 넘쳐(2147483647 + 2147483647 = -2) 호출자가
         // "자리 없음" 으로 읽는다 — 빈 칸이 짝수인 동안만 운송이 멈추는 형태로 나타났다.
@@ -269,12 +281,17 @@ public static class RecipeSolver
     /// 다 못 넣어도 나머지를 호출자가 알 수 있으므로, 필드 드랍 줍기처럼
     /// "일부만 주워지는" 상황에서 남은 것이 증발하지 않는다.
     /// </summary>
-    public static int AddItems(IList<ItemStack> slots, Items item, int amount, ItemInstance instance = null)
+    /// <param name="perSlotCap">
+    /// 한 칸의 최대치. <b>0 이면 아이템의 maxStack</b> 을 쓴다(지금까지의 동작).
+    /// <see cref="CountFreeSpace"/> 와 <b>반드시 같은 값</b>을 넘겨야 한다 —
+    /// 어긋나면 "자리가 있다고 해서 보냈는데 안 들어가는" 짐이 파이프에 영원히 남는다.
+    /// </param>
+    public static int AddItems(IList<ItemStack> slots, Items item, int amount, ItemInstance instance = null, int perSlotCap = 0)
     {
         if (slots == null || item == null || amount <= 0) return 0;
 
         int remaining = amount;
-        int max = MaxStackOf(item);
+        int max = perSlotCap > 0 ? perSlotCap : MaxStackOf(item);
 
         if (instance == null)
         {
@@ -308,5 +325,175 @@ public static class RecipeSolver
             remaining -= moved;
         }
         return amount - remaining;
+    }
+
+    // ── 유체 ──────────────────────────────────────────────────────
+    //
+    // 아이템 쪽과 <b>이름·순서·계약을 대칭</b>으로 맞춘다(Count / Has / Consume / CanStore / Store / Add).
+    // 대칭이 깨지면 "아이템은 미리 자리를 확인하는데 유체는 안 하는" 식으로 한쪽만 고쳐진다.
+    //
+    // 탱크는 칸마다 <paramref name="cap"/> 까지만 담는다(MachineBlock.maxFluidAmount).
+    // 한 칸에는 <b>한 종류만</b> 들어간다 — 섞이면 꺼낼 방법이 없다.
+
+    /// <summary>탱크 전체에 든 그 유체의 총량.</summary>
+    public static int CountFluid(IList<FluidStack> tanks, FluidDefine fluid)
+    {
+        if (tanks == null || fluid == null) return 0;
+
+        int total = 0;
+        for (int i = 0; i < tanks.Count; i++)
+        {
+            FluidStack tank = tanks[i];
+            if (tank != null && tank.fluid == fluid && tank.amount > 0) total += tank.amount;
+        }
+        return total;
+    }
+
+    /// <summary>레시피가 요구하는 유체가 입력 탱크에 충분히 있는가. 유체를 안 쓰는 레시피는 항상 true.</summary>
+    public static bool HasFluids(IList<FluidStack> tanks, Recipe recipe)
+    {
+        if (recipe == null || recipe.fluidInputs == null || recipe.fluidInputs.Count == 0) return true;
+        if (tanks == null) return false;
+
+        for (int i = 0; i < recipe.fluidInputs.Count; i++)
+        {
+            FluidStack need = recipe.fluidInputs[i];
+            if (need == null || need.fluid == null || need.amount <= 0) continue;
+            if (CountFluid(tanks, need.fluid) < need.amount) return false;
+        }
+        return true;
+    }
+
+    /// <summary>
+    /// 입력 유체를 소모한다. <see cref="ConsumeInputs"/> 와 같이 <b>부족하면 아무것도 건드리지 않고</b> false —
+    /// 반쯤 먹고 멈추면 재료가 조용히 사라진다.
+    /// </summary>
+    public static bool ConsumeFluids(IList<FluidStack> tanks, Recipe recipe)
+    {
+        if (recipe == null || recipe.fluidInputs == null || recipe.fluidInputs.Count == 0) return true;
+        if (!HasFluids(tanks, recipe)) return false;
+
+        for (int i = 0; i < recipe.fluidInputs.Count; i++)
+        {
+            FluidStack need = recipe.fluidInputs[i];
+            if (need == null || need.fluid == null || need.amount <= 0) continue;
+
+            int remaining = need.amount;
+            for (int j = 0; j < tanks.Count && remaining > 0; j++)
+            {
+                FluidStack tank = tanks[j];
+                if (tank == null || tank.fluid != need.fluid || tank.amount <= 0) continue;
+
+                int taken = Mathf.Min(tank.amount, remaining);
+                tank.amount -= taken;
+                remaining -= taken;
+                if (tank.amount <= 0) tank.Clear();   // 종류까지 지워야 다른 유체가 들어올 수 있다
+            }
+        }
+        return true;
+    }
+
+    /// <summary>
+    /// 산출 유체를 담을 자리가 있는가. <see cref="CanStoreOutputs"/> 와 같이 <b>탱크를 건드리지 않는 시뮬레이션</b>이고,
+    /// 연료·전력을 쓰기 전에 확인해야 "진행은 하는데 결과를 못 내는" 상태로 자원이 새지 않는다.
+    /// </summary>
+    public static bool CanStoreFluids(IList<FluidStack> tanks, Recipe recipe, int cap)
+    {
+        if (recipe == null || recipe.fluidOutputs == null || recipe.fluidOutputs.Count == 0) return true;
+        if (tanks == null || cap <= 0) return false;
+
+        // 산출이 여러 종류면 서로 자리를 잡아먹으므로 누적해서 센다(칸당 한 종류 규칙 때문에 특히 중요하다).
+        int[] used = new int[tanks.Count];
+        FluidDefine[] kind = new FluidDefine[tanks.Count];
+        for (int i = 0; i < tanks.Count; i++)
+        {
+            FluidStack tank = tanks[i];
+            kind[i] = tank != null && tank.amount > 0 ? tank.fluid : null;
+            used[i] = tank != null && tank.amount > 0 ? tank.amount : 0;
+        }
+
+        for (int i = 0; i < recipe.fluidOutputs.Count; i++)
+        {
+            FluidStack make = recipe.fluidOutputs[i];
+            if (make == null || make.fluid == null || make.amount <= 0) continue;
+
+            int remaining = make.amount;
+            for (int j = 0; j < tanks.Count && remaining > 0; j++)
+            {
+                if (kind[j] != null && kind[j] != make.fluid) continue;
+                if (kind[j] == null) kind[j] = make.fluid;
+                int room = cap - used[j];
+                if (room <= 0) continue;
+                int moved = Mathf.Min(room, remaining);
+                used[j] += moved;
+                remaining -= moved;
+            }
+            if (remaining > 0) return false;
+        }
+        return true;
+    }
+
+    /// <summary>산출 유체를 적재한다. 자리는 <see cref="CanStoreFluids"/> 로 미리 확인해 둔다.</summary>
+    public static bool StoreFluids(IList<FluidStack> tanks, Recipe recipe, int cap)
+    {
+        if (recipe == null || recipe.fluidOutputs == null || recipe.fluidOutputs.Count == 0) return true;
+        if (tanks == null) return false;
+
+        bool all = true;
+        for (int i = 0; i < recipe.fluidOutputs.Count; i++)
+        {
+            FluidStack make = recipe.fluidOutputs[i];
+            if (make == null || make.fluid == null || make.amount <= 0) continue;
+            if (AddFluid(tanks, make.fluid, make.amount, cap) != make.amount) all = false;
+        }
+        return all;
+    }
+
+    /// <summary>
+    /// 넣을 수 있는 만큼만 넣고 <b>실제로 넣은 양</b>을 돌려준다(<see cref="AddItems"/> 와 같은 계약).
+    /// 이미 같은 유체가 든 칸을 먼저 채우고 그 다음 빈 칸을 쓴다.
+    /// </summary>
+    public static int AddFluid(IList<FluidStack> tanks, FluidDefine fluid, int amount, int cap)
+    {
+        if (tanks == null || fluid == null || amount <= 0 || cap <= 0) return 0;
+
+        int remaining = amount;
+        for (int i = 0; i < tanks.Count && remaining > 0; i++)
+        {
+            FluidStack tank = tanks[i];
+            if (tank == null || tank.fluid != fluid || tank.amount >= cap) continue;
+            int moved = Mathf.Min(cap - tank.amount, remaining);
+            tank.amount += moved;
+            remaining -= moved;
+        }
+        for (int i = 0; i < tanks.Count && remaining > 0; i++)
+        {
+            FluidStack tank = tanks[i];
+            if (tank == null || !tank.IsEmpty) continue;
+            int moved = Mathf.Min(cap, remaining);
+            tank.fluid = fluid;
+            tank.amount = moved;
+            remaining -= moved;
+        }
+        return amount - remaining;
+    }
+
+    /// <summary>
+    /// 지금 이 탱크들이 그 유체를 얼마까지 받을 수 있는지 <b>넣어 보지 않고</b> 센다
+    /// (<see cref="CountFreeSpace"/> 의 유체판. 파이프가 못 받는 곳으로 보내지 않게 한다).
+    /// </summary>
+    public static int CountFreeFluidSpace(IList<FluidStack> tanks, FluidDefine fluid, int cap)
+    {
+        if (tanks == null || fluid == null || cap <= 0) return 0;
+
+        int room = 0;
+        for (int i = 0; i < tanks.Count; i++)
+        {
+            FluidStack tank = tanks[i];
+            if (tank == null) continue;
+            if (tank.IsEmpty) { room += cap; continue; }
+            if (tank.fluid == fluid && tank.amount < cap) room += cap - tank.amount;
+        }
+        return room;
     }
 }

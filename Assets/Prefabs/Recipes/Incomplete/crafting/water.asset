@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d1635fa976c21145835b252e45d6313, type: 3}
   m_Name: water
   m_EditorClassIdentifier: Assembly-CSharp::Recipe
-  machine: {fileID: 11400000, guid: ea55fe72f9315554a8ffdcf795dd1b7e, type: 2}
+  machine: {fileID: 11400000, guid: c72fdd50611adfe4383f6f64465da81e, type: 2}
   category: {fileID: 11400000, guid: a63365af4ccd3904a91ebf59b6456c84, type: 2}
   tier: 0
   inputs:
@@ -23,6 +23,9 @@ MonoBehaviour:
   outputs:
   - item: {fileID: 11400000, guid: 42b880701ef0fe14aad6a13a71f3ba2a, type: 2}
     count: 1
+  fluidInputs: []
+  fluidOutputs: []
+  chanceOutputs: []
   requiredTools: []
   craftTime: 1
   importNote: "[\uCD9C\uCC98] crafting.json / id=water\r\n[\uC870\uD569 \uC7A5\uC18C]

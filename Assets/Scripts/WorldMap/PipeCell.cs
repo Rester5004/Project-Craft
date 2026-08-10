@@ -20,6 +20,19 @@ public class ParcelRecord
     /// <summary>남은 이동 시간(초).</summary>
     public float remaining;
 
+    /// <summary>
+    /// 유체 짐이면 <see cref="FluidDefine.fluidId"/>, 아이템 짐이면 빈 문자열(v11).
+    /// 짐 종류를 <b>한 클래스로 판별</b>하는 이유: 나누면 Tick·DeliverAll·TryExtract·다익스트라가
+    /// 전부 두 벌이 된다. 실제로 다른 것은 "무엇을 넣느냐" 한 곳뿐이다.
+    /// </summary>
+    public string fluidId;
+
+    /// <summary>유체 짐일 때의 양(아이템 짐이면 0). 개수는 <see cref="count"/> 를 쓴다.</summary>
+    public int amount;
+
+    /// <summary>유체를 나르는 짐인가.</summary>
+    public bool IsFluid => !string.IsNullOrEmpty(fluidId);
+
     public Vector2Int Destination => new Vector2Int(destX, destY);
 }
 

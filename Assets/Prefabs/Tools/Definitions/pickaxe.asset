@@ -59,3 +59,4 @@ MonoBehaviour:
     - {fileID: 11400000, guid: befc3c72f0469f445b05d5b50778521d, type: 2}
     layerSpritePattern: '{material}_pickaxe_head'
     tintByMaterial: 0
+  canMineBlocks: 1

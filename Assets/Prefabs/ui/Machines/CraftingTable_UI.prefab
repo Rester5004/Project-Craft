@@ -201,6 +201,7 @@ MonoBehaviour:
   craftButtonLabel: {fileID: 8749885179153228155}
   partSlotsRoot: {fileID: 4443191858333468915}
   partSlotTemplate: {fileID: 3158404759138654966}
+  upgradeSlotTemplate: {fileID: 710217270828421770, guid: d61b84926feb70b468b574795abdae3c, type: 3}
   selectedTabColor: {r: 1, g: 1, b: 1, a: 1}
   normalTabColor: {r: 1, g: 1, b: 1, a: 0.45}
   enoughColor: {r: 0.85, g: 0.9, b: 0.95, a: 1}

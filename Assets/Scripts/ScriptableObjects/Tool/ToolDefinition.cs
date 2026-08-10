@@ -25,6 +25,9 @@ public class ToolDefinition : ScriptableObject
     [Tooltip("부품 칸이자 그림 레이어. 순서가 곧 겹치는 순서(뒤가 위)이고, 마지막 칸을 '머리'로 본다.")]
     public List<ToolPartSlot> slots = new();
 
+    [Tooltip("이 도구를 들어야 벽 블록을 캘 수 있는가(곡괭이). 캔 블록 1개당 내구도가 1 닳는다.")]
+    public bool canMineBlocks = false;
+
     /// <summary>표시에 쓸 이름(displayName 이 비면 toolId, 그것도 비면 에셋 이름).</summary>
     public string DisplayName
     {

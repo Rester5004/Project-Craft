@@ -14,8 +14,10 @@ public class ItemStack
     public bool IsPlain => instance == null;
 
     /// <summary>내용이 같아 한 칸으로 합쳐도 되는가.</summary>
-    public bool CanStackWith(ItemStack other)
-        => other != null && item == other.item && ItemInstance.Same(instance, other.instance);
+    public bool CanStackWith(ItemStack other){
+        if(other == null) return false;
+        return other != null && item == other.item && ItemInstance.Same(instance, other.instance);
+    }
 
     /// <summary>슬롯을 비운다(개체 데이터까지 확실히 지운다).</summary>
     public void Clear()
@@ -24,10 +26,4 @@ public class ItemStack
         count = 0;
         instance = null;
     }
-}
-
-public class Gas
-{
-    public GasDefine gas;
-    public float amount;
 }

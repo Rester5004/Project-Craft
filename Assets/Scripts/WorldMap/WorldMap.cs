@@ -61,6 +61,32 @@ public class PlaceableRecord
     /// </summary>
     public float progress;
 
+    /// <summary>
+    /// 기계 탱크의 내용(v11). 유체 종류는 <see cref="FluidDefine.fluidId"/> 로 저장한다 —
+    /// 에셋 참조가 아니라 문자열이라 유체 에셋을 옮겨도 세이브가 깨지지 않는다(아이템의 itemName 과 같은 규약).
+    /// 기계가 아니거나 탱크가 없으면 길이 0.
+    /// </summary>
+    public string[] inputFluidIds;
+    public int[] inputFluidAmounts;
+    public string[] outputFluidIds;
+    public int[] outputFluidAmounts;
+
+    /// <summary>업그레이드 모듈 칸(v12). 소모되지 않으므로 개수 자체가 곧 성능이다.</summary>
+    public string[] upgradeItemNames;
+    public int[] upgradeCounts;
+    public ItemInstance[] upgradeInstances;
+
+    /// <summary>
+    /// 이 배치물이 업그레이드로 올린 티어(v12). 0 이면 <see cref="MachineBlock.tier"/> 를 그대로 쓴다.
+    ///
+    /// SO 를 런타임에 고칠 수는 없으므로(에디터에서 에셋이 영구히 바뀐다) 코어 조합기의 티어는
+    /// <b>인스턴스마다</b> 여기에 둔다 — 코어가 둘이면 한쪽만 올라가는 것이 맞다.
+    /// </summary>
+    public int tier;
+
+    /// <summary>작물을 심은 UTC 시각. 작물이 아닌 배치물은 0.</summary>
+    public long plantedAtUtcTicks;
+
     public PlaceableRecord() { }
 
     public PlaceableRecord(string blockId)
@@ -77,6 +103,13 @@ public class PlaceableRecord
         fuelInstances = new ItemInstance[0];
         links = System.Array.Empty<Vector2Int>();
         parcels = System.Array.Empty<ParcelRecord>();
+        inputFluidIds = new string[0];
+        inputFluidAmounts = new int[0];
+        outputFluidIds = new string[0];
+        outputFluidAmounts = new int[0];
+        upgradeItemNames = new string[0];
+        upgradeCounts = new int[0];
+        upgradeInstances = new ItemInstance[0];
     }
 }
 
@@ -177,6 +210,10 @@ public class Chunk
                 writer.Write(parcel.destX);
                 writer.Write(parcel.destY);
                 writer.Write(parcel.remaining);
+
+                // v11: 유체 짐. 아이템 짐이면 빈 문자열 + 0 이라 아이템 파이프에는 몇 바이트만 더 든다.
+                writer.Write(parcel.fluidId ?? "");
+                writer.Write(parcel.amount);
             }
 
             // v9: 렌치로 지정한 네 면의 상태. 파이프가 아니면 언제나 0 이라 1바이트로 끝난다.
@@ -184,6 +221,15 @@ public class Chunk
 
             // v10: 가공 진행도(초). 기계가 아니면 언제나 0 이다.
             writer.Write(rec.progress);
+
+            // v11: 기계 탱크. 탱크가 없으면 길이 0 이라 4바이트씩만 든다.
+            WriteFluidArray(writer, rec.inputFluidIds, rec.inputFluidAmounts);
+            WriteFluidArray(writer, rec.outputFluidIds, rec.outputFluidAmounts);
+
+            // v12: 업그레이드 모듈 칸 + 업그레이드로 올린 티어.
+            WriteSlotArray(writer, rec.upgradeItemNames, rec.upgradeCounts, rec.upgradeInstances);
+            writer.Write(rec.tier);
+            writer.Write(rec.plantedAtUtcTicks);
         }
 
         writer.Write(drops.Count);
@@ -206,6 +252,29 @@ public class Chunk
             writer.Write(names[i] ?? "");
             writer.Write(counts[i]);
             ItemInstanceSerializer.Write(writer, instances != null && i < instances.Length ? instances[i] : null);
+        }
+    }
+
+    private static void WriteFluidArray(BinaryWriter writer, string[] ids, int[] amounts)
+    {
+        int cap = ids != null ? ids.Length : 0;
+        writer.Write(cap);
+        for (int i = 0; i < cap; i++)
+        {
+            writer.Write(ids[i] ?? "");
+            writer.Write(amounts != null && i < amounts.Length ? amounts[i] : 0);
+        }
+    }
+
+    private static void ReadFluidArray(BinaryReader reader, out string[] ids, out int[] amounts)
+    {
+        int cap = reader.ReadInt32();
+        ids = new string[cap];
+        amounts = new int[cap];
+        for (int i = 0; i < cap; i++)
+        {
+            ids[i] = reader.ReadString();
+            amounts[i] = reader.ReadInt32();
         }
     }
 
@@ -272,7 +341,8 @@ public class Chunk
                 int parcelCount = reader.ReadInt32();
                 rec.parcels = new ParcelRecord[parcelCount];
                 for (int i = 0; i < parcelCount; i++)
-                    rec.parcels[i] = new ParcelRecord
+                {
+                    ParcelRecord parcel = new ParcelRecord
                     {
                         itemName = reader.ReadString(),
                         count = reader.ReadInt32(),
@@ -281,6 +351,14 @@ public class Chunk
                         destY = reader.ReadInt32(),
                         remaining = reader.ReadSingle(),
                     };
+                    // v11 부터 유체 짐이 있다. v10 이하는 전부 아이템 짐이라 기본값(빈 문자열 · 0)이 곧 정답이다.
+                    if (version >= 11)
+                    {
+                        parcel.fluidId = reader.ReadString();
+                        parcel.amount = reader.ReadInt32();
+                    }
+                    rec.parcels[i] = parcel;
+                }
             }
             else
             {
@@ -293,6 +371,36 @@ public class Chunk
 
             // 같은 이유로 else 가 필요 없다. float 기본값 0 이 곧 "진행 없음" 이다.
             if (version >= 10) rec.progress = reader.ReadSingle();
+
+            // v11: 기계 탱크. <b>else 로 빈 배열을 넣어야 한다</b> — 참조형이라 null 로 두면
+            // MachineInstance.LoadTanks 가 v10 이하 세이브에서 통째로 터진다(parcels 와 같은 함정).
+            if (version >= 11)
+            {
+                ReadFluidArray(reader, out rec.inputFluidIds, out rec.inputFluidAmounts);
+                ReadFluidArray(reader, out rec.outputFluidIds, out rec.outputFluidAmounts);
+            }
+            else
+            {
+                rec.inputFluidIds = new string[0];
+                rec.inputFluidAmounts = new int[0];
+                rec.outputFluidIds = new string[0];
+                rec.outputFluidAmounts = new int[0];
+            }
+
+            // v12: 업그레이드 칸과 티어. 참조형이라 여기도 else 로 빈 배열을 넣어야 한다.
+            if (version >= 12)
+            {
+                ReadSlotArray(reader, version, out rec.upgradeItemNames, out rec.upgradeCounts, out rec.upgradeInstances);
+                rec.tier = reader.ReadInt32();
+            }
+            else
+            {
+                rec.upgradeItemNames = new string[0];
+                rec.upgradeCounts = new int[0];
+                rec.upgradeInstances = new ItemInstance[0];
+            }
+
+            if (version >= 9) rec.plantedAtUtcTicks = reader.ReadInt64();
 
             chunk.placeables[new Vector2Int(lx, ly)] = rec;
         }
@@ -337,13 +445,31 @@ public class WorldMap : Singleton<WorldMap>
     // v8: 파이프가 운반 중인 짐(ParcelRecord)을 배치물마다 저장한다.
     // v9: 렌치로 지정한 파이프 네 면의 상태(faceModes 1바이트)를 배치물마다 저장한다.
     // v10: 기계의 가공 진행도(progress). 수동 기계는 20번을 눌러야 하나가 나오므로 잃으면 안 된다.
+    // v11: 기계 유체 탱크(입력·출력)와 파이프가 나르는 유체 짐(ParcelRecord.fluidId/amount).
+    // v12: 업그레이드 모듈 칸과 인스턴스별 티어(코어 조합기 업그레이드).
     private const int SaveMagic = 0x50435730; // 'PCW0'
-    private const int SaveVersion = 10;
+    private const int SaveVersion = 12;
     private const int MinReadableVersion = 3;
 
     private Dictionary<Vector2Int, Chunk> chunks;
     private string savePath;
     private bool isLoaded;
+
+    /// <summary>
+    /// 없는 청크를 무엇으로 채울지. 지상은 <see cref="GenerateSurfaceChunk"/> 고,
+    /// 지하맵은 <see cref="EnterEphemeralWorld"/> 로 이것만 갈아 끼운다.
+    ///
+    /// <b>월드를 객체로 나누지 않고 델리게이트 하나로 가는 것이 요점이다.</b> 나누면
+    /// <c>MapGenerator</c>·<c>PlayerInteraction</c>·<c>PipeRouter</c>·<c>MachineInstance</c> 가
+    /// 전부 "어느 월드냐"를 인자로 받아야 한다 — 지금은 호출부를 한 줄도 안 고치고 지하에서 그대로 돈다.
+    /// </summary>
+    private System.Func<Vector2Int, Chunk> chunkGenerator;
+
+    /// <summary>
+    /// 지금 들고 있는 월드가 <b>디스크에 남지 않는</b> 임시 월드인가(지하맵).
+    /// 참이면 <see cref="Save"/> 가 통째로 아무것도 하지 않는다 — 자동 저장·종료 저장이 한 번에 막힌다.
+    /// </summary>
+    public bool IsEphemeral { get; private set; }
 
     /// <summary>Save 직전에 호출되는 훅. MapGenerator가 로드된 기계 인벤토리를 레코드로 flush 한다.</summary>
     public System.Action OnBeforeSave;
@@ -354,6 +480,7 @@ public class WorldMap : Singleton<WorldMap>
 
         savePath = DefaultSavePath;
         chunks = new();
+        chunkGenerator = GenerateSurfaceChunk;
         if (File.Exists(savePath))
             Load(savePath);
         else if (File.Exists(DefaultWorldmapPath))
@@ -381,7 +508,7 @@ public class WorldMap : Singleton<WorldMap>
     {
         if (!chunks.TryGetValue(chunkId, out Chunk chunk))
         {
-            chunk = GenerateChunk(chunkId);
+            chunk = chunkGenerator(chunkId);
             chunks[chunkId] = chunk;
         }
         return chunk;
@@ -446,6 +573,16 @@ public class WorldMap : Singleton<WorldMap>
         return true;
     }
 
+    /// <summary>기존 바닥 한 칸을 다른 바닥으로 교체한다(농지 설치용).</summary>
+    public bool PlaceFloor(Vector2Int chunkId, Vector2Int cellPos, string floorTileId)
+    {
+        if (!Chunk.IsFloor(floorTileId)) return false;
+        Chunk chunk = GetOrCreateChunk(chunkId);
+        if (!Chunk.IsFloor(chunk.GetTile(cellPos.x, cellPos.y))) return false;
+        chunk.SetTile(cellPos.x, cellPos.y, floorTileId);
+        return true;
+    }
+
     /// <summary>드랍이 정해진 벽 블록만 캘 수 있다(블록 종류는 가리지 않는다).</summary>
     public bool IsMineable(Vector2Int chunkId, Vector2Int cellPos)
     {
@@ -456,24 +593,43 @@ public class WorldMap : Singleton<WorldMap>
         return block != null && block.dropItem != null;
     }
 
-    public void EnsurePrototypeUndergroundRoom()
+    // ── 월드 교체 (지하맵) ──────────────────────────────────────────────
+    /// <summary>
+    /// 디스크에 남지 않는 임시 월드로 갈아탄다(지하맵 진입).
+    ///
+    /// <b>지금 월드를 먼저 디스크에 확정한 뒤</b> 청크를 통째로 버린다 — 돌아올 때 그 파일을 다시 읽으므로
+    /// 여기서 저장을 빠뜨리면 마지막 자동 저장 이후의 지상 작업이 통째로 사라진다.
+    /// 씬을 로드하기 <b>전에</b> 부를 것: 이 싱글톤은 씬을 넘어 살아남으므로 교체가 그대로 따라오고,
+    /// 새 씬 <c>MapGenerator.Start</c> 가 곧바로 <c>UpdateChunks</c> 를 부르는 것과 순서를 다투지 않는다.
+    /// </summary>
+    public void EnterEphemeralWorld(System.Func<Vector2Int, Chunk> generator)
     {
-        for (int y = -67; y <= -61; y++)
-        {
-            for (int x = -3; x <= 3; x++)
-            {
-                Vector2Int chunkId = Chunk.GetChunkId(new Vector3(x, y, 0f));
-                Vector2Int localCell = Chunk.GetLocalCellPositionInChunk(new Vector3(x, y, 0f));
-                GetOrCreateChunk(chunkId).SetTile(localCell.x, localCell.y, TerrainPalette.FloorIdAt(x, y));
-            }
-        }
+        if (generator == null) return;
+
+        Save();                 // 지상을 확정한다(IsEphemeral 이 아직 false 라 실제로 쓰인다)
+        chunks.Clear();
+        chunkGenerator = generator;
+        IsEphemeral = true;
     }
 
     /// <summary>
-    /// 청크를 새로 만든다. 스폰 앞 6x6 만 뚫어 두고 나머지는 벽으로 채우며,
+    /// 영속 월드(지상)로 되돌아온다. 임시 월드의 청크는 <b>저장하지 않고 버린다</b> — 그것이 의도다.
+    /// </summary>
+    public void ReturnToPersistentWorld()
+    {
+        if (!IsEphemeral) return;
+
+        chunks.Clear();
+        chunkGenerator = GenerateSurfaceChunk;
+        IsEphemeral = false;
+        Load(savePath);         // 들어가기 직전에 확정해 둔 그 파일이다
+    }
+
+    /// <summary>
+    /// 지상 청크를 새로 만든다. 스폰 앞 6x6 만 뚫어 두고 나머지는 벽으로 채우며,
     /// 어떤 벽·바닥을 쓸지는 <see cref="TerrainPalette"/> 가 좌표를 보고 정한다.
     /// </summary>
-    Chunk GenerateChunk(Vector2Int chunkId)
+    Chunk GenerateSurfaceChunk(Vector2Int chunkId)
     {
         Chunk chunk = new();
         for (int ty = 0; ty < ChunkSize; ty++)
@@ -494,6 +650,10 @@ public class WorldMap : Singleton<WorldMap>
     public void Save(string path)
     {
         if (!isLoaded) return;
+        // 지하맵은 디스크에 닿지 않는다. 여기 한 줄이 MapGenerator 의 10초 자동 저장 ·
+        // OnApplicationQuit · OnApplicationPause 를 <b>한꺼번에</b> 막는다 — 호출부마다 가드를 두면
+        // 언젠가 한 곳이 빠져 지하 청크가 지상 세이브를 덮어쓴다.
+        if (IsEphemeral) return;
         OnBeforeSave?.Invoke(); // 로드된 기계 인벤토리를 레코드로 동기화한 뒤 직렬화
 
         // 임시 파일에 다 쓴 뒤에야 교체한다. 예전처럼 원본을 먼저 비우고 쓰면

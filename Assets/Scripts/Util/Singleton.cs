@@ -58,13 +58,19 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
     protected virtual void Awake()
     {
         // 씬에 이미 인스턴스가 존재하는데 다른 오브젝트가 또 생성되었다면 중복 제거
-        if (_instance == null)
+        //
+        // <b>`_instance == this` 도 반드시 여기를 타야 한다.</b> Awake 보다 먼저 누군가 Instance 를
+        // 부르면 게터의 FindFirstObjectByType 이 이 오브젝트를 찾아 _instance 에 넣어 두는데,
+        // 게터는 DontDestroyOnLoad 를 걸지 않는다. 그래서 예전에는 이 분기가 통째로 건너뛰어져
+        // <b>씬을 넘어가야 할 싱글톤이 조용히 씬과 함께 죽었다</b>(InputActionManager 가 실제로 그랬다 —
+        // PlayerInteraction.OnEnable 이 먼저 Instance 를 부른다).
+        if (_instance == null || _instance == this)
         {
             _instance = this as T;
             if (PersistAcrossScenes)
                 DontDestroyOnLoad(gameObject);
         }
-        else if (_instance != this)
+        else
         {
             Destroy(gameObject);
         }

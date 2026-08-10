@@ -85,6 +85,11 @@ public static class ItemAliases
 
         // 가루 · 유체 · 전력
         { "전도체 가루", "conductor_powder" },
+        // '레드스톤' 은 '전도체' 의 옛 이름이다 — 그림까지 같은 완전한 중복이라 전도체로 합쳤다.
+        // (2026-08-08 사용자 결정. 분쇄 레시피 하나가 이 둘만 잇고 있었다)
+        { "레드스톤 결정", "conductor_crystal" }, { "redstone_crystal", "conductor_crystal" },
+        { "레드스톤 가루", "conductor_powder" },  { "redstone_powder",  "conductor_powder" },
+        { "전도체 결정", "conductor_crystal" },
         { "마법이 부여된 전도체 가루", "enchanted_conductor_powder" },
         { "마법 가루", "magic_powder" }, { "황 가루", "sulfur_powder" },
         { "마력 파편", "mana_shard" },   { "마력 칩", "mana_chip" },
@@ -116,6 +121,14 @@ public static class ItemAliases
         { "증류기", "Machine:Distiller" },           { "distiller", "Machine:Distiller" },
         { "정유기", "Machine:Distiller" },           { "Machine:Refinery", "Machine:Distiller" },
         { "고급 조합기", "Machine:AdvancedCrafter" }, { "advanced_crafter", "Machine:AdvancedCrafter" },
+        // 시멘트 공장·유리 가공기는 삭제하고 레시피 4개를 코어 조합기로 옮겼다(2026-08-10 사용자 결정).
+        // 갈 곳이 없으므로 코어로 잇는다 — <b>이 줄이 없으면 이미 놓아 둔 배치물이 세이브에서 통째로 사라진다.</b>
+        { "시멘트 공장", "CoreCrafter" }, { "Machine:CementPlant", "CoreCrafter" },
+        { "유리 가공기", "CoreCrafter" }, { "Machine:GlassWorks", "CoreCrafter" },
+        // 압연기는 압축기와 같은 기계였다 — 압축기를 정본으로 두고 흡수했다(2026-08-10 사용자 결정).
+        // 가공 레시피 8개가 압축기로 넘어갔고, <b>이 줄이 없으면 이미 놓아 둔 압연기가 세이브에서 사라진다.</b>
+        { "압연기", "Machine:Compressor" },          { "Machine:RollingMill", "Machine:Compressor" },
+        { "압축기", "Machine:Compressor" },
         { "아이템 강화기", "Machine:ItemEnhancer" },  { "item_enhancer", "Machine:ItemEnhancer" },
         { "수경 재배기", "Machine:Hydroponics" },     { "hydroponics", "Machine:Hydroponics" },
 

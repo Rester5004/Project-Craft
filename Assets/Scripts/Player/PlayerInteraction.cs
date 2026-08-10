@@ -25,6 +25,22 @@ public class PlayerInteraction : MonoBehaviour
     private float miningProgress;
     private bool isMining;
 
+    /// <summary>
+    /// 이번 홀드를 시작할 때 손에 들고 있던 곡괭이. 도중에 다른 도구로 바꾸면 진행도를 버리기 위해 기억한다
+    /// (칸을 바꿔도 <see cref="ItemStack"/> 객체는 슬롯의 것이라 그대로다 — 개체 데이터로 비교해야 한다).
+    /// </summary>
+    private ToolInstance miningTool;
+
+    /// <summary>
+    /// 이번 프레임에 우클릭이 들어왔는가. <b>입력 콜백에서 곧바로 처리하지 않고 <see cref="Update"/> 로 미룬다.</b>
+    ///
+    /// 우클릭 판정의 핵심 가드가 <c>EventSystem.IsPointerOverGameObject()</c> 인데, 이것을 InputAction
+    /// 콜백 안에서 부르면 <b>지난 프레임의 UI 상태</b>가 돌아온다(콜백이 UI 레이캐스트보다 먼저 돈다).
+    /// 그러면 이번 프레임에 뜬 패널 위에서 누른 우클릭이 월드로 새어 배치·기계 열기가 일어나고,
+    /// Unity 도 경고를 낸다. <c>Update</c> 는 UI 갱신 뒤라 <see cref="isPointerOverUI"/> 가 이번 프레임 값이다.
+    /// </summary>
+    private bool usePending;
+
     private void OnEnable()
     {
         if (InputActionManager.Instance != null){
@@ -36,7 +52,6 @@ public class PlayerInteraction : MonoBehaviour
     void Start()
     {
         inventory = Inventory.Instance;
-        PrototypeMapTransitions.Initialize();
     }
 
     private void OnDisable()
@@ -58,18 +73,24 @@ public class PlayerInteraction : MonoBehaviour
             cell = loader.IsOutlined(cell + Vector2Int.down) ? cell + Vector2Int.down : cell;
         return cell;
     }
-    // 우클릭(Use)에 대한 단일 판별 지점: 기계 위면 그 기계 UI 오픈, 빈 칸이면 placeable 배치.
+    /// <summary>E(Interact) 에 대한 단일 판별 지점. 지금은 발밑 포탈뿐이다.</summary>
     private void HandleInteractPerformed()
     {
-        if(PrototypeMapTransitions.TryUseNearest(gameObject.transform))
-            PrototypeMapTransitions.Initialize();
+        if (UndergroundPortal.TryUseNearest(transform)) return;
     }
-    private void HandleUsePerformed()
+    /// <summary>입력 콜백은 "눌렸다"만 적어 둔다. 판정은 전부 <see cref="PerformUse"/> 가 한다(<see cref="usePending"/> 참고).</summary>
+    private void HandleUsePerformed() => usePending = true;
+
+    /// <summary>
+    /// 우클릭(Use)에 대한 단일 판별 지점: 기계 위면 그 기계 UI 오픈, 빈 칸이면 placeable 배치.
+    /// <b><see cref="Update"/> 에서만 부른다</b> — UI 위인지 판정하려면 이번 프레임 값이 필요하다.
+    /// </summary>
+    private void PerformUse()
     {
         if (Camera.main == null) return;
         if (PowerLinkMode.IsActive) return;   // 전송 모드의 우클릭은 연결 해제지 배치가 아니다
         // 열린 UI 패널 위에서의 우클릭은 배치/상호작용으로 처리하지 않는다.
-        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject()) return;
+        if (isPointerOverUI) return;
 
         Vector2 mouseWorldPosition = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
         Vector2Int targetCell = (Vector2Int)mapGenerator.blocksTilemap.WorldToCell(mouseWorldPosition);
@@ -91,6 +112,11 @@ public class PlayerInteraction : MonoBehaviour
             return;
         }
 
+        // 1-b) 탐지기를 들고 인접한 빈 바닥을 누르면 지하 포탈을 찾는다(확률).
+        //      배치보다 앞이지만 기계보다는 뒤다 — 탐지기를 들었다고 기계를 못 열면 안 된다.
+        if (adjacent && TryDowse(heldStack, targetCell))
+            return;
+
         // 2) placeable 선택 & 인접한 빈 칸 → 배치
         ItemStack selectedItemStack = inventory.GetSelectedItem();
         if (selectedItemStack == null || selectedItemStack.item == null || !selectedItemStack.item.placeable)
@@ -111,6 +137,15 @@ public class PlayerInteraction : MonoBehaviour
             : null;
         if (terrain != null)
         {
+            // 농지 같은 바닥 블록은 현재 바닥 한 칸을 교체한다.
+            if (Chunk.IsFloor(terrain.blockName))
+            {
+                if (!WorldMap.Instance.PlaceFloor(chunkId, localCell, terrain.blockName)) return;
+                mapGenerator.RefreshTile(targetCell);
+                ConsumeSelected(selectedItemStack);
+                return;
+            }
+
             if (!IsCellClearForWall(targetCell))
                 return; // 플레이어나 기계 위에 벽을 세우면 갇히거나 겹친다
             if (!WorldMap.Instance.Place(chunkId, localCell, terrain.blockName))
@@ -121,7 +156,25 @@ public class PlayerInteraction : MonoBehaviour
             return;
         }
 
-        // 2-b) 파이프는 프리팹이 아니라 전용 타일맵에 그린다(수백 개가 깔리므로).
+
+        // 2-b) 씨앗/묘목은 설정된 농지 위에만 심는다.
+        CropBlock crop = ItemDictionary.Instance != null
+            ? ItemDictionary.Instance.GetCropForSeed(selectedItemStack.item)
+            : null;
+        if (crop != null)
+        {
+            if (WorldMap.Instance.GetTileId(targetCell) != crop.requiredSoilId) return;
+            PlaceableRecord cropRecord = new PlaceableRecord(crop.blockName)
+            {
+                plantedAtUtcTicks = System.DateTime.UtcNow.Ticks
+            };
+            chunk.SetPlaceable(localCell, cropRecord);
+            mapGenerator.SpawnPlaceableAt(targetCell, cropRecord);
+            ConsumeSelected(selectedItemStack);
+            return;
+        }
+
+        // 2-c) 파이프는 프리팹이 아니라 전용 타일맵에 그린다(수백 개가 깔리므로).
         PipeBlock pipe = ItemDictionary.Instance != null
             ? ItemDictionary.Instance.GetPipeBlockFor(selectedItemStack.item)
             : null;
@@ -162,6 +215,41 @@ public class PlayerInteraction : MonoBehaviour
 
         chunk.RemovePlaceable(localCell);
         return false;
+    }
+
+    /// <summary>
+    /// 탐지기 우클릭. 빈 바닥을 짚으면 탐지기를 하나 쓰고, <see cref="UndergroundPalette.DiscoveryChance"/>
+    /// 확률로 그 자리에 지하 포탈이 열린다.
+    ///
+    /// <b>실패해도 탐지기는 사라진다</b> — 그것이 확률의 대가다. 어느 등급인지는
+    /// <see cref="UndergroundPalette.DowsingTierOf"/> 한 곳이 정하므로 상위 탐지기가 생겨도 여기는 그대로다.
+    /// ⚠ 포탈은 <b>세이브에 남지 않는다</b>(런타임 오브젝트). 찾았으면 그 자리에서 들어가야 한다.
+    /// </summary>
+    /// <returns>탐지기를 실제로 썼으면 true. false 면 호출자가 평소 동작으로 흘려보낸다.</returns>
+    private bool TryDowse(ItemStack held, Vector2Int targetCell)
+    {
+        if (UndergroundSession.IsActive) return false;   // 지하에서 또 파고들 수는 없다
+        if (held == null || held.item == null || held.count <= 0) return false;
+
+        int tier = UndergroundPalette.DowsingTierOf(held.item.itemName);
+        if (tier < 0) return false;
+
+        // 벽·기계·파이프가 있는 칸에는 열 수 없다(포탈이 파묻히거나 겹친다).
+        if (!Chunk.IsFloor(WorldMap.Instance.GetTileId(targetCell))) return false;
+        if (WorldMap.Instance.GetPlaceableAt(targetCell) != null) return false;
+
+        ConsumeSelected(held);
+
+        if (Random.value >= UndergroundPalette.DiscoveryChance)
+        {
+            Debug.Log("[Dowsing] 아무것도 찾지 못했습니다.");
+            return true;
+        }
+
+        UndergroundPortal.Create(new Vector2(targetCell.x + 0.5f, targetCell.y + 0.5f),
+                                 UndergroundPortal.Kind.ToUnderground, tier);
+        Debug.Log($"[Dowsing] {tier}등급 지하 포탈을 찾았습니다! ({targetCell.x}, {targetCell.y}) 에서 E");
+        return true;
     }
 
     /// <summary>
@@ -258,11 +346,16 @@ public class PlayerInteraction : MonoBehaviour
         {
             if (TilemapTextureLoader.Instance != null) TilemapTextureLoader.Instance.ClearOutline();
             CancelMining();
+            usePending = false;   // 미뤄 둔 우클릭을 흘려보낸다 — 안 지우면 모드를 끄는 순간 묵은 클릭이 터진다
             return;
         }
 
         SetGlobalCellPositions();
         isPointerOverUI = EventSystem.current != null && EventSystem.current.IsPointerOverGameObject();
+
+        // 채굴보다 먼저 처리해야 방금 놓은 기계를 같은 프레임의 채굴 판정이 본다.
+        if (usePending) { usePending = false; PerformUse(); }
+
         UpdateMining();
         if(GetIsCardinalAdjacent(targetGlobalCell, playerGlobalCell))
         {
@@ -271,7 +364,7 @@ public class PlayerInteraction : MonoBehaviour
     }
 
     /// <summary>좌클릭 홀드로 캘 수 있는 대상의 종류.</summary>
-    private enum MineTarget { None, Wall, Machine, Pipe }
+    private enum MineTarget { None, Wall, Machine, Pipe, Crop }
 
     private void UpdateMining()
     {
@@ -289,12 +382,17 @@ public class PlayerInteraction : MonoBehaviour
             && WorldMap.Instance != null;
 
         // 배치물이 놓인 칸은 그 아래 지형이 아니라 배치물을 캔다.
+        // <b>곡괭이는 벽에만 요구한다</b> — 기계·파이프까지 막으면 곡괭이가 부러졌을 때
+        // 이미 지어 둔 공장을 뜯지 못해 갇힌다.
         MineTarget target = MineTarget.None;
+        ToolInstance tool = null;
         if (inputAllowed)
         {
-            if (mapGenerator.TryGetMachineAt(mineCell, out _)) target = MineTarget.Machine;
+            if (mapGenerator.TryGetCropAt(mineCell, out CropInstance crop) && crop != null && crop.IsMature) target = MineTarget.Crop;
+            else if (mapGenerator.TryGetMachineAt(mineCell, out _)) target = MineTarget.Machine;
             else if (mapGenerator.TryGetPipeAt(mineCell, out _)) target = MineTarget.Pipe;
-            else if (WorldMap.Instance.IsMineable(chunkId, localCell)) target = MineTarget.Wall;
+            else if (WorldMap.Instance.IsMineable(chunkId, localCell) && TryGetMiningTool(out _, out tool))
+                target = MineTarget.Wall;
         }
 
         if (target == MineTarget.None)
@@ -303,9 +401,11 @@ public class PlayerInteraction : MonoBehaviour
             return;
         }
 
-        if (!isMining || miningTarget != mineCell)
+        // 캐는 도중 다른 곡괭이로 바꾸면 처음부터다(도구를 갈아 끼워 진행도를 이어받지 못하게).
+        if (!isMining || miningTarget != mineCell || miningTool != tool)
         {
             miningTarget = mineCell;
+            miningTool = tool;
             miningProgress = 0f;
             isMining = true;
         }
@@ -316,21 +416,61 @@ public class PlayerInteraction : MonoBehaviour
 
         if (target == MineTarget.Machine) MineMachine(mineCell);
         else if (target == MineTarget.Pipe) mapGenerator.RemoveMachineAt(mineCell);   // 안에서 파이프로 갈라진다
-        else MineWall(mineCell, chunkId, localCell);
+        else if (target == MineTarget.Crop) mapGenerator.HarvestCropAt(mineCell);
+        else if (MineWall(mineCell, chunkId, localCell)) WearMiningTool();            // 실제로 캔 경우에만 닳는다
 
         CancelMining();
     }
 
-    /// <summary>벽을 캐고 그 블록에 지정된 아이템을 필드에 떨어뜨린다.</summary>
-    private void MineWall(Vector2Int mineCell, Vector2Int chunkId, Vector2Int localCell)
+    /// <summary>
+    /// 지금 손에 든 것이 벽을 캘 수 있는 도구인가.
+    ///
+    /// 곡괭이는 망치·드라이버와 <see cref="ToolItem"/> 하나를 공유하므로 <see cref="WrenchItem"/> 처럼
+    /// <b>타입으로는 구분되지 않는다</b>. 설계도의 <see cref="ToolDefinition.canMineBlocks"/> 가 정본이라
+    /// 문자열 비교도 씬 참조도 없이 에셋만 보고 판정된다(재료 티어별 제한도 나중에 같은 자리에 붙는다).
+    /// </summary>
+    private bool TryGetMiningTool(out ItemStack stack, out ToolInstance tool)
     {
-        if (!WorldMap.Instance.Mining(chunkId, localCell, out string minedTileId)) return;
+        stack = null;
+        tool = null;
+        if (inventory == null) return false;
+
+        // GetSelectedItem() 이 아니라 GetSelectedStack() 을 쓴다 — 전자는 선택 칸이 없을 때
+        // (ConsumeSelectedItem 이 -1 로 만든다) 예외를 던진다.
+        ItemStack held = inventory.GetSelectedStack();
+        if (held == null) return false;
+        if (held.item is not ToolItem item || item.definition == null || !item.definition.canMineBlocks) return false;
+        if (held.instance is not ToolInstance instance || instance.durability <= 0) return false;
+
+        stack = held;
+        tool = instance;
+        return true;
+    }
+
+    /// <summary>
+    /// 벽 한 칸을 캘 때마다 곡괭이 내구도를 1 깎는다. 0 이 되면 스택째 사라진다 —
+    /// <see cref="RecipeSolver.ConsumeTools"/> 와 <b>같은 규약</b>이라 도구가 없어지는 방식이 한 가지뿐이다.
+    /// </summary>
+    private void WearMiningTool()
+    {
+        if (!TryGetMiningTool(out ItemStack stack, out ToolInstance tool)) return;
+
+        tool.durability -= 1;
+        if (tool.durability <= 0) stack.Clear();
+        inventory.NotifyChanged();   // 핫바의 내구도 표시를 갱신한다
+    }
+
+    /// <summary>벽을 캐고 그 블록에 지정된 아이템을 필드에 떨어뜨린다. 실제로 캤으면 true.</summary>
+    private bool MineWall(Vector2Int mineCell, Vector2Int chunkId, Vector2Int localCell)
+    {
+        if (!WorldMap.Instance.Mining(chunkId, localCell, out string minedTileId)) return false;
 
         BlockBase block = ItemDictionary.Instance != null ? ItemDictionary.Instance.GetBlock(minedTileId) : null;
         if (block != null && block.dropItem != null)
             mapGenerator.SpawnDrop(mineCell, new ItemStack { item = block.dropItem, count = block.dropCount });
 
         mapGenerator.RefreshTile(mineCell);
+        return true;
     }
 
     /// <summary>기계를 캔다. 내부 아이템은 필드로 쏟아지고 에너지·가스·연소 상태는 사라진다.</summary>
@@ -349,6 +489,7 @@ public class PlayerInteraction : MonoBehaviour
     {
         isMining = false;
         miningProgress = 0f;
+        miningTool = null;
     }
 
     private void OnGUI()

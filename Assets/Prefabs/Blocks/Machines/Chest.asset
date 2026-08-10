@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8eb88b946cb785647b9822510aecbc39, type: 3}
+  m_Name: Chest
+  m_EditorClassIdentifier: Assembly-CSharp::StorageBlock
+  blockName: Machine:Chest
+  displayName: "\uC0C1\uC790"
+  dropItem: {fileID: 0}
+  dropCount: 1
+  machinePrefab: {fileID: 3455168700427752035, guid: 91bdd964e3a7ef4409c3b1cd6f3d718c, type: 3}
+  uiPrefab: {fileID: 8988790215771605379, guid: 165daaa4e952ad8478ac4e6781fc72b0, type: 3}
+  runningSprite: {fileID: 0}
+  manualStepRatio: 0
+  tier: 0
+  recipeGroupId: 
+  inputSlotCount: 0
+  outputSlotCount: 0
+  fuelSlotCount: 0
+  fuelBurnRate: 0
+  upgradeSlotCount: 0
+  inputFluidSlotCount: 0
+  outputFluidSlotCount: 0
+  maxFluidAmount: 0
+  maxEnergyAmount: 0
+  isUseEnergy: 0
+  isGenerator: 0
+  powerRange: 0
+  energyUseRate: 0
+  speedMultiplier: 1
+  chanceMultiplier: 1
+  storageSlotCount: 40
+  baseCapacity: 0
+  capacityPerUpgrade: 0

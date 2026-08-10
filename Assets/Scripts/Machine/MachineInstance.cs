@@ -3,7 +3,7 @@ using UnityEngine;
 /// <summary>
 /// 월드에 배치된 기계 하나의 런타임 인스턴스. 자기 인벤토리(<see cref="MachineInventory"/>)를 보유하며,
 /// 청크의 <see cref="PlaceableRecord"/> 와 <see cref="LoadFrom"/>/<see cref="WriteBack"/> 로 동기화된다.
-/// 슬롯 개수/가스/에너지 설정은 blockId 로 ItemDictionary(MachineBlock)에서 가져온다.
+/// 슬롯 개수·유체 탱크·에너지 설정은 blockId 로 ItemDictionary(MachineBlock)에서 가져온다.
 /// </summary>
 public class MachineInstance : MonoBehaviour
 {
@@ -14,10 +14,11 @@ public class MachineInstance : MonoBehaviour
     private int inputSlotCount;
     private int outputSlotCount;
     private int fuelSlotCount;
+    private int upgradeSlotCount;
     private float fuelBurnRate;
-    private int InputGasSlotCount;
-    private int OutputGasSlotCount;
-    private float MaxGasAmount;   // 모든 가스 슬롯(입력/출력)이 공유하는 최대치
+    private int inputTankCount;
+    private int outputTankCount;
+    private int maxFluidAmount;   // 탱크 <b>한 칸</b>의 최대치(1 양동이 = 1000 규약)
     private float MaxEnergyAmount;
     private bool IsUseEnergy;
     private bool isGenerator;
@@ -32,10 +33,18 @@ public class MachineInstance : MonoBehaviour
     /// <summary>이 기계의 블록 정보(딕셔너리 미구성 시 null). 조합대 티어 등 파생 설정을 읽는 데 쓴다.</summary>
     public MachineBlock Info { get; private set; }
 
-    // ── 가스 · 에너지 보유량 ────────────────────────────────────
+    // ── 유체 탱크 · 에너지 보유량 ───────────────────────────────
     private float currentEnergy;
-    private Gas[] inputGas = System.Array.Empty<Gas>();
-    private Gas[] outputGas = System.Array.Empty<Gas>();
+
+    // 탱크는 <see cref="ItemStack"/> 슬롯과 같은 자리다 — 레시피 소모·산출, 파이프 입출력, 세이브를 모두 탄다.
+    private readonly System.Collections.Generic.List<FluidStack> inputTanks = new();
+    private readonly System.Collections.Generic.List<FluidStack> outputTanks = new();
+
+    /// <summary>입력 탱크 목록(파이프·RecipeSolver 가 직접 다룬다).</summary>
+    public System.Collections.Generic.IList<FluidStack> InputTanks => inputTanks;
+
+    /// <summary>출력 탱크 목록(파이프가 여기서 퍼 간다).</summary>
+    public System.Collections.Generic.IList<FluidStack> OutputTanks => outputTanks;
 
     public float CurrentEnergy => currentEnergy;
     public float EnergyRatio => MaxEnergyAmount > 0f ? Mathf.Clamp01(currentEnergy / MaxEnergyAmount) : 0f;
@@ -84,6 +93,9 @@ public class MachineInstance : MonoBehaviour
     public float BurnRemaining => burnRemaining;
     public float BurnRatio => burnTotal > 0f ? Mathf.Clamp01(burnRemaining / burnTotal) : 0f;
 
+    // ── 인스턴스별 티어 (코어 조합기 업그레이드) ─────────────────
+    private int recordTier;
+
     // ── 가공 상태 ──────────────────────────────────────────────
     private Recipe activeRecipe;
     private float progress;                 // 초
@@ -104,10 +116,93 @@ public class MachineInstance : MonoBehaviour
         get
         {
             if (activeRecipe == null) return 0f;
-            float speed = Info != null ? Info.speedMultiplier : 1f;
+            float speed = (Info != null ? Info.speedMultiplier : 1f) * SpeedFactor;
             return speed > 0f ? activeRecipe.craftTime / speed : activeRecipe.craftTime;
         }
     }
+
+    // ── 업그레이드 모듈 ────────────────────────────────────────
+    // 배수는 <b>캐시하지 않는다</b>. 모듈을 꽂자마자 반영돼야 하는데, ApplyConfig 처럼 Bind 시점에
+    // 복사해 두면 창을 닫았다 열기 전까지 옛 값이 계속 쓰인다(energyUseRate 가 그 함정에 있다).
+    // 칸이 2개뿐이라 매 프레임 세도 비용이 없다.
+
+    /// <summary>속도 모듈의 합. 1 이면 배수 없음, 2 면 두 배 빠름.</summary>
+    private float SpeedFactor => 1f + UpgradeSum(UpgradeKind.Speed);
+
+    /// <summary>
+    /// 효율 모듈의 합. 소비에 <b>곱하는</b> 값이라 1 이 기본이고 작을수록 덜 쓴다.
+    /// 0 이 되면 연료·전력이 공짜가 되므로 0.1 에서 막는다.
+    /// </summary>
+    private float EfficiencyFactor => Mathf.Max(0.1f, 1f - UpgradeSum(UpgradeKind.Efficiency));
+
+    private float UpgradeSum(UpgradeKind kind)
+    {
+        if (inventory == null || inventory.upgradeSlots == null) return 0f;
+
+        float total = 0f;
+        for (int i = 0; i < inventory.upgradeSlots.Count; i++)
+        {
+            ItemStack stack = inventory.upgradeSlots[i];
+            if (stack == null || stack.count <= 0) continue;
+            if (stack.item is not UpgradeModuleItem module || module.kind != kind) continue;
+            total += module.valuePerUnit * stack.count;
+        }
+        return total;
+    }
+
+    /// <summary>모듈 <b>개수</b>의 합. 용량처럼 valuePerUnit(비율)이 아니라 개수로 세는 값이 쓴다.</summary>
+    private int UpgradeModuleCount(UpgradeKind kind)
+    {
+        if (inventory == null || inventory.upgradeSlots == null) return 0;
+
+        int total = 0;
+        for (int i = 0; i < inventory.upgradeSlots.Count; i++)
+        {
+            ItemStack stack = inventory.upgradeSlots[i];
+            if (stack == null || stack.count <= 0) continue;
+            if (stack.item is not UpgradeModuleItem module || module.kind != kind) continue;
+            total += stack.count;
+        }
+        return total;
+    }
+
+    // ── 저장 블록 ──────────────────────────────────────────────
+
+    /// <summary>저장 전용 블록인가(상자·아이템 저장소). 파이프 규칙과 슬롯 용량이 여기서 갈린다.</summary>
+    public bool IsStorage => Info is StorageBlock;
+
+    /// <summary>
+    /// 개체 데이터(<see cref="ItemInstance"/>)가 붙은 아이템을 받아도 되는가.
+    /// 고유 최대치를 쓰는 저장소는 <b>안 된다</b> — 한 칸에 수천 개가 들어가는데 인스턴스는 하나뿐이라,
+    /// 그 하나가 닳아 없어질 때 <c>stack.Clear()</c> 로 전부가 통째로 사라진다
+    /// (<see cref="RecipeSolver.AddItems"/> 의 칸당 1개 규칙과 같은 이유).
+    /// 상자는 칸이 40개고 maxStack 을 따르므로 그 규칙이 그대로 통해 받아도 된다.
+    /// </summary>
+    public bool AcceptsInstanceItems => Info is not StorageBlock storage || !storage.HasOwnCapacity;
+
+    /// <summary>
+    /// 저장 칸(= 입력 구간) 한 칸의 최대치. 저장 블록이 아니면 아이템의 maxStack 그대로다.
+    ///
+    /// <b>캐시하지 않는다</b> — 업그레이드 모듈을 꽂자마자 반영돼야 한다
+    /// (<see cref="SpeedFactor"/> · <see cref="EfficiencyFactor"/> 와 같은 규약).
+    /// </summary>
+    public int InputSlotCapacity(Items item)
+    {
+        if (Info is not StorageBlock storage || !storage.HasOwnCapacity) return RecipeSolver.MaxStackOf(item);
+
+        // long 으로 곱한다 — 에셋 값이 크면 int 로 넘쳐 음수가 되고, 호출자가 "자리 없음" 으로 읽는다
+        // (CountFreeSpace 가 같은 이유로 long 을 쓴다).
+        long capacity = (long)storage.baseCapacity
+                      + (long)storage.capacityPerUpgrade * UpgradeModuleCount(UpgradeKind.Efficiency);
+        return capacity > int.MaxValue ? int.MaxValue : (int)capacity;
+    }
+
+    /// <summary>
+    /// 평면 인덱스 한 칸의 최대치. <see cref="MachineInventory.capacityOverride"/> 에 꽂힌다.
+    /// <b>입력 구간만</b> 고유 최대치를 쓴다 — 연료·업그레이드 칸은 언제나 maxStack 이다.
+    /// </summary>
+    private int SlotCapacityFor(int index, Items item)
+        => index >= 0 && index < inputSlotCount ? InputSlotCapacity(item) : RecipeSolver.MaxStackOf(item);
 
     /// <summary>진행도 0~1. 진행 중이 아니면 0.</summary>
     public float ProgressRatio
@@ -123,11 +218,12 @@ public class MachineInstance : MonoBehaviour
     public int InputCount => inputSlotCount;
     public int OutputCount => outputSlotCount;
     public int FuelCount => fuelSlotCount;
-    public int InputGasCount => InputGasSlotCount;
-    public int OutputGasCount => OutputGasSlotCount;
+    public int UpgradeCount => upgradeSlotCount;
+    public int InputTankCount => inputTankCount;
+    public int OutputTankCount => outputTankCount;
     public bool UsesEnergy => IsUseEnergy;
-    /// <summary>모든 가스 슬롯(입력/출력)이 공유하는 최대 저장량.</summary>
-    public float MaxGas => MaxGasAmount;
+    /// <summary>탱크 한 칸의 최대 저장량.</summary>
+    public int MaxFluid => maxFluidAmount;
     public float MaxEnergy => MaxEnergyAmount;
 
     // ── 가동 표시 ────────────────────────────────────────────────
@@ -151,13 +247,15 @@ public class MachineInstance : MonoBehaviour
         ApplyConfig(ItemDictionary.Instance != null ? ItemDictionary.Instance.GetMachineInfo(blockId) : null);
 
         if (inventory != null) inventory.OnChanged -= HandleInventoryChanged;
-        inventory = new MachineInventory(inputSlotCount, outputSlotCount, fuelSlotCount);
+        inventory = new MachineInventory(inputSlotCount, outputSlotCount, fuelSlotCount, upgradeSlotCount);
         inventory.OnChanged += HandleInventoryChanged;
+        // 숫자가 아니라 함수를 꽂는다 — 저장소 최대치는 업그레이드 모듈에 따라 런타임에 바뀐다.
+        inventory.capacityOverride = SlotCapacityFor;
 
+        // <b>탱크는 ApplyConfig 안에서 만든다.</b> 여기(LoadFrom 다음)에서 만들면
+        // 레코드에서 복원한 유체가 매번 지워진다 — 전력·진행도가 정확히 이 자리에서 사라졌던 이력이 있다.
         LoadFrom(record);
 
-        inputGas = CreateGasSlots(InputGasSlotCount);
-        outputGas = CreateGasSlots(OutputGasSlotCount);
         // 전력은 여기서 0으로 리셋하지 않는다 — LoadFrom 이 레코드에서 복원한 값을 지워 버리게 된다.
         // <b>진행도도 같다.</b> 예전엔 여기서 progress = 0 을 했는데, LoadFrom 다음이라
         // v10 에서 복원한 진행도가 매번 지워졌다(수동 기계는 20번 누른 것이 통째로 사라진다).
@@ -166,12 +264,12 @@ public class MachineInstance : MonoBehaviour
         recipeDirty = true;
     }
 
-    private static Gas[] CreateGasSlots(int count)
+    /// <summary>탱크 목록의 칸 수를 맞춘다(내용은 건드리지 않는다).</summary>
+    private static void ResizeTanks(System.Collections.Generic.List<FluidStack> tanks, int count)
     {
-        if (count <= 0) return System.Array.Empty<Gas>();
-        Gas[] slots = new Gas[count];
-        for (int i = 0; i < count; i++) slots[i] = new Gas();
-        return slots;
+        if (count < 0) count = 0;
+        while (tanks.Count > count) tanks.RemoveAt(tanks.Count - 1);
+        while (tanks.Count < count) tanks.Add(new FluidStack());
     }
 
     private void OnDestroy()
@@ -199,10 +297,11 @@ public class MachineInstance : MonoBehaviour
             inputSlotCount = info.inputSlotCount;
             outputSlotCount = info.outputSlotCount;
             fuelSlotCount = info.fuelSlotCount;
+            upgradeSlotCount = info.upgradeSlotCount;
             fuelBurnRate = info.fuelBurnRate;
-            InputGasSlotCount = info.inputGasSlotCount;
-            OutputGasSlotCount = info.outputGasSlotCount;
-            MaxGasAmount = info.maxGasAmount;
+            inputTankCount = info.inputFluidSlotCount;
+            outputTankCount = info.outputFluidSlotCount;
+            maxFluidAmount = info.maxFluidAmount;
             MaxEnergyAmount = info.maxEnergyAmount;
             IsUseEnergy = info.isUseEnergy;
             isGenerator = info.IsGenerator;
@@ -214,16 +313,29 @@ public class MachineInstance : MonoBehaviour
             inputSlotCount = DefaultInputCount;
             outputSlotCount = DefaultOutputCount;
             fuelSlotCount = 0;
+            upgradeSlotCount = 0;
             fuelBurnRate = 0f;
-            InputGasSlotCount = 0;
-            OutputGasSlotCount = 0;
-            MaxGasAmount = 0f;
+            inputTankCount = 0;
+            outputTankCount = 0;
+            maxFluidAmount = 0;
             MaxEnergyAmount = 0f;
             IsUseEnergy = false;
             isGenerator = false;
             powerRange = 0;
             energyUseRate = 0f;
         }
+
+        // 저장 블록은 저장 칸을 <b>입력 구간에 얹는다</b>(새 구간을 만들면 세이브·드랍·평면 인덱스가 다 따라 늘어난다).
+        // 에셋에서 inputSlotCount 와 storageSlotCount 를 맞춰 둘 필요가 없도록 여기서 덮어쓴다.
+        if (info is StorageBlock storage)
+        {
+            inputSlotCount = storage.storageSlotCount;
+            outputSlotCount = 0;
+        }
+
+        // 탱크는 여기서 만든다 — Bind 가 LoadFrom <b>뒤에</b> 만들면 복원한 유체를 매번 덮어쓴다.
+        ResizeTanks(inputTanks, inputTankCount);
+        ResizeTanks(outputTanks, outputTankCount);
     }
 
     /// <summary>레코드 → 런타임 인벤토리로 복원(아이템은 ItemDictionary 로 이름 조회).</summary>
@@ -232,6 +344,11 @@ public class MachineInstance : MonoBehaviour
         LoadSlots(inventory.inputSlots, record.inputItemNames, record.inputCounts, record.inputInstances);
         LoadSlots(inventory.outputSlots, record.outputItemNames, record.outputCounts, record.outputInstances);
         LoadSlots(inventory.fuelSlots, record.fuelItemNames, record.fuelCounts, record.fuelInstances);
+        LoadSlots(inventory.upgradeSlots, record.upgradeItemNames, record.upgradeCounts, record.upgradeInstances);
+
+        // 인스턴스별 티어(코어 조합기 업그레이드). <b>여기서 복원한 값을 Bind 가 다시 0 으로 밀면 안 된다</b>
+        // — 전력·진행도가 정확히 그렇게 사라졌던 이력이 있다.
+        recordTier = Mathf.Max(0, record.tier);
 
         burnRemaining = record.burnRemaining;
         burnTotal = record.burnTotal;
@@ -245,6 +362,26 @@ public class MachineInstance : MonoBehaviour
         if (record.links != null) links.AddRange(record.links);
         roundRobinCursor = record.roundRobinCursor;
         if (roundRobinCursor >= links.Count) roundRobinCursor = 0;
+
+        LoadTanks(inputTanks, record.inputFluidIds, record.inputFluidAmounts);
+        LoadTanks(outputTanks, record.outputFluidIds, record.outputFluidAmounts);
+    }
+
+    private void LoadTanks(System.Collections.Generic.List<FluidStack> tanks, string[] ids, int[] amounts)
+    {
+        int cap = ids != null ? ids.Length : 0;
+        for (int i = 0; i < tanks.Count; i++)
+        {
+            FluidStack tank = tanks[i];
+            if (i < cap && !string.IsNullOrEmpty(ids[i]) && amounts != null && i < amounts.Length && amounts[i] > 0)
+            {
+                // 유체 에셋이 사라졌으면 되살릴 근거가 없다. 아이템 슬롯과 같은 규칙으로 비운다.
+                tank.fluid = ItemDictionary.Instance != null ? ItemDictionary.Instance.GetFluid(ids[i]) : null;
+                tank.amount = tank.fluid != null ? Mathf.Min(amounts[i], Mathf.Max(1, maxFluidAmount)) : 0;
+                if (tank.fluid == null) tank.Clear();
+            }
+            else tank.Clear();
+        }
     }
 
     private static void LoadSlots(System.Collections.Generic.List<ItemStack> slots,
@@ -274,6 +411,8 @@ public class MachineInstance : MonoBehaviour
         WriteSlots(inventory.inputSlots, ref record.inputItemNames, ref record.inputCounts, ref record.inputInstances);
         WriteSlots(inventory.outputSlots, ref record.outputItemNames, ref record.outputCounts, ref record.outputInstances);
         WriteSlots(inventory.fuelSlots, ref record.fuelItemNames, ref record.fuelCounts, ref record.fuelInstances);
+        WriteSlots(inventory.upgradeSlots, ref record.upgradeItemNames, ref record.upgradeCounts, ref record.upgradeInstances);
+        record.tier = recordTier;
 
         record.burnRemaining = burnRemaining;
         record.burnTotal = burnTotal;
@@ -282,6 +421,24 @@ public class MachineInstance : MonoBehaviour
         record.roundRobinCursor = roundRobinCursor;
         record.links = links.Count > 0 ? links.ToArray() : System.Array.Empty<Vector2Int>();
         record.progress = progress;
+
+        WriteTanks(inputTanks, ref record.inputFluidIds, ref record.inputFluidAmounts);
+        WriteTanks(outputTanks, ref record.outputFluidIds, ref record.outputFluidAmounts);
+    }
+
+    private static void WriteTanks(System.Collections.Generic.List<FluidStack> tanks, ref string[] ids, ref int[] amounts)
+    {
+        int cap = tanks.Count;
+        if (ids == null || ids.Length != cap) { ids = new string[cap]; amounts = new int[cap]; }
+        if (amounts == null || amounts.Length != cap) amounts = new int[cap];
+
+        for (int i = 0; i < cap; i++)
+        {
+            FluidStack tank = tanks[i];
+            bool has = tank != null && !tank.IsEmpty;
+            ids[i] = has ? tank.fluid.fluidId : "";
+            amounts[i] = has ? tank.amount : 0;
+        }
     }
 
     private static void WriteSlots(System.Collections.Generic.List<ItemStack> slots,
@@ -332,6 +489,11 @@ public class MachineInstance : MonoBehaviour
     private void Update()
     {
         if (inventory == null) { SetRunning(false); return; }
+
+        // 양동이 교환은 가공보다 먼저 한다 — 이번 프레임에 넣은 물로 바로 돌 수 있어야 한다.
+        // 발전기·조합대도 탱크가 있으면 교환한다(탱크가 0개면 즉시 반환하므로 비용이 없다).
+        ExchangeBuckets();
+
         if (isGenerator) { TickGenerator(Time.deltaTime); return; }   // 발전기는 레시피를 보지 않는다
         if (Info != null && !Info.AutoProcess) { SetRunning(false); return; }   // 조합대는 버튼을 눌러야 만든다
 
@@ -377,8 +539,8 @@ public class MachineInstance : MonoBehaviour
             if (activeRecipe == null) { SetRunning(false); return; }
         }
 
-        // 진행 중에 재료나 도구를 빼가면 취소하고 처음부터
-        if (!RecipeSolver.CanCraft(inventory.inputSlots, activeRecipe))
+        // 진행 중에 재료·도구·유체를 빼가면 취소하고 처음부터
+        if (!CanRun(activeRecipe))
         {
             activeRecipe = null;
             progress = 0f;
@@ -392,7 +554,9 @@ public class MachineInstance : MonoBehaviour
         // 이 검사가 아래(완성 시점)에만 있으면, 진행도가 100% 에 멈춘 채로도 매 프레임 연료가 계속 타고
         // 다 타면 Ignite 가 새 연료를 또 집는다 — 화면에 아무 단서 없이 석탄 한 스택이 통째로 증발한다.
         // 확률 부산물도 함께 자리를 잡아 둔다(blockId 를 넘기는 이유) — 굴린 뒤 자리가 없어 버리지 않도록.
-        if (!RecipeSolver.CanStoreOutputs(inventory.outputSlots, activeRecipe, blockId))
+        // 유체 산출도 같은 이유로 여기서 함께 본다 — 탱크가 차 있는데 진행하면 연료·전력만 태운다.
+        if (!RecipeSolver.CanStoreOutputs(inventory.outputSlots, activeRecipe, blockId)
+            || !RecipeSolver.CanStoreFluids(outputTanks, activeRecipe, maxFluidAmount))
         {
             SetRunning(false);
             PushProgress();
@@ -429,8 +593,11 @@ public class MachineInstance : MonoBehaviour
         // 재료 소모는 완료 시점에 한다(가공 도중 기계가 디스폰돼도 재료가 사라지지 않도록).
         RecipeSolver.ConsumeInputs(inventory.inputSlots, activeRecipe);
         RecipeSolver.ConsumeTools(inventory.inputSlots, activeRecipe);   // 도구는 내구도만 닳는다
+        RecipeSolver.ConsumeFluids(inputTanks, activeRecipe);
         RecipeSolver.StoreOutputs(inventory.outputSlots, activeRecipe);
+        RecipeSolver.StoreFluids(outputTanks, activeRecipe, maxFluidAmount);
         RollChanceOutputs(activeRecipe);
+        PushFluids();
 
         activeRecipe = null;
         progress = 0f;
@@ -487,7 +654,13 @@ public class MachineInstance : MonoBehaviour
         burned = 0f;
         if (burnRemaining <= 0f && !Ignite()) return false;
 
-        float want = fuelBurnRate * deltaTime;
+        // 배수는 <b>소비 시점</b>에 곱한다. fuelBurnRate 는 ApplyConfig 가 복사해 둔 값이라
+        // 여기서 곱해야 모듈을 꽂자마자 반영된다.
+        //
+        // 소비 기계: 효율 모듈이 연료를 덜 쓰게 한다.
+        // 발전기   : 태운 양이 곧 발전량이라 소비를 줄이면 출력도 준다 — 대신 <b>속도</b> 모듈이
+        //            연소를 빠르게 해 출력을 올린다(총 에너지는 그대로). 효율은 TickGenerator 가 산출 쪽에서 건다.
+        float want = fuelBurnRate * deltaTime * (isGenerator ? SpeedFactor : EfficiencyFactor);
         burned = Mathf.Min(want, burnRemaining);
 
         burnRemaining -= want;
@@ -504,7 +677,8 @@ public class MachineInstance : MonoBehaviour
     /// <summary>이 프레임 분의 전력을 쓴다. 모자라면 false(진행 정지).</summary>
     private bool ConsumeEnergy(float deltaTime)
     {
-        float need = energyUseRate * deltaTime;
+        // energyUseRate 도 ApplyConfig 가 복사한 값이라, 배수는 여기서 곱해야 즉시 반영된다.
+        float need = energyUseRate * deltaTime * EfficiencyFactor;
         if (need <= 0f) return true;           // 소비량이 설정되지 않은 기계는 막지 않는다
         if (currentEnergy < need) return false;
 
@@ -526,7 +700,8 @@ public class MachineInstance : MonoBehaviour
         bool burning = false;
         if (currentEnergy < MaxEnergyAmount && BurnFuel(deltaTime, out float burned) && burned > 0f)
         {
-            SetEnergy(currentEnergy + burned);   // SetEnergy 가 클램프와 UI 반영까지 맡는다
+            // 발전기의 효율 모듈은 <b>같은 연료로 더 많은 전력</b>이다(연소량은 BurnFuel 이 그대로 둔다).
+            SetEnergy(currentEnergy + burned / EfficiencyFactor);
             burning = true;
         }
 
@@ -617,10 +792,58 @@ public class MachineInstance : MonoBehaviour
     /// <summary>레시피를 찾을 때 쓰는 키. 0/1/2티어 화로처럼 업그레이드 관계면 같은 목록을 본다.</summary>
     public string RecipeKey => Info != null ? Info.RecipeGroupId : blockId;
 
-    /// <summary>이 기계가 처리할 수 있는 최대 레시피 티어.</summary>
-    public int Tier => Info != null ? Info.tier : 0;
+    /// <summary>
+    /// 이 기계가 처리할 수 있는 최대 레시피 티어.
+    ///
+    /// SO 값과 <b>이 인스턴스가 업그레이드로 올린 티어</b> 중 큰 쪽이다(코어 조합기).
+    /// 일반 기계는 레코드가 0 이라 지금까지와 완전히 같다.
+    /// </summary>
+    public int Tier => Mathf.Max(Info != null ? Info.tier : 0, recordTier);
 
-    /// <summary>입력 슬롯으로 지금 만들 수 있는 첫 레시피를 고른다. 티어가 모자란 레시피는 건너뛴다.</summary>
+    /// <summary>업그레이드로 올린 인스턴스별 티어(레코드에 저장된다). 0 이면 SO 값을 그대로 쓴다.</summary>
+    public int RecordTier => recordTier;
+
+    /// <summary>티어 상승 재료를 받는 조합대인가(코어 조합기).</summary>
+    public bool AcceptsTierUpgrade => Info is CraftingTableBlock table && table.acceptsTierUpgrade;
+
+    /// <summary>
+    /// 업그레이드 칸의 아이템을 하나 소모해 티어를 올린다. 올릴 수 없으면 false.
+    ///
+    /// 티어는 <b>레코드</b>에 남으므로 코어를 캤다 다시 놓으면 0 으로 돌아간다(레코드가 새로 생긴다) —
+    /// 코어 자체가 티어를 들고 있는 것이 아니라 "그 자리에 세운 코어" 가 들고 있다는 뜻이다.
+    /// </summary>
+    public bool TryUpgradeTier()
+    {
+        if (!AcceptsTierUpgrade || inventory == null || inventory.upgradeSlots == null) return false;
+
+        for (int i = 0; i < inventory.upgradeSlots.Count; i++)
+        {
+            ItemStack stack = inventory.upgradeSlots[i];
+            if (stack == null || stack.item == null || stack.count <= 0) continue;
+
+            int target = CoreUpgradeTable.TargetTier(stack.item);
+            if (target <= Tier) continue;   // 재료가 아니거나 이미 그 티어 이상이다
+
+            recordTier = target;
+            if (--stack.count <= 0) stack.Clear();
+            inventory.NotifyChanged();
+            Flush();
+            return true;
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// 지금 이 레시피를 돌릴 재료가 갖춰졌는가(아이템 · 도구 · 유체).
+    ///
+    /// <b><see cref="SelectRecipe"/> 와 <see cref="Tick"/> 이 같은 것을 봐야 한다.</b>
+    /// 고를 때는 아이템만 보고 돌릴 때만 유체를 보면, "물이 없어 영원히 안 도는" 레시피를 골라 놓고
+    /// 기계가 통째로 잠긴다(<see cref="SelectRecipe"/> 는 첫 후보를 잡으면 더 안 찾는다).
+    /// </summary>
+    private bool CanRun(Recipe recipe)
+        => RecipeSolver.CanCraft(inventory.inputSlots, recipe) && RecipeSolver.HasFluids(inputTanks, recipe);
+
+    /// <summary>입력 슬롯·탱크로 지금 만들 수 있는 첫 레시피를 고른다. 티어가 모자란 레시피는 건너뛴다.</summary>
     private Recipe SelectRecipe()
     {
         RecipeDictionary dictionary = RecipeDictionary.Instance;
@@ -631,9 +854,90 @@ public class MachineInstance : MonoBehaviour
         {
             Recipe recipe = candidates[i];
             if (recipe == null || recipe.tier > Tier) continue;
-            if (RecipeSolver.CanCraft(inventory.inputSlots, recipe)) return recipe;
+            if (CanRun(recipe)) return recipe;
         }
         return null;
+    }
+
+    // ── 양동이 ↔ 탱크 교환 ──────────────────────────────────────
+    /// <summary>
+    /// 입력 슬롯의 '채워진 양동이'를 탱크로 빨아들이고, 빈 양동이로 출력 탱크를 퍼낸다.
+    ///
+    /// 전용 슬롯을 만들지 않은 이유: 평면 인덱스([입력][출력][연료])에 구간이 하나 더 늘면
+    /// 세이브·UI·파이프가 전부 따라 늘어난다. 입출력 슬롯을 그대로 쓰면 <b>파이프로 양동이를 넣는 것도
+    /// 공짜로 된다</b>(파이프는 이미 입력 슬롯에 아이템을 넣는다).
+    ///
+    /// 빈 그릇을 놓을 자리가 없으면 <b>아무것도 하지 않는다</b> — 반쯤 처리하면 양동이가 증발한다.
+    /// </summary>
+    private void ExchangeBuckets()
+    {
+        if (inputTanks.Count == 0 && outputTanks.Count == 0) return;
+        if (maxFluidAmount <= 0) return;
+
+        ItemDictionary dictionary = ItemDictionary.Instance;
+        if (dictionary == null) return;
+
+        bool changed = false;
+        for (int i = 0; i < inventory.inputSlots.Count; i++)
+        {
+            ItemStack stack = inventory.inputSlots[i];
+            if (stack == null || stack.item == null || stack.count <= 0 || !stack.IsPlain) continue;
+
+            // ① 채워진 양동이 → 입력 탱크 (빈 그릇이 출력으로 나간다)
+            FluidDefine filled = dictionary.GetFluidForItem(stack.item);
+            if (filled != null && filled.HasBucket
+                && RecipeSolver.CountFreeFluidSpace(inputTanks, filled, maxFluidAmount) >= filled.bucketAmount
+                && RecipeSolver.CountFreeSpace(inventory.outputSlots, filled.emptyItem) >= 1)
+            {
+                RecipeSolver.AddFluid(inputTanks, filled, filled.bucketAmount, maxFluidAmount);
+                RecipeSolver.AddItems(inventory.outputSlots, filled.emptyItem, 1);
+                if (--stack.count <= 0) stack.Clear();
+                changed = true;
+                continue;
+            }
+
+            // ② 빈 그릇 → 출력 탱크에서 퍼내기 (채워진 것이 출력으로 나간다)
+            FluidDefine drained = FindDrainable(stack.item);
+            if (drained != null
+                && RecipeSolver.CountFluid(outputTanks, drained) >= drained.bucketAmount
+                && RecipeSolver.CountFreeSpace(inventory.outputSlots, drained.bucketItem) >= 1)
+            {
+                DrainTanks(drained, drained.bucketAmount);
+                RecipeSolver.AddItems(inventory.outputSlots, drained.bucketItem, 1);
+                if (--stack.count <= 0) stack.Clear();
+                changed = true;
+            }
+        }
+
+        if (!changed) return;
+        inventory.NotifyChanged();
+        PushFluids();
+        Flush();
+    }
+
+    /// <summary>이 빈 그릇으로 퍼낼 수 있는 유체가 출력 탱크에 있는가.</summary>
+    private FluidDefine FindDrainable(Items emptyItem)
+    {
+        for (int i = 0; i < outputTanks.Count; i++)
+        {
+            FluidStack tank = outputTanks[i];
+            if (tank == null || tank.IsEmpty) continue;
+            if (tank.fluid.HasBucket && tank.fluid.emptyItem == emptyItem) return tank.fluid;
+        }
+        return null;
+    }
+
+    private void DrainTanks(FluidDefine fluid, int amount)
+    {
+        for (int i = 0; i < outputTanks.Count && amount > 0; i++)
+        {
+            FluidStack tank = outputTanks[i];
+            if (tank == null || tank.fluid != fluid || tank.amount <= 0) continue;
+            int taken = Mathf.Min(tank.amount, amount);
+            tank.amount -= taken;
+            amount -= taken;
+            if (tank.amount <= 0) tank.Clear();
+        }
     }
 
     // ── UI 연동 (기계가 자기 UI를 직접 구동한다) ─────────────────
@@ -644,6 +948,7 @@ public class MachineInstance : MonoBehaviour
         PushProgress();
         PushFuel();
         PushEnergy();
+        PushFluids();
     }
 
     /// <summary>표시가 끝난 패널의 연결을 해제한다.</summary>
@@ -670,18 +975,18 @@ public class MachineInstance : MonoBehaviour
         boundUI.SetEnergy(EnergyRatio);
     }
 
-    // ── 가스 · 에너지 접근 ──────────────────────────────────────
-    /// <summary>입력 가스 슬롯(범위 밖이면 null).</summary>
-    public Gas GetInputGas(int index)
-        => index >= 0 && index < inputGas.Length ? inputGas[index] : null;
+    // ── 유체 탱크 · 에너지 접근 ─────────────────────────────────
+    /// <summary>입력 탱크(범위 밖이면 null).</summary>
+    public FluidStack GetInputTank(int index)
+        => index >= 0 && index < inputTanks.Count ? inputTanks[index] : null;
 
-    /// <summary>출력 가스 슬롯(범위 밖이면 null).</summary>
-    public Gas GetOutputGas(int index)
-        => index >= 0 && index < outputGas.Length ? outputGas[index] : null;
+    /// <summary>출력 탱크(범위 밖이면 null).</summary>
+    public FluidStack GetOutputTank(int index)
+        => index >= 0 && index < outputTanks.Count ? outputTanks[index] : null;
 
-    /// <summary>가스 보유량을 최대치 기준 0~1 로 환산한다(모든 가스 슬롯이 MaxGas 를 공유).</summary>
-    public float GasRatio(Gas gas)
-        => gas != null && MaxGasAmount > 0f ? Mathf.Clamp01(gas.amount / MaxGasAmount) : 0f;
+    /// <summary>탱크 보유량을 한 칸 최대치 기준 0~1 로 환산한다.</summary>
+    public float FluidRatio(FluidStack tank)
+        => tank != null && maxFluidAmount > 0 ? Mathf.Clamp01((float)tank.amount / maxFluidAmount) : 0f;
 
     /// <summary>에너지 보유량을 설정하고 열려 있는 UI 에 반영한다.</summary>
     public void SetEnergy(float amount)
@@ -690,27 +995,29 @@ public class MachineInstance : MonoBehaviour
         PushEnergy();
     }
 
-    /// <summary>입력 가스 슬롯의 종류/보유량을 설정하고 열려 있는 UI 에 반영한다.</summary>
-    public void SetInputGas(int index, GasDefine gas, float amount)
+    /// <summary>
+    /// 탱크를 밖에서 채우거나 비운 뒤 부르는 통지. 파이프처럼 <see cref="InputTanks"/> 를 직접 만진 쪽이
+    /// 호출해야 UI 가 갱신되고 레코드가 동기화된다(<see cref="RecipeSolver.AddItems"/> 가 통지하지 않는 것과 같다).
+    /// </summary>
+    public void NotifyFluidChanged()
     {
-        if (!AssignGas(inputGas, index, gas, amount)) return;
-        if (boundUI != null) boundUI.SetInputGas(index, GasRatio(inputGas[index]));
+        recipeDirty = true;   // 유체가 들어오면 멈춰 있던 레시피가 다시 돌 수 있다
+        PushFluids();
+        Flush();
     }
 
-    /// <summary>출력 가스 슬롯의 종류/보유량을 설정하고 열려 있는 UI 에 반영한다.</summary>
-    public void SetOutputGas(int index, GasDefine gas, float amount)
+    /// <summary>
+    /// 열려 있는 UI 의 유체 바를 전부 갱신한다.
+    /// UI 에는 색이 아니라 <b>유체 이름</b>을 넘긴다 — 색을 고르는 것은 <c>FluidColors</c> 한 곳의 몫이다.
+    /// </summary>
+    private void PushFluids()
     {
-        if (!AssignGas(outputGas, index, gas, amount)) return;
-        if (boundUI != null) boundUI.SetOutputGas(index, GasRatio(outputGas[index]));
+        if (boundUI == null) return;
+        for (int i = 0; i < inputTanks.Count; i++) boundUI.SetInputFluid(i, FluidRatio(inputTanks[i]), FluidIdOf(inputTanks[i]));
+        for (int i = 0; i < outputTanks.Count; i++) boundUI.SetOutputFluid(i, FluidRatio(outputTanks[i]), FluidIdOf(outputTanks[i]));
     }
 
-    private bool AssignGas(Gas[] slots, int index, GasDefine gas, float amount)
-    {
-        if (index < 0 || index >= slots.Length) return false;
-
-        float clamped = Mathf.Clamp(amount, 0f, MaxGasAmount);
-        slots[index].gas = clamped > 0f ? gas : null;   // 비면 종류도 지운다
-        slots[index].amount = clamped;
-        return true;
-    }
+    /// <summary>탱크에 담긴 유체의 id(비었으면 빈 문자열).</summary>
+    private static string FluidIdOf(FluidStack tank)
+        => tank != null && !tank.IsEmpty ? tank.fluid.fluidId : "";
 }

@@ -18,18 +18,6 @@
       "station": "초급 재단",
       "note": "마력 파편 증식" },
 
-    { "id": "magic_water", "machine": "초급 재단", "tier": 0, "output": "물", "outputQty": 1,
-      "outputFluid": true,
-      "inputs": [ { "item": "양동이", "qty": 1 }, { "item": "마력 파편", "qty": 2 } ],
-      "station": "초급 재단",
-      "note": "조합하면 양동이가 채워짐" },
-
-    { "id": "magic_lava", "machine": "초급 재단", "tier": 0, "output": "용암", "outputQty": 1,
-      "outputFluid": true,
-      "inputs": [ { "item": "양동이", "qty": 1 }, { "item": "마력 파편", "qty": 2 } ],
-      "station": "초급 재단",
-      "note": "조합하면 양동이가 채워짐" },
-
     { "id": "resource_generator_t0", "machine": "초급 재단", "tier": 0,
       "output": "0티어 자원 생성기", "outputQty": 1,
       "inputs": [ { "item": "마력 파편", "qty": 5 }, { "item": "돌", "qty": 5 } ],
@@ -66,6 +54,11 @@
         { "item": "은 판", "qty": 5 }
       ],
       "station": "중급 재단",
-      "note": "도구에 마법 부여. 마나를 사용하며 막대 종류별 효율 차이 (추후 추가 예정)" }
+      "note": "도구에 마법 부여. 마나를 사용하며 막대 종류별 효율 차이 (추후 추가 예정)" },
+
+    { "id": "advanced_altar", "machine": "고급 조합기", "tier": 2, "output": "고급 재단", "outputQty": 1,
+      "inputs": [ { "item": "특수합금", "qty": 100 }, { "item": "티타늄 주괴", "qty": 50 } ],
+      "station": "고급 조합기",
+      "note": "재단 3종은 조합대(CraftingTableBlock)이고 recipeGroupId 를 'Altar' 로 공유한다" }
   ]
 }

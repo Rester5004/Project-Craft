@@ -36,7 +36,9 @@ namespace ProjectCraft.EditorTools
             { "coal", "석탄" },                     { "brown_coal", "갈탄" },
             { "bone_meal", "뼈 가루" },
             { "quartz_crystal", "석영 결정" },       { "quartz_powder", "석영 가루" },
-            { "redstone_crystal", "레드스톤 결정" }, { "redstone_powder", "레드스톤 가루" },
+            // '레드스톤 결정/가루' 는 '전도체 결정/가루' 로 통합돼 사라졌다(ItemAliases 참조).
+            // 전도체 쪽은 이미 에셋에 한글 이름이 있어 여기 적지 않는다 —
+            // <b>한글을 타이핑하면 NFC/NFD 가 어긋나</b> 표시명 조회가 조용히 실패한다.
             { "uranium_powder", "우라늄 가루" },     { "surface_powder", "표토 가루" },
             { "energy_crystal", "에너지 결정" },     { "magic_crystal", "마력 결정" },
             { "diamond", "다이아몬드" },            { "ruby", "루비" },

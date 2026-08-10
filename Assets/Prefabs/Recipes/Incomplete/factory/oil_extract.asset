@@ -16,23 +16,25 @@ MonoBehaviour:
   category: {fileID: 11400000, guid: a63365af4ccd3904a91ebf59b6456c84, type: 2}
   tier: 1
   inputs: []
-  outputs:
-  - item: {fileID: 11400000, guid: f2a712589b2ce6a4ab70bf9183fcd655, type: 2}
-    count: 1
+  outputs: []
+  fluidInputs: []
+  fluidOutputs:
+  - fluid: {fileID: 11400000, guid: 115cb7b5cbe9eb64b8f10d62b593ac7a, type: 2}
+    amount: 1000
+  chanceOutputs: []
   requiredTools: []
   craftTime: 1
   importNote: "[\uBCD1\uD569] Assets/Prefabs/Recipes/Incomplete/factory/oil_extract.asset
-    \uB97C \uD761\uC218\uD568\r\n[\uCD9C\uCC98] notion_factory.json / id=drill_crude_oil\r\n[\uAE30\uACC4]
+    \uB97C \uD761\uC218\uD568\n[\uCD9C\uCC98] notion_factory.json / id=drill_crude_oil\n[\uAE30\uACC4]
     '\uC6D0\uC720 \uCC44\uAD74\uAE30' \u2014 \uB300\uC751\uD558\uB294 MachineBlock
-    \uC774 \uC5C6\uC5B4 \uBE44\uC6CC \uB460\r\n[\uD544\uC694 \uC9C0\uD615] \uC11D\uC720
-    \uC9C0\uD615\r\n[\uC720\uCCB4] true\r\n[\uBE44\uACE0] \uC11D\uC720 \uC9C0\uD615
-    \uC124\uCE58 \uD544\uC218\r\n[\uC6D0\uBB38] {\"id\":\"drill_crude_oil\",\"machine\":\"\uC6D0\uC720
-    \uCC44\uAD74\uAE30\",\"tier\":1,\"output\":\"\uC6D0\uC720\",\"outputQty\":1,\"fluid\":true,\"terrain\":\"\uC11D\uC720
-    \uC9C0\uD615\",\"note\":\"\uC11D\uC720 \uC9C0\uD615 \uC124\uCE58 \uD544\uC218\"}\r\n\r\n---
-    \uD761\uC218\uB41C \uC6D0\uBCF8 ---\r\n[\uCD9C\uCC98] factory.json / id=oil_extract\r\n[\uAE30\uACC4]
+    \uC774 \uC5C6\uC5B4 \uBE44\uC6CC \uB460\n[\uD544\uC694 \uC9C0\uD615] \uC11D\uC720
+    \uC9C0\uD615\n[\uBE44\uACE0] \uC11D\uC720 \uC9C0\uD615 \uC124\uCE58 \uD544\uC218\n[\uC6D0\uBB38]
+    {\"id\":\"drill_crude_oil\",\"machine\":\"\uC6D0\uC720 \uCC44\uAD74\uAE30\",\"tier\":1,\"output\":\"\uC6D0\uC720\",\"outputQty\":1,\"fluid\":true,\"terrain\":\"\uC11D\uC720
+    \uC9C0\uD615\",\"note\":\"\uC11D\uC720 \uC9C0\uD615 \uC124\uCE58 \uD544\uC218\"}\n\n---
+    \uD761\uC218\uB41C \uC6D0\uBCF8 ---\n[\uCD9C\uCC98] factory.json / id=oil_extract\n[\uAE30\uACC4]
     '\uC6D0\uC720 \uCC44\uAD74\uAE30' \u2014 \uB300\uC751\uD558\uB294 MachineBlock
-    \uC774 \uC5C6\uC5B4 \uBE44\uC6CC \uB460\r\n[\uC804\uB825] \uC800\uC804\uC555\r\n[\uBE44\uACE0]
+    \uC774 \uC5C6\uC5B4 \uBE44\uC6CC \uB460\n[\uC804\uB825] \uC800\uC804\uC555\n[\uBE44\uACE0]
     \uC11D\uC720 \uC9C0\uD615\uC5D0\uB9CC \uC124\uCE58, \uC9C0\uD615\uC5D0\uC11C
-    \uCC44\uAD74\r\n[\uC6D0\uBB38] {\"id\":\"oil_extract\",\"machine\":\"\uC6D0\uC720
+    \uCC44\uAD74\n[\uC6D0\uBB38] {\"id\":\"oil_extract\",\"machine\":\"\uC6D0\uC720
     \uCC44\uAD74\uAE30\",\"power\":\"\uC800\uC804\uC555\",\"output\":\"\uC6D0\uC720\",\"inputs\":[],\"note\":\"\uC11D\uC720
-    \uC9C0\uD615\uC5D0\uB9CC \uC124\uCE58, \uC9C0\uD615\uC5D0\uC11C \uCC44\uAD74\"}\r\n"
+    \uC9C0\uD615\uC5D0\uB9CC \uC124\uCE58, \uC9C0\uD615\uC5D0\uC11C \uCC44\uAD74\"}\n"

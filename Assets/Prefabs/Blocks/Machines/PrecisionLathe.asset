@@ -14,16 +14,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MachineBlock
   blockName: Machine:PrecisionLathe
   displayName: "\uC815\uBC00 \uC138\uACF5\uAE30"
+  dropItem: {fileID: 0}
+  dropCount: 1
   machinePrefab: {fileID: 2613032363430261748, guid: 8d67880ec54c5294a8744173a0b9c1da, type: 3}
-  uiPrefab: {fileID: 0}
+  uiPrefab: {fileID: 2182730991123271693, guid: bfb5626fae24d6a48bf032bbbe61b951, type: 3}
+  runningSprite: {fileID: 0}
+  manualStepRatio: 0
   tier: 2
   recipeGroupId: 
   inputSlotCount: 1
   outputSlotCount: 1
   fuelSlotCount: 0
   fuelBurnRate: 20
-  inputGasSlotCount: 0
-  outputGasSlotCount: 0
-  maxGasAmount: 0
-  maxEnergyAmount: 0
-  isUseEnergy: 0
+  upgradeSlotCount: 2
+  inputFluidSlotCount: 0
+  outputFluidSlotCount: 0
+  maxFluidAmount: 0
+  maxEnergyAmount: 1000
+  isUseEnergy: 1
+  isGenerator: 0
+  powerRange: 0
+  energyUseRate: 0
+  speedMultiplier: 1
+  chanceMultiplier: 1

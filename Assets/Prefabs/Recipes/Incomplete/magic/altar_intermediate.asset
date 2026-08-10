@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Recipe
   machine: {fileID: 11400000, guid: c72fdd50611adfe4383f6f64465da81e, type: 2}
   category: {fileID: 11400000, guid: ad974e9d9fcf5f549a933df79a03218c, type: 2}
-  tier: 1
+  tier: 0
   inputs:
   - item: {fileID: 11400000, guid: d88dcb89e57aab54f9a73d0626f5d27e, type: 2}
     count: 1
@@ -23,6 +23,7 @@ MonoBehaviour:
   outputs:
   - item: {fileID: 11400000, guid: b844c914c951bcf4aa3fe24f030d3267, type: 2}
     count: 1
+  chanceOutputs: []
   requiredTools: []
   craftTime: 1
   importNote: "[\uCD9C\uCC98] notion_magic.json / id=altar_intermediate\r\n[\uAE30\uACC4]

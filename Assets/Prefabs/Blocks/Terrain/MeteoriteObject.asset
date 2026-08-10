@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4cecabaf732519b4bb23d8f04e36093c, type: 3}
+  m_Name: MeteoriteObject
+  m_EditorClassIdentifier: Assembly-CSharp::MainBlock
+  blockName: wall:meteorite
+  displayName: "\uC6B4\uC11D"
+  dropItem: {fileID: 11400000, guid: 6cfc9e4024e051b49beb76c302434db7, type: 2}
+  dropCount: 1
+  assetPath: {fileID: 11400000, guid: 45c12955aad162945b88ce7c6d74cd82, type: 2}
+  wallAtlas: {fileID: 11400000, guid: e8a1cc3b1950b4243b8587214fbfb273, type: 2}
+  floorSprite: {fileID: 0}

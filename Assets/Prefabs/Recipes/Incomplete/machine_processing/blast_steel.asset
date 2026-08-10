@@ -12,13 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d1635fa976c21145835b252e45d6313, type: 3}
   m_Name: blast_steel
   m_EditorClassIdentifier: Assembly-CSharp::Recipe
-  machine: {fileID: 11400000, guid: 63f0a8bb17e98434a90c04565e332cf7, type: 2}
+  machine: {fileID: 11400000, guid: f31c6e72b5484f24a97b23dfd2c3a26c, type: 2}
   category: {fileID: 11400000, guid: a63365af4ccd3904a91ebf59b6456c84, type: 2}
   tier: 2
-  inputs: []
+  inputs:
+  - item: {fileID: 11400000, guid: 956eb8dcb573269499f30f7c84b58ecb, type: 2}
+    count: 2
+  - item: {fileID: 11400000, guid: b175ffb5a38990f48955a831de7a3b1d, type: 2}
+    count: 1
   outputs:
   - item: {fileID: 11400000, guid: 3498aa70af8668c448832ddf5e287819, type: 2}
     count: 1
+  fluidInputs: []
+  fluidOutputs: []
+  chanceOutputs: []
   requiredTools: []
   craftTime: 1
   importNote: "[\uCD9C\uCC98] machine_processing.json / id=blast_steel\r\n[\uAE30\uACC4]

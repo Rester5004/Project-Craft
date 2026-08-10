@@ -90,9 +90,9 @@ namespace ProjectCraft.UIFactory.EditorTools
             {
                 EditorGUILayout.IntField("입력 슬롯", target.inputSlotCount);
                 EditorGUILayout.IntField("출력 슬롯", target.outputSlotCount);
-                EditorGUILayout.IntField("가스 입력 슬롯", target.inputGasSlotCount);
-                EditorGUILayout.IntField("가스 출력 슬롯", target.outputGasSlotCount);
-                EditorGUILayout.FloatField("가스 최대치(공용)", target.maxGasAmount);
+                EditorGUILayout.IntField("유체 입력 탱크", target.inputFluidSlotCount);
+                EditorGUILayout.IntField("유체 출력 탱크", target.outputFluidSlotCount);
+                EditorGUILayout.IntField("탱크 한 칸 최대치", target.maxFluidAmount);
                 EditorGUILayout.Toggle("에너지 사용", target.isUseEnergy);
                 EditorGUILayout.ObjectField("현재 uiPrefab", target.uiPrefab, typeof(GameObject), false);
             }
@@ -146,11 +146,17 @@ namespace ProjectCraft.UIFactory.EditorTools
                     if (GUILayout.Button("입력 슬롯")) AddElement(layout, MachineUIRole.InputSlot);
                     if (GUILayout.Button("출력 슬롯")) AddElement(layout, MachineUIRole.OutputSlot);
                     if (GUILayout.Button("연료 슬롯")) AddElement(layout, MachineUIRole.FuelSlot);
+                    if (GUILayout.Button("업그레이드 칸")) AddElement(layout, MachineUIRole.UpgradeSlot);
+                    // 저장 칸은 입력 구간에 살므로 <b>입력 슬롯과 섞어 쓰면 안 된다</b>(DefaultMachineUI 가 오류로 잡는다).
+                    if (GUILayout.Button("저장 슬롯")) AddElement(layout, MachineUIRole.StorageSlot);
                 }
                 using (new EditorGUILayout.HorizontalScope())
                 {
-                    if (GUILayout.Button("입력 가스 바")) AddElement(layout, MachineUIRole.InputGasBar);
-                    if (GUILayout.Button("출력 가스 바")) AddElement(layout, MachineUIRole.OutputGasBar);
+                    if (GUILayout.Button("입력 유체 바")) AddElement(layout, MachineUIRole.InputFluidBar);
+                    if (GUILayout.Button("출력 유체 바")) AddElement(layout, MachineUIRole.OutputFluidBar);
+                    if (GUILayout.Button("작동 버튼")) AddElement(layout, MachineUIRole.ManualButton);
+                    // 코어 조합기 전용. 재료는 위의 "업그레이드 칸" 에 넣는다(둘이 짝이다).
+                    if (GUILayout.Button("코어 업그레이드 버튼")) AddElement(layout, MachineUIRole.CoreUpgradeButton);
                 }
                 using (new EditorGUILayout.HorizontalScope())
                 {
@@ -266,20 +272,46 @@ namespace ProjectCraft.UIFactory.EditorTools
             rect.anchoredPosition = Vector2.zero;
 
             const float step = 120f;
-            for (int i = 0; i < Mathf.Max(0, target.inputSlotCount); i++)
-                PlaceElement(panel, MachineUIRole.InputSlot, i, new Vector2(-300f + i * step, 140f));
-            for (int i = 0; i < Mathf.Max(0, target.outputSlotCount); i++)
-                PlaceElement(panel, MachineUIRole.OutputSlot, i, new Vector2(-300f + i * step, -120f));
-            for (int i = 0; i < Mathf.Max(0, target.inputGasSlotCount); i++)
-                PlaceElement(panel, MachineUIRole.InputGasBar, i, new Vector2(-260f - i * 70f, 0f));
-            for (int i = 0; i < Mathf.Max(0, target.outputGasSlotCount); i++)
-                PlaceElement(panel, MachineUIRole.OutputGasBar, i, new Vector2(260f + i * 70f, 0f));
+
+            // 저장 블록은 저장 칸만 놓는다(입력 슬롯과 섞으면 인덱스가 겹친다).
+            // 40칸을 한 줄로 늘어놓으면 화면 밖으로 나가므로 10개씩 줄바꿈한다.
+            StorageBlock storage = target as StorageBlock;
+            if (storage != null)
+            {
+                const int perRow = 10;
+                const float cell = 80f;
+                for (int i = 0; i < Mathf.Max(0, storage.storageSlotCount); i++)
+                {
+                    float x = -0.5f * (Mathf.Min(storage.storageSlotCount, perRow) - 1) * cell + (i % perRow) * cell;
+                    float y = 120f - (i / perRow) * cell;
+                    PlaceElement(panel, MachineUIRole.StorageSlot, i, new Vector2(x, y));
+                }
+            }
+            else
+            {
+                for (int i = 0; i < Mathf.Max(0, target.inputSlotCount); i++)
+                    PlaceElement(panel, MachineUIRole.InputSlot, i, new Vector2(-300f + i * step, 140f));
+                for (int i = 0; i < Mathf.Max(0, target.outputSlotCount); i++)
+                    PlaceElement(panel, MachineUIRole.OutputSlot, i, new Vector2(-300f + i * step, -120f));
+            }
+            for (int i = 0; i < Mathf.Max(0, target.inputFluidSlotCount); i++)
+                PlaceElement(panel, MachineUIRole.InputFluidBar, i, new Vector2(-260f - i * 70f, 0f));
+            for (int i = 0; i < Mathf.Max(0, target.outputFluidSlotCount); i++)
+                PlaceElement(panel, MachineUIRole.OutputFluidBar, i, new Vector2(260f + i * 70f, 0f));
             if (target.isUseEnergy)
                 PlaceElement(panel, MachineUIRole.EnergyBar, 0, new Vector2(-360f, 0f));
             for (int i = 0; i < target.fuelSlotCount; i++)
                 PlaceElement(panel, MachineUIRole.FuelSlot, i, new Vector2(-300f + i * 140f, 10f));
             if (target.UsesFuel)
                 PlaceElement(panel, MachineUIRole.FuelBar, 0, new Vector2(-360f, 0f));
+            for (int i = 0; i < Mathf.Max(0, target.upgradeSlotCount); i++)
+                PlaceElement(panel, MachineUIRole.UpgradeSlot, i, new Vector2(300f + i * step, 210f));
+            // 작동 버튼이 빠지면 수동 기계를 영원히 돌릴 수 없다(검증기가 Error 로 잡는 항목이다).
+            if (target.IsManual)
+                PlaceElement(panel, MachineUIRole.ManualButton, 0, new Vector2(0f, -220f));
+            // 코어 업그레이드 버튼은 위의 업그레이드 칸과 짝이다 — 빠지면 티어를 올릴 수 없다.
+            if (target is CraftingTableBlock table && table.acceptsTierUpgrade)
+                PlaceElement(panel, MachineUIRole.CoreUpgradeButton, 0, new Vector2(300f, 150f));
             PlaceElement(panel, MachineUIRole.ProgressBar, 0, new Vector2(0f, 10f));
             PlaceElement(panel, MachineUIRole.MachineName, 0, new Vector2(0f, 210f));
 

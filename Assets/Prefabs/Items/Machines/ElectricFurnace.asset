@@ -15,6 +15,6 @@ MonoBehaviour:
   itemName: Machine:ElectricFurnace
   displayName: "\uC804\uAE30\uB85C"
   placeable: 1
-  Icon: {fileID: 4887756226536358156, guid: 38b4fa4239024494ca66c8bae78c4b09, type: 3}
+  Icon: {fileID: -1972252169303919741, guid: d1d5ec1422cfaba4f86908f28b60094e, type: 3}
   maxStack: 64
   burnEnergy: 0

@@ -31,8 +31,8 @@ namespace ProjectCraft.UIFactory.EditorTools
             tagged += TagChildren(root.Find("Inputs"), MachineUIRole.InputSlot);
             tagged += TagChildren(root.Find("Outputs"), MachineUIRole.OutputSlot);
             // 레거시 패널의 가스바 2개는 입력/출력 하나씩으로 매핑한다.
-            tagged += Tag(root.Find("GasBar1"), MachineUIRole.InputGasBar, 0);
-            tagged += Tag(root.Find("GasBar2"), MachineUIRole.OutputGasBar, 0);
+            tagged += Tag(root.Find("GasBar1"), MachineUIRole.InputFluidBar, 0);
+            tagged += Tag(root.Find("GasBar2"), MachineUIRole.OutputFluidBar, 0);
             tagged += Tag(root.Find("EnergyBar"), MachineUIRole.EnergyBar, 0);
             tagged += Tag(root.Find("ProgressBar"), MachineUIRole.ProgressBar, 0);
             tagged += Tag(root.Find("MachineName"), MachineUIRole.MachineName, 0);
@@ -47,7 +47,7 @@ namespace ProjectCraft.UIFactory.EditorTools
                 extracted += Extract(inputs.GetChild(0).gameObject, MachineUIFactoryPaths.SlotPrefab, MachineUIRole.InputSlot);
             extracted += Extract(root.Find("ProgressBar"), MachineUIFactoryPaths.ProgressBarPrefab, MachineUIRole.ProgressBar);
             extracted += Extract(root.Find("EnergyBar"), MachineUIFactoryPaths.EnergyBarPrefab, MachineUIRole.EnergyBar);
-            extracted += Extract(root.Find("GasBar1"), MachineUIFactoryPaths.GasBarPrefab, MachineUIRole.InputGasBar);
+            extracted += Extract(root.Find("GasBar1"), MachineUIFactoryPaths.FluidBarPrefab, MachineUIRole.InputFluidBar);
             extracted += Extract(root.Find("MachineName"), MachineUIFactoryPaths.NameTextPrefab, MachineUIRole.MachineName);
 
             AssetDatabase.SaveAssets();

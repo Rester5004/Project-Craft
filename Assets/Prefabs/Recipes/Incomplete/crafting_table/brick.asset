@@ -23,15 +23,19 @@ MonoBehaviour:
   outputs:
   - item: {fileID: 11400000, guid: 3d2032d6931bd614c88734a7b8e2983e, type: 2}
     count: 1
+  fluidInputs: []
+  fluidOutputs: []
+  chanceOutputs: []
   requiredTools: []
   craftTime: 1
-  importNote: "[\uBCD1\uD569] Assets/Prefabs/Recipes/Incomplete/crafting_table/craft_brick.asset
-    \uB97C \uD761\uC218\uD568\r\n[\uCD9C\uCC98] notion_crafting.json / id=brick\r\n[\uAE30\uACC4]
+  importNote: "[\uC720\uCCB4 \uC544\uB2D8] \uC774 \uAE30\uACC4\uB294 \uD0F1\uD06C\uAC00
+    \uC5C6\uB2E4 \u2014 \uBB3C\xB7\uC6A9\uC554\uC740 '\uCC44\uC6CC\uC9C4 \uC591\uB3D9\uC774'(\uC544\uC774\uD15C)\uB85C
+    \uC8FC\uACE0\uBC1B\uB294\uB2E4.\n[\uBCD1\uD569] Assets/Prefabs/Recipes/Incomplete/crafting_table/craft_brick.asset
+    \uB97C \uD761\uC218\uD568\n[\uCD9C\uCC98] notion_crafting.json / id=brick\n[\uAE30\uACC4]
     '\uC870\uD569\uB300' \u2014 \uB300\uC751\uD558\uB294 MachineBlock \uC774 \uC5C6\uC5B4
-    \uBE44\uC6CC \uB460\r\n[\uBE44\uACE0] \uC555\uC5F0\uAE30\uC5D0\uC11C \uB9CC\uB4E4\uBA74
-    \uACE0\uD6A8\uC728\r\n[\uC6D0\uBB38] {\"id\":\"brick\",\"tier\":0,\"output\":\"\uBCBD\uB3CC\",\"outputQty\":1,\"inputs\":[{\"item\":\"\uBAA8\uB798\",\"qty\":2},{\"item\":\"\uBB3C\",\"qty\":1}],\"note\":\"\uC555\uC5F0\uAE30\uC5D0\uC11C
-    \uB9CC\uB4E4\uBA74 \uACE0\uD6A8\uC728\"}\r\n\r\n--- \uD761\uC218\uB41C \uC6D0\uBCF8
-    ---\r\n[\uCD9C\uCC98] crafting_table.json / id=craft_brick\r\n[\uAE30\uACC4]
-    '\uAC00\uACF5\uB300' \u2014 \uB300\uC751\uD558\uB294 MachineBlock \uC774 \uC5C6\uC5B4
-    \uBE44\uC6CC \uB460\r\n[\uC720\uCCB4 \uC7AC\uB8CC] \uBB3C x1 (\uC544\uC774\uD15C\uC774
-    \uC544\uB2C8\uB77C \uC62E\uAE30\uC9C0 \uC54A\uC74C)\r\n[\uC6D0\uBB38] {\"id\":\"craft_brick\",\"output\":\"\uBCBD\uB3CC\",\"inputs\":[{\"item\":\"\uBAA8\uB798\",\"qty\":2},{\"item\":\"\uBB3C\",\"qty\":1,\"fluid\":true}]}\r\n"
+    \uBE44\uC6CC \uB460\n[\uBE44\uACE0] \uC555\uC5F0\uAE30\uC5D0\uC11C \uB9CC\uB4E4\uBA74
+    \uACE0\uD6A8\uC728\n[\uC6D0\uBB38] {\"id\":\"brick\",\"tier\":0,\"output\":\"\uBCBD\uB3CC\",\"outputQty\":1,\"inputs\":[{\"item\":\"\uBAA8\uB798\",\"qty\":2},{\"item\":\"\uBB3C\",\"qty\":1}],\"note\":\"\uC555\uC5F0\uAE30\uC5D0\uC11C
+    \uB9CC\uB4E4\uBA74 \uACE0\uD6A8\uC728\"}\n\n--- \uD761\uC218\uB41C \uC6D0\uBCF8
+    ---\n[\uCD9C\uCC98] crafting_table.json / id=craft_brick\n[\uAE30\uACC4] '\uAC00\uACF5\uB300'
+    \u2014 \uB300\uC751\uD558\uB294 MachineBlock \uC774 \uC5C6\uC5B4 \uBE44\uC6CC
+    \uB460\n[\uC6D0\uBB38] {\"id\":\"craft_brick\",\"output\":\"\uBCBD\uB3CC\",\"inputs\":[{\"item\":\"\uBAA8\uB798\",\"qty\":2},{\"item\":\"\uBB3C\",\"qty\":1,\"fluid\":true}]}\n"

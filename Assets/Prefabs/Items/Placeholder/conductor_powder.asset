@@ -15,6 +15,6 @@ MonoBehaviour:
   itemName: conductor_powder
   displayName: "\uC804\uB3C4\uCCB4 \uAC00\uB8E8"
   placeable: 0
-  Icon: {fileID: 21300000, guid: 4a4d2640fbd603542be3906e18903c59, type: 3}
+  Icon: {fileID: 2813817313752391192, guid: aa9d507c382e03646868e7afb18980dc, type: 3}
   maxStack: 64
   burnEnergy: 0

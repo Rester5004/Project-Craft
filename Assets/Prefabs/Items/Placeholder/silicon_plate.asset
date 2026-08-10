@@ -15,6 +15,6 @@ MonoBehaviour:
   itemName: silicon_plate
   displayName: "\uC2E4\uB9AC\uCF58 \uD310"
   placeable: 0
-  Icon: {fileID: 21300000, guid: 4a4d2640fbd603542be3906e18903c59, type: 3}
+  Icon: {fileID: -1088236067098571125, guid: a3cd26fd1d78ac546b7761073da1cd37, type: 3}
   maxStack: 64
   burnEnergy: 0
