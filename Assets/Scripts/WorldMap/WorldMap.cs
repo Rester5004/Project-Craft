@@ -44,6 +44,9 @@ public class PlaceableRecord
     /// <summary>파이프가 운반 중인 짐. 파이프가 아니면 길이 0.</summary>
     public ParcelRecord[] parcels;
 
+    /// <summary>작물을 심은 UTC 시각. 작물이 아닌 배치물은 0.</summary>
+    public long plantedAtUtcTicks;
+
     public PlaceableRecord() { }
 
     public PlaceableRecord(string blockId)
@@ -161,6 +164,7 @@ public class Chunk
                 writer.Write(parcel.destY);
                 writer.Write(parcel.remaining);
             }
+            writer.Write(rec.plantedAtUtcTicks);
         }
 
         writer.Write(drops.Count);
@@ -265,6 +269,8 @@ public class Chunk
                 rec.parcels = System.Array.Empty<ParcelRecord>();
             }
 
+            if (version >= 9) rec.plantedAtUtcTicks = reader.ReadInt64();
+
             chunk.placeables[new Vector2Int(lx, ly)] = rec;
         }
 
@@ -307,7 +313,7 @@ public class WorldMap : Singleton<WorldMap>
     // v7: 기계의 보유 전력·라운드로빈 커서·발전기의 전력 링크 목록을 추가했다.
     // v8: 파이프가 운반 중인 짐(ParcelRecord)을 배치물마다 저장한다.
     private const int SaveMagic = 0x50435730; // 'PCW0'
-    private const int SaveVersion = 8;
+    private const int SaveVersion = 9;
     private const int MinReadableVersion = 3;
 
     private Dictionary<Vector2Int, Chunk> chunks;
@@ -412,6 +418,16 @@ public class WorldMap : Singleton<WorldMap>
         if (Chunk.IsWall(chunk.GetTile(cellPos.x, cellPos.y))) return false;
 
         chunk.SetTile(cellPos.x, cellPos.y, wallTileId);
+        return true;
+    }
+
+    /// <summary>기존 바닥 한 칸을 다른 바닥으로 교체한다(농지 설치용).</summary>
+    public bool PlaceFloor(Vector2Int chunkId, Vector2Int cellPos, string floorTileId)
+    {
+        if (!Chunk.IsFloor(floorTileId)) return false;
+        Chunk chunk = GetOrCreateChunk(chunkId);
+        if (!Chunk.IsFloor(chunk.GetTile(cellPos.x, cellPos.y))) return false;
+        chunk.SetTile(cellPos.x, cellPos.y, floorTileId);
         return true;
     }
 

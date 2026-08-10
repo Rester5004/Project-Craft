@@ -1,0 +1,15 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4cecabaf732519b4bb23d8f04e36093c, type: 3}
+  m_Name: farm_soil
+  m_EditorClassIdentifier: Assembly-CSharp::MainBlock
+  blockName: floor:farm_soil
+  displayName: "\uB18D\uC0AC\uC6A9 \uD759"
+  dropItem: {fileID: 11400000, guid: 7ac52f013f15490f9aa676f485f0cb7c, type: 2}
+  dropCount: 1
+  assetPath: {fileID: 11400000, guid: 45c12955aad162945b88ce7c6d74cd82, type: 2}
+  wallAtlas: {fileID: 0}
+  floorSprite: {fileID: 21300000, guid: 9f385ea47e8c68048a5a880da3fd27e4, type: 2}
