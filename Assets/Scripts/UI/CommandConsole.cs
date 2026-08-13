@@ -189,7 +189,7 @@ public class CommandConsole : MonoBehaviour
         if (tokens.Length >= 2 && !int.TryParse(tokens[1], out tier))
             return $"등급이 올바르지 않습니다: '{tokens[1]}' (0·1·2)";
 
-        PlayerForTest player = FindFirstObjectByType<PlayerForTest>();
+        PlayerMove player = FindFirstObjectByType<PlayerMove>();
         if (player == null) return "플레이어를 찾을 수 없습니다.";
 
         UndergroundSession.Enter(tier, player.transform.position);

@@ -37,3 +37,4 @@ MonoBehaviour:
   energyUseRate: 0
   speedMultiplier: 1
   chanceMultiplier: 1
+  acceptsTierUpgrade: 0

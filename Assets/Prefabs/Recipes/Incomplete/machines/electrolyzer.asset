@@ -16,8 +16,8 @@ MonoBehaviour:
   category: {fileID: 11400000, guid: ad974e9d9fcf5f549a933df79a03218c, type: 2}
   tier: 1
   inputs:
-  - item: {fileID: 11400000, guid: 0330312b77a14f343994e156d6909149, type: 2}
-    count: 1
+  - item: {fileID: 11400000, guid: 52dcd68d9640d074e987d7b810605bb2, type: 2}
+    count: 4
   - item: {fileID: 11400000, guid: b7e8552055763794b96b71a826ce9a6c, type: 2}
     count: 1
   - item: {fileID: 11400000, guid: e0fdfd1ed3bfb0c46ab4d35c0213c1a9, type: 2}
@@ -29,6 +29,9 @@ MonoBehaviour:
   outputs:
   - item: {fileID: 11400000, guid: fa68ae5afc1666945acc17eeac1901af, type: 2}
     count: 1
+  fluidInputs: []
+  fluidOutputs: []
+  chanceOutputs: []
   requiredTools:
   - tool: {fileID: 11400000, guid: 10ee7e00132852840bfb6daadcaa45b2, type: 2}
     durabilityCost: 1

@@ -15,7 +15,7 @@ public class UndergroundSceneSetup : MonoBehaviour
     {
         Vector2 spawn = new(UndergroundWorld.SpawnCell.x + 0.5f, UndergroundWorld.SpawnCell.y + 0.5f);
 
-        PlayerForTest player = FindFirstObjectByType<PlayerForTest>();
+        PlayerMove player = FindFirstObjectByType<PlayerMove>();
         if (player != null)
         {
             player.transform.position = new Vector3(spawn.x, spawn.y, player.transform.position.z);

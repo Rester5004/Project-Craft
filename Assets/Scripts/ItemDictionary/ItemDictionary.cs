@@ -17,7 +17,6 @@ public class ItemDictionary : Singleton<ItemDictionary>
     // '채워진 양동이' 아이템 → 그 안에 든 유체. bucketItem 의 역인덱스라 어긋날 수 없다.
     private Dictionary<Items, FluidDefine> fluidByBucket = new Dictionary<Items, FluidDefine>();
     private Dictionary<Items, CropBlock> cropBySeed = new Dictionary<Items, CropBlock>();
-    private Dictionary<Items, CropBlock> cropBySeed = new Dictionary<Items, CropBlock>();
 
     /// <summary>
     /// 한글 이름을 키로 비교할 때는 NFC 로 통일한다.
@@ -112,7 +111,6 @@ public class ItemDictionary : Singleton<ItemDictionary>
 
             RegisterTerrainPlacement(block);
             RegisterPipePlacement(block);
-            RegisterCropPlacement(block);
         }
     }
 
@@ -248,19 +246,13 @@ public class ItemDictionary : Singleton<ItemDictionary>
         => !string.IsNullOrEmpty(blockId) && blockDictionary.TryGetValue(blockId, out BlockBase block)
             ? block as CropBlock : null;
 
-    private void RegisterCropPlacement(BlockBase block)
+    /*private void RegisterCropPlacement(BlockBase block)
     {
         CropBlock crop = block as CropBlock;
         if (crop == null || crop.dropItem == null) return;
         if (!cropBySeed.ContainsKey(crop.dropItem)) cropBySeed.Add(crop.dropItem, crop);
     }
-
-    public CropBlock GetCropForSeed(Items item)
-        => item != null && cropBySeed.TryGetValue(item, out CropBlock crop) ? crop : null;
-
-    public CropBlock GetCropInfo(string blockId)
-        => !string.IsNullOrEmpty(blockId) && blockDictionary.TryGetValue(blockId, out BlockBase block)
-            ? block as CropBlock : null;
+    */
     /// <summary>itemName 으로 Items 를 조회한다(placeable 인벤토리 복원 등에 사용).</summary>
     public Items GetItem(string itemName)
     {
@@ -352,7 +344,7 @@ public class ItemDictionary : Singleton<ItemDictionary>
         EnsureIndex();
         if (!blockDictionary.TryGetValue(name, out BlockBase block))
         {
-            Debug.Log(name + "is not exists in dictionary.");
+            Debug.Log(name + " is not exists in dictionary.");
             return null;
         }
 

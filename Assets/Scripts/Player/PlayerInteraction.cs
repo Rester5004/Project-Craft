@@ -117,6 +117,13 @@ public class PlayerInteraction : MonoBehaviour
         if (adjacent && TryDowse(heldStack, targetCell))
             return;
 
+        // 1-c) 빈 그릇을 들고 유체 바닥을 누르면 그 유체로 채운다.
+        //      ⚠ 여기만 <b>발밑(targetCell == playerCell)</b>도 허용한다 — 물 타일은 통행을 막지 않아
+        //      그 위에 올라설 수 있고, 지하 방의 물이 두어 칸뿐이라 밟고 서기 쉽다.
+        //      인접만 보면 "물 위에 서 있는데 물을 못 뜨는" 상태가 된다.
+        if ((adjacent || targetCell == playerCell) && TryFillContainer(heldStack, targetCell))
+            return;
+
         // 2) placeable 선택 & 인접한 빈 칸 → 배치
         ItemStack selectedItemStack = inventory.GetSelectedItem();
         if (selectedItemStack == null || selectedItemStack.item == null || !selectedItemStack.item.placeable)
@@ -258,6 +265,45 @@ public class PlayerInteraction : MonoBehaviour
         UndergroundPortal.Create(new Vector2(targetCell.x + 0.5f, targetCell.y + 0.5f),
                                  UndergroundPortal.Kind.ToUnderground, tier);
         Debug.Log($"[Dowsing] {tier}등급 지하 포탈을 찾았습니다! ({targetCell.x}, {targetCell.y}) 에서 E");
+        return true;
+    }
+
+    /// <summary>
+    /// 빈 그릇을 유체 바닥에 대고 채운다. <b>바닥은 줄지 않는다</b> — 지형 유체는 무한 원천이고,
+    /// 그래서 물의 최초 획득처가 된다(물을 먹는 벽돌·화학 사슬이 여기서 열린다).
+    ///
+    /// 어느 바닥이 어느 유체인지는 <see cref="MainBlock.fluid"/> 하나가 정하므로
+    /// 용암 웅덩이가 생겨도 여기는 그대로다. 그릇 ↔ 내용물의 짝은
+    /// <see cref="FluidDefine.emptyItem"/>/<see cref="FluidDefine.bucketItem"/> 이 정본이라
+    /// 기계 탱크 교환(<c>MachineInstance.ExchangeBuckets</c>)과 같은 표를 본다.
+    /// </summary>
+    /// <returns>실제로 채웠으면 true. false 면 호출자가 평소 동작(배치 등)으로 흘려보낸다.</returns>
+    private bool TryFillContainer(ItemStack held, Vector2Int targetCell)
+    {
+        if (held == null || held.item == null || held.count <= 0) return false;
+        if (ItemDictionary.Instance == null || WorldMap.Instance == null) return false;
+
+        MainBlock floor = ItemDictionary.Instance.GetBlock(WorldMap.Instance.GetTileId(targetCell)) as MainBlock;
+        if (floor == null || floor.fluid == null) return false;
+
+        FluidDefine fluid = floor.fluid;
+        // 그 유체를 담을 수 있는 그릇을 들고 있어야 한다. 아니면 false 로 흘려보내
+        // '들고 있던 것을 물 위에 배치' 같은 평소 동작이 그대로 되게 둔다.
+        if (!fluid.HasBucket || fluid.emptyItem != held.item) return false;
+
+        // ⚠ 아이템 참조를 <b>먼저</b> 붙잡는다 — ConsumeSelected 가 마지막 한 개를 쓰면
+        //    stack.Clear() 가 held.item 을 null 로 만들어, 되돌릴 때 무엇을 돌려줄지 알 수 없게 된다.
+        Items empty = held.item;
+        ConsumeSelected(held);
+
+        if (Inventory.Instance.AddPartial(fluid.bucketItem, 1) == 0)
+        {
+            // 자리가 없다고 빈 그릇까지 사라지면 안 된다.
+            Inventory.Instance.AddPartial(empty, 1);
+            Debug.LogWarning($"[Bucket] 인벤토리에 '{fluid.bucketItem.DisplayName}' 을 넣을 자리가 없습니다.");
+            return true;
+        }
+
         return true;
     }
 

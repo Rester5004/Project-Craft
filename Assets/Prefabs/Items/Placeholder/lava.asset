@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: lava
   m_EditorClassIdentifier: Assembly-CSharp::Items
   itemName: lava
-  displayName: "\uC6A9\uC554"
+  displayName: "\uC591\uB3D9\uC774(\uC6A9\uC554)"
   placeable: 0
   Icon: {fileID: 21300000, guid: 4a4d2640fbd603542be3906e18903c59, type: 3}
   maxStack: 64
+  fluidOverlay: {fileID: 0}
   burnEnergy: 0

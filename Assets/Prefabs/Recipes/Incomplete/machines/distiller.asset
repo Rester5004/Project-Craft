@@ -15,10 +15,19 @@ MonoBehaviour:
   machine: {fileID: 11400000, guid: ea55fe72f9315554a8ffdcf795dd1b7e, type: 2}
   category: {fileID: 11400000, guid: a63365af4ccd3904a91ebf59b6456c84, type: 2}
   tier: 2
-  inputs: []
+  inputs:
+  - item: {fileID: 11400000, guid: 8e5057dd8b09a32468dc47da6921ccb7, type: 2}
+    count: 1
+  - item: {fileID: 11400000, guid: 52dcd68d9640d074e987d7b810605bb2, type: 2}
+    count: 70
+  - item: {fileID: 11400000, guid: 0330312b77a14f343994e156d6909149, type: 2}
+    count: 2
   outputs:
   - item: {fileID: 11400000, guid: 2251dbc46c526c6439d9de537b496ac5, type: 2}
     count: 1
+  fluidInputs: []
+  fluidOutputs: []
+  chanceOutputs: []
   requiredTools: []
   craftTime: 1
   importNote: "[\uBCD1\uD569] Assets/Prefabs/Recipes/Incomplete/crafting/distiller.asset

@@ -68,17 +68,14 @@ public class DroppedItem : MonoBehaviour
     }
 
     /// <summary>
-    /// 아이콘을 그린다. 커스텀 도구처럼 여러 장을 겹쳐야 하는 아이템은
-    /// UI 와 같은 <see cref="ItemInstance.CollectIconLayers"/> 를 써서 자식 SpriteRenderer 로 포갠다.
+    /// 아이콘을 그린다. 커스텀 도구·채워진 양동이처럼 여러 장을 겹쳐야 하는 아이템은
+    /// UI 와 <b>같은 <see cref="ItemIconLayers"/></b> 로 레이어를 받아 자식 SpriteRenderer 로 포갠다
+    /// — 슬롯과 필드가 다른 그림으로 보이면 안 된다.
     /// </summary>
     private void DrawIcon()
     {
-        LayerBuffer.Clear();
-        if (record.instance == null || !record.instance.CollectIconLayers(item, LayerBuffer))
-        {
-            LayerBuffer.Clear();
-            LayerBuffer.Add(new IconLayer(item.Icon, Color.white));
-        }
+        ItemIconLayers.Collect(item, record.instance, LayerBuffer);
+        if (LayerBuffer.Count == 0) return;
 
         GameObject iconGO = new GameObject("Icon");
         iconRoot = iconGO.transform;

@@ -23,4 +23,9 @@ public class MainBlock : BlockBase
     [Header("바닥 전용")]
     [Tooltip("바닥에 까는 그림 한 장. 바닥은 오토타일링하지 않는다.")]
     public Sprite floorSprite;
+
+    [Tooltip("이 바닥이 유체 웅덩이면 그 유체. 비어 있으면 평범한 바닥이다. " +
+             "빈 그릇을 들고 우클릭하면 여기서 퍼진다(PlayerInteraction.TryFillContainer) — " +
+             "퍼도 타일은 줄지 않는 무한 원천이다.")]
+    public FluidDefine fluid;
 }

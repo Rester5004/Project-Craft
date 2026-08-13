@@ -16,8 +16,8 @@ MonoBehaviour:
   category: {fileID: 11400000, guid: ad974e9d9fcf5f549a933df79a03218c, type: 2}
   tier: 1
   inputs:
-  - item: {fileID: 11400000, guid: 0330312b77a14f343994e156d6909149, type: 2}
-    count: 1
+  - item: {fileID: 11400000, guid: 52dcd68d9640d074e987d7b810605bb2, type: 2}
+    count: 4
   - item: {fileID: 11400000, guid: cca3c885de98d894484003bf9ff633bf, type: 2}
     count: 1
   - item: {fileID: 11400000, guid: c9392aeebd648724fa65fd8e7b65dcef, type: 2}
@@ -27,6 +27,9 @@ MonoBehaviour:
   outputs:
   - item: {fileID: 11400000, guid: 3defc12406000494d9b772f926422436, type: 2}
     count: 1
+  fluidInputs: []
+  fluidOutputs: []
+  chanceOutputs: []
   requiredTools: []
   craftTime: 1
   importNote: "[\uBCD1\uD569] Assets/Prefabs/Recipes/Incomplete/crafting/alloy_smelter.asset

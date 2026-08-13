@@ -78,6 +78,10 @@ public static class ItemAliases
         { "은 판", "silver_plate" },    { "청동 판", "bronze_plate" },  { "인바 판", "invar_plate" },
         { "실리콘 판", "silicon_plate" }, { "금속 판", "metal_plate" },
         { "철근", "rebar" },            { "철근 콘크리트", "reinforced_concrete" },
+        { "강화 합금", "reinforced_alloy" },
+        // 노션이 '2티어 업그레이드 모듈' 로 부르던 것이다 — 지금 이름은 '기계 강화 모듈'.
+        { "기계 강화 모듈", "machine_upgrade_module" },
+        { "2티어 업그레이드 모듈", "machine_upgrade_module" },
         { "크랭크", "crank" },          { "모터", "motor" },            { "베어링", "bearing" },
         { "프로펠러", "propeller" },    { "컴퓨터 칩", "computer_chip" },
         { "양동이", "bucket" },         { "유리 용기", "glass_container" },

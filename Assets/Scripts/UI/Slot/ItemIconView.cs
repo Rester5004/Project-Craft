@@ -4,8 +4,12 @@ using UnityEngine.UI;
 
 /// <summary>
 /// 슬롯 아이콘 하나를 그리는 공용 루틴. 평범한 아이템은 스프라이트 한 장이지만
-/// 커스텀 도구처럼 여러 장을 겹쳐야 하는 아이템도 있어서, 부족한 만큼 겹침 Image 를
+/// 커스텀 도구·채워진 양동이처럼 여러 장을 겹쳐야 하는 아이템도 있어서, 부족한 만큼 겹침 Image 를
 /// <b>런타임에 만들어</b> 쓴다(프리팹을 고치지 않기 위해 — BarTooltip 과 같은 규약).
+///
+/// <b>여기는 "어떻게 그리는가" 만 안다.</b> "무엇을 몇 장으로 그리는가" 는
+/// <see cref="ItemIconLayers"/> 가 정한다 — 필드 드랍(<see cref="DroppedItem"/>)과 규칙을 공유하려면
+/// 그 판단이 한 곳에 있어야 한다.
 ///
 /// 겹침 Image 는 반드시 기준 Image 의 <b>자식</b>이어야 한다.
 /// <see cref="ItemSlot.OnBeginDrag"/> 가 기준 Image 의 transform 째로 캔버스에 옮기기 때문이다.
@@ -34,11 +38,13 @@ public static class ItemIconView
             return;
         }
 
-        buffer.Clear();
-        if (instance == null || !instance.CollectIconLayers(item, buffer))
+        // 무엇을 몇 장으로 그릴지는 ItemIconLayers 한 곳이 정한다(필드 드랍도 같은 것을 본다).
+        ItemIconLayers.Collect(item, instance, buffer);
+        if (buffer.Count == 0)
         {
-            buffer.Clear();
-            buffer.Add(new IconLayer(item.Icon, Color.white));
+            baseImage.enabled = false;
+            HideFrom(baseImage, 1);
+            return;
         }
 
         baseImage.enabled = true;

@@ -15,8 +15,9 @@ MonoBehaviour:
   itemName: upgrade_efficiency
   displayName: "\uC5C5\uADF8\uB808\uC774\uB4DC \uBAA8\uB4C8 - \uD6A8\uC728"
   placeable: 0
-  Icon: {fileID: 6171144539048142750, guid: cbe785553f8a087429b55d8ce1e44cc7, type: 3}
+  Icon: {fileID: 7678971456616278840, guid: cbe785553f8a087429b55d8ce1e44cc7, type: 3}
   maxStack: 8
+  fluidOverlay: {fileID: 0}
   burnEnergy: 0
   kind: 1
   valuePerUnit: 0.1

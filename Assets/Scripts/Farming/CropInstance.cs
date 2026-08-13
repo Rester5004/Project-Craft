@@ -31,7 +31,7 @@ public class CropInstance : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         if (spriteRenderer == null) spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
         spriteRenderer.sprite = crop.cropSprite;
-        spriteRenderer.sortingOrder = 2;
+        spriteRenderer.sortingOrder = 120;
         RefreshVisual(true);
     }
 

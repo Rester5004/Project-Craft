@@ -15,6 +15,7 @@ MonoBehaviour:
   itemName: Machine:AdvancedAltar
   displayName: "\uACE0\uAE09 \uC7AC\uB2E8"
   placeable: 1
-  Icon: {fileID: 21300000, guid: 4a4d2640fbd603542be3906e18903c59, type: 3}
+  Icon: {fileID: -1219546307, guid: a6d977fdd28fb4d42b242a878f5adb84, type: 3}
   maxStack: 64
+  fluidOverlay: {fileID: 0}
   burnEnergy: 0

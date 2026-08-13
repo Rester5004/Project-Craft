@@ -17,4 +17,5 @@ MonoBehaviour:
   placeable: 0
   Icon: {fileID: 4820447155302757456, guid: 431c25a23dac76542a54bd31f7d8ac8e, type: 3}
   maxStack: 64
+  fluidOverlay: {fileID: 21300000, guid: 56c46cd1093c9c34896fb54e85ff2426, type: 3}
   burnEnergy: 0

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Recipe
   machine: {fileID: 11400000, guid: ea55fe72f9315554a8ffdcf795dd1b7e, type: 2}
   category: {fileID: 11400000, guid: a63365af4ccd3904a91ebf59b6456c84, type: 2}
-  tier: 0
+  tier: 1
   inputs:
   - item: {fileID: 11400000, guid: 52dcd68d9640d074e987d7b810605bb2, type: 2}
     count: 4
@@ -23,6 +23,9 @@ MonoBehaviour:
   outputs:
   - item: {fileID: 11400000, guid: 0330312b77a14f343994e156d6909149, type: 2}
     count: 1
+  fluidInputs: []
+  fluidOutputs: []
+  chanceOutputs: []
   requiredTools: []
   craftTime: 1
   importNote: "[\uCD9C\uCC98] factory.json / id=reinforced_concrete\r\n[\uC6D0\uBB38

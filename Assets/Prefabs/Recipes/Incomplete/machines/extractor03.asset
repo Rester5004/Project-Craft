@@ -15,10 +15,21 @@ MonoBehaviour:
   machine: {fileID: 11400000, guid: ea55fe72f9315554a8ffdcf795dd1b7e, type: 2}
   category: {fileID: 11400000, guid: a63365af4ccd3904a91ebf59b6456c84, type: 2}
   tier: 2
-  inputs: []
+  inputs:
+  - item: {fileID: 11400000, guid: 4d8760c7b532f9040a23bd82f95502d5, type: 2}
+    count: 1
+  - item: {fileID: 11400000, guid: 9e7305e9ba375e441b35037c04e96810, type: 2}
+    count: 10
+  - item: {fileID: 11400000, guid: 414c202c34212ba439dd4c5fc66b9c92, type: 2}
+    count: 1
+  - item: {fileID: 11400000, guid: 0330312b77a14f343994e156d6909149, type: 2}
+    count: 2
   outputs:
   - item: {fileID: 11400000, guid: cbf81a8ef9f71bc4aa1d7e74c3bff2b1, type: 2}
     count: 1
+  fluidInputs: []
+  fluidOutputs: []
+  chanceOutputs: []
   requiredTools: []
   craftTime: 1
   importNote: "[\uBCD1\uD569] Assets/Prefabs/Recipes/Incomplete/crafting/extractor_t03.asset

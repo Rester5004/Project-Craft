@@ -15,10 +15,15 @@ MonoBehaviour:
   machine: {fileID: 11400000, guid: ea55fe72f9315554a8ffdcf795dd1b7e, type: 2}
   category: {fileID: 11400000, guid: a63365af4ccd3904a91ebf59b6456c84, type: 2}
   tier: 2
-  inputs: []
+  inputs:
+  - item: {fileID: 11400000, guid: 0330312b77a14f343994e156d6909149, type: 2}
+    count: 2
   outputs:
   - item: {fileID: 11400000, guid: ada4a89a5dc1b924688d8cf3b3dd84f7, type: 2}
     count: 1
+  fluidInputs: []
+  fluidOutputs: []
+  chanceOutputs: []
   requiredTools: []
   craftTime: 1
   importNote: "[\uBCD1\uD569] Assets/Prefabs/Recipes/Incomplete/crafting/item_enhancer.asset

@@ -15,10 +15,19 @@ MonoBehaviour:
   machine: {fileID: 11400000, guid: ea55fe72f9315554a8ffdcf795dd1b7e, type: 2}
   category: {fileID: 11400000, guid: a63365af4ccd3904a91ebf59b6456c84, type: 2}
   tier: 2
-  inputs: []
+  inputs:
+  - item: {fileID: 11400000, guid: a734b1474ee0468409d82b9b4d1d1d74, type: 2}
+    count: 20
+  - item: {fileID: 11400000, guid: c27a38a64a192fa4b8f413a72e15f546, type: 2}
+    count: 50
+  - item: {fileID: 11400000, guid: 0330312b77a14f343994e156d6909149, type: 2}
+    count: 2
   outputs:
   - item: {fileID: 11400000, guid: 49c4342c8f12f0b408cfb74d132c700b, type: 2}
     count: 1
+  fluidInputs: []
+  fluidOutputs: []
+  chanceOutputs: []
   requiredTools: []
   craftTime: 1
   importNote: "[\uBCD1\uD569] Assets/Prefabs/Recipes/Incomplete/crafting/hydroponics.asset

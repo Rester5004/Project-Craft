@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d1635fa976c21145835b252e45d6313, type: 3}
+  m_Name: machine_upgrade_module
+  m_EditorClassIdentifier: Assembly-CSharp::Recipe
+  machine: {fileID: 11400000, guid: 9dad41642642cce4cb4672ccf639d7a3, type: 2}
+  category: {fileID: 0}
+  tier: 2
+  inputs:
+  - item: {fileID: 11400000, guid: 36673d165a5f895419b19e358bce9cea, type: 2}
+    count: 20
+  - item: {fileID: 11400000, guid: 52dcd68d9640d074e987d7b810605bb2, type: 2}
+    count: 10
+  outputs:
+  - item: {fileID: 11400000, guid: 414c202c34212ba439dd4c5fc66b9c92, type: 2}
+    count: 1
+  fluidInputs: []
+  fluidOutputs: []
+  chanceOutputs: []
+  requiredTools: []
+  craftTime: 10
+  importNote: 

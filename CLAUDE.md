@@ -26,6 +26,7 @@ Unity 6 · 2D 탑다운 오픈월드 공장 게임. 대화는 한국어, 주석�
 | 에셋의 `m_Script` 를 바꾼 뒤 | ⚠ **이미 로드된 객체의 참조가 죽는다.** 디스크 guid 는 멀쩡한데 `machine == null` 로 읽히고 `ImportAsset(ForceUpdate)` 로도 안 고쳐진다 — `CompilationPipeline.RequestScriptCompilation()` 으로 **도메인 리로드**를 해야 살아난다. 그 전에 `Register All Assets` 를 돌리면 멀쩡한 레시피가 "기계 미지정" 으로 빠진다 |
 | 게임뷰 스크린샷 | `manage_camera(action:"screenshot", capture_source:"game_view", output_folder:"Captures")`. **프로젝트 밖 경로 거부.** 비동기라 직전 프레임이 찍힐 수 있으니 `Step()` 후 다시 찍는다. 다 쓰면 `Captures/` 삭제 |
 | 월드 스크린샷 | 임시 `Camera` + `RenderTexture` + `Render()` 가 동기라 확실하다 (UI 는 안 나온다) |
+| 스프라이트 시트 재슬라이스 | ⚠ **`TextureImporter.spritesheet` 를 쓰면 안 된다.** `SpriteMetaData` 에는 **`spriteID` 필드가 아예 없어서**(name·rect·alignment·pivot·border·customData 뿐) 다시 쓰는 순간 서브 스프라이트의 ID 가 유실되고, Unity 가 이름으로 재연결하다 **충돌한 것만 새 fileID 를 발급**한다 → 그 스프라이트를 가리키던 에셋 참조가 조용히 끊긴다(실측: 55개 중 2개). 반드시 `UnityEditor.U2D.Sprites.SpriteDataProviderFactories` → `ISpriteEditorDataProvider.GetSpriteRects()` 로 **`SpriteRect.rect` 만 고치고 `spriteID` 는 건드리지 않는다**(클래스라 그냥 대입하면 된다). 손대기 전 `.png.meta` 를 백업할 것 — 되돌리면 `ForceUpdate` 재임포트로 참조가 되살아난다 |
 
 ### 세이브를 건드리기 전에
 
@@ -141,7 +142,7 @@ Assets/Scenes/UndergroundScene.unity ← GameRig + UndergroundSceneSetup 둘뿐
   중앙 3×3 과 물 칸은 후보에서 뺀다(스폰과 동시에 주워지면 안 된다).
 - **포탈은 세이브에 남지 않는다**(런타임 오브젝트). 찾았으면 그 자리에서 들어가야 한다.
   지상 포탈은 한 번 쓰면 사라진다 — 남기면 탐지기 하나로 무한히 드나든다.
-- 물 타일(`floor:water`)은 **지금 그림뿐**이다. 통행을 막지도, 양동이로 퍼지도 못한다(지형 유체는 별건).
+- 물 타일(`floor:water`)에서 **빈 양동이로 물을 퍼낼 수 있다**(아래 "지형 유체" 참고). 다만 **통행은 막지 않는다.**
 - 디버그: 콘솔 **`/underground <등급>`** 으로 바로 내려가고, 인자 없이 다시 치면 올라온다.
 
 ### 씬 구성 — `GameRig` 프리팹 (⚠ 규칙 하나가 전부다)
@@ -259,6 +260,17 @@ Assets/Scenes/UndergroundScene.unity ← GameRig + UndergroundSceneSetup 둘뿐
   `MachineInstance.ManualStep` 이 **`Tick` 을 그대로 재사용**하므로 재료·출력자리·연료·전력 판정이 한 곳에 남는다.
   `AutoProcess=false`(조합대)와는 다르다 — 조합대는 자기 슬롯을 안 쓰고 플레이어 인벤토리로 만든다.
   **수동 기계에 `runningSprite` 를 주지 말 것**: `Update` 가 매 프레임 `SetRunning(false)` 라 한 프레임만 보인다.
+- **건설 재료의 티어 기본값** (2026-08-12 사용자 결정) — 기계 건설 레시피는 **티어 기본 재료 + 기계별 부품**이다.
+
+  | 해금 티어 | 기본 재료 | 실질 비용 |
+  |---|---|---|
+  | 0 | `벽돌 ×1` | 모래2 + 물1 |
+  | 1 | **`철근 ×4`** | 철판 8 (철근 = 철판 ×2) |
+  | 2 | **`철근 콘크리트 ×2`** | 철근 8 + 시멘트 40 |
+
+  ⚠ **콘크리트는 원래 1티어였다.** `철근 ×4 + 시멘트 ×20` 이고 시멘트 ← 석회 ← **뼈 가루(돌 가루 추출 1%)**
+  라 콘크리트 1개가 돌 가루 수천 개다 — 1티어가 통째로 잠겨 있었다. **한 티어 위로 올려** 2티어 관문으로 삼았다.
+  새 기계를 추가할 때 이 표를 따르고, 어기면 그 티어가 조용히 잠긴다.
 - **새 기계를 늘리는 데 에디터 툴은 필요 없다.** 기존 `MachineBlock` 을 복제해
   `recipeGroupId`(레시피 목록 공유) · `tier`(처리 범위) · `uiPrefab`(UI 공유) 세 필드만 맞추고,
   `itemName == blockName` 인 `Items` 를 함께 만든 뒤 `Register All Assets` 를 돌리면 된다.
@@ -295,6 +307,16 @@ Assets/Scenes/UndergroundScene.unity ← GameRig + UndergroundSceneSetup 둘뿐
 - **양동이 교환은 전용 슬롯 없이 입출력 슬롯으로 한다**(`MachineInstance.ExchangeBuckets`, `Tick` 보다 먼저).
   채워진 양동이 → 입력 탱크 + 빈 그릇이 출력으로 / 빈 그릇 → 출력 탱크를 퍼내 채워진 것이 출력으로.
   **빈 그릇 놓을 자리가 없으면 아무것도 하지 않는다.** 덕분에 파이프로 양동이를 넣는 것도 공짜다.
+- **지형 유체 — 빈 그릇을 들고 유체 바닥을 우클릭하면 채워진다**(`PlayerInteraction.TryFillContainer`).
+  **바닥은 줄지 않는 무한 원천이다** — 그래서 지하맵의 물이 **물의 유일한 최초 획득처**이고,
+  물을 먹는 `compress_brick`·화학 사슬이 여기서 열린다.
+  어느 바닥이 어느 유체인지는 **`MainBlock.fluid`(SO 필드) 하나**가 정하고(참조형이라 나머지 지형 7종은
+  줄이 없어 자동으로 null = 유체 아님), 그릇 ↔ 내용물의 짝은 `ExchangeBuckets` 와 **같은
+  `FluidDefine.emptyItem`/`bucketItem`** 을 본다 — 표가 둘로 갈리지 않는다.
+  ⚠ **이 분기만 "인접 한 칸" 이 아니라 발밑도 허용한다**(`adjacent || targetCell == playerCell`).
+  물은 통행을 막지 않아 그 위에 설 수 있고, 인접만 보면 "물 위에 서 있는데 못 뜨는" 상태가 된다.
+  ⚠ **자리가 없으면 빈 그릇을 되돌린다** — 소모가 먼저라 되돌리지 않으면 그릇이 증발한다.
+  **붓기(채워진 그릇 → 유체 타일)는 아직 없다** — 놓은 물을 다시 퍼면 무한 증식이라 규칙부터 정해야 한다.
 - **탱크는 유체를 다루는 것이 정체성이고 지금 유체 레시피가 있는 기계만** 준다
   (전기 분해기 1/2 · 화학 처리기 2/1 · 마나 용해기 0/1 · 펌프 0/1 · 원유 채굴기 0/1).
   화로·압축기·조합대·재단은 탱크 없이 **`물`(채워진 양동이) 아이템**을 그대로 먹는다.
@@ -527,7 +549,17 @@ Assets/Scenes/UndergroundScene.unity ← GameRig + UndergroundSceneSetup 둘뿐
   (칸은 `upgradeSlotCount`, 버튼은 `CraftingTableUI` 가 `acceptsTierUpgrade` 로).
 - **비활성 오브젝트는 레이아웃 재계산이 통째로 무시된다.** 켠 다음에 짓고 `LayoutRebuilder.ForceRebuildLayoutImmediate`.
 - 툴팁은 `TooltipUI.Show(Func<string>)` 로 넘겨야 실시간 갱신된다(문자열을 넘기면 고정).
-- 아이콘은 `ItemIconView.Apply` — 도구는 자루+머리를 겹쳐 그린다.
+- **"무엇을 몇 장으로 그리는가" 의 정본은 `ItemIconLayers.Collect` 하나다.** 우선순위는
+  ① 개체 데이터(도구의 자루+머리) → ② 채워진 그릇(빈 그릇 그림 + `Items.fluidOverlay` 를 `FluidColors` 색으로)
+  → ③ `item.Icon` 한 장. **`ItemIconView`(UI 슬롯)와 `DroppedItem`(필드 드랍)이 이것 하나를 함께 본다** —
+  예전엔 폴백 네 줄을 각자 복사해 갖고 있어, 규칙을 하나만 고치면 "슬롯에선 파란 물인데 바닥에 떨어뜨리면 회색"
+  이 됐다. `ItemIconView` 는 이제 **어떻게 그리는가만** 안다(겹침 Image 생성·재사용).
+  ⚠ **오버레이 그림은 유체가 아니라 "빈 그릇" 아이템이 갖는다**(`bucket.fluidOverlay`). 같은 물이라도
+  양동이와 유리 용기는 다르게 그려져야 하는데, `FluidDefine` 에 두면 그릇이 늘 때마다 유체 8개를 다 고쳐야 한다.
+  **반드시 흰색 마스크로 그릴 것** — 색은 `FluidColors.Of(fluidId)` 곱셈이 정한다. 오버레이가 없는 그릇
+  (유리 용기)은 **조용히 ③으로 떨어진다**(경고를 내면 그 아이템을 볼 때마다 로그가 쏟아진다).
+- 채워진 그릇의 `displayName` 규약은 **`{빈 그릇}({유체})`** — `양동이(물)` `유리 용기(산성 용액)`.
+  `itemName`(세이브 키)은 그대로고, 옛 한글 이름은 `ItemAliases`(`물 → water` 등)가 이미 잇는다.
 - 한글 폰트: `Assets/TextMesh Pro/Fonts/Maplestory Bold SDF.asset`, `Tools/Project Craft/Font/Apply Korean Font To All`.
 
 ### 입력 (`InputActionManager`, 코드로 만든 액션맵)

@@ -3265,7 +3265,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1178313475323055050}
   - component: {fileID: 4106146267824262288}
-  - component: {fileID: 4054122259544956910}
   - component: {fileID: 4828092908653200023}
   - component: {fileID: 3111037233431012421}
   - component: {fileID: 4055843958466966259}
@@ -3273,6 +3272,7 @@ GameObject:
   - component: {fileID: 8348071912504617550}
   - component: {fileID: 6818636868523427251}
   - component: {fileID: 5889045473029231940}
+  - component: {fileID: 3047545806638564741}
   m_Layer: 0
   m_Name: TestPlayer
   m_TagString: Untagged
@@ -3354,19 +3354,6 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!114 &4054122259544956910
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6264964439825965416}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 10493a3c484d2214c9a94ec095749e58, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerForTest
-  speed: 5
 --- !u!114 &4828092908653200023
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3522,6 +3509,19 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.6427346, y: 0.5088184}
   m_EdgeRadius: 0
+--- !u!114 &3047545806638564741
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6264964439825965416}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48091306c9f71a549a4ab5da015acd36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerMove
+  speed: 5
 --- !u!1 &6414490096598877338
 GameObject:
   m_ObjectHideFlags: 0

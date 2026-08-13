@@ -87,9 +87,6 @@ public class PlaceableRecord
     /// <summary>작물을 심은 UTC 시각. 작물이 아닌 배치물은 0.</summary>
     public long plantedAtUtcTicks;
 
-    /// <summary>작물을 심은 UTC 시각. 작물이 아닌 배치물은 0.</summary>
-    public long plantedAtUtcTicks;
-
     public PlaceableRecord() { }
 
     public PlaceableRecord(string blockId)

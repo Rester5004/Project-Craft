@@ -8,69 +8,310 @@
     "수량이 표기되지 않은 재료는 qty=null + note 로 남겼다."
   ],
   "recipes": [
-    { "id": "hammer_metal_plate", "machine": "망치", "tier": 0, "manual": true,
-      "output": "금속판", "outputQty": 1,
-      "inputs": [ { "item": "금속", "qty": 2 } ],
-      "tools": [ "망치" ],
-      "note": "망치는 소모되지 않음(소모X)" },
-
-    { "id": "furnace_silicon", "machine": "화로", "tier": 0,
+    {
+      "id": "hammer_metal_plate",
+      "machine": "망치",
+      "tier": 0,
+      "manual": true,
+      "output": "금속판",
+      "outputQty": 1,
+      "inputs": [
+        {
+          "item": "금속",
+          "qty": 2
+        }
+      ],
+      "tools": [
+        "망치"
+      ],
+      "note": "망치는 소모되지 않음(소모X)"
+    },
+    {
+      "id": "furnace_silicon",
+      "machine": "화로",
+      "tier": 0,
       "output": "실리콘",
-      "inputs": [ { "item": "석영 가루", "qty": null } ],
-      "note": "화로의 특이 사항. 원문에 수량 미표기" },
-
-    { "id": "thermal_gen_lignite", "machine": "화력 발전기", "tier": 0, "category": "fuel",
-      "inputs": [ { "item": "갈탄", "qty": 1 } ],
-      "outputs": [ { "item": "Energy", "type": "power", "amount": 200 } ] },
-
-    { "id": "thermal_gen_coal", "machine": "화력 발전기", "tier": 0, "category": "fuel",
-      "inputs": [ { "item": "석탄", "qty": 1 } ],
-      "outputs": [ { "item": "Energy", "type": "power", "amount": 400 } ] },
-
-    { "id": "thermal_gen_hydrogen", "machine": "화력 발전기", "tier": 0, "category": "fuel",
-      "inputs": [ { "item": "수소", "qty": 1, "unit": "양동이", "fluid": true } ],
-      "outputs": [ { "item": "Energy", "type": "power", "amount": 1000 } ] },
-
-    { "id": "compressor_metal_plate", "machine": "압축기", "tier": 1,
-      "output": "금속 판", "outputQty": 1,
-      "inputs": [ { "item": "금속 주괴", "qty": 1 } ] },
-
-    { "id": "alloy_bronze", "machine": "합금 재련기", "tier": 1,
-      "output": "청동", "outputQty": 4,
-      "inputs": [ { "item": "구리", "qty": 3 }, { "item": "주석", "qty": 1 } ],
-      "note": "광석/주괴 상관 없음" },
-
-    { "id": "alloy_invar", "machine": "합금 재련기", "tier": 1,
-      "output": "인바(invar)", "outputQty": 2,
-      "inputs": [ { "item": "니켈", "qty": 1 }, { "item": "철", "qty": 2 } ] },
-
-    { "id": "bio_soil", "machine": "유기물 배양기", "tier": 1,
-      "output": "흙", "outputQty": 1, "chance": 0.10,
-      "inputs": [ { "item": "돌", "qty": 1 } ],
-      "note": "10% 확률로 생성" },
-
-    { "id": "laser_computer_chip", "machine": "레이저 가공기", "tier": 1,
-      "output": "컴퓨터 칩", "outputQty": 1,
-      "inputs": [ { "item": "실리콘 판", "qty": 1 }, { "item": "구리판", "qty": 1 }, { "item": "철판", "qty": 1 }, { "item": "전도체 가루", "qty": 1 } ],
-      "note": "수동 조합(crafting.json) 대비 1/10 재료" },
-
-    { "id": "laser_cavity_scanner", "machine": "레이저 가공기", "tier": 1,
-      "output": "공동 탐색기", "outputQty": 1,
-      "inputs": [ { "item": "컴퓨터 칩", "qty": 1 }, { "item": "다우징 로드", "qty": 1 } ] },
-
-    { "id": "extractor02", "machine": "레이저 가공기", "tier": 1,
-      "output": "0-2티어 추출기", "outputQty": 1,
-      "inputs": [ { "item": "컴퓨터 칩", "qty": 2 }, { "item": "0-1티어 추출기", "qty": 1 }, { "item": "니켈 주괴", "qty": 1 } ] },
-
-    { "id": "enchant", "machine": "마법부여기", "tier": 1,
+      "inputs": [
+        {
+          "item": "석영 가루",
+          "qty": null
+        }
+      ],
+      "note": "화로의 특이 사항. 원문에 수량 미표기"
+    },
+    {
+      "id": "thermal_gen_lignite",
+      "machine": "화력 발전기",
+      "tier": 0,
+      "category": "fuel",
+      "inputs": [
+        {
+          "item": "갈탄",
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": "Energy",
+          "type": "power",
+          "amount": 200
+        }
+      ]
+    },
+    {
+      "id": "thermal_gen_coal",
+      "machine": "화력 발전기",
+      "tier": 0,
+      "category": "fuel",
+      "inputs": [
+        {
+          "item": "석탄",
+          "qty": 1
+        }
+      ],
+      "outputs": [
+        {
+          "item": "Energy",
+          "type": "power",
+          "amount": 400
+        }
+      ]
+    },
+    {
+      "id": "thermal_gen_hydrogen",
+      "machine": "화력 발전기",
+      "tier": 0,
+      "category": "fuel",
+      "inputs": [
+        {
+          "item": "수소",
+          "qty": 1,
+          "unit": "양동이",
+          "fluid": true
+        }
+      ],
+      "outputs": [
+        {
+          "item": "Energy",
+          "type": "power",
+          "amount": 1000
+        }
+      ]
+    },
+    {
+      "id": "compressor_metal_plate",
+      "machine": "압축기",
+      "tier": 1,
+      "output": "금속 판",
+      "outputQty": 1,
+      "inputs": [
+        {
+          "item": "금속 주괴",
+          "qty": 1
+        }
+      ]
+    },
+    {
+      "id": "alloy_bronze",
+      "machine": "합금 재련기",
+      "tier": 1,
+      "output": "청동",
+      "outputQty": 4,
+      "inputs": [
+        {
+          "item": "구리",
+          "qty": 3
+        },
+        {
+          "item": "주석",
+          "qty": 1
+        }
+      ],
+      "note": "광석/주괴 상관 없음"
+    },
+    {
+      "id": "alloy_invar",
+      "machine": "합금 재련기",
+      "tier": 1,
+      "output": "인바(invar)",
+      "outputQty": 2,
+      "inputs": [
+        {
+          "item": "니켈",
+          "qty": 1
+        },
+        {
+          "item": "철",
+          "qty": 2
+        }
+      ]
+    },
+    {
+      "id": "reinforced_alloy",
+      "machine": "합금 재련기",
+      "tier": 1,
+      "output": "강화 합금",
+      "outputQty": 5,
+      "inputs": [
+        {
+          "item": "인바",
+          "qty": 5
+        },
+        {
+          "item": "청동",
+          "qty": 5
+        },
+        {
+          "item": "철 주괴",
+          "qty": 5
+        }
+      ],
+      "note": "정밀 세공기·2티어 기계의 재료"
+    },
+    {
+      "id": "bio_soil",
+      "machine": "유기물 배양기",
+      "tier": 1,
+      "output": "흙",
+      "outputQty": 1,
+      "chance": 0.1,
+      "inputs": [
+        {
+          "item": "돌",
+          "qty": 1
+        }
+      ],
+      "note": "10% 확률로 생성"
+    },
+    {
+      "id": "laser_computer_chip",
+      "machine": "레이저 가공기",
+      "tier": 1,
+      "output": "컴퓨터 칩",
+      "outputQty": 1,
+      "inputs": [
+        {
+          "item": "실리콘 판",
+          "qty": 1
+        },
+        {
+          "item": "구리판",
+          "qty": 1
+        },
+        {
+          "item": "철판",
+          "qty": 1
+        },
+        {
+          "item": "전도체 가루",
+          "qty": 1
+        }
+      ],
+      "note": "수동 조합(crafting.json) 대비 1/10 재료"
+    },
+    {
+      "id": "laser_cavity_scanner",
+      "machine": "레이저 가공기",
+      "tier": 1,
+      "output": "공동 탐색기",
+      "outputQty": 1,
+      "inputs": [
+        {
+          "item": "컴퓨터 칩",
+          "qty": 1
+        },
+        {
+          "item": "다우징 로드",
+          "qty": 1
+        }
+      ]
+    },
+    {
+      "id": "extractor02",
+      "machine": "레이저 가공기",
+      "tier": 1,
+      "output": "0-2티어 추출기",
+      "outputQty": 1,
+      "inputs": [
+        {
+          "item": "컴퓨터 칩",
+          "qty": 2
+        },
+        {
+          "item": "0-1티어 추출기",
+          "qty": 1
+        },
+        {
+          "item": "니켈 주괴",
+          "qty": 1
+        }
+      ]
+    },
+    {
+      "id": "enchant",
+      "machine": "마법부여기",
+      "tier": 1,
       "output": null,
       "inputs": [],
-      "note": "마법부여 추후 추가 예정. 도구는 막대 종류별로 효율이 다르며 마나를 사용함" },
-
-    { "id": "precision_motor", "machine": "정밀 세공기", "tier": 2, "output": "모터", "inputs": [], "note": "레시피 미정" },
-    { "id": "precision_bearing", "machine": "정밀 세공기", "tier": 2, "output": "베어링", "inputs": [], "note": "레시피 미정" },
-    { "id": "precision_propeller", "machine": "정밀 세공기", "tier": 2, "output": "프로펠러", "inputs": [], "note": "레시피 미정" },
-    { "id": "blast_steel", "machine": "용광로", "tier": 2, "output": "강철", "inputs": [], "note": "레시피 미정" },
-    { "id": "blast_titanium", "machine": "용광로", "tier": 2, "output": "티타늄", "inputs": [], "note": "레시피 미정" }
+      "note": "마법부여 추후 추가 예정. 도구는 막대 종류별로 효율이 다르며 마나를 사용함"
+    },
+    {
+      "id": "precision_motor",
+      "machine": "정밀 세공기",
+      "tier": 2,
+      "output": "모터",
+      "inputs": [],
+      "note": "레시피 미정"
+    },
+    {
+      "id": "precision_bearing",
+      "machine": "정밀 세공기",
+      "tier": 2,
+      "output": "베어링",
+      "inputs": [],
+      "note": "레시피 미정"
+    },
+    {
+      "id": "precision_propeller",
+      "machine": "정밀 세공기",
+      "tier": 2,
+      "output": "프로펠러",
+      "inputs": [],
+      "note": "레시피 미정"
+    },
+    {
+      "id": "machine_upgrade_module",
+      "machine": "정밀 세공기",
+      "tier": 2,
+      "output": "기계 강화 모듈",
+      "outputQty": 1,
+      "inputs": [
+        {
+          "item": "마력 결정",
+          "qty": 20
+        },
+        {
+          "item": "철근",
+          "qty": 10
+        }
+      ],
+      "note": "구 '2티어 업그레이드 모듈'. 용광로·0-3티어 추출기 건설 재료"
+    },
+    {
+      "id": "blast_steel",
+      "machine": "용광로",
+      "tier": 2,
+      "output": "강철",
+      "inputs": [],
+      "note": "레시피 미정"
+    },
+    {
+      "id": "blast_titanium",
+      "machine": "용광로",
+      "tier": 2,
+      "output": "티타늄",
+      "inputs": [],
+      "note": "레시피 미정"
+    }
   ]
 }

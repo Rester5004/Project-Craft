@@ -19,3 +19,4 @@ MonoBehaviour:
   assetPath: {fileID: 11400000, guid: 67b76a59e3fb88c48b1a98ab025aa84e, type: 2}
   wallAtlas: {fileID: 0}
   floorSprite: {fileID: 21300000, guid: d581ffe44ea086e4db595430e61ea261, type: 3}
+  fluid: {fileID: 11400000, guid: 2cdaa9d61c988844bb2182ca4ab389ba, type: 2}

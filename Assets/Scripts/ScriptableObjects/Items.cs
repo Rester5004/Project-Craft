@@ -13,6 +13,10 @@ public class Items : ScriptableObject
     public Sprite Icon;
     public int maxStack;
 
+    [Tooltip("이 그릇에 유체가 담겼을 때 Icon 위에 겹칠 그림. '빈 그릇' 아이템(양동이·유리 용기)에만 채운다. " +
+             "색은 여기가 아니라 FluidColors 가 정하므로 반드시 흰색 마스크로 그릴 것.")]
+    public Sprite fluidOverlay;
+
     [Tooltip("연료로 태웠을 때 나오는 에너지. 0 이면 연료가 아니다. (갈탄 200 / 석탄 400 / 수소 1000)")]
     [Min(0f)] public float burnEnergy;
 

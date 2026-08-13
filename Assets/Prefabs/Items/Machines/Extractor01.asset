@@ -15,6 +15,7 @@ MonoBehaviour:
   itemName: Machine:Extractor01
   displayName: "0-1\uD2F0\uC5B4 \uCD94\uCD9C\uAE30"
   placeable: 1
-  Icon: {fileID: 21300000, guid: 4a4d2640fbd603542be3906e18903c59, type: 3}
+  Icon: {fileID: 5797666589822277397, guid: b7028f89e5191d4419eea0d7a652a9bb, type: 3}
   maxStack: 64
+  fluidOverlay: {fileID: 0}
   burnEnergy: 0

@@ -4,11 +4,11 @@
 
 ## 아이템
 
-- 에셋 219개 중 219개 등록 대상, 새로 추가 0개
+- 에셋 224개 중 224개 등록 대상, 새로 추가 2개
 
 ## 블록
 
-- 에셋 58개 중 58개 등록 대상, 새로 추가 0개
+- 에셋 60개 중 60개 등록 대상, 새로 추가 0개
 
 ## 유체
 
@@ -16,7 +16,7 @@
 
 ## 레시피
 
-- 에셋 164개 중 **149개 등록 대상**, 새로 추가 0개
+- 에셋 166개 중 **151개 등록 대상**, 새로 추가 2개
 - 제외: 기계 미지정 2개 · 산출물 없음 13개
 
 ### ⚠ 재료만 있고 산출물이 없어 제외한 레시피 9개
@@ -46,7 +46,7 @@
 - `Extractor2` : 3개
 - `Furnace` : 11개
 - `Machine:AdvancedCrafter` : 1개
-- `Machine:AlloySmelter` : 3개
+- `Machine:AlloySmelter` : 4개
 - `Machine:BioIncubator` : 1개
 - `Machine:BlastFurnace` : 2개
 - `Machine:ChemicalProcessor` : 3개
@@ -55,7 +55,7 @@
 - `Machine:LasorProcessor` : 3개
 - `Machine:ManaDissolver` : 2개
 - `Machine:OilDrill` : 1개
-- `Machine:PrecisionLathe` : 3개
+- `Machine:PrecisionLathe` : 4개
 - `Pulverizer` : 12개
 - `Pump` : 2개
 - `ResourceGenerator` : 1개

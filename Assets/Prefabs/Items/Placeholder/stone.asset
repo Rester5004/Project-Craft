@@ -15,6 +15,7 @@ MonoBehaviour:
   itemName: stone
   displayName: "\uB3CC"
   placeable: 1
-  Icon: {fileID: 21300000, guid: 4a4d2640fbd603542be3906e18903c59, type: 3}
+  Icon: {fileID: -7862214062918900274, guid: ed5e51f1629e6a442890959e83f929bf, type: 3}
   maxStack: 64
+  fluidOverlay: {fileID: 0}
   burnEnergy: 0

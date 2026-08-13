@@ -15,10 +15,19 @@ MonoBehaviour:
   machine: {fileID: 11400000, guid: ea55fe72f9315554a8ffdcf795dd1b7e, type: 2}
   category: {fileID: 11400000, guid: ad974e9d9fcf5f549a933df79a03218c, type: 2}
   tier: 2
-  inputs: []
+  inputs:
+  - item: {fileID: 11400000, guid: 7339db20c6b26a546a7f548eba5d445c, type: 2}
+    count: 1
+  - item: {fileID: 11400000, guid: c9392aeebd648724fa65fd8e7b65dcef, type: 2}
+    count: 50
+  - item: {fileID: 11400000, guid: 0330312b77a14f343994e156d6909149, type: 2}
+    count: 2
   outputs:
   - item: {fileID: 11400000, guid: 15d92f2f88c4d0247a177b8905807ce9, type: 2}
     count: 1
+  fluidInputs: []
+  fluidOutputs: []
+  chanceOutputs: []
   requiredTools: []
   craftTime: 1
   importNote: "[\uBCD1\uD569] Assets/Prefabs/Recipes/Incomplete/crafting/precision_machining.asset

@@ -3,10 +3,16 @@
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 62bb097108b849169d1a467df37743c1, type: 3}
   m_Name: prototype_tree
   m_EditorClassIdentifier: Assembly-CSharp::CropBlock
-  blockName: crop:prototype_tree
+  blockName: prototype_tree_seed
   displayName: "\uD504\uB85C\uD1A0\uD0C0\uC785 \uB098\uBB34"
   dropItem: {fileID: 11400000, guid: 12e75074341e4c4aa53aa685cf2a40e0, type: 2}
   dropCount: 1
