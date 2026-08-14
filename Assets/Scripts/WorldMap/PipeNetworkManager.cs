@@ -404,7 +404,10 @@ public class PipeNetworkManager : MonoBehaviour
                 ItemStack candidate = from[s];
                 if (candidate == null || candidate.item == null || candidate.count <= 0) continue;
                 source = machine;
-                sourceCell = cell;
+                // ⚠ 이웃 칸(cell)이 아니라 <b>기계의 기준점</b>을 쓴다. 여러 칸 기계는 파이프가 닿은
+                // 칸과 기준점이 다른데, FindSinks 의 도착지는 기준점으로 정규화돼 있어
+                // 이웃 칸을 그대로 두면 아래 자기 급전 가드가 뚫린다.
+                sourceCell = machine.worldCell;
                 stack = candidate;
                 break;
             }
@@ -496,7 +499,7 @@ public class PipeNetworkManager : MonoBehaviour
                 if (candidate == null || candidate.IsEmpty) continue;
                 if (candidate.fluid.CarriedBy != pipe.block.kind) continue;   // 액체/기체 파이프를 가른다
                 source = machine;
-                sourceCell = cell;
+                sourceCell = machine.worldCell;   // 아이템 쪽과 같은 이유로 기준점을 쓴다
                 tank = candidate;
                 break;
             }

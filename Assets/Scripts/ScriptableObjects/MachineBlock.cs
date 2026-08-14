@@ -18,6 +18,12 @@ public class MachineBlock : BlockBase
              "0.05 = 20번 눌러야 하나가 완성된다.")]
     [Range(0f, 1f)] public float manualStepRatio = 0f;
 
+    [Header("차지하는 칸")]
+    [Tooltip("차지하는 칸 수(가로, 세로). 기준점은 왼쪽 아래 칸이다.\n" +
+             "그림이 한 타일(32px)을 넘는 기계만 지정한다 — 세로로 조금 삐져나온 것은 " +
+             "탑다운 오버행 그림이지 발자국이 아니다.")]
+    public Vector2Int size = Vector2Int.one;
+
     [Header("등급 · 레시피 연결")]
     [Tooltip("이 기계의 티어. recipe.tier 가 이 값 이하인 레시피만 처리한다.")]
     [Min(0)] public int tier;
@@ -109,6 +115,17 @@ public class MachineBlock : BlockBase
 
     /// <summary>가동 중 초당 소비 전력. 미설정(0)이면 최대 저장량의 10% 로 폴백한다.</summary>
     public float EnergyUseRate => energyUseRate > 0f ? energyUseRate : maxEnergyAmount * 0.1f;
+
+    /// <summary>
+    /// 실제로 쓸 발자국. <b>0 을 1 로 올리는 이 클램프가 일괄 채우기 스크립트를 대신한다</b> —
+    /// 이 필드가 생기기 전에 만들어진 에셋 47개의 YAML 에는 <c>size:</c> 줄이 아예 없어
+    /// C# 초기값(1,1)이 아니라 <b>(0,0) 으로 읽히기 때문</b>이다. 클램프를 빼면 기존 기계가
+    /// 전부 "칸을 하나도 안 차지하는" 것이 되어 배치·조회가 통째로 무너진다.
+    ///
+    /// 발자국은 <b>저장하지 않는다</b>. 여기(SO)가 정본이고 <see cref="WorldMap"/> 이
+    /// 덮인 칸 색인을 파생시켜 들고 있을 뿐이라, 그림이 바뀌면 이 값만 고치면 된다.
+    /// </summary>
+    public Vector2Int Footprint => new Vector2Int(Mathf.Max(1, size.x), Mathf.Max(1, size.y));
 
     /// <summary>레시피 조회 키. 업그레이드 관계인 기계들은 같은 값을 공유한다.</summary>
     public string RecipeGroupId => string.IsNullOrEmpty(recipeGroupId) ? blockName : recipeGroupId;

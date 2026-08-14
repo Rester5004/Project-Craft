@@ -20,6 +20,7 @@ MonoBehaviour:
   uiPrefab: {fileID: 6450689151568072695, guid: ff942f783141dfe46b4158aa9c1dbbca, type: 3}
   runningSprite: {fileID: 0}
   manualStepRatio: 0
+  size: {x: 1, y: 3}
   tier: 2
   recipeGroupId: 
   inputSlotCount: 0

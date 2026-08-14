@@ -276,6 +276,40 @@ Assets/Scenes/UndergroundScene.unity ← GameRig + UndergroundSceneSetup 둘뿐
   `itemName == blockName` 인 `Items` 를 함께 만든 뒤 `Register All Assets` 를 돌리면 된다.
   화로 3종 · 조합대 2종 · 추출기 12종이 전부 이 방식으로 붙어 있다 —
   **그래서 계열 생성 툴(`ExtractorSetup` 등)은 만들지 않는다.** 표와 에셋이 갈라져 값이 되돌아갈 뿐이다.
+#### 여러 칸을 차지하는 기계 (발자국)
+
+`MachineBlock.size` 로 정하고 **기준점은 왼쪽 아래 칸**이다. 지금 6종:
+`고급 조합기 5×5` · `고급 재단 3×3` · `코어 조합기 3×3` · `중급 재단 2×2` · `용광로 2×2` · `증류기 1×3`.
+세로로 1.1~1.5칸인 그림(화로·기본 재단 등)은 **탑다운 오버행이지 발자국이 아니다** — 1×1 로 둔다.
+
+- **발자국은 저장하지 않는다.** `MachineBlock.Footprint` 에서 파생되고 `WorldMap` 이
+  **덮인 칸 → 기준점** 색인(`occupancy`)만 런타임으로 들고 있다. **세이브는 v12 그대로다.**
+  ⚠ **`Footprint` 의 `Mathf.Max(1, …)` 클램프를 지우지 말 것** — `size` 가 (0,0) 으로 읽히는 에셋이
+  하나라도 생기면 그 기계가 칸을 하나도 안 차지하게 된다. (실측: `size` 를 추가한 뒤 기존 47개 에셋은
+  YAML 에 `size:` 줄이 없는데도 C# 초기값 (1,1) 로 읽혔다 — 위쪽 "필드를 새로 넣으면 0 으로 읽힌다"
+  경고와 다른 결과이므로, **믿지 말고 클램프로 막아 둔다**.)
+- **지렛대는 두 곳뿐이다.** `WorldMap.GetPlaceableAt` 이 덮인 칸에서 **기준점 레코드**를 돌려주고
+  (그래서 `PipeRouter` 의 `MachineAt·Connects·StorageAt·FaceAt` 와 배치 판정이 코드 변경 없이 발자국을 안다),
+  `MapGenerator` 가 **덮는 칸마다 같은 인스턴스**를 `loadedMachines` 에 넣는다
+  (그래서 어느 칸을 우클릭해도 UI 가 열리고 어느 칸을 캐도 회수된다).
+- ⚠ **칸으로 기계를 가리키는 자리는 전부 `WorldMap.OriginAt` 으로 정규화한다.** 안 하면 한 기계가
+  칸 수만큼 서로 다른 대상으로 세어진다 — 실제로 그럴 뻔한 곳이 넷이다:
+  `PipeRouter.AddSink`(도착지) · `PipeNetworkManager` 의 `sourceCell`(자기 급전 가드) ·
+  `PowerLinkMode` 의 `AddLink`(전력 몫이 N배) · `MapGenerator.FlushAll`(한 기계를 N번 Flush).
+- **쓰기는 `WorldMap.SetPlaceableAt`/`RemovePlaceableAt`(월드 좌표) 로 모았다.** 예전에는 읽기만
+  월드 좌표고 쓰기는 청크 로컬이었는데, 발자국은 **청크 경계를 넘을 수 있어** 그 비대칭을 둘 수 없다.
+- ⚠ **콜라이더는 인스턴스에만 맞춘다**(`MapGenerator.ApplyFootprintCollider`, `sortingOrder` 와 같은 규약).
+  프리팹 콜라이더는 대부분 복붙된 `0.8125 × 1.09375` 이고 `tmp_crafter`(코어)는 **아예 없다** —
+  보정이 없으면 2×2 기계의 절반을 뚫고 지나간다. 1×1 은 손대지 않는다(오버행이 의도된 모습).
+- ⚠ **면 상태는 방향당 하나다.** `faceModes` 는 레코드 하나에 2비트 × 4면이라, 같은 방향으로 늘어선
+  여러 칸이 **한 설정을 공유**한다(2×2 의 북쪽 두 면을 따로 지정할 수 없다).
+- **설치 미리보기**(`PlacementPreview`, `MapGenerator.Start` 가 런타임 생성)는 반투명 기계 그림 +
+  칸별 초록/빨강이다. ⚠ **판정은 `PlayerInteraction.CanPlaceFootprint` 한 곳만 한다** —
+  미리보기가 따로 계산하면 "초록인데 안 놓이는" 상태가 반드시 생긴다. 그래서 `PerformUse` 의 네 분기는
+  판정을 갖지 않고 "어떻게 놓는가" 만 남아 있다(칸 조건은 `CanPlaceCell` 이 종류별로 가른다).
+- **도달 판정도 발자국 기준**이다(`IsFootprintAdjacent`) — 한 칸이라도 플레이어와 맨해튼 1 이면 된다.
+  1×1 이면 옛 `adjacent` 와 결과가 같다.
+
 - `RecipeSolver` 가 재료 확인·소모·적재를 전담: `CanCraft` `ConsumeInputs` `CanStoreOutputs` `AddItems`
   `CountFreeSpace`(넣어 보지 않고 여유 세기) `CountItem`.
 - **`RecipeSolver.AddItems` 는 통지하지 않는다.** 외부에서 슬롯을 건드렸으면
@@ -642,8 +676,21 @@ Idle(FemaleNormal) ──[blink]──▶ Blink ──[Exit Time 1.0]──▶ I
   → **UI 레이아웃을 먼저 해상도 독립적으로 정리한 뒤에** 손대는 것이 맞다.
 
 ### 정렬 순서 (한 레이어, sortingOrder)
-`0` Blocks/Floor · `1` FloorTexture · `2` 기계·파이프 · `3` 플레이어 · `3+i` 드랍 ·
-`4` 벽 윗면 · `5` 아웃라인·파이프 면 막대 · `6` PowerLink 오버레이
+
+**2026-08-13 에 배율이 `(옛값 + 10) × 10` 으로 바뀌었다.** 사이에 열 칸씩 여유를 두려는 것이므로
+**새 값은 반드시 10 단위로** 넣는다. 옛 한 자릿수 값(0~9)을 그대로 쓰면 바닥(100)보다 아래라
+**화면에서 통째로 사라진다** — 실제로 파이프 면 막대(5)와 PowerLink 오버레이(6)가 그렇게 안 보이고 있었다.
+
+| 값 | 무엇 | 어디가 정본 |
+|---|---|---|
+| `100` | Blocks · Floor | 씬(GameRig) |
+| `110` | FloorTexture | 씬 |
+| `120` | 기계 · 파이프 · 작물 · 포탈 · WallBottomTexture | 코드(`MapGenerator:319` `PipeNetworkManager` `CropInstance` `UndergroundPortal`) + 씬 |
+| `130`(+i) | 플레이어 · 필드 드랍(레이어마다 +1) | 씬 · `DroppedItem` |
+| `140` | 벽 윗면 | 씬 |
+| `150` | 아웃라인 · PlaceableObjects · 파이프 면 막대 | 씬 · `PipeFaceOverlay` |
+| `160` | PowerLink 오버레이 | `PowerLinkMode` |
+| `170` / `180` | 설치 미리보기 칸(초록·빨강) / 기계 그림 | `PlacementPreview` |
 
 ## 5. 에디터 메뉴 (전부 재실행 안전, 대화상자 없음)
 

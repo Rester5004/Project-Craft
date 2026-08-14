@@ -112,6 +112,11 @@ public class ItemDictionary : Singleton<ItemDictionary>
             RegisterTerrainPlacement(block);
             RegisterPipePlacement(block);
         }
+
+        // 발자국 색인은 이 딕셔너리에서 파생된다. 색인이 비어 있던 동안(도메인 리로드 직후)
+        // 만들어진 점유 표는 모든 기계를 1×1 로 알고 있으므로 여기서 함께 다시 세운다.
+        // ⚠ Instance 가 아니라 InstanceIfAlive 다 — 찾지도 만들지도 않는다(종료·에디트 모드 보호).
+        WorldMap.InstanceIfAlive?.RebuildOccupancy();
     }
 
     /// <summary>
@@ -323,6 +328,17 @@ public class ItemDictionary : Singleton<ItemDictionary>
 
     /// <summary>blockId(=blockName) 로 기계 정보(MachineBlock)를 조회한다. 없거나 기계가 아니면 null.</summary>
     public MachineBlock GetMachineInfo(string blockId) => GetBlock(blockId) as MachineBlock;
+
+    /// <summary>
+    /// 이 배치물이 차지하는 칸 수. <b>발자국 조회의 정본은 여기 하나다</b> —
+    /// 기계가 아닌 것(지형·파이프·작물)은 전부 1×1 이므로 부르는 쪽이 종류를 가릴 필요가 없다.
+    ///
+    /// <see cref="GetBlock"/> 을 거치므로 별칭 표 폴백과 <c>EnsureIndex</c> 복구가 그대로 적용된다.
+    /// ⚠ 도메인 리로드 직후처럼 색인이 잠깐 비면 1×1 이 나올 수 있어,
+    /// <see cref="BuildIndexes"/> 끝에서 <see cref="WorldMap.RebuildOccupancy"/> 를 다시 부른다.
+    /// </summary>
+    public Vector2Int FootprintOf(string blockId)
+        => GetBlock(blockId) is MachineBlock machine ? machine.Footprint : Vector2Int.one;
     // 아래 둘은 예전에 무조건 캐스팅을 했다. 파이프처럼 MainBlock/MachineBlock 이 아닌 블록이 생기면
     // InvalidCastException 이 나므로 타입 검사로 바꾼다.
     public TileBase GetTileFromBlockDictionary(string name)

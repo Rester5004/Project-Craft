@@ -18,9 +18,12 @@ public class PowerLinkMode : MonoBehaviour
 {
     private const string UIName = "PowerLink";
 
-    // 오버레이 타일맵의 정렬 순서. 6 이상은 비어 있어 무엇보다 위에 그려진다
-    // (Blocks/Floor 0 · FloorTexture 1 · 기계 2 · 플레이어 3 · WallTop 4 · OutLine/Placeable 5).
-    private const int OverlaySortingOrder = 6;
+    // 오버레이 타일맵의 정렬 순서. 160 이상은 비어 있어 무엇보다 위에 그려진다
+    // (Blocks/Floor 100 · FloorTexture 110 · 기계·파이프 120 · 플레이어 130 · WallTop 140 ·
+    //  OutLine/Placeable 150 · 설치 미리보기 170·180).
+    // ⚠ 예전 배율의 6 이었는데 정렬 순서가 (옛값 + 10) × 10 으로 바뀔 때 빠졌다 —
+    //    6 은 바닥(100)보다 아래라 <b>전송 모드 오버레이가 통째로 안 보였다.</b>
+    private const int OverlaySortingOrder = 160;
 
     private static readonly Color UnlinkedColor = new Color(1f, 0.25f, 0.25f, 0.55f);
     private static readonly Color LinkedColor = new Color(0.3f, 1f, 0.35f, 0.55f);
@@ -161,19 +164,23 @@ public class PowerLinkMode : MonoBehaviour
 
         Paint(generator.worldCell, GeneratorColor);
 
+        // LoadedMachines 는 여러 칸 기계를 <b>덮는 칸마다</b> 담고 있다. 칠하기는 그대로 두어
+        // 큰 기계가 점 하나로 보이지 않게 하고, <b>링크·거리·연결 여부는 기준점(worldCell)</b>으로 묻는다 —
+        // 링크가 칸 단위라 정규화하지 않으면 한 기계가 전력을 칸 수만큼 받아 간다.
         foreach (KeyValuePair<Vector2Int, MachineInstance> pair in MapGenerator.Active.LoadedMachines)
         {
             Vector2Int cell = pair.Key;
             MachineInstance machine = pair.Value;
-            if (machine == null || cell == generator.worldCell) continue;
-            if (!generator.IsInPowerRange(cell)) continue;
+            if (machine == null) continue;
+            if (machine == generator) { Paint(cell, GeneratorColor); continue; }   // 자기 자신은 전 칸이 파랑
+            if (!generator.IsInPowerRange(machine.worldCell)) continue;
 
             // 전력을 쓰는 기계와, 발전은 안 하고 전송만 하는 중계기가 대상이다.
             bool relay = machine.Info != null && machine.Info.powerRange > 0 && !machine.IsGenerator;
             if (!machine.UsesEnergy && !relay) continue;
 
             candidates.Add(cell);
-            Paint(cell, generator.IsLinkedTo(cell) ? LinkedColor : UnlinkedColor);
+            Paint(cell, generator.IsLinkedTo(machine.worldCell) ? LinkedColor : UnlinkedColor);
         }
     }
 
@@ -241,8 +248,13 @@ public class PowerLinkMode : MonoBehaviour
 
         if (!candidates.Contains(cell)) return;   // 범위 밖이거나 연결할 수 없는 칸
 
-        if (data.button == PointerEventData.InputButton.Left) generator.AddLink(cell);
-        else if (data.button == PointerEventData.InputButton.Right) generator.RemoveLink(cell);
+        // 링크는 칸이 아니라 기계를 가리켜야 한다. 여러 칸 기계의 어느 칸을 눌렀든
+        // <b>기준점 하나</b>로 이어야 같은 기계가 라운드로빈에서 칸 수만큼 몫을 챙기지 않는다.
+        Vector2Int link = MapGenerator.Active.TryGetMachineAt(cell, out MachineInstance clicked) && clicked != null
+            ? clicked.worldCell : cell;
+
+        if (data.button == PointerEventData.InputButton.Left) generator.AddLink(link);
+        else if (data.button == PointerEventData.InputButton.Right) generator.RemoveLink(link);
         else return;
 
         Refresh();

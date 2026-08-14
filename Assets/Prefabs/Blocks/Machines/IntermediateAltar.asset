@@ -20,6 +20,7 @@ MonoBehaviour:
   uiPrefab: {fileID: 779414532576868518, guid: 06eab2c4533376848ad7a643051ba2cf, type: 3}
   runningSprite: {fileID: 0}
   manualStepRatio: 0
+  size: {x: 2, y: 2}
   tier: 1
   recipeGroupId: Altar
   inputSlotCount: 3
@@ -37,3 +38,4 @@ MonoBehaviour:
   energyUseRate: 0
   speedMultiplier: 1
   chanceMultiplier: 1
+  acceptsTierUpgrade: 0

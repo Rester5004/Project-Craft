@@ -258,9 +258,18 @@ public static class PipeRouter
         results.Sort((a, b) => a.seconds.CompareTo(b.seconds));
     }
 
-    /// <summary>같은 기계에 여러 경로로 닿으면 가장 빠른 것만 남긴다.</summary>
+    /// <summary>
+    /// 같은 기계에 여러 경로로 닿으면 가장 빠른 것만 남긴다.
+    ///
+    /// ⚠ <b>반드시 기준점 칸으로 정규화한다.</b> 여러 칸을 차지하는 기계는 파이프가 두 면에서 닿을 수 있는데,
+    /// 칸을 그대로 두면 <b>한 기계가 서로 다른 도착지 둘</b>로 세어진다 — 라운드로빈 몫이 두 배가 되고,
+    /// <c>PipeNetworkManager</c> 의 <c>sink.machineCell == sourceCell</c> 자기 급전 가드가 뚫려
+    /// 기계가 자기 산출물을 자기 입력칸으로 되먹는다.
+    /// </summary>
     private static void AddSink(List<Sink> results, Vector2Int machineCell, float seconds)
     {
+        if (WorldMap.Instance != null) machineCell = WorldMap.Instance.OriginAt(machineCell);
+
         for (int i = 0; i < results.Count; i++)
         {
             if (results[i].machineCell != machineCell) continue;

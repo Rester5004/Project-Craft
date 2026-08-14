@@ -14,8 +14,12 @@ using UnityEngine.Tilemaps;
 /// </summary>
 public class PipeFaceOverlay : MonoBehaviour
 {
-    /// <summary>파이프(2)·플레이어(3)·벽 윗면(4) 위. 가려지는 것보다 보이는 쪽이 중요하다.</summary>
-    private const int SortingOrder = 5;
+    /// <summary>
+    /// 파이프(120)·플레이어(130)·벽 윗면(140) 위. 가려지는 것보다 보이는 쪽이 중요하다.
+    /// ⚠ 예전 배율의 <c>5</c> 였는데 정렬 순서가 <c>(옛값 + 10) × 10</c> 으로 바뀔 때 빠졌다 —
+    /// 5 는 바닥(100)보다 아래라 <b>막대가 통째로 안 보였다.</b>
+    /// </summary>
+    private const int SortingOrder = 150;
 
     private static readonly Color InsertColor = new Color(0.30f, 0.62f, 1f, 0.95f);
     private static readonly Color ExtractColor = new Color(1f, 0.35f, 0.30f, 0.95f);

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -105,9 +106,13 @@ public class PlayerInteraction : MonoBehaviour
             return;
 
         // 1) 대상 셀에 기계가 있으면 → 그 기계 UI 오픈 (배치보다 우선)
+        //    여러 칸 기계는 <b>덮는 칸 어디를 눌러도</b> 같은 인스턴스가 잡히고(MapGenerator 가
+        //    칸마다 등록한다), 도달 판정도 커서 칸이 아니라 발자국으로 한다 —
+        //    기계 옆에 서 있는데 반대쪽 끝을 눌렀다고 안 열리면 이상하다.
         if (mapGenerator.TryGetMachineAt(targetCell, out MachineInstance machine))
         {
-            if (adjacent && machineInteraction != null)
+            if (machineInteraction != null && machine != null
+                && IsFootprintAdjacent(machine.worldCell, FootprintFor(machine.blockId), playerCell))
                 machineInteraction.OpenMachine(machine);
             return;
         }
@@ -128,15 +133,22 @@ public class PlayerInteraction : MonoBehaviour
         ItemStack selectedItemStack = inventory.GetSelectedItem();
         if (selectedItemStack == null || selectedItemStack.item == null || !selectedItemStack.item.placeable)
             return;
-        if (!adjacent)
+
+        // 도달 판정은 커서 칸이 아니라 <b>발자국</b>으로 한다 — 5×5 기계를 놓을 때
+        // 기준점(왼쪽 아래) 칸 바로 옆까지 걸어가야 한다면 사실상 못 놓는다.
+        // 1×1 이면 결과가 위의 adjacent 와 완전히 같아, 규칙이 둘로 갈리지 않는다.
+        Vector2Int placeSize = FootprintFor(selectedItemStack.item);
+        if (!IsFootprintAdjacent(targetCell, placeSize, playerCell))
+            return;
+
+        // 놓을 수 있는지는 <b>CanPlaceFootprint 한 곳</b>이 정한다(설치 미리보기도 이것만 본다).
+        // 각 분기는 "무엇을 어떻게 놓는가" 만 남는다.
+        if (!CanPlaceFootprint(selectedItemStack.item, targetCell, placeSize, null))
             return;
 
         Vector3 cellPos = new Vector3(targetCell.x, targetCell.y, 0f);
         Vector2Int chunkId = Chunk.GetChunkId(cellPos);
         Vector2Int localCell = Chunk.GetLocalCellPositionInChunk(cellPos);
-        Chunk chunk = WorldMap.Instance.GetOrCreateChunk(chunkId);
-        if (chunk.GetPlaceable(localCell) != null)
-            return; // 이미 placeable 이 있는 칸
 
         // 2-a) 지형 블록(돌·마력석 등)은 프리팹이 아니라 타일로 놓는다.
         MainBlock terrain = ItemDictionary.Instance != null
@@ -145,76 +157,128 @@ public class PlayerInteraction : MonoBehaviour
         if (terrain != null)
         {
             // 농지 같은 바닥 블록은 현재 바닥 한 칸을 교체한다.
-            if (Chunk.IsFloor(terrain.blockName))
-            {
-                if (!WorldMap.Instance.PlaceFloor(chunkId, localCell, terrain.blockName)) return;
-                mapGenerator.RefreshTile(targetCell);
-                ConsumeSelected(selectedItemStack);
-                return;
-            }
-
-            // 농지 같은 바닥 블록은 현재 바닥 한 칸을 교체한다.
-            if (Chunk.IsFloor(terrain.blockName))
-            {
-                if (!WorldMap.Instance.PlaceFloor(chunkId, localCell, terrain.blockName)) return;
-                mapGenerator.RefreshTile(targetCell);
-                ConsumeSelected(selectedItemStack);
-                return;
-            }
-
-            if (!IsCellClearForWall(targetCell))
-                return; // 플레이어나 기계 위에 벽을 세우면 갇히거나 겹친다
-            if (!WorldMap.Instance.Place(chunkId, localCell, terrain.blockName))
-                return; // 이미 벽인 칸
+            bool placed = Chunk.IsFloor(terrain.blockName)
+                ? WorldMap.Instance.PlaceFloor(chunkId, localCell, terrain.blockName)
+                : WorldMap.Instance.Place(chunkId, localCell, terrain.blockName);
+            if (!placed) return;
 
             mapGenerator.RefreshTile(targetCell);
             ConsumeSelected(selectedItemStack);
             return;
         }
 
-
-        // 2-b) 씨앗/묘목은 설정된 농지 위에만 심는다.
+        // 2-b) 씨앗/묘목은 설정된 농지 위에만 심는다(자리 판정은 위에서 이미 했다).
         CropBlock crop = ItemDictionary.Instance != null
             ? ItemDictionary.Instance.GetCropForSeed(selectedItemStack.item)
             : null;
         if (crop != null)
         {
-            if (WorldMap.Instance.GetTileId(targetCell) != crop.requiredSoilId) return;
             PlaceableRecord cropRecord = new PlaceableRecord(crop.blockName)
             {
                 plantedAtUtcTicks = System.DateTime.UtcNow.Ticks
             };
-            chunk.SetPlaceable(localCell, cropRecord);
+            if (!WorldMap.Instance.SetPlaceableAt(targetCell, cropRecord)) return;
             mapGenerator.SpawnPlaceableAt(targetCell, cropRecord);
             ConsumeSelected(selectedItemStack);
             return;
         }
 
         // 2-c) 파이프는 프리팹이 아니라 전용 타일맵에 그린다(수백 개가 깔리므로).
-        PipeBlock pipe = ItemDictionary.Instance != null
-            ? ItemDictionary.Instance.GetPipeBlockFor(selectedItemStack.item)
-            : null;
-        if (pipe != null)
+        if (ItemDictionary.Instance != null
+            && ItemDictionary.Instance.GetPipeBlockFor(selectedItemStack.item) != null)
         {
-            // 벽 속에 묻으면 벽 텍스처에 완전히 가려 보이지 않는다.
-            if (!Chunk.IsFloor(WorldMap.Instance.GetTileId(targetCell)))
-                return;
-
             PlaceableRecord pipeRecord = new PlaceableRecord(selectedItemStack.item.itemName);
-            if (!TryPlaceRecord(chunk, localCell, targetCell, pipeRecord)) return;
+            if (!TryPlaceRecord(targetCell, pipeRecord)) return;
             ConsumeSelected(selectedItemStack);
             return;
         }
 
         // 2-d) 기계는 프리팹을 세운다.
-        // 지형·파이프와 달리 예전에는 여기에만 자리 검사가 없어 플레이어가 선 칸에도 기계를 세울 수 있었다.
-        if (!IsCellClearForWall(targetCell))
-            return;
-
         PlaceableRecord record = new PlaceableRecord(selectedItemStack.item.itemName);
-        if (!TryPlaceRecord(chunk, localCell, targetCell, record)) return;
+        if (!TryPlaceRecord(targetCell, record)) return;
 
         ConsumeSelected(selectedItemStack);
+    }
+
+    // ── 발자국 (여러 칸을 차지하는 기계) ────────────────────────────────
+    /// <summary>미리보기가 매 프레임 쓰는 버퍼. 프레임마다 새로 할당하지 않으려고 들고 있는다.</summary>
+    private readonly List<Vector2Int> previewBlocked = new();
+
+    /// <summary>이 아이템을 놓으면 몇 칸을 차지하는가. 기계가 아니면 1×1.</summary>
+    private static Vector2Int FootprintFor(Items item)
+        => FootprintFor(item != null ? item.itemName : null);
+
+    /// <summary>blockId(= itemName) 로 발자국을 묻는다. 딕셔너리가 없으면 1×1.</summary>
+    private static Vector2Int FootprintFor(string blockId)
+        => ItemDictionary.Instance != null ? ItemDictionary.Instance.FootprintOf(blockId) : Vector2Int.one;
+
+    /// <summary>
+    /// 발자국 중 <b>한 칸이라도</b> 플레이어와 맨해튼 거리 1 인가.
+    /// 1×1 이면 <c>PerformUse</c> 의 <c>adjacent</c> 와 결과가 같다.
+    /// </summary>
+    private static bool IsFootprintAdjacent(Vector2Int origin, Vector2Int size, Vector2Int playerCell)
+    {
+        foreach (Vector2Int cell in WorldMap.Cells(origin, size))
+            if (Mathf.Abs(cell.x - playerCell.x) + Mathf.Abs(cell.y - playerCell.y) == 1) return true;
+        return false;
+    }
+
+    /// <summary>
+    /// 이 발자국에 <paramref name="item"/> 을 놓을 수 있는가.
+    ///
+    /// ⚠ <b>설치 미리보기(<see cref="PlacementPreview"/>)와 실제 배치가 이 함수 하나를 공유한다.</b>
+    /// 판정을 두 벌로 두면 "초록으로 보이는데 우클릭하면 안 놓이는" 상태가 반드시 생긴다 —
+    /// 그래서 <see cref="PerformUse"/> 의 네 분기는 판정을 갖지 않고 "어떻게 놓는가" 만 남겼다.
+    ///
+    /// <paramref name="blocked"/> 를 주면 막힌 칸을 채워 미리보기가 칸별로 색을 칠할 수 있다
+    /// (null 이면 첫 실패에서 바로 끝낸다 — 배치 경로는 어디가 막혔는지 알 필요가 없다).
+    /// </summary>
+    private bool CanPlaceFootprint(Items item, Vector2Int origin, Vector2Int size, List<Vector2Int> blocked)
+    {
+        blocked?.Clear();
+        if (WorldMap.Instance == null) return false;
+        bool ok = true;
+
+        foreach (Vector2Int cell in WorldMap.Cells(origin, size))
+        {
+            if (CanPlaceCell(item, cell)) continue;
+
+            ok = false;
+            if (blocked == null) return false;
+            blocked.Add(cell);
+        }
+        return ok;
+    }
+
+    /// <summary>
+    /// 칸 하나의 조건. 종류마다 다르다 —
+    /// 바닥 블록(농지)은 바닥을 갈아 끼우고, 벽은 그 위에 아무것도 없어야 하며,
+    /// 씨앗은 지정된 농지만, 파이프는 벽에 묻히면 안 되고, 기계는 바닥이면서 비어 있어야 한다.
+    /// </summary>
+    private bool CanPlaceCell(Items item, Vector2Int cell)
+    {
+        // 여러 칸 기계가 <b>덮고 있는</b> 칸은 그 칸에 레코드가 없어도 비어 있지 않다
+        // (GetPlaceableAt 이 기준점 레코드를 돌려준다).
+        if (WorldMap.Instance.GetPlaceableAt(cell) != null) return false;
+
+        string tileId = WorldMap.Instance.GetTileId(cell);
+        ItemDictionary dict = ItemDictionary.Instance;
+
+        MainBlock terrain = dict != null ? dict.GetTerrainBlockFor(item) : null;
+        if (terrain != null)
+        {
+            if (Chunk.IsFloor(terrain.blockName)) return Chunk.IsFloor(tileId);   // 바닥 교체
+            // 플레이어나 기계 위에 벽을 세우면 갇히거나 겹친다.
+            return Chunk.IsFloor(tileId) && IsCellClearForWall(cell);
+        }
+
+        CropBlock crop = dict != null ? dict.GetCropForSeed(item) : null;
+        if (crop != null) return tileId == crop.requiredSoilId;
+
+        // 파이프는 벽 속에 묻으면 벽 텍스처에 완전히 가려 보이지 않는다.
+        if (dict != null && dict.GetPipeBlockFor(item) != null) return Chunk.IsFloor(tileId);
+
+        return Chunk.IsFloor(tileId) && IsCellClearForWall(cell);   // 기계
     }
 
     /// <summary>
@@ -224,12 +288,14 @@ public class PlayerInteraction : MonoBehaviour
     /// 기계도 파이프도 아니고 바닥이라 <see cref="UpdateMining"/> 의 세 분기가 전부 탈락해
     /// <b>캘 수조차 없는 칸</b>이 되어 세이브에 영구히 남는다.
     /// </summary>
-    private bool TryPlaceRecord(Chunk chunk, Vector2Int localCell, Vector2Int targetCell, PlaceableRecord record)
+    private bool TryPlaceRecord(Vector2Int targetCell, PlaceableRecord record)
     {
-        chunk.SetPlaceable(localCell, record);
+        // 쓰기는 월드 좌표 한 곳(WorldMap)으로 모은다 — 발자국이 청크 경계를 넘을 수 있어
+        // "읽기는 월드 좌표, 쓰기는 청크 로컬" 이던 옛 비대칭을 그대로 둘 수 없다.
+        if (!WorldMap.Instance.SetPlaceableAt(targetCell, record)) return false;
         if (mapGenerator.SpawnPlaceableAt(targetCell, record)) return true;
 
-        chunk.RemovePlaceable(localCell);
+        WorldMap.Instance.RemovePlaceableAt(targetCell);
         return false;
     }
 
@@ -400,6 +466,7 @@ public class PlayerInteraction : MonoBehaviour
         if (PowerLinkMode.IsActive)
         {
             if (TilemapTextureLoader.Instance != null) TilemapTextureLoader.Instance.ClearOutline();
+            if (PlacementPreview.Active != null) PlacementPreview.Active.Hide();
             CancelMining();
             usePending = false;   // 미뤄 둔 우클릭을 흘려보낸다 — 안 지우면 모드를 끄는 순간 묵은 클릭이 터진다
             return;
@@ -412,10 +479,57 @@ public class PlayerInteraction : MonoBehaviour
         if (usePending) { usePending = false; PerformUse(); }
 
         UpdateMining();
-        if(GetIsCardinalAdjacent(targetGlobalCell, playerGlobalCell))
+        UpdateCursorDisplay();
+    }
+
+    /// <summary>
+    /// 커서 자리에 무엇을 보여 줄지 고른다 — 배치물을 들고 있으면 <b>설치 미리보기</b>,
+    /// 아니면 지금까지의 채굴용 윤곽선이다. 둘을 동시에 그리면 어느 쪽이 지금 유효한지 알 수 없다.
+    /// </summary>
+    private void UpdateCursorDisplay()
+    {
+        ItemStack held = inventory != null ? inventory.GetSelectedStack() : null;
+        bool placing = held != null && held.item != null && held.count > 0 && held.item.placeable;
+
+        if (!placing)
         {
-            TilemapTextureLoader.Instance.ShowOutline(targetGlobalCell);
-        } 
+            if (PlacementPreview.Active != null) PlacementPreview.Active.Hide();
+            if (GetIsCardinalAdjacent(targetGlobalCell, playerGlobalCell) && TilemapTextureLoader.Instance != null)
+                TilemapTextureLoader.Instance.ShowOutline(targetGlobalCell);
+            return;
+        }
+
+        if (TilemapTextureLoader.Instance != null) TilemapTextureLoader.Instance.ClearOutline();
+        if (PlacementPreview.Active == null || WorldMap.Instance == null) return;
+
+        Vector2Int size = FootprintFor(held.item);
+        // ⚠ 실제 배치와 <b>같은 판정 함수</b>를 부른다. 여기서 따로 계산하면 언젠가 규칙이 갈려
+        // "초록으로 보이는데 우클릭하면 안 놓이는" 상태가 된다.
+        CanPlaceFootprint(held.item, targetGlobalCell, size, previewBlocked);
+
+        // 손이 닿지 않으면 전 칸을 빨강으로 — 자리는 비었는데 왜 안 놓이는지 보여야 한다.
+        if (!IsFootprintAdjacent(targetGlobalCell, size, playerGlobalCell))
+            foreach (Vector2Int cell in WorldMap.Cells(targetGlobalCell, size))
+                if (!previewBlocked.Contains(cell)) previewBlocked.Add(cell);
+
+        PlacementPreview.Active.Show(targetGlobalCell, size, PreviewSpriteFor(held.item), previewBlocked);
+    }
+
+    /// <summary>
+    /// 미리보기에 쓸 그림. 기계는 <b>프리팹의 <see cref="SpriteRenderer"/></b> 가 정지 그림의 정본이라
+    /// 그것을 그대로 쓰고(실제로 세워질 모습과 같다), 지형·파이프·씨앗은 아이콘으로 떨어진다.
+    /// </summary>
+    private static Sprite PreviewSpriteFor(Items item)
+    {
+        MachineBlock machine = item != null && ItemDictionary.Instance != null
+            ? ItemDictionary.Instance.GetMachineInfo(item.itemName) : null;
+
+        if (machine != null && machine.machinePrefab != null)
+        {
+            SpriteRenderer renderer = machine.machinePrefab.GetComponent<SpriteRenderer>();
+            if (renderer != null && renderer.sprite != null) return renderer.sprite;
+        }
+        return item != null ? item.Icon : null;
     }
 
     /// <summary>좌클릭 홀드로 캘 수 있는 대상의 종류.</summary>

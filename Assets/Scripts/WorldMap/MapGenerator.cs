@@ -46,8 +46,10 @@ public class MapGenerator : MonoBehaviour
     void Start()
     {
         EnsurePlaceableContainer();
-        // 파이프 타일맵은 씬에 배선하지 않고 여기서 만든다(씬 파일을 건드리지 않기 위해).
-        PipeNetworkManager.EnsureCreated(placeableObjectsTilemap != null ? placeableObjectsTilemap.transform.parent : null);
+        // 파이프 타일맵·설치 미리보기는 씬에 배선하지 않고 여기서 만든다(씬 파일을 건드리지 않기 위해).
+        Transform gridRoot = placeableObjectsTilemap != null ? placeableObjectsTilemap.transform.parent : null;
+        PipeNetworkManager.EnsureCreated(gridRoot);
+        PlacementPreview.EnsureCreated(gridRoot, placeableObjectsTilemap);
         if (WorldMap.Instance != null)
             WorldMap.Instance.OnBeforeSave += FlushAll;
         UpdateChunks();
@@ -272,15 +274,27 @@ public class MapGenerator : MonoBehaviour
 
     private bool SpawnPlaceable(Vector2Int worldCell, PlaceableRecord record)
     {
-        if (record == null || loadedMachines.ContainsKey(worldCell) || loadedCrops.ContainsKey(worldCell) || loadedCrops.ContainsKey(worldCell)) return false;
+        if (record == null) return false;
 
         CropBlock crop = ItemDictionary.Instance != null ? ItemDictionary.Instance.GetCropInfo(record.blockId) : null;
-        if (crop != null) { SpawnCrop(worldCell, record, crop); return false; }
+        if (crop != null)
+        {
+            if (loadedCrops.ContainsKey(worldCell)) return false;
+            SpawnCrop(worldCell, record, crop);
+            return false;
+        }
 
         // 파이프는 프리팹을 세우지 않고 타일맵에 그린다. 아래 기계 경로를 타면
         // MachineInstance 가 붙어 "유령 기계"가 되므로 반드시 여기서 갈라야 한다.
         PipeBlock pipe = ItemDictionary.Instance != null ? ItemDictionary.Instance.GetPipeInfo(record.blockId) : null;
         if (pipe != null) return SpawnPipe(worldCell, record, pipe);
+
+        // 여러 칸을 차지하는 기계는 <b>덮는 칸 전부</b>가 비어 있어야 세운다. 한 칸만 보면
+        // 이미 다른 기계가 있는 자리에 겹쳐 서고, 그 칸의 등록이 덮어써져 앞의 기계를 못 캐게 된다.
+        Vector2Int size = WorldMap.FootprintOf(record);
+        foreach (Vector2Int cell in WorldMap.Cells(worldCell, size))
+            if (loadedMachines.ContainsKey(cell) || loadedCrops.ContainsKey(cell) || loadedPipes.ContainsKey(cell))
+                return false;
 
         EnsurePlaceableContainer();
 
@@ -292,20 +306,48 @@ public class MapGenerator : MonoBehaviour
         }
 
         GameObject go = Instantiate(prefab, placeableContainer);
-        go.transform.position = placeableObjectsTilemap.GetCellCenterWorld(new Vector3Int(worldCell.x, worldCell.y, 0));
+        // 기준점은 왼쪽 아래 칸이고 스프라이트 피벗은 전부 Center 라, 발자국 정중앙으로 반 칸씩 민다.
+        // 1×1 이면 보정이 0 이라 예전과 완전히 같은 자리다.
+        Vector3 centre = placeableObjectsTilemap.GetCellCenterWorld(new Vector3Int(worldCell.x, worldCell.y, 0));
+        go.transform.position = centre + new Vector3((size.x - 1) * 0.5f, (size.y - 1) * 0.5f, 0f);
 
         MachineInstance inst = go.GetComponent<MachineInstance>();
         if (inst == null) inst = go.AddComponent<MachineInstance>();
-        inst.Bind(record, worldCell);
+        inst.Bind(record, worldCell);   // worldCell = 기준점. 전력 링크·거리 판정이 이걸 본다
 
         SpriteRenderer sr = go.GetComponent<SpriteRenderer>();
         if (sr != null) sr.sortingOrder = 120; // 인스턴스에만 설정(공유 프리팹 오염 방지)
 
-        loadedMachines[worldCell] = inst;
+        ApplyFootprintCollider(go, size);
+
+        // <b>덮는 칸마다 같은 인스턴스를 등록한다.</b> TryGetMachineAt 이 이 사전 하나뿐이라,
+        // 여기서 다 넣어야 어느 칸을 우클릭해도 UI 가 열리고 어느 칸을 캐도 회수되며
+        // 파이프가 어느 면에서든 붙는다.
+        foreach (Vector2Int cell in WorldMap.Cells(worldCell, size))
+            loadedMachines[cell] = inst;
 
         // 기계가 생기면 옆 파이프가 이쪽으로 붙는 모양으로 바뀐다.
+        // ⚠ 칸마다 부르지 않는다 — 위상 버전이 발자국 크기만큼 튀면 경로 캐시가 그만큼 더 버려진다.
         if (PipeNetworkManager.Active != null) PipeNetworkManager.Active.MarkTopologyDirty(worldCell);
         return true;
+    }
+
+    /// <summary>
+    /// 여러 칸을 차지하는 기계의 콜라이더를 발자국에 맞춘다.
+    ///
+    /// ⚠ 지금 기계 프리팹의 <c>BoxCollider2D</c> 는 대부분 복붙된 <c>{0.8125, 1.09375}</c> 라,
+    /// 손대지 않으면 <b>2×2 기계의 절반을 뚫고 지나간다</b>. 반대로 1×1 기계는 건드리지 않는다 —
+    /// 그림이 한 칸보다 살짝 큰 것은 탑다운 오버행이라 콜라이더가 작은 것이 의도다.
+    /// 값은 <see cref="SpriteRenderer.sortingOrder"/> 와 같은 규약으로 <b>인스턴스에만</b> 준다.
+    /// </summary>
+    private static void ApplyFootprintCollider(GameObject go, Vector2Int size)
+    {
+        if (size.x <= 1 && size.y <= 1) return;
+
+        BoxCollider2D box = go.GetComponent<BoxCollider2D>();
+        if (box == null) box = go.AddComponent<BoxCollider2D>();   // tmp_crafter 처럼 아예 없는 프리팹도 있다
+        box.size = new Vector2(size.x, size.y);
+        box.offset = Vector2.zero;   // 오브젝트가 이미 발자국 중앙에 서 있다
     }
 
     private void SpawnCrop(Vector2Int worldCell, PlaceableRecord record, CropBlock crop)
@@ -365,12 +407,11 @@ public class MapGenerator : MonoBehaviour
     /// </summary>
     public bool RemoveMachineAt(Vector2Int worldCell)
     {
-        Vector3 cellPos = new Vector3(worldCell.x, worldCell.y, 0f);
-        Vector2Int chunkId = Chunk.GetChunkId(cellPos);
-        Vector2Int local = Chunk.GetLocalCellPositionInChunk(cellPos);
+        // ⚠ 가장 먼저 기준점으로 정규화한다. 여러 칸 기계는 <b>덮인 칸을 캐도</b> 지워져야 하는데,
+        // 레코드는 기준점에만 있어 정규화하지 않으면 "캘 수 없는 칸" 으로 보인다.
+        worldCell = WorldMap.Instance.OriginAt(worldCell);
 
-        Chunk chunk = WorldMap.Instance.GetOrCreateChunk(chunkId);
-        PlaceableRecord record = chunk.GetPlaceable(local);
+        PlaceableRecord record = WorldMap.Instance.GetPlaceableAt(worldCell);
         if (record == null) return false;
 
         // 파이프는 인벤토리 대신 운반 중인 짐을 쏟는다.
@@ -380,7 +421,7 @@ public class MapGenerator : MonoBehaviour
             DropSelf(worldCell, record);
             ClearMirroredCuts(worldCell, record);
 
-            chunk.RemovePlaceable(local);
+            WorldMap.Instance.RemovePlaceableAt(worldCell);
             loadedPipes.Remove(worldCell);
             if (PipeNetworkManager.Active != null) PipeNetworkManager.Active.OnPipeUnloaded(worldCell);
             return true;
@@ -400,9 +441,13 @@ public class MapGenerator : MonoBehaviour
         // 2) 기계 자신도 떨어뜨린다(아이템 ID 는 blockName 과 같다는 규약).
         DropSelf(worldCell, record);
 
-        // 3) 레코드와 인스턴스를 없앤다.
-        chunk.RemovePlaceable(local);
-        loadedMachines.Remove(worldCell);
+        // 3) 레코드와 인스턴스를 없앤다. 덮고 있던 칸의 등록도 <b>전부</b> 지운다 —
+        //    남기면 사라진 기계를 가리키는 유령 키가 되어 그 칸에 다시 놓을 수 없다.
+        Vector2Int size = WorldMap.FootprintOf(record);
+        WorldMap.Instance.RemovePlaceableAt(worldCell);
+        foreach (Vector2Int cell in WorldMap.Cells(worldCell, size))
+            if (loadedMachines.TryGetValue(cell, out MachineInstance at) && at == inst)
+                loadedMachines.Remove(cell);
         if (inst != null) Destroy(inst.gameObject);
 
         // 기계가 사라지면 옆 파이프의 연결 모양도 바뀐다.
@@ -439,9 +484,7 @@ public class MapGenerator : MonoBehaviour
             return false;
 
         CropBlock crop = instance.Crop;
-        Vector3 pos = new Vector3(worldCell.x, worldCell.y, 0f);
-        Chunk chunk = WorldMap.Instance.GetOrCreateChunk(Chunk.GetChunkId(pos));
-        chunk.RemovePlaceable(Chunk.GetLocalCellPositionInChunk(pos));
+        WorldMap.Instance.RemovePlaceableAt(worldCell);
         loadedCrops.Remove(worldCell);
         Destroy(instance.gameObject);
 
@@ -495,8 +538,10 @@ public class MapGenerator : MonoBehaviour
     /// <summary>로드된 모든 기계의 인벤토리를 레코드로 동기화(저장 직전 호출).</summary>
     public void FlushAll()
     {
-        foreach (MachineInstance inst in loadedMachines.Values)
-            if (inst != null) inst.Flush();
+        // ⚠ 여러 칸 기계는 덮는 칸마다 같은 인스턴스가 등록돼 있다. 값만 순회하면 한 기계를
+        // 칸 수만큼 Flush 하므로, <b>기준점 칸에서만</b> 한 번 부른다.
+        foreach (var kvp in loadedMachines)
+            if (kvp.Value != null && kvp.Value.worldCell == kvp.Key) kvp.Value.Flush();
 
         // 파이프가 싣고 있는 짐도 레코드로 옮긴다 — 빼먹으면 저장할 때 화물이 사라진다.
         if (PipeNetworkManager.Active != null) PipeNetworkManager.Active.FlushAll();
@@ -513,7 +558,11 @@ public class MapGenerator : MonoBehaviour
             if (loadedMachines.TryGetValue(worldCell, out MachineInstance inst))
             {
                 if (inst != null) { inst.Flush(); Destroy(inst.gameObject); }
-                loadedMachines.Remove(worldCell);
+                // 덮고 있던 칸의 등록도 함께 지운다. chunk.Placeables 는 기준점만 담으므로
+                // 이웃 청크를 언로드할 때 남의 기계를 잘못 지울 일은 없다.
+                foreach (Vector2Int cell in WorldMap.CellsOf(worldCell, kvp.Value))
+                    if (loadedMachines.TryGetValue(cell, out MachineInstance at) && at == inst)
+                        loadedMachines.Remove(cell);
             }
             else if (loadedPipes.ContainsKey(worldCell))
             {

@@ -459,6 +459,16 @@ public class WorldMap : Singleton<WorldMap>
     private bool isLoaded;
 
     /// <summary>
+    /// 여러 칸을 차지하는 기계가 <b>덮고 있는 칸 → 기준점(왼쪽 아래) 칸</b>.
+    /// 기준점 자신은 넣지 않는다(레코드가 이미 거기 있다).
+    ///
+    /// <b>저장하지 않는다.</b> 크기는 <see cref="MachineBlock.Footprint"/> 에서 파생되므로
+    /// 세이브 포맷은 v12 그대로고, 그림이 바뀌면 SO 한 곳만 고치면 된다
+    /// (CLAUDE.md §6 "파생 상태는 저장하지 않고 매번 계산한다").
+    /// </summary>
+    private readonly Dictionary<Vector2Int, Vector2Int> occupancy = new();
+
+    /// <summary>
     /// 없는 청크를 무엇으로 채울지. 지상은 <see cref="GenerateSurfaceChunk"/> 고,
     /// 지하맵은 <see cref="EnterEphemeralWorld"/> 로 이것만 갈아 끼운다.
     ///
@@ -513,6 +523,7 @@ public class WorldMap : Singleton<WorldMap>
         {
             chunk = chunkGenerator(chunkId);
             chunks[chunkId] = chunk;
+            IndexChunk(chunkId, chunk);   // 생성기가 배치물을 심어 두었을 수도 있다
         }
         return chunk;
     }
@@ -532,13 +543,149 @@ public class WorldMap : Singleton<WorldMap>
     /// <summary>
     /// 해당 월드 셀의 배치물. 청크가 아직 없으면 <b>만들지 않고</b> null 을 돌려준다
     /// (<see cref="GetTileId"/> 와 같은 규약) — 파이프 이웃을 살피다 화면 밖 청크를 통째로 만들면 안 된다.
+    ///
+    /// <b>여러 칸을 차지하는 기계는 덮인 칸에서도 기준점의 레코드를 돌려준다.</b> 이 한 곳 덕분에
+    /// <see cref="PipeRouter"/> 의 <c>MachineAt·Connects·StorageAt·FaceAt</c> 와 배치 가능 판정이
+    /// 코드 변경 없이 발자국을 안다.
+    /// ⚠ <b>직접 조회를 반드시 먼저 한다</b> — 파이프·1×1 기계가 압도적 다수이고
+    /// <see cref="PipeRouter.FindSinks"/> 가 이 함수를 대량으로 부르므로, 빈 칸에서만 조회가 한 번 는다.
     /// </summary>
     public PlaceableRecord GetPlaceableAt(Vector2Int worldCell)
+    {
+        PlaceableRecord direct = GetPlaceableExactly(worldCell);
+        if (direct != null) return direct;
+
+        return occupancy.TryGetValue(worldCell, out Vector2Int origin) ? GetPlaceableExactly(origin) : null;
+    }
+
+    /// <summary>덮인 칸을 해석하지 <b>않고</b> 그 칸 자체의 레코드만 본다(점유 색인을 세울 때 쓴다).</summary>
+    private PlaceableRecord GetPlaceableExactly(Vector2Int worldCell)
     {
         Vector3 pos = new Vector3(worldCell.x, worldCell.y, 0f);
         if (!chunks.TryGetValue(Chunk.GetChunkId(pos), out Chunk chunk)) return null;
 
         return chunk.GetPlaceable(Chunk.GetLocalCellPositionInChunk(pos));
+    }
+
+    // ── 발자국(여러 칸 배치물) ──────────────────────────────────────────
+    /// <summary>
+    /// 이 칸을 차지하고 있는 배치물의 <b>기준점(왼쪽 아래) 칸</b>. 덮인 칸이 아니면 자기 자신을 돌려준다.
+    /// 채굴·제거·전력 링크·파이프 도착지처럼 "칸으로 기계를 가리키는" 자리는 전부 이걸로 정규화한다 —
+    /// 안 하면 2×2 기계 하나가 칸 수만큼 서로 다른 대상으로 세어진다.
+    /// </summary>
+    public Vector2Int OriginAt(Vector2Int worldCell)
+        => GetPlaceableExactly(worldCell) != null ? worldCell
+         : occupancy.TryGetValue(worldCell, out Vector2Int origin) ? origin
+         : worldCell;
+
+    /// <summary>기준점과 크기로 덮이는 칸을 훑는다(왼쪽 아래부터).</summary>
+    public static IEnumerable<Vector2Int> Cells(Vector2Int origin, Vector2Int size)
+    {
+        int w = Mathf.Max(1, size.x);
+        int h = Mathf.Max(1, size.y);
+        for (int dy = 0; dy < h; dy++)
+            for (int dx = 0; dx < w; dx++)
+                yield return new Vector2Int(origin.x + dx, origin.y + dy);
+    }
+
+    /// <summary>이 배치물이 덮는 칸(레코드의 blockId 로 크기를 조회한다).</summary>
+    public static IEnumerable<Vector2Int> CellsOf(Vector2Int origin, PlaceableRecord record)
+        => Cells(origin, FootprintOf(record));
+
+    /// <summary>
+    /// 레코드의 발자국. 딕셔너리가 없거나 기계가 아니면 1×1.
+    /// ⚠ <b><see cref="Singleton{T}.Instance"/> 가 아니라 <c>InstanceIfAlive</c> 다</b> —
+    /// 에디트 모드나 초기화 순서에 따라 여기서 딕셔너리를 <b>만들어 버리면</b> 씬에 유령이 남는다.
+    /// 아직 없어서 1×1 로 읽혀도, <see cref="ItemDictionary.BuildIndexes"/> 끝의
+    /// <see cref="RebuildOccupancy"/> 가 딕셔너리가 선 뒤 다시 세워 준다.
+    /// </summary>
+    public static Vector2Int FootprintOf(PlaceableRecord record)
+        => record != null && ItemDictionary.InstanceIfAlive != null
+            ? ItemDictionary.InstanceIfAlive.FootprintOf(record.blockId)
+            : Vector2Int.one;
+
+    /// <summary>
+    /// 배치물을 월드 좌표로 놓는다. <b>발자국 전체가 비어 있어야 성공한다.</b>
+    ///
+    /// 예전에는 읽기(<see cref="GetPlaceableAt"/>)만 월드 좌표고 쓰기는 청크 로컬 좌표라 좌표계가 갈려 있었다.
+    /// 발자국은 청크 경계를 넘을 수 있어 그 비대칭을 그대로 둘 수 없다 — 쓰기도 여기로 모은다.
+    /// </summary>
+    public bool SetPlaceableAt(Vector2Int origin, PlaceableRecord record)
+    {
+        if (record == null) return false;
+
+        Vector2Int size = FootprintOf(record);
+        foreach (Vector2Int cell in Cells(origin, size))
+            if (GetPlaceableAt(cell) != null) return false;
+
+        Vector3 pos = new Vector3(origin.x, origin.y, 0f);
+        Chunk chunk = GetOrCreateChunk(Chunk.GetChunkId(pos));
+        chunk.SetPlaceable(Chunk.GetLocalCellPositionInChunk(pos), record);
+
+        foreach (Vector2Int cell in Cells(origin, size))
+            if (cell != origin) occupancy[cell] = origin;
+
+        return true;
+    }
+
+    /// <summary>
+    /// 배치물을 지운다. <b>덮인 칸을 짚어도 된다</b> — 기준점을 찾아 레코드와 점유 표를 함께 없앤다.
+    /// </summary>
+    public void RemovePlaceableAt(Vector2Int anyCoveredCell)
+    {
+        Vector2Int origin = OriginAt(anyCoveredCell);
+        PlaceableRecord record = GetPlaceableExactly(origin);
+        if (record == null) return;
+
+        foreach (Vector2Int cell in CellsOf(origin, record))
+            if (cell != origin) occupancy.Remove(cell);
+
+        Vector3 pos = new Vector3(origin.x, origin.y, 0f);
+        if (chunks.TryGetValue(Chunk.GetChunkId(pos), out Chunk chunk))
+            chunk.RemovePlaceable(Chunk.GetLocalCellPositionInChunk(pos));
+    }
+
+    /// <summary>
+    /// 점유 색인을 통째로 다시 세운다. 세이브를 읽은 뒤·월드를 갈아탄 뒤,
+    /// 그리고 <see cref="ItemDictionary"/> 색인이 다시 만들어진 뒤에 부른다.
+    /// </summary>
+    public void RebuildOccupancy()
+    {
+        occupancy.Clear();
+        if (chunks == null) return;
+
+        // ⚠ 청크 순서를 정렬한다. 겹쳤을 때 "먼저 온 것이 이긴다" 는 규칙이 Dictionary 순회 순서에
+        // 의존하면 실행할 때마다 이긴 쪽이 바뀌어, 같은 세이브가 매번 다르게 보인다.
+        List<Vector2Int> ids = new(chunks.Keys);
+        ids.Sort((a, b) => a.y != b.y ? a.y.CompareTo(b.y) : a.x.CompareTo(b.x));
+        foreach (Vector2Int id in ids) IndexChunk(id, chunks[id]);
+    }
+
+    /// <summary>
+    /// 청크 하나의 배치물을 점유 색인에 넣는다.
+    ///
+    /// ⚠ <b>겹치면 먼저 온 기준점이 이긴다.</b> 그림이 커져 옛 세이브의 두 기계가 겹칠 수 있는데,
+    /// 진 쪽도 <see cref="GetPlaceableAt"/> 이 직접 조회를 먼저 하므로 <b>자기 칸에서는 계속 열리고 캘 수 있다</b>.
+    /// 조용히 넘기지 않고 어느 두 기계가 어디서 겹쳤는지 한 줄 남긴다.
+    /// </summary>
+    private void IndexChunk(Vector2Int chunkId, Chunk chunk)
+    {
+        foreach (var kvp in chunk.Placeables)
+        {
+            Vector2Int origin = chunkId * ChunkSize + kvp.Key;
+            foreach (Vector2Int cell in CellsOf(origin, kvp.Value))
+            {
+                if (cell == origin) continue;
+                if (occupancy.TryGetValue(cell, out Vector2Int other) && other != origin)
+                {
+                    Debug.LogWarning($"[WorldMap] 배치물 발자국이 겹칩니다: {cell} 을 " +
+                                     $"{other}('{GetPlaceableExactly(other)?.blockId}') 와 " +
+                                     $"{origin}('{kvp.Value.blockId}') 가 함께 덮습니다. 앞의 것을 유지합니다.");
+                    continue;
+                }
+                occupancy[cell] = origin;
+            }
+        }
     }
 
     public bool Mining(Vector2Int chunkId, Vector2Int cellPos) => Mining(chunkId, cellPos, out _);
@@ -611,6 +758,7 @@ public class WorldMap : Singleton<WorldMap>
 
         Save();                 // 지상을 확정한다(IsEphemeral 이 아직 false 라 실제로 쓰인다)
         chunks.Clear();
+        occupancy.Clear();      // 청크를 버렸으니 파생 색인도 함께 버린다(지상 좌표가 지하에 남는다)
         chunkGenerator = generator;
         IsEphemeral = true;
     }
@@ -623,9 +771,10 @@ public class WorldMap : Singleton<WorldMap>
         if (!IsEphemeral) return;
 
         chunks.Clear();
+        occupancy.Clear();
         chunkGenerator = GenerateSurfaceChunk;
         IsEphemeral = false;
-        Load(savePath);         // 들어가기 직전에 확정해 둔 그 파일이다
+        Load(savePath);         // 들어가기 직전에 확정해 둔 그 파일이다(Load 가 색인을 다시 세운다)
     }
 
     /// <summary>
@@ -678,6 +827,7 @@ public class WorldMap : Singleton<WorldMap>
     public void Load(string path)
     {
         chunks.Clear();
+        occupancy.Clear();
         try
         {
             using BinaryReader reader = new(File.Open(path, FileMode.Open));
@@ -709,6 +859,8 @@ public class WorldMap : Singleton<WorldMap>
             // <b>반드시 선다.</b> 예전에는 격리(옛 File.Delete)가 던지면 이 줄에 닿지 못해
             // isLoaded 가 false 로 남았고, Save 첫 줄의 가드 때문에 그 세션 내내 저장이 조용히 무시됐다.
             isLoaded = true;
+            // 읽어 들인(또는 실패해 비운) 청크에서 발자국 색인을 파생시킨다.
+            RebuildOccupancy();
         }
     }
 }

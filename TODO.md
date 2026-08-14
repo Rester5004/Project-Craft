@@ -668,3 +668,48 @@ BlockBase **56** · 씬 `recipesList` **139**(변화 없음 — 지운 것들은
       노션의 2티어 `원유 펌프` 는 별개 기계 `Machine:OilDrill` 인데 **건설 레시피가 없다.**
 - [ ] `reinforced_concrete` 레시피의 `tier` 가 **0** 이다(재료인 시멘트는 t1). 이제 2티어 관문 재료이므로
       해금 티어를 올리는 편이 자연스럽다 — 지금은 t0 목록에 뜨지만 시멘트가 없어 못 만든다.
+
+---
+
+## L. 여러 칸을 차지하는 기계 (발자국 + 설치 미리보기) — 2026-08-13
+
+### L-1. 한 일
+
+- [x] **`MachineBlock.size` + `Footprint`** — 발자국은 **저장하지 않는다**(SO 파생, 세이브 v12 그대로).
+      `Mathf.Max(1, …)` 클램프가 "새 필드는 0 으로 읽힌다" 함정을 대신 막는다.
+- [x] **`WorldMap` 에 점유 색인** — 덮인 칸 → 기준점. `GetPlaceableAt` 이 이걸로 해석하므로
+      `PipeRouter` 의 `MachineAt·Connects·StorageAt·FaceAt` 와 배치 판정이 **코드 변경 없이** 발자국을 안다.
+      쓰기도 `SetPlaceableAt`/`RemovePlaceableAt`(월드 좌표)로 모아 좌표계 비대칭을 없앴다.
+- [x] **`MapGenerator` 가 덮는 칸마다 같은 인스턴스를 등록** — 사용자가 겪은
+      "나머지 칸은 우클릭해도 UI 가 안 열린다" 가 여기서 풀린다. 위치는 발자국 정중앙으로 보정하고,
+      콜라이더는 **인스턴스에만** 발자국 크기로 맞춘다(`tmp_crafter` 는 콜라이더가 없어 새로 붙인다).
+- [x] **`PlacementPreview`** — 반투명 기계 그림(order 8) + 칸별 초록/빨강(order 7).
+      판정은 `PlayerInteraction.CanPlaceFootprint` **한 곳**만 하고 미리보기는 결과만 칠한다.
+- [x] **기준점 정규화 4곳** — `PipeRouter.AddSink` · `PipeNetworkManager` 의 `sourceCell` ·
+      `PowerLinkMode.AddLink` · `MapGenerator.FlushAll`.
+- [x] 에셋 6종: 고급 조합기 5×5 · 고급 재단 3×3 · 코어 조합기 3×3 · 중급 재단 2×2 · 용광로 2×2 · 증류기 1×3.
+- [x] ⚠ **정렬 순서 마이그레이션 누락 2건을 함께 고쳤다.** 정렬 순서가 `(옛값 + 10) × 10` 으로 바뀔 때
+      `PipeFaceOverlay`(5) 와 `PowerLinkMode`(6) 가 빠져 있었다 — 둘 다 바닥(100)보다 아래라
+      **렌치 면 막대와 전송 모드 오버레이가 통째로 안 보이던 상태**였다. 150·160 으로 올렸다.
+      코드에 남은 한 자릿수 값은 이제 0건이다.
+
+### L-2. 이번에 생긴 부채 · 손대지 않은 것
+
+- [ ] **회전이 없다.** 발자국은 축 정렬 직사각형이라 `1×3` 증류기는 세로로만 놓인다.
+- [ ] ⚠ **5×5 고급 조합기는 빈 땅 25칸을 요구한다.** 실제로 놓아 보고 답답하면 그림을 줄이거나 3×3 으로 낮춘다.
+- [ ] ⚠ **면 상태는 방향당 하나다** — 2×2 의 북쪽 두 칸이 렌치 설정 하나를 공유한다.
+      칸별로 나누려면 `faceModes` 를 레코드가 아니라 칸에 둬야 해서 세이브가 바뀐다.
+- [ ] **발자국이 청크 경계를 넘고 기준점 청크만 언로드되면** 덮인 칸에 인스턴스가 없다.
+      레코드는 점유 색인으로 계속 보이고 배달은 `IsCellLoaded` 가 막으므로 안전하지만,
+      렌더 창(25청크) 가장자리에서만 생기는 상태다.
+- [ ] **`Furnace.prefab` 의 월드 스프라이트가 `furnace_icon`(22×30)** 로 잘못 물려 있고,
+      `HVElectricFurnace.prefab` 은 `machine2.png` 의 16×25 화로를 쓴다. 그림을 고치면 발자국도 다시 재야 한다.
+- [ ] **아이콘 3종이 월드 스프라이트를 그대로 쓴다** — `AdvancedAltar`(86×99) · `IntermediateAltar`(56×67) ·
+      `CoreCrafter`(82×82). 앞의 둘은 32×32 `_icon` 스프라이트가 이미 있는데 안 쓰여 슬롯에서 넘친다.
+- [ ] ⚠ **`Chunk.Save/Load` 가 `plantedAtUtcTicks` 를 두 번 쓰고 두 번 읽는다**(`WorldMap.cs:232-233` /
+      `404-406`). 자기끼리는 맞아 돌지만 gate 가 `version >= 9` 라 **진짜 v9~v11 파일은 못 읽는다.**
+- [ ] **`MachinePlacement.cs`(21-42)는 죽은 병행 배치 코드**다. 한 칸 가정을 복사해 갖고 있으니 지우는 편이 맞다.
+- [ ] **`PlayerInteraction`** 에 죽은 가지 하나(`:474-475` `MineTarget.Crop` 중복)가 남아 있다.
+      (`IsFloor` 블록 중복은 이번에 판정을 합치면서 사라졌다.)
+- [ ] **덜 자란 작물을 없앨 방법이 없다** — `HarvestCropAt`·`MineTarget.Crop` 둘 다 `IsMature` 를 요구하고,
+      레코드가 남아 다시 놓지도 못한다.
