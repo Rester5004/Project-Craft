@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: crush_sand
   m_EditorClassIdentifier: Assembly-CSharp::Recipe
   machine: {fileID: 11400000, guid: 2290bdb0a27272d4eb44b866581bb18e, type: 2}
-  category: {fileID: 0}
+  category: {fileID: 11400000, guid: a63365af4ccd3904a91ebf59b6456c84, type: 2}
   tier: 0
   inputs:
   - item: {fileID: 11400000, guid: 4df3ae1290e85d346a34ede0f4a5c053, type: 2}
@@ -21,6 +21,9 @@ MonoBehaviour:
   outputs:
   - item: {fileID: 11400000, guid: 4234355d128895145abd4edb5299b560, type: 2}
     count: 1
+  fluidInputs: []
+  fluidOutputs: []
+  chanceOutputs: []
   requiredTools: []
   craftTime: 1
   importNote: "[\uC218\uB3D9] \uB3CC \uBD84\uC1C4 \uC0AC\uC2AC \uD1B5\uD569(\uB3CC

@@ -13,12 +13,14 @@ MonoBehaviour:
   m_Name: extract_meteorite_shard
   m_EditorClassIdentifier: Assembly-CSharp::Recipe
   machine: {fileID: 11400000, guid: af8028b660af13b4899f7a23205588c9, type: 2}
-  category: {fileID: 0}
+  category: {fileID: 11400000, guid: a63365af4ccd3904a91ebf59b6456c84, type: 2}
   tier: 0
   inputs:
   - item: {fileID: 11400000, guid: 6e83046e8ffa0e44f8a0b5855663815e, type: 2}
     count: 1
   outputs: []
+  fluidInputs: []
+  fluidOutputs: []
   chanceOutputs:
   - item: {fileID: 11400000, guid: d92f6fb405a80874a93ef156e66d8374, type: 2}
     count: 1

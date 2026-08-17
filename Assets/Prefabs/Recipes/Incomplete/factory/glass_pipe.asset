@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: glass_pipe
   m_EditorClassIdentifier: Assembly-CSharp::Recipe
   machine: {fileID: 11400000, guid: ea55fe72f9315554a8ffdcf795dd1b7e, type: 2}
-  category: {fileID: 11400000, guid: a63365af4ccd3904a91ebf59b6456c84, type: 2}
+  category: {fileID: 11400000, guid: e8aa8410127980c4f9bd1da1db39f486, type: 2}
   tier: 1
   inputs:
   - item: {fileID: 11400000, guid: bbb797acc5a779e41a96c13ea4f31a03, type: 2}

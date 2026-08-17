@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: laser_cavity_scanner
   m_EditorClassIdentifier: Assembly-CSharp::Recipe
   machine: {fileID: 11400000, guid: b0b5992a71f98cd4eb896eb59f582d68, type: 2}
-  category: {fileID: 11400000, guid: a63365af4ccd3904a91ebf59b6456c84, type: 2}
+  category: {fileID: 11400000, guid: ad974e9d9fcf5f549a933df79a03218c, type: 2}
   tier: 1
   inputs:
   - item: {fileID: 11400000, guid: cb5fecda99ffdb74382a0c1f5e8bef4d, type: 2}
@@ -23,6 +23,9 @@ MonoBehaviour:
   outputs:
   - item: {fileID: 11400000, guid: 43e33e8f82b485745835d663dcf467d7, type: 2}
     count: 1
+  fluidInputs: []
+  fluidOutputs: []
+  chanceOutputs: []
   requiredTools: []
   craftTime: 1
   importNote: "[\uBCD1\uD569] Assets/Prefabs/Recipes/Incomplete/machine_processing/laser_cavity_scanner.asset

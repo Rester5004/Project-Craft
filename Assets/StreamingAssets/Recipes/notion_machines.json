@@ -482,16 +482,43 @@
       "tier": 2,
       "output": "업그레이드 모듈 - 속도",
       "outputQty": 1,
-      "inputs": [],
-      "note": "조합법 미정. 기계에 장착해 처리 속도 향상"
+      "inputs": [ { "item": "특수합금", "qty": 200 } ],
+      "note": "기계에 장착해 처리 속도 향상"
     },
     {
       "id": "upgrade_module_efficiency",
       "tier": 2,
       "output": "업그레이드 모듈 - 효율",
       "outputQty": 1,
-      "inputs": [],
-      "note": "조합법 미정. 기계에 장착해 효율 향상"
+      "inputs": [ { "item": "강화 합금", "qty": 200 } ],
+      "note": "기계에 장착해 효율 향상"
+    },
+    {
+      "id": "hv_electric_furnace",
+      "tier": 2,
+      "output": "고전압 전기로",
+      "outputQty": 1,
+      "inputs": [ { "item": "전기로", "qty": 1 }, { "item": "강화 합금", "qty": 10 },
+                  { "item": "기계 강화 모듈", "qty": 1 }, { "item": "철근 콘크리트", "qty": 2 } ],
+      "note": "화로 계열 마지막 업그레이드. 속도 x4 / 전력 300per s"
+    },
+    {
+      "id": "geothermal_generator",
+      "tier": 1,
+      "output": "지열 발전기",
+      "outputQty": 1,
+      "inputs": [ { "item": "철근", "qty": 4 }, { "item": "철판", "qty": 10 },
+                  { "item": "전도체 가루", "qty": 4 } ],
+      "note": "연료 없이 12per s 발전. fuelBurnRate 가 곧 발전량이다"
+    },
+    {
+      "id": "transformer",
+      "tier": 1,
+      "output": "변압기",
+      "outputQty": 1,
+      "inputs": [ { "item": "철근", "qty": 4 }, { "item": "금 판", "qty": 4 },
+                  { "item": "철판", "qty": 4 }, { "item": "구리판", "qty": 4 } ],
+      "note": "건설 레시피. 전압 2풀이 미구현이라 지어도 아직 아무 일도 하지 않는다"
     }
   ]
 }

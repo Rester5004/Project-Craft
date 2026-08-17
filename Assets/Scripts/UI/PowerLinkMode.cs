@@ -32,6 +32,12 @@ public class PowerLinkMode : MonoBehaviour
     [Tooltip("비우면 씬에서 첫 번째 Canvas 를 사용")]
     [SerializeField] private Canvas targetCanvas;
 
+    [Tooltip("오버레이가 조명을 받지 않게 하는 Unlit 머티리얼(Assets/Asset/Common/OverlayUnlit.mat).")]
+    [SerializeField] private Material overlayMaterial;
+
+    [Tooltip("한 칸을 통째로 채우는 흰 타일(Assets/Asset/Common/White1x1Tile.asset). 색은 SetColor 로 입힌다.")]
+    [SerializeField] private Tile solidTile;
+
     public static PowerLinkMode Instance { get; private set; }
 
     /// <summary>전송 모드가 켜져 있는가. PlayerInteraction 이 커서 윤곽선·채굴을 멈추는 데 쓴다.</summary>
@@ -42,7 +48,6 @@ public class PowerLinkMode : MonoBehaviour
     private MachineInstance generator;
 
     private Tilemap overlay;
-    private Tile solidTile;
     private readonly List<Vector3Int> painted = new();
     private readonly HashSet<Vector2Int> candidates = new();
 
@@ -198,33 +203,15 @@ public class PowerLinkMode : MonoBehaviour
         overlay = go.GetComponent<Tilemap>();
         TilemapRenderer renderer = go.GetComponent<TilemapRenderer>();
         renderer.sortingOrder = OverlaySortingOrder;
-    }
-
-    /// <summary>
-    /// 한 칸을 통째로 채우는 흰 타일. 칸마다 Tile 을 새로 만들면 인스턴스가 쌓이므로
-    /// 하나만 만들어 두고 <see cref="Tilemap.SetColor"/> 로 색을 입힌다.
-    /// </summary>
-    private Tile SolidTile()
-    {
-        if (solidTile != null) return solidTile;
-
-        Texture2D texture = new Texture2D(1, 1);
-        texture.SetPixel(0, 0, Color.white);
-        texture.filterMode = FilterMode.Point;
-        texture.Apply();
-
-        // pixelsPerUnit = 1, 1x1 픽셀 → 셀 크기(1)와 정확히 같아진다.
-        Sprite sprite = Sprite.Create(texture, new Rect(0f, 0f, 1f, 1f), new Vector2(0.5f, 0.5f), 1f);
-
-        solidTile = ScriptableObject.CreateInstance<Tile>();
-        solidTile.sprite = sprite;
-        return solidTile;
+        // 안내 표시는 조명을 받지 않는다. 머티리얼은 인스펙터에서 꽂는다 —
+        // Shader.Find 로 만들면 빌드에서 셰이더가 스트립됐을 때 런타임에만 조용히 깨진다.
+        if (overlayMaterial != null) renderer.sharedMaterial = overlayMaterial;
     }
 
     private void Paint(Vector2Int cell, Color color)
     {
         Vector3Int pos = (Vector3Int)cell;
-        overlay.SetTile(pos, SolidTile());
+        overlay.SetTile(pos, solidTile);
         overlay.SetTileFlags(pos, TileFlags.None);   // 이걸 빼면 SetColor 가 조용히 무시된다
         overlay.SetColor(pos, color);
         painted.Add(pos);

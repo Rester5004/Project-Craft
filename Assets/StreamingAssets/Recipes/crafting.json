@@ -25,18 +25,6 @@
       "note": "다른 자원 막대, 칼날, 망치머리 추가 예정"
     },
     {
-      "id": "blade",
-      "tier": 0,
-      "output": "칼날",
-      "outputQty": 1,
-      "inputs": [
-        {
-          "item": "돌",
-          "qty": 2
-        }
-      ]
-    },
-    {
       "id": "hammer_head",
       "tier": 0,
       "output": "망치 머리",
@@ -49,25 +37,9 @@
       ]
     },
     {
-      "id": "knife",
+      "id": "dowsing_rod",
       "tier": 0,
-      "output": "칼",
-      "outputQty": 1,
-      "inputs": [
-        {
-          "item": "막대",
-          "qty": 1
-        },
-        {
-          "item": "칼날",
-          "qty": 1
-        }
-      ]
-    },
-    {
-      "id": "dowsing_rod_t0",
-      "tier": 0,
-      "output": "0티어 다우징 로드",
+      "output": "다우징 로드",
       "outputQty": 1,
       "tools": [
         "칼",
@@ -209,27 +181,6 @@
       ]
     },
     {
-      "id": "mana_shard_duplicate",
-      "tier": 0,
-      "category": "magic",
-      "station": "초급 재단",
-      "output": "마력 파편",
-      "outputQty": 2,
-      "tools": [
-        "망치"
-      ],
-      "inputs": [
-        {
-          "item": "마력 파편",
-          "qty": 1
-        },
-        {
-          "item": "구리",
-          "qty": 10
-        }
-      ]
-    },
-    {
       "id": "water",
       "tier": 0,
       "category": "magic",
@@ -266,61 +217,6 @@
         }
       ],
       "note": "양동이는 조합하면 채워짐"
-    },
-    {
-      "id": "resource_generator_t0",
-      "tier": 0,
-      "category": "magic",
-      "station": "초급 재단",
-      "output": "0티어 자원 생성기",
-      "outputQty": 1,
-      "inputs": [
-        {
-          "item": "마력 파편",
-          "qty": 5
-        },
-        {
-          "item": "돌",
-          "qty": 5
-        }
-      ]
-    },
-    {
-      "id": "enchanted_conductor_powder",
-      "tier": 0,
-      "category": "magic",
-      "station": "초급 재단",
-      "output": "마법이 부여된 전도체 가루",
-      "outputQty": 1,
-      "inputs": [
-        {
-          "item": "마력 파편",
-          "qty": 2
-        },
-        {
-          "item": "전도체 가루",
-          "qty": 1
-        }
-      ],
-      "note": "1개로 코어를 1티어로 업그레이드"
-    },
-    {
-      "id": "tailoring_intermediate",
-      "tier": 0,
-      "category": "magic",
-      "station": "초급 재단",
-      "output": "중급 재단",
-      "outputQty": 1,
-      "inputs": [
-        {
-          "item": "초급 재단",
-          "qty": 1
-        },
-        {
-          "item": "금 주괴",
-          "qty": 10
-        }
-      ]
     },
     {
       "id": "crusher",
@@ -604,57 +500,7 @@
         }
       ]
     },
-    {
-      "id": "mana_crystal",
-      "tier": 1,
-      "category": "magic",
-      "station": "중급 재단",
-      "output": "마력 결정",
-      "outputQty": 1,
-      "inputs": [
-        {
-          "item": "마력 파편",
-          "qty": 100
-        }
-      ]
-    },
-    {
-      "id": "resource_generator_t0_enhanced",
-      "tier": 1,
-      "category": "magic",
-      "station": "중급 재단",
-      "output": "0티어 자원 생성기(강화)",
-      "outputQty": 1,
-      "inputs": [
-        {
-          "item": "마력 결정",
-          "qty": 1
-        },
-        {
-          "item": "0티어 자원 생성기",
-          "qty": 1
-        }
-      ]
-    },
-    {
-      "id": "mana_chip",
-      "tier": 1,
-      "category": "magic",
-      "station": "중급 재단",
-      "output": "마력 칩",
-      "outputQty": 1,
-      "inputs": [
-        {
-          "item": "컴퓨터 칩",
-          "qty": 1
-        },
-        {
-          "item": "마력 결정",
-          "qty": 1
-        }
-      ]
-    },
-    {
+                {
       "id": "mana_dissolver",
       "tier": 1,
       "category": "magic",
@@ -681,47 +527,7 @@
       ],
       "note": "원문에 수량 미표기"
     },
-    {
-      "id": "enchanter",
-      "tier": 1,
-      "category": "magic",
-      "station": "중급 재단",
-      "output": "마법부여기",
-      "outputQty": 1,
-      "inputs": [
-        {
-          "item": "금 주괴",
-          "qty": 10
-        },
-        {
-          "item": "마력 결정",
-          "qty": 2
-        },
-        {
-          "item": "은 판",
-          "qty": 5
-        }
-      ]
-    },
-    {
-      "id": "apple_tree_seed",
-      "tier": 1,
-      "category": "magic",
-      "station": "중급 재단",
-      "output": "사과 나무 씨앗",
-      "outputQty": 1,
-      "inputs": [
-        {
-          "item": "나무 씨앗",
-          "qty": 1
-        },
-        {
-          "item": "마력 파편",
-          "qty": 10
-        }
-      ]
-    },
-    {
+            {
       "id": "pump",
       "tier": 2,
       "output": "펌프",
@@ -808,15 +614,15 @@
       "id": "upgrade_module_speed",
       "tier": 2,
       "output": "업그레이드 모듈 - 속도",
-      "inputs": [],
-      "note": "조합법 미정"
+      "inputs": [ { "item": "특수합금", "qty": 200 } ],
+      "note": "노션 값 그대로. 체감상 매우 크므로 조정 대상"
     },
     {
       "id": "upgrade_module_efficiency",
       "tier": 2,
       "output": "업그레이드 모듈 - 효율",
-      "inputs": [],
-      "note": "조합법 미정"
+      "inputs": [ { "item": "강화 합금", "qty": 200 } ],
+      "note": "노션 값 그대로. 체감상 매우 크므로 조정 대상"
     },
     {
       "id": "blast_furnace",

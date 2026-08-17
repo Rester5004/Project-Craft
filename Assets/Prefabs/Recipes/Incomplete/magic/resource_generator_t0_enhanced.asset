@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: resource_generator_t0_enhanced
   m_EditorClassIdentifier: Assembly-CSharp::Recipe
   machine: {fileID: 11400000, guid: b34db018d1ff1954fbe7a9e48a6bf25b, type: 2}
-  category: {fileID: 11400000, guid: a63365af4ccd3904a91ebf59b6456c84, type: 2}
+  category: {fileID: 11400000, guid: ad974e9d9fcf5f549a933df79a03218c, type: 2}
   tier: 1
   inputs:
   - item: {fileID: 11400000, guid: 36673d165a5f895419b19e358bce9cea, type: 2}
@@ -23,6 +23,9 @@ MonoBehaviour:
   outputs:
   - item: {fileID: 11400000, guid: b4f730bc42573354397b7ca044a53936, type: 2}
     count: 1
+  fluidInputs: []
+  fluidOutputs: []
+  chanceOutputs: []
   requiredTools: []
   craftTime: 1
   importNote: "[\uCD9C\uCC98] notion_magic.json / id=resource_generator_t0_enhanced\r\n[\uAE30\uACC4]

@@ -91,8 +91,9 @@ public class CraftRecipeSlot : MonoBehaviour, IPointerClickHandler, IPointerEnte
     {
         ApplyHighlight(true);
 
-        Items output = Recipe != null ? Recipe.PrimaryOutput : null;
-        if (TooltipUI.Instance != null) TooltipUI.Instance.Show(output != null ? output.DisplayName : "");
+        // 산출물이 아니라 <b>레시피가 부르는 이름</b>을 쓴다 — 도구·부품 레시피는 재질에 따라 결과가
+        // 달라서 outputs[0] 이 아이콘용 견본일 뿐이다(<see cref="Recipe.ListName"/> 주석 참고).
+        if (TooltipUI.Instance != null) TooltipUI.Instance.Show(Recipe != null ? Recipe.ListName : "");
     }
 
     public void OnPointerExit(PointerEventData eventData)

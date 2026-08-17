@@ -2,16 +2,19 @@
 
 `Tools/Project Craft/Recipes/Assign Recipe Categories` 가 자동 생성한 파일입니다.
 
-## 카테고리 에셋
-
-- `resource` 표시 이름 'Resource' → '자원'
-- `machine` 표시 이름 'Machine' → '기계'
-- `block` 표시 이름 'Block' → '블록'
-
 ## 결과
 
-- 새로 배정 129개 · 이미 지정돼 있어 유지 5개 · 산출물이 없어 건너뜀 32개
+- 바뀐 것 5개 · 그대로 131개 · 산출물이 없어 건너뜀 6개
 
-- resource : 108개
-- machine : 17개
-- tool : 4개
+- resource : 76개
+- tool : 10개
+- machine : 40개
+- block : 10개
+
+## 옮겨진 레시피
+
+- `compress_copper_plate` : 도구 → 자원
+- `compress_gold_plate` : 도구 → 자원
+- `compress_silver_plate` : 도구 → 자원
+- `compress_iron_plate` : 도구 → 자원
+- `plate` : 도구 → 자원

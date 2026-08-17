@@ -14,13 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Recipe
   machine: {fileID: 11400000, guid: 63f0a8bb17e98434a90c04565e332cf7, type: 2}
   category: {fileID: 11400000, guid: a63365af4ccd3904a91ebf59b6456c84, type: 2}
-  tier: 1
+  tier: 0
   inputs:
   - item: {fileID: 11400000, guid: 61d1cac0182ab314a952cc8caac13d75, type: 2}
     count: 4
   outputs:
   - item: {fileID: 11400000, guid: 9edcaeffcada1d34faa53a180266af01, type: 2}
     count: 1
+  fluidInputs: []
+  fluidOutputs: []
+  chanceOutputs: []
   requiredTools: []
   craftTime: 1
   importNote: "[\uBCD1\uD569] Assets/Prefabs/Recipes/Incomplete/smelting/smelt_tin.asset

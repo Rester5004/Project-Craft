@@ -20,6 +20,7 @@ MonoBehaviour:
   uiPrefab: {fileID: 7702039049571775994, guid: 92a0bb36338b526468e28b1cb9d67156, type: 3}
   runningSprite: {fileID: 0}
   manualStepRatio: 0
+  size: {x: 1, y: 1}
   tier: 1
   recipeGroupId: Furnace
   inputSlotCount: 1
@@ -35,5 +36,5 @@ MonoBehaviour:
   isGenerator: 0
   powerRange: 0
   energyUseRate: 100
-  speedMultiplier: 1
+  speedMultiplier: 2
   chanceMultiplier: 1

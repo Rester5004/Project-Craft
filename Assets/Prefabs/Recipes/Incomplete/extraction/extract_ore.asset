@@ -13,12 +13,15 @@ MonoBehaviour:
   m_Name: extract_ore
   m_EditorClassIdentifier: Assembly-CSharp::Recipe
   machine: {fileID: 0}
-  category: {fileID: 11400000, guid: a63365af4ccd3904a91ebf59b6456c84, type: 2}
+  category: {fileID: 11400000, guid: e8aa8410127980c4f9bd1da1db39f486, type: 2}
   tier: 1
   inputs: []
   outputs:
   - item: {fileID: 11400000, guid: 3b3ecc29dd70a9d409676129a61c5bdf, type: 2}
     count: 1
+  fluidInputs: []
+  fluidOutputs: []
+  chanceOutputs: []
   requiredTools: []
   craftTime: 1
   importNote: "[\uBCD1\uD569] Assets/Prefabs/Recipes/Incomplete/extraction/extract_ore.asset

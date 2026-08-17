@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a1a0b2d2d1d5524f8e690500777e3cf, type: 3}
+  m_Name: knife
+  m_EditorClassIdentifier: Assembly-CSharp::ToolRecipe
+  machine: {fileID: 11400000, guid: ea55fe72f9315554a8ffdcf795dd1b7e, type: 2}
+  category: {fileID: 11400000, guid: ef9a71ccaa651f44b9ac39336fd0fdf1, type: 2}
+  tier: 0
+  inputs: []
+  outputs:
+  - item: {fileID: 11400000, guid: 5766975fe09f5524f8fc4bb06b6fc80b, type: 2}
+    count: 1
+  fluidInputs: []
+  fluidOutputs: []
+  chanceOutputs: []
+  requiredTools: []
+  craftTime: 0
+  importNote: 
+  tool: {fileID: 11400000, guid: 1b3c5eb96478c9443bbbbd1cebde8f40, type: 2}

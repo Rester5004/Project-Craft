@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: hydroponics
   m_EditorClassIdentifier: Assembly-CSharp::Recipe
   machine: {fileID: 11400000, guid: ea55fe72f9315554a8ffdcf795dd1b7e, type: 2}
-  category: {fileID: 11400000, guid: a63365af4ccd3904a91ebf59b6456c84, type: 2}
+  category: {fileID: 11400000, guid: ad974e9d9fcf5f549a933df79a03218c, type: 2}
   tier: 2
   inputs:
   - item: {fileID: 11400000, guid: a734b1474ee0468409d82b9b4d1d1d74, type: 2}

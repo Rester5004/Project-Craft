@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: crush_meteorite_dust
   m_EditorClassIdentifier: Assembly-CSharp::Recipe
   machine: {fileID: 11400000, guid: 2290bdb0a27272d4eb44b866581bb18e, type: 2}
-  category: {fileID: 0}
+  category: {fileID: 11400000, guid: a63365af4ccd3904a91ebf59b6456c84, type: 2}
   tier: 2
   inputs:
   - item: {fileID: 11400000, guid: ff2f550d33ad2c24aa80c5223cacc159, type: 2}
@@ -21,6 +21,8 @@ MonoBehaviour:
   outputs:
   - item: {fileID: 11400000, guid: 475a8df022d54b84c926e1cb398d3ce8, type: 2}
     count: 1
+  fluidInputs: []
+  fluidOutputs: []
   chanceOutputs: []
   requiredTools: []
   craftTime: 1

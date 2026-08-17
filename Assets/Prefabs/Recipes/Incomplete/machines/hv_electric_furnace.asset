@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d1635fa976c21145835b252e45d6313, type: 3}
+  m_Name: hv_electric_furnace
+  m_EditorClassIdentifier: Assembly-CSharp::Recipe
+  machine: {fileID: 11400000, guid: ea55fe72f9315554a8ffdcf795dd1b7e, type: 2}
+  category: {fileID: 11400000, guid: ad974e9d9fcf5f549a933df79a03218c, type: 2}
+  tier: 2
+  inputs:
+  - item: {fileID: 11400000, guid: 8e5057dd8b09a32468dc47da6921ccb7, type: 2}
+    count: 1
+  - item: {fileID: 11400000, guid: 9e7305e9ba375e441b35037c04e96810, type: 2}
+    count: 10
+  - item: {fileID: 11400000, guid: 414c202c34212ba439dd4c5fc66b9c92, type: 2}
+    count: 1
+  - item: {fileID: 11400000, guid: 0330312b77a14f343994e156d6909149, type: 2}
+    count: 2
+  outputs:
+  - item: {fileID: 11400000, guid: 5bb0986bc0d15304284cabac2daa8cea, type: 2}
+    count: 1
+  fluidInputs: []
+  fluidOutputs: []
+  chanceOutputs: []
+  requiredTools: []
+  craftTime: 1
+  importNote: 

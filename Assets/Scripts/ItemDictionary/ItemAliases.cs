@@ -34,9 +34,12 @@ public static class ItemAliases
         { "티타늄", "raw_titanium_ore" },
 
         // 표기 흔들림 — 띄어쓰기와 영문 병기
-        { "금속판", "금속 판" },
-        { "인바(invar) 판", "인바 판" },
-        { "인바(invar)", "인바" },
+        // ⚠ 셋 다 <b>최종 이름을 직접 가리켜야 한다</b>(Resolve 는 한 단계만 푼다).
+        //    예전에는 '금속판 → 금속 판', '인바(invar) → 인바' 처럼 사슬이라 실제로는 안 풀렸고,
+        //    '금속 판' 은 2026-08-15 에 아이템까지 사라져 아무 데도 닿지 않게 됐다.
+        { "금속판", "iron_plate" },
+        { "인바(invar) 판", "invar_plate" },
+        { "인바(invar)", "invar" },
 
         // 추출기 계열이 정식 기계가 되면서 흡수된 플레이스홀더 (Machine:Extractor00~23 12종은 이미 다 있다)
         // 뭉뚱그린 옛 '추출기' 는 전력을 쓰는 첫 등급(0-1)으로 본다 — 옛 세이브에 놓여 있어도 안 사라지게.
@@ -76,7 +79,10 @@ public static class ItemAliases
         // 판 · 부품
         { "철판", "iron_plate" },       { "구리판", "copper_plate" },   { "금 판", "gold_plate" },
         { "은 판", "silver_plate" },    { "청동 판", "bronze_plate" },  { "인바 판", "invar_plate" },
-        { "실리콘 판", "silicon_plate" }, { "금속 판", "metal_plate" },
+        { "실리콘 판", "silicon_plate" },
+        // ⚠ '금속 판' 은 재질별 판 16종이 대신하면서 지웠다(2026-08-15). 갈 곳이 없으므로 철판으로 보낸다 —
+        //    itemName 이 세이브 키라, 이 줄이 없으면 인벤토리에 있던 금속 판이 사라진다.
+        { "금속 판", "iron_plate" },     { "metal_plate", "iron_plate" },
         { "철근", "rebar" },            { "철근 콘크리트", "reinforced_concrete" },
         { "강화 합금", "reinforced_alloy" },
         // 노션이 '2티어 업그레이드 모듈' 로 부르던 것이다 — 지금 이름은 '기계 강화 모듈'.
@@ -105,9 +111,20 @@ public static class ItemAliases
         { "나무 씨앗", "tree_seed" },   { "사과 나무 씨앗", "apple_tree_seed" },
 
         // 도구 (도구 체계로 흡수는 별건 — 지금은 이름만 규약에 맞춘다)
-        { "칼", "knife" },              { "돌 칼", "stone_knife" },   { "철 칼", "iron_knife" },
-        { "칼날", "blade" },            { "돌 칼날", "stone_blade" }, { "철 칼날", "iron_blade" },
-        { "다우징 로드", "dowsing_rod" }, { "0티어 다우징 로드", "dowsing_rod_t0" },
+        // ⚠ 칼은 2026-08-15 에 도구 체계로 옮겼다(망치·곡괭이와 같은 꼴).
+        //    재질 고정 아이템 `돌 칼`·`철 칼` 은 사라지고 <b>재질을 인스턴스가 들고 있는 `tool_knife` 하나</b>다.
+        //    칼날은 반대로 부품이 되면서 `stone_blade`·`iron_blade` 라는 <b>이름이 그대로 살아남았다</b>
+        //    (그래서 그 둘은 별칭이 필요 없다). 재질 없는 `blade` 만 갈 곳이 없어 돌 칼날로 보낸다.
+        { "칼", "tool_knife" },         { "knife", "tool_knife" },
+        { "돌 칼", "tool_knife" },       { "stone_knife", "tool_knife" },
+        { "철 칼", "tool_knife" },       { "iron_knife", "tool_knife" },
+        { "칼날", "stone_blade" },       { "blade", "stone_blade" },
+        { "돌 칼날", "stone_blade" },    { "철 칼날", "iron_blade" },
+        // ⚠ dowsing_rod_t0 는 그림까지 같은 완전한 중복이었고, 그것 하나 때문에 게임이 시작되지 않았다 —
+        //    만들 수 있는 것은 dowsing_rod_t0 인데 UndergroundPalette.DowsingTierOf 는 dowsing_rod 만 인정해서
+        //    지하맵(= 철 주괴·마력 파편의 유일한 획득처)에 영영 못 들어갔다. dowsing_rod 로 흡수했다.
+        { "다우징 로드", "dowsing_rod" },
+        { "0티어 다우징 로드", "dowsing_rod" }, { "dowsing_rod_t0", "dowsing_rod" },
         { "업그레이드 모듈 - 속도", "upgrade_speed" },
         { "업그레이드 모듈 - 효율", "upgrade_efficiency" },
 
@@ -135,6 +152,15 @@ public static class ItemAliases
         { "압축기", "Machine:Compressor" },
         { "아이템 강화기", "Machine:ItemEnhancer" },  { "item_enhancer", "Machine:ItemEnhancer" },
         { "수경 재배기", "Machine:Hydroponics" },     { "hydroponics", "Machine:Hydroponics" },
+        // ⚠ 중급 재단만 아이템 이름이 블록 이름과 달랐다(Machine:Intermediate_altar vs Machine:IntermediateAltar).
+        //    blockId == itemName == blockName 규약 위반이라 <b>만들 수는 있는데 놓을 수가 없었다.</b>
+        //    아이템 쪽을 블록에 맞췄고, 이 줄은 옛 이름이 든 세이브·인벤토리를 잇는 안전망이다(itemName 이 세이브 키).
+        { "중급 재단", "Machine:IntermediateAltar" },
+        { "Machine:Intermediate_altar", "Machine:IntermediateAltar" },
+        // '원유 채굴기' 는 '펌프' 와 같은 기계라 흡수됐다(둘 다 지형에서 원유 1000 을 뽑는 것뿐).
+        // <b>이 줄이 없으면 이미 놓아 둔 원유 채굴기가 세이브에서 통째로 사라진다.</b>
+        { "원유 채굴기", "Machine:Pump" },        { "Machine:OilDrill", "Machine:Pump" },
+        { "펌프", "Machine:Pump" },
 
         // 배치물 — 아이템 이름을 바꾸면 blockName 도 같이 바꿔야 한다(파이프 에셋 설정이 복사해 간다)
         { "돌", "stone" },              { "마력석", "manastone" },

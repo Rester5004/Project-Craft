@@ -24,7 +24,7 @@
     {
       "id": "altar_intermediate",
       "machine": "초급 재단",
-      "tier": 1,
+      "tier": 0,
       "output": "중급 재단",
       "outputQty": 1,
       "inputs": [

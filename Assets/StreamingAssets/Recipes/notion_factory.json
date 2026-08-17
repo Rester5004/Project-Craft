@@ -54,13 +54,6 @@
         { "item": "산소", "qty": 1, "fluid": true }
       ],
       "note": "수전해기가 전기 분해기로 통합됨" },
-
-    { "id": "drill_crude_oil", "machine": "원유 채굴기", "tier": 1, "output": "원유", "outputQty": 1,
-      "fluid": true, "terrain": "석유 지형", "note": "석유 지형 설치 필수" },
-
-    { "id": "compress_metal_plate", "machine": "압축기", "tier": 1, "output": "금속 판", "outputQty": 1,
-      "inputs": [ { "item": "금속 주괴", "qty": 1 } ] },
-
     { "id": "alloy_bronze", "machine": "합금 재련기", "tier": 1, "output": "청동", "outputQty": 4,
       "inputs": [ { "item": "구리", "qty": 3 }, { "item": "주석", "qty": 1 } ],
       "note": "광석·주괴 상관 없이 투입 가능" },
@@ -104,23 +97,8 @@
       "outputFluid": true, "inputs": [ { "item": "마력 파편", "qty": 1 } ],
       "note": "마나는 액체 취급" },
 
-    { "id": "power_thermal_t0", "machine": "화력 발전기", "tier": 0,
-      "inputs": [ { "item": "석탄 or 갈탄", "qty": 1 } ],
-      "outputs": [ { "type": "power", "item": "저전압 전력", "amount": null } ],
-      "note": "갈탄 1 = 200 Energy / 석탄 1 = 400 Energy / 수소 1양동이 = 1000 Energy. 갈탄은 저효율" },
-
-    { "id": "power_thermal_t1", "machine": "화력 발전기", "tier": 1,
-      "inputs": [ { "item": "석탄 / 갈탄 / 석유", "qty": 1 } ],
-      "outputs": [ { "type": "power", "item": "저전압 전력", "amount": null } ],
-      "note": "1티어 업그레이드로 석유 연료 추가" },
-
-    { "id": "power_transformer", "machine": "변압기", "tier": 1,
+            { "id": "power_transformer", "machine": "변압기", "tier": 1,
       "outputs": [ { "type": "power", "item": "고전압 전력", "amount": null } ],
-      "note": "저전압 소모 → 고전압 변환. 변환 손실 발생 (예: 1000W → 900W)" },
-
-    { "id": "power_nuclear", "machine": "핵발전소", "tier": 1,
-      "inputs": [ { "item": "핵연료봉", "qty": null }, { "item": "물", "qty": null, "fluid": true } ],
-      "outputs": [ { "type": "power", "item": "고전압 전력", "amount": null } ],
-      "note": "물 대량 필요. 방사성 폐기물 처리 필요 (미정)" }
+      "note": "저전압 소모 → 고전압 변환. 변환 손실 발생 (예: 1000W → 900W)" }
   ]
 }

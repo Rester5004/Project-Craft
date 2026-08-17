@@ -13,12 +13,14 @@ MonoBehaviour:
   m_Name: extract_ore_grain
   m_EditorClassIdentifier: Assembly-CSharp::Recipe
   machine: {fileID: 11400000, guid: 2a1607846353d954eb1bf755339d2b4c, type: 2}
-  category: {fileID: 0}
+  category: {fileID: 11400000, guid: a63365af4ccd3904a91ebf59b6456c84, type: 2}
   tier: 0
   inputs:
   - item: {fileID: 11400000, guid: 8b7fe263cb72f4c4da31319c4635510f, type: 2}
     count: 1
   outputs: []
+  fluidInputs: []
+  fluidOutputs: []
   chanceOutputs:
   - item: {fileID: 11400000, guid: b61227cfa59eec64e8e253e559178f97, type: 2}
     count: 1

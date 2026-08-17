@@ -62,4 +62,14 @@ public class Recipe : ScriptableObject
     public int PrimaryOutputAmount => outputs != null && outputs.Count > 0
         ? outputs[0].count
         : (chanceOutputs != null && chanceOutputs.Count > 0 ? chanceOutputs[0].count : 0);
+
+    /// <summary>
+    /// 조합대 <b>목록에서 부르는 이름</b>(칸 툴팁). 기본은 대표 산출물의 이름이다.
+    ///
+    /// ⚠ <b>산출물 이름과 갈라지는 경우가 있어 따로 둔다.</b> 도구·부품 레시피는 무엇이 나올지가
+    /// 재질에 따라 달라서 <c>outputs[0]</c> 에 <b>견본</b>(돌 망치 머리)만 넣어 두는데, 그것을 그대로
+    /// 보여 주면 "돌 망치 머리" 로 읽혀 <b>돌 것만 만들어지는 것처럼 보인다</b>.
+    /// 파생 클래스가 종류 이름(망치 머리 · 칼 · 판)으로 덮는다.
+    /// </summary>
+    public virtual string ListName => PrimaryOutput != null ? PrimaryOutput.DisplayName : "";
 }

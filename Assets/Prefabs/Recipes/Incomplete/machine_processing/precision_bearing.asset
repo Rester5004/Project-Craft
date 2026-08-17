@@ -15,10 +15,17 @@ MonoBehaviour:
   machine: {fileID: 11400000, guid: 9dad41642642cce4cb4672ccf639d7a3, type: 2}
   category: {fileID: 11400000, guid: a63365af4ccd3904a91ebf59b6456c84, type: 2}
   tier: 2
-  inputs: []
+  inputs:
+  - item: {fileID: 11400000, guid: 9e7305e9ba375e441b35037c04e96810, type: 2}
+    count: 10
+  - item: {fileID: 11400000, guid: 3498aa70af8668c448832ddf5e287819, type: 2}
+    count: 2
   outputs:
   - item: {fileID: 11400000, guid: 073631021b9abff469f3bb5e04a754b7, type: 2}
     count: 1
+  fluidInputs: []
+  fluidOutputs: []
+  chanceOutputs: []
   requiredTools: []
   craftTime: 1
   importNote: "[\uCD9C\uCC98] machine_processing.json / id=precision_bearing\r\n[\uAE30\uACC4]

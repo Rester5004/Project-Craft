@@ -67,6 +67,9 @@
 | `금속 판` | `metal_plate` | 건너뜀 — 옛 아이템이 이미 없음 |
 | `철근` | `rebar` | 건너뜀 — 옛 아이템이 이미 없음 |
 | `철근 콘크리트` | `reinforced_concrete` | 건너뜀 — 옛 아이템이 이미 없음 |
+| `강화 합금` | `reinforced_alloy` | 건너뜀 — 옛 아이템이 이미 없음 |
+| `기계 강화 모듈` | `machine_upgrade_module` | 건너뜀 — 옛 아이템이 이미 없음 |
+| `2티어 업그레이드 모듈` | `machine_upgrade_module` | 건너뜀 — 옛 아이템이 이미 없음 |
 | `크랭크` | `crank` | 건너뜀 — 옛 아이템이 이미 없음 |
 | `모터` | `motor` | 건너뜀 — 옛 아이템이 이미 없음 |
 | `베어링` | `bearing` | 건너뜀 — 옛 아이템이 이미 없음 |
@@ -77,9 +80,9 @@
 | `핵연료봉` | `nuclear_fuel_rod` | 건너뜀 — 옛 아이템이 이미 없음 |
 | `전도체 가루` | `conductor_powder` | 건너뜀 — 옛 아이템이 이미 없음 |
 | `레드스톤 결정` | `conductor_crystal` | 건너뜀 — 옛 아이템이 이미 없음 |
-| `redstone_crystal` | `conductor_crystal` | 통합 |
+| `redstone_crystal` | `conductor_crystal` | 건너뜀 — 옛 아이템이 이미 없음 |
 | `레드스톤 가루` | `conductor_powder` | 건너뜀 — 옛 아이템이 이미 없음 |
-| `redstone_powder` | `conductor_powder` | 통합 |
+| `redstone_powder` | `conductor_powder` | 건너뜀 — 옛 아이템이 이미 없음 |
 | `전도체 결정` | `conductor_crystal` | 건너뜀 — 옛 아이템이 이미 없음 |
 | `마법이 부여된 전도체 가루` | `enchanted_conductor_powder` | 건너뜀 — 옛 아이템이 이미 없음 |
 | `마법 가루` | `magic_powder` | 건너뜀 — 옛 아이템이 이미 없음 |
@@ -101,7 +104,8 @@
 | `돌 칼날` | `stone_blade` | 건너뜀 — 옛 아이템이 이미 없음 |
 | `철 칼날` | `iron_blade` | 건너뜀 — 옛 아이템이 이미 없음 |
 | `다우징 로드` | `dowsing_rod` | 건너뜀 — 옛 아이템이 이미 없음 |
-| `0티어 다우징 로드` | `dowsing_rod_t0` | 건너뜀 — 옛 아이템이 이미 없음 |
+| `0티어 다우징 로드` | `dowsing_rod` | 건너뜀 — 옛 아이템이 이미 없음 |
+| `dowsing_rod_t0` | `dowsing_rod` | 통합 |
 | `업그레이드 모듈 - 속도` | `upgrade_speed` | 건너뜀 — 옛 아이템이 이미 없음 |
 | `업그레이드 모듈 - 효율` | `upgrade_efficiency` | 건너뜀 — 옛 아이템이 이미 없음 |
 | `자동 조합기` | `auto_crafter` | 건너뜀 — 옛 아이템이 이미 없음 |
@@ -118,6 +122,13 @@
 | `Machine:Refinery` | `Machine:Distiller` | 건너뜀 — 옛 아이템이 이미 없음 |
 | `고급 조합기` | `Machine:AdvancedCrafter` | 건너뜀 — 옛 아이템이 이미 없음 |
 | `advanced_crafter` | `Machine:AdvancedCrafter` | 건너뜀 — 옛 아이템이 이미 없음 |
+| `시멘트 공장` | `CoreCrafter` | 건너뜀 — 옛 아이템이 이미 없음 |
+| `Machine:CementPlant` | `CoreCrafter` | 건너뜀 — 옛 아이템이 이미 없음 |
+| `유리 가공기` | `CoreCrafter` | 건너뜀 — 옛 아이템이 이미 없음 |
+| `Machine:GlassWorks` | `CoreCrafter` | 건너뜀 — 옛 아이템이 이미 없음 |
+| `압연기` | `Machine:Compressor` | 건너뜀 — 옛 아이템이 이미 없음 |
+| `Machine:RollingMill` | `Machine:Compressor` | 건너뜀 — 옛 아이템이 이미 없음 |
+| `압축기` | `Machine:Compressor` | 건너뜀 — 옛 아이템이 이미 없음 |
 | `아이템 강화기` | `Machine:ItemEnhancer` | 건너뜀 — 옛 아이템이 이미 없음 |
 | `item_enhancer` | `Machine:ItemEnhancer` | 건너뜀 — 옛 아이템이 이미 없음 |
 | `수경 재배기` | `Machine:Hydroponics` | 건너뜀 — 옛 아이템이 이미 없음 |
@@ -137,9 +148,8 @@
 
 ## 삭제
 
-- `Assets/Prefabs/Items/Resource1/redstone_crystal.asset` 삭제 → `conductor_crystal` 로 대체
-- `Assets/Prefabs/Items/Resource1/redstone_powder.asset` 삭제 → `conductor_powder` 로 대체
+- `Assets/Prefabs/Items/Placeholder/dowsing_rod_t0.asset` 삭제 → `dowsing_rod` 로 대체
 
-- 이름 변경 0개 · 레시피 1개 수정 · 블록 0개 수정 · 아이템 2개 삭제
+- 이름 변경 0개 · 레시피 1개 수정 · 블록 0개 수정 · 아이템 1개 삭제
 
 딕셔너리 등록을 이어서 돌립니다 (Register All Assets).

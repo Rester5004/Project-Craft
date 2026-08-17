@@ -10,6 +10,16 @@ public class MapGenerator : MonoBehaviour
     [SerializeField] public Tilemap floorTilemap;
     [SerializeField] public Tilemap placeableObjectsTilemap;
     [SerializeField] Transform player;
+
+    [Header("공용 표시 에셋")]
+    [Tooltip("월드 안내 표시(설치 미리보기·파이프 면 막대)가 조명을 받지 않게 하는 Unlit 머티리얼.\n" +
+             "Assets/Asset/Common/OverlayUnlit.mat")]
+    [SerializeField] Material overlayMaterial;
+
+    [Tooltip("크기를 localScale 로 내는 표시물이 함께 쓰는 1×1 흰 스프라이트.\n" +
+             "⚠ PPU 는 반드시 1 이어야 한다(Assets/Asset/Common/White1x1.png).")]
+    [SerializeField] Sprite whitePixel;
+
     [SerializeField] int renderDistance = 2;
     [SerializeField] float saveCooldown = 10f; // 이 시간(초)이 지난 뒤에만 청크 이동 시 저장
 
@@ -46,10 +56,13 @@ public class MapGenerator : MonoBehaviour
     void Start()
     {
         EnsurePlaceableContainer();
-        // 파이프 타일맵·설치 미리보기는 씬에 배선하지 않고 여기서 만든다(씬 파일을 건드리지 않기 위해).
+        // ⚠ MapLighting · ChunkShadowCasters 는 <b>GameRig 프리팹에 저작</b>돼 있다(여기서 만들지 않는다).
+        //   저작된 컴포넌트의 Awake 는 이 Start 보다 먼저 도므로, 아래 UpdateChunks() 가
+        //   RenderChunk → ChunkShadowCasters.Active 를 부를 때 이미 서 있다.
+        //   아직 코드로 만드는 둘은 개수·모양이 데이터에 달린 자식을 풀링해서다(TODO §M-3 이관 대상).
         Transform gridRoot = placeableObjectsTilemap != null ? placeableObjectsTilemap.transform.parent : null;
-        PipeNetworkManager.EnsureCreated(gridRoot);
-        PlacementPreview.EnsureCreated(gridRoot, placeableObjectsTilemap);
+        PipeNetworkManager.EnsureCreated(gridRoot, whitePixel, overlayMaterial);
+        PlacementPreview.EnsureCreated(gridRoot, placeableObjectsTilemap, whitePixel, overlayMaterial);
         if (WorldMap.Instance != null)
             WorldMap.Instance.OnBeforeSave += FlushAll;
         UpdateChunks();
@@ -211,6 +224,9 @@ public class MapGenerator : MonoBehaviour
 
         // 이 청크에 떨어져 있던 아이템 스폰
         foreach (DropRecord drop in chunk.Drops) SpawnDropObject(drop, chunk);
+
+        // 벽이 빛을 막게 하는 그림자 사각형. 타일을 다 칠한 뒤라야 벽 배치가 확정된다.
+        if (ChunkShadowCasters.Active != null) ChunkShadowCasters.Active.Build(id, chunk);
     }
 
     // ── 필드 드랍 ──────────────────────────────────────────────────────
@@ -368,7 +384,9 @@ public class MapGenerator : MonoBehaviour
     {
         if (loadedPipes.ContainsKey(worldCell)) return false;
 
-        PipeNetworkManager.EnsureCreated(placeableObjectsTilemap != null ? placeableObjectsTilemap.transform.parent : null);
+        PipeNetworkManager.EnsureCreated(
+            placeableObjectsTilemap != null ? placeableObjectsTilemap.transform.parent : null,
+            whitePixel, overlayMaterial);
 
         PipeCell pipe = new PipeCell(worldCell, block, record);
         loadedPipes[worldCell] = pipe;
@@ -550,6 +568,8 @@ public class MapGenerator : MonoBehaviour
     {
         int size = WorldMap.ChunkSize;
 
+        if (ChunkShadowCasters.Active != null) ChunkShadowCasters.Active.Release(id);
+
         // 이 청크의 기계·파이프를 레코드로 동기화 후 디스폰
         foreach (var kvp in chunk.Placeables)
         {
@@ -625,6 +645,15 @@ public class MapGenerator : MonoBehaviour
         {
             blocksTilemap.SetTile(pos, null);
             floorTilemap.SetTile(pos, LoadTile(tileId));
+        }
+
+        // 벽이 생기거나 사라졌으니 이 청크의 그림자 사각형을 다시 만든다.
+        // 사각형은 청크 안에서만 묶이므로 이웃 청크는 건드릴 필요가 없다.
+        if (ChunkShadowCasters.Active != null)
+        {
+            Vector2Int chunkId = Chunk.GetChunkId(new Vector3(worldPos.x, worldPos.y, 0f));
+            if (LoadedChunks.TryGetValue(chunkId, out Chunk owner))
+                ChunkShadowCasters.Active.Build(chunkId, owner);
         }
 
         // 이 칸과 한 칸 위에 남아 있던 예전 벽 텍스처를 먼저 지운다.

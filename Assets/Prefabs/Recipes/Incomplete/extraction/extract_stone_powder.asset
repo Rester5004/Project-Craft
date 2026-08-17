@@ -13,12 +13,14 @@ MonoBehaviour:
   m_Name: extract_stone_powder
   m_EditorClassIdentifier: Assembly-CSharp::Recipe
   machine: {fileID: 11400000, guid: 453c977a51055754f85f43c665c9407a, type: 2}
-  category: {fileID: 0}
+  category: {fileID: 11400000, guid: a63365af4ccd3904a91ebf59b6456c84, type: 2}
   tier: 0
   inputs:
   - item: {fileID: 11400000, guid: 4234355d128895145abd4edb5299b560, type: 2}
     count: 1
   outputs: []
+  fluidInputs: []
+  fluidOutputs: []
   chanceOutputs:
   - item: {fileID: 11400000, guid: e28e21cfbb23d8c42869f75d13aba7e5, type: 2}
     count: 1

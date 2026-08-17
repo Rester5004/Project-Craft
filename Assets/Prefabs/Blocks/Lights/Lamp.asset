@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e17ab8d60de6e8e49b887e514e412d63, type: 3}
+  m_Name: Lamp
+  m_EditorClassIdentifier: Assembly-CSharp::LightBlock
+  blockName: Machine:Lamp
+  displayName: "\uC804\uB4F1"
+  dropItem: {fileID: 0}
+  dropCount: 1
+  machinePrefab: {fileID: 5754806444341609234, guid: 0461b1026a21dcb4592891cc7ce3745f, type: 3}
+  uiPrefab: {fileID: 0}
+  runningSprite: {fileID: 0}
+  manualStepRatio: 0
+  size: {x: 1, y: 1}
+  tier: 0
+  recipeGroupId: 
+  inputSlotCount: 0
+  outputSlotCount: 0
+  fuelSlotCount: 0
+  fuelBurnRate: 20
+  upgradeSlotCount: 0
+  inputFluidSlotCount: 0
+  outputFluidSlotCount: 0
+  maxFluidAmount: 0
+  maxEnergyAmount: 100
+  isUseEnergy: 1
+  isGenerator: 0
+  powerRange: 0
+  energyUseRate: 2
+  speedMultiplier: 1
+  chanceMultiplier: 1
+  lightColor: {r: 1, g: 0.965, b: 0.878, a: 1}
+  innerRadius: 2
+  outerRadius: 9
+  lightIntensity: 1.1
+  castsShadows: 1
+  flicker: 0

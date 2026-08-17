@@ -13,12 +13,14 @@ MonoBehaviour:
   m_Name: extract_shiny_powder
   m_EditorClassIdentifier: Assembly-CSharp::Recipe
   machine: {fileID: 11400000, guid: 2a1607846353d954eb1bf755339d2b4c, type: 2}
-  category: {fileID: 0}
+  category: {fileID: 11400000, guid: a63365af4ccd3904a91ebf59b6456c84, type: 2}
   tier: 0
   inputs:
   - item: {fileID: 11400000, guid: 90a978a34bf729f448e65ffbff5ce8e0, type: 2}
     count: 1
   outputs: []
+  fluidInputs: []
+  fluidOutputs: []
   chanceOutputs:
   - item: {fileID: 11400000, guid: 24373903c8c44e946b7d40537cb7c0da, type: 2}
     count: 1

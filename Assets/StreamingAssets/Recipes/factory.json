@@ -47,27 +47,8 @@
     { "id": "electrolysis_lithium", "machine": "전기분해기", "power": "고전압", "output": "리튬 주괴",
       "inputs": [ { "item": "리튬 조각", "qty": 4 } ], "note": "고전압 필수" },
 
-    { "id": "oil_extract", "machine": "원유 채굴기", "power": "저전압", "output": "원유",
-      "inputs": [], "note": "석유 지형에만 설치, 지형에서 채굴" },
-
-    { "id": "thermal_power_t0", "machine": "화력발전소", "tier": 0,
-      "outputs": [ { "item": "저전압 전력", "type": "power" } ],
-      "inputs": [ { "item": "석탄 또는 갈탄", "qty": 1 } ], "note": "갈탄은 저효율" },
-
-    { "id": "thermal_power_t1", "machine": "화력발전소 (1티어 업그레이드)", "tier": 1,
-      "outputs": [ { "item": "저전압 전력", "type": "power" } ],
-      "inputs": [ { "item": "석탄/갈탄/석유 중 1", "qty": 1 } ], "note": "석유 연료 추가" },
-
-    { "id": "transformer", "machine": "변압기", "tier": 1,
-      "outputs": [ { "item": "고전압 전력", "type": "power" } ],
-      "inputs": [ { "item": "저전압 전력", "type": "power" } ], "note": "변환 손실 발생 (예: 1000W→900W)" },
-
-    { "id": "nuclear_power", "machine": "핵발전소", "tier": 1,
-      "outputs": [ { "item": "고전압 전력", "type": "power" } ],
-      "inputs": [ { "item": "핵연료봉", "qty": null }, { "item": "물", "qty": null, "fluid": true } ],
-      "note": "물 대량, 연료봉 수량 미정, 방사성 폐기물 처리 필요" },
-
-    { "id": "reinforced_concrete", "machine": null, "category": "건설 재료", "output": "철근 콘크리트",
-      "inputs": [ { "item": "철근", "qty": 4 }, { "item": "시멘트", "qty": 20 } ], "note": "1티어 공장 건설 재료" }
+                { "id": "reinforced_concrete", "machine": null, "tier": 2, "category": "건설 재료", "output": "철근 콘크리트",
+      "inputs": [ { "item": "철근", "qty": 4 }, { "item": "시멘트", "qty": 20 } ],
+      "note": "2티어 공장 건설 재료(기본 재료 = 철근 콘크리트 x2). 1티어에서 2티어로 올렸다 — 시멘트가 1티어에 없어 목록에만 뜨고 못 만들었다" }
   ]
 }

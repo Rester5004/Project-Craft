@@ -14,13 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Recipe
   machine: {fileID: 11400000, guid: 63f0a8bb17e98434a90c04565e332cf7, type: 2}
   category: {fileID: 11400000, guid: a63365af4ccd3904a91ebf59b6456c84, type: 2}
-  tier: 1
+  tier: 0
   inputs:
   - item: {fileID: 11400000, guid: 1ef010f537329d24793cb769d85d68d4, type: 2}
     count: 4
   outputs:
   - item: {fileID: 11400000, guid: d18d224dc7f833d49b47f7b7fcf32950, type: 2}
     count: 1
+  fluidInputs: []
+  fluidOutputs: []
+  chanceOutputs: []
   requiredTools: []
   craftTime: 1
   importNote: "[\uBCD1\uD569] Assets/Prefabs/Recipes/Incomplete/smelting/smelt_nickel.asset

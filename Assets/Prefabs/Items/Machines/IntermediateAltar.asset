@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0aa270e77a10f843b1b6fe8950719d0, type: 3}
   m_Name: IntermediateAltar
   m_EditorClassIdentifier: Assembly-CSharp::Items
-  itemName: Machine:Intermediate_altar
+  itemName: Machine:IntermediateAltar
   displayName: "\uC911\uAE09 \uC7AC\uB2E8"
   placeable: 1
   Icon: {fileID: 1642737858, guid: a6d977fdd28fb4d42b242a878f5adb84, type: 3}

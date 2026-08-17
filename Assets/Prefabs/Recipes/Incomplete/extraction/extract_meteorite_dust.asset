@@ -13,12 +13,14 @@ MonoBehaviour:
   m_Name: extract_meteorite_dust
   m_EditorClassIdentifier: Assembly-CSharp::Recipe
   machine: {fileID: 11400000, guid: af8028b660af13b4899f7a23205588c9, type: 2}
-  category: {fileID: 0}
+  category: {fileID: 11400000, guid: a63365af4ccd3904a91ebf59b6456c84, type: 2}
   tier: 0
   inputs:
   - item: {fileID: 11400000, guid: ff2f550d33ad2c24aa80c5223cacc159, type: 2}
     count: 1
   outputs: []
+  fluidInputs: []
+  fluidOutputs: []
   chanceOutputs:
   - item: {fileID: 11400000, guid: b293e29fe29e871449d10dfae5bbfb23, type: 2}
     count: 1

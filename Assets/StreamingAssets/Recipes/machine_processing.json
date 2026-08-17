@@ -9,24 +9,6 @@
   ],
   "recipes": [
     {
-      "id": "hammer_metal_plate",
-      "machine": "망치",
-      "tier": 0,
-      "manual": true,
-      "output": "금속판",
-      "outputQty": 1,
-      "inputs": [
-        {
-          "item": "금속",
-          "qty": 2
-        }
-      ],
-      "tools": [
-        "망치"
-      ],
-      "note": "망치는 소모되지 않음(소모X)"
-    },
-    {
       "id": "furnace_silicon",
       "machine": "화로",
       "tier": 0,
@@ -38,78 +20,6 @@
         }
       ],
       "note": "화로의 특이 사항. 원문에 수량 미표기"
-    },
-    {
-      "id": "thermal_gen_lignite",
-      "machine": "화력 발전기",
-      "tier": 0,
-      "category": "fuel",
-      "inputs": [
-        {
-          "item": "갈탄",
-          "qty": 1
-        }
-      ],
-      "outputs": [
-        {
-          "item": "Energy",
-          "type": "power",
-          "amount": 200
-        }
-      ]
-    },
-    {
-      "id": "thermal_gen_coal",
-      "machine": "화력 발전기",
-      "tier": 0,
-      "category": "fuel",
-      "inputs": [
-        {
-          "item": "석탄",
-          "qty": 1
-        }
-      ],
-      "outputs": [
-        {
-          "item": "Energy",
-          "type": "power",
-          "amount": 400
-        }
-      ]
-    },
-    {
-      "id": "thermal_gen_hydrogen",
-      "machine": "화력 발전기",
-      "tier": 0,
-      "category": "fuel",
-      "inputs": [
-        {
-          "item": "수소",
-          "qty": 1,
-          "unit": "양동이",
-          "fluid": true
-        }
-      ],
-      "outputs": [
-        {
-          "item": "Energy",
-          "type": "power",
-          "amount": 1000
-        }
-      ]
-    },
-    {
-      "id": "compressor_metal_plate",
-      "machine": "압축기",
-      "tier": 1,
-      "output": "금속 판",
-      "outputQty": 1,
-      "inputs": [
-        {
-          "item": "금속 주괴",
-          "qty": 1
-        }
-      ]
     },
     {
       "id": "alloy_bronze",
@@ -247,37 +157,29 @@
         }
       ]
     },
-    {
-      "id": "enchant",
-      "machine": "마법부여기",
-      "tier": 1,
-      "output": null,
-      "inputs": [],
-      "note": "마법부여 추후 추가 예정. 도구는 막대 종류별로 효율이 다르며 마나를 사용함"
-    },
-    {
+        {
       "id": "precision_motor",
       "machine": "정밀 세공기",
       "tier": 2,
       "output": "모터",
-      "inputs": [],
-      "note": "레시피 미정"
+      "inputs": [ { "item": "강화 합금", "qty": 10 }, { "item": "구리판", "qty": 4 } ],
+      "note": "노션 기본값 강화 합금 x10 + 전자석용 구리판. 세 부품의 재료가 같으면 SelectRecipe 가 첫 것만 돌린다"
     },
     {
       "id": "precision_bearing",
       "machine": "정밀 세공기",
       "tier": 2,
       "output": "베어링",
-      "inputs": [],
-      "note": "레시피 미정"
+      "inputs": [ { "item": "강화 합금", "qty": 10 }, { "item": "강철", "qty": 2 } ],
+      "note": "노션 기본값 강화 합금 x10 + 구름 요소용 강철"
     },
     {
       "id": "precision_propeller",
       "machine": "정밀 세공기",
       "tier": 2,
       "output": "프로펠러",
-      "inputs": [],
-      "note": "레시피 미정"
+      "inputs": [ { "item": "강화 합금", "qty": 10 }, { "item": "티타늄 주괴", "qty": 2 } ],
+      "note": "노션 기본값 강화 합금 x10 + 날개용 티타늄 주괴"
     },
     {
       "id": "machine_upgrade_module",

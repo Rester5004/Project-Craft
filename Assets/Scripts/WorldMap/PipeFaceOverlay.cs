@@ -31,7 +31,14 @@ public class PipeFaceOverlay : MonoBehaviour
     /// <summary>셀 중심 좌표를 얻는 데만 쓴다(격자 원점·셀 크기를 여기서 다시 가정하지 않도록).</summary>
     public Tilemap Reference { get; set; }
 
-    private Sprite barSprite;
+    /// <summary>
+    /// 1×1 흰 스프라이트와 Unlit 머티리얼. <b>에셋에서 받는다</b> —
+    /// 네 시스템이 똑같은 흰 점을 각자 코드로 만들고 있었고, <c>Shader.Find</c> 는
+    /// 빌드에서 셰이더가 스트립되면 런타임에만 조용히 깨진다.
+    /// </summary>
+    public Sprite BarSprite { get; set; }
+    public Material OverlayMaterial { get; set; }
+
     private readonly List<SpriteRenderer> pool = new List<SpriteRenderer>();
 
     /// <summary>지금 칠해야 할 면을 전부 다시 그린다. 남는 막대는 꺼 둔다.</summary>
@@ -87,24 +94,11 @@ public class PipeFaceOverlay : MonoBehaviour
             host.transform.SetParent(transform, false);
 
             SpriteRenderer renderer = host.AddComponent<SpriteRenderer>();
-            renderer.sprite = EnsureSprite();
+            renderer.sprite = BarSprite;
             renderer.sortingOrder = SortingOrder;
+            if (OverlayMaterial != null) renderer.sharedMaterial = OverlayMaterial;   // 조명을 받지 않는다
             pool.Add(renderer);
         }
         return pool[index];
-    }
-
-    /// <summary>1×1 흰 점 하나. 모양은 전부 스케일로 낸다(막대 그림을 따로 그릴 필요가 없다).</summary>
-    private Sprite EnsureSprite()
-    {
-        if (barSprite != null) return barSprite;
-
-        Texture2D texture = new Texture2D(1, 1, TextureFormat.RGBA32, false);
-        texture.SetPixel(0, 0, Color.white);
-        texture.filterMode = FilterMode.Point;
-        texture.Apply();
-
-        barSprite = Sprite.Create(texture, new Rect(0f, 0f, 1f, 1f), new Vector2(0.5f, 0.5f), 1f);
-        return barSprite;
     }
 }

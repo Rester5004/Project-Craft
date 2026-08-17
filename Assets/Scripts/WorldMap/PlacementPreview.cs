@@ -32,14 +32,17 @@ public class PlacementPreview : MonoBehaviour
     /// <summary>셀 중심 좌표를 얻는 데만 쓴다(격자 원점·셀 크기를 여기서 다시 가정하지 않도록).</summary>
     public Tilemap Reference { get; set; }
 
+    /// <summary>1×1 흰 스프라이트와 Unlit 머티리얼. 에셋에서 받는다(<see cref="PipeFaceOverlay"/> 와 같은 규약).</summary>
+    public Sprite CellSprite { get; set; }
+    public Material OverlayMaterial { get; set; }
+
     public static PlacementPreview Active { get; private set; }
 
-    private Sprite cellSprite;
     private SpriteRenderer ghost;
     private readonly List<SpriteRenderer> pool = new List<SpriteRenderer>();
 
     /// <summary>씬을 건드리지 않고 만든다. 이미 있으면 그것을 돌려준다.</summary>
-    public static PlacementPreview EnsureCreated(Transform parent, Tilemap reference)
+    public static PlacementPreview EnsureCreated(Transform parent, Tilemap reference, Sprite cellSprite, Material overlayMaterial)
     {
         if (Active != null) return Active;
 
@@ -48,6 +51,8 @@ public class PlacementPreview : MonoBehaviour
 
         Active = go.AddComponent<PlacementPreview>();
         Active.Reference = reference;
+        Active.CellSprite = cellSprite;
+        Active.OverlayMaterial = overlayMaterial;
         return Active;
     }
 
@@ -97,6 +102,8 @@ public class PlacementPreview : MonoBehaviour
             host.transform.SetParent(transform, false);
             ghost = host.AddComponent<SpriteRenderer>();
             ghost.sortingOrder = GhostSortingOrder;
+            // 미리보기는 조명을 받지 않는다(어두운 곳에서도 또렷해야 한다).
+            if (OverlayMaterial != null) ghost.sharedMaterial = OverlayMaterial;
         }
 
         ghost.sprite = sprite;
@@ -128,24 +135,11 @@ public class PlacementPreview : MonoBehaviour
             host.transform.SetParent(transform, false);
 
             SpriteRenderer renderer = host.AddComponent<SpriteRenderer>();
-            renderer.sprite = EnsureCellSprite();
+            renderer.sprite = CellSprite;
             renderer.sortingOrder = CellSortingOrder;
+            if (OverlayMaterial != null) renderer.sharedMaterial = OverlayMaterial;
             pool.Add(renderer);
         }
         return pool[index];
-    }
-
-    /// <summary>한 칸을 정확히 채우는 흰 사각형(1픽셀 × PPU 1). 새 아트 에셋이 필요 없다.</summary>
-    private Sprite EnsureCellSprite()
-    {
-        if (cellSprite != null) return cellSprite;
-
-        Texture2D texture = new Texture2D(1, 1, TextureFormat.RGBA32, false);
-        texture.SetPixel(0, 0, Color.white);
-        texture.filterMode = FilterMode.Point;
-        texture.Apply();
-
-        cellSprite = Sprite.Create(texture, new Rect(0f, 0f, 1f, 1f), new Vector2(0.5f, 0.5f), 1f);
-        return cellSprite;
     }
 }

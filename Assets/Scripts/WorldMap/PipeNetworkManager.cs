@@ -37,7 +37,7 @@ public class PipeNetworkManager : MonoBehaviour
     public IEnumerable<KeyValuePair<Vector2Int, PipeCell>> Cells => cells;
 
     /// <summary>씬을 건드리지 않고 매니저와 타일맵을 만든다. 이미 있으면 그대로 쓴다.</summary>
-    public static void EnsureCreated(Transform gridParent)
+    public static void EnsureCreated(Transform gridParent, Sprite whitePixel, Material overlayMaterial)
     {
         if (Active != null) return;
 
@@ -52,6 +52,9 @@ public class PipeNetworkManager : MonoBehaviour
 
         manager.overlay = host.AddComponent<PipeFaceOverlay>();
         manager.overlay.Reference = manager.PipeTilemap;
+        // 면 막대는 안내 표시라 조명을 받지 않는다. 그림·머티리얼은 에셋에서 받아 넘긴다.
+        manager.overlay.BarSprite = whitePixel;
+        manager.overlay.OverlayMaterial = overlayMaterial;
     }
 
     private void Awake()

@@ -58,6 +58,9 @@ namespace ProjectCraft.EditorTools
             "Assets/Asset/ItemImages/ToolImages/hammer_and_@.png",
             "Assets/Asset/ItemImages/ToolImages/pickaxe_head.png",
             "Assets/Asset/ItemImages/ToolImages/knife.png",
+            // 판은 도구 그림이 아니지만 부품 종류가 되면서 여기서 아이콘을 가져간다.
+            // ⚠ stone_plate·wood_plate 만 없다 — 그 둘은 아이콘 없이 만들어진다.
+            "Assets/Asset/ItemImages/project_craft_metal_plates.png",
         };
 
         // 도구에 쓸 수 있는 재질 16종(사용자 지정 순서: 나무/돌/철/구리/금/주석/석영/니켈/오스뮴/은/납/티타늄/알루미늄/우라늄/리튬/토륨)
@@ -89,6 +92,10 @@ namespace ProjectCraft.EditorTools
             { "rod",          "막대",       "_rod" },
             { "hammer_head",  "망치 머리",   "_hammer_head" },
             { "pickaxe_head", "곡괭이 머리", "_pickaxe_head" },
+            { "blade",        "칼날",       "_blade" },
+            // 판은 도구 부품은 아니지만 <b>재질마다 하나</b>라는 구조가 같아 같은 표를 쓴다.
+            // 조합대에서 재질 칸에 주괴를 올리면 그 재질의 판이 나온다(레시피 하나).
+            { "plate",        "판",         "_plate" },
         };
 
         // 삭제할 중복 플레이스홀더 → 대체할 새 아이템의 itemName("" 이면 참조를 도구 요구로 옮긴다)
@@ -320,7 +327,18 @@ namespace ProjectCraft.EditorTools
         {
             List<ToolPartItem> result = new List<ToolPartItem>();
             List<string> missingSprites = new List<string>();
+            List<string> adopted = new List<string>();
             int created = 0;
+
+            // ⚠ <b>이름이 같은 아이템이 다른 폴더에 있으면 새로 만들면 안 된다.</b>
+            // 예전에는 자기 폴더(PartItemFolder)만 봐서, 판처럼 이미 Placeholder 에 있던 것을
+            // <b>하나 더 만들어</b> itemName 이 겹쳤다(세이브 키가 겹치면 조회가 어느 쪽인지 알 수 없다).
+            Dictionary<string, ToolPartItem> existing = new Dictionary<string, ToolPartItem>();
+            foreach (string guid in AssetDatabase.FindAssets("t:ToolPartItem"))
+            {
+                ToolPartItem it = AssetDatabase.LoadAssetAtPath<ToolPartItem>(AssetDatabase.GUIDToAssetPath(guid));
+                if (it != null && !string.IsNullOrEmpty(it.itemName)) existing[it.itemName] = it;
+            }
 
             foreach (MaterialSpec spec in Materials)
             {
@@ -331,6 +349,12 @@ namespace ProjectCraft.EditorTools
                     string path = $"{PartItemFolder}/{itemName}.asset";
 
                     ToolPartItem part = AssetDatabase.LoadAssetAtPath<ToolPartItem>(path);
+                    if (part == null && existing.TryGetValue(itemName, out ToolPartItem elsewhere))
+                    {
+                        // 다른 폴더에 이미 있다(판 4종을 손으로 승격시킨 경우). 그대로 쓴다.
+                        part = elsewhere;
+                        adopted.Add(itemName);
+                    }
                     if (part == null)
                     {
                         part = ScriptableObject.CreateInstance<ToolPartItem>();
@@ -352,6 +376,8 @@ namespace ProjectCraft.EditorTools
             }
 
             Report.AppendLine($"- 부품 아이템 {result.Count}개 (새로 만든 것 {created}개)");
+            if (adopted.Count > 0)
+                Report.AppendLine($"  - 다른 폴더에 이미 있어 그대로 쓴 것 {adopted.Count}개: {string.Join(", ", adopted)}");
             if (missingSprites.Count > 0)
                 Report.AppendLine($"  - ⚠ 스프라이트를 못 찾은 부품 {missingSprites.Count}개: {string.Join(", ", missingSprites)}");
             return result;
@@ -379,6 +405,14 @@ namespace ProjectCraft.EditorTools
             {
                 Slot(kinds["rod"], MaterialFilter.Curated, all, "{material}_hammer", false),
                 Slot(kinds["hammer_head"], MaterialFilter.Curated, all, "{material}_hammer_head", false),
+            });
+
+            // 칼: 망치와 같은 꼴이다(자루 + 머리). 자루 그림은 망치·곡괭이와 공유하고
+            // 날만 {material}_blade 로 갈아 끼운다. 목록 아이콘은 미리 합쳐진 {m}_knife 를 쓴다.
+            result["knife"] = EnsureDefinition("knife", "칼", 80, Sprite(sprites, "iron_knife"), new[]
+            {
+                Slot(kinds["rod"], MaterialFilter.Curated, all, "{material}_hammer", false),
+                Slot(kinds["blade"], MaterialFilter.Curated, all, "{material}_blade", false),
             });
 
             // 드라이버: 부품이 막대 하나뿐이고 재질별 그림이 없어 공용 스프라이트를 재질 색으로 물들인다.
@@ -482,7 +516,7 @@ namespace ProjectCraft.EditorTools
             if (coreCrafter == null)
                 Report.AppendLine("  - ⚠ CoreCrafter 블록을 찾지 못해 레시피에 기계를 연결하지 못했습니다.");
 
-            string[] order = { "pickaxe", "hammer", "driver" };
+            string[] order = { "pickaxe", "hammer", "driver", "knife" };
             List<Recipe> result = new List<Recipe>();
 
             foreach (string id in order)

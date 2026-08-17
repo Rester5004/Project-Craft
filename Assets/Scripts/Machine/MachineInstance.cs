@@ -292,7 +292,10 @@ public class MachineInstance : MonoBehaviour
 
         // 연료 칸만 있고 입출력이 0인 기계(발전기)도 "미설정"으로 보면 안 된다.
         // 폴백으로 넘어가면 fuelSlotCount 까지 0 으로 덮여 발전기가 조용히 죽는다.
-        if (info != null && (info.AllowsZeroSlots || info.inputSlotCount > 0 || info.outputSlotCount > 0 || info.fuelSlotCount > 0))
+        // ⚠ <b>IsGenerator 도 함께 봐야 한다</b> — 지열 발전기는 연료 칸마저 0 이라 위 세 조건에
+        //    하나도 안 걸리고, 폴백에서 isGenerator 가 지워져 <b>발전을 아예 안 했다</b>.
+        if (info != null && (info.AllowsZeroSlots || info.IsGenerator
+                             || info.inputSlotCount > 0 || info.outputSlotCount > 0 || info.fuelSlotCount > 0))
         {
             inputSlotCount = info.inputSlotCount;
             outputSlotCount = info.outputSlotCount;
@@ -474,6 +477,12 @@ public class MachineInstance : MonoBehaviour
     ///
     /// <b>가동 그림이 지정되지 않은 기계는 그냥 넘어간다.</b> 47대 중 대부분이 그렇다.
     /// </summary>
+    /// <summary>
+    /// 지금 실제로 돌고 있는가. <see cref="LightEmitter"/> 가 이걸 보고 빛을 켜고 끈다 —
+    /// 판정을 밖에서 다시 하면 그림과 빛이 어긋난다.
+    /// </summary>
+    public bool IsRunning => running;
+
     private void SetRunning(bool value)
     {
         if (running == value) return;
@@ -495,6 +504,18 @@ public class MachineInstance : MonoBehaviour
         ExchangeBuckets();
 
         if (isGenerator) { TickGenerator(Time.deltaTime); return; }   // 발전기는 레시피를 보지 않는다
+
+        // 레시피 없이 그냥 켜져 있는 장치(조명). <b>AutoProcess 조기 return 보다 앞에 있어야 한다.</b>
+        // ⚠ 이 분기가 없으면 전등은 영원히 안 켜진다 — Tick 은 activeRecipe 가 없으면 첫 줄에서
+        //   되돌아가 ConsumeEnergy 에 닿지 않는다("놀고 있는 기계는 전기를 먹지 않는다"가 의도된 규칙이라,
+        //   상시 소비는 그 규칙의 예외로 여기 따로 적는다).
+        if (Info != null && Info.IsAlwaysOn)
+        {
+            // 전력을 쓰는 조명은 전력이 있을 때만, 아닌 것(횃불)은 무조건 켜진다.
+            SetRunning(!Info.isUseEnergy || ConsumeEnergy(Time.deltaTime));
+            return;
+        }
+
         if (Info != null && !Info.AutoProcess) { SetRunning(false); return; }   // 조합대는 버튼을 눌러야 만든다
 
         // 수동 기계는 시간이 아니라 클릭으로 진행한다(ManualStep).
@@ -698,11 +719,23 @@ public class MachineInstance : MonoBehaviour
     private void TickGenerator(float deltaTime)
     {
         bool burning = false;
-        if (currentEnergy < MaxEnergyAmount && BurnFuel(deltaTime, out float burned) && burned > 0f)
+        if (currentEnergy < MaxEnergyAmount)
         {
-            // 발전기의 효율 모듈은 <b>같은 연료로 더 많은 전력</b>이다(연소량은 BurnFuel 이 그대로 둔다).
-            SetEnergy(currentEnergy + burned / EfficiencyFactor);
-            burning = true;
+            if (Info != null && !Info.UsesFuel)
+            {
+                // <b>연료가 없는 발전기</b>(지열). 땅이 원천이라 태울 것이 없고 멈추지도 않는다.
+                // 발전량의 정본은 <see cref="MachineBlock.fuelBurnRate"/> 를 그대로 쓴다 —
+                // 연료식에서도 "태운 양 = 발전량" 이므로 필드를 새로 만들면 같은 뜻이 두 곳으로 갈린다.
+                // 효율 모듈이 산출 쪽에 걸리는 것도 아래 연료식과 똑같다.
+                SetEnergy(currentEnergy + fuelBurnRate * deltaTime * SpeedFactor / EfficiencyFactor);
+                burning = true;
+            }
+            else if (BurnFuel(deltaTime, out float burned) && burned > 0f)
+            {
+                // 발전기의 효율 모듈은 <b>같은 연료로 더 많은 전력</b>이다(연소량은 BurnFuel 이 그대로 둔다).
+                SetEnergy(currentEnergy + burned / EfficiencyFactor);
+                burning = true;
+            }
         }
 
         // 연료를 <b>실제로 태운 프레임</b>만 가동이다. 버퍼가 가득 차면 태우지 않으므로(위 조건)
@@ -793,10 +826,12 @@ public class MachineInstance : MonoBehaviour
     public string RecipeKey => Info != null ? Info.RecipeGroupId : blockId;
 
     /// <summary>
-    /// 이 기계가 처리할 수 있는 최대 레시피 티어.
+    /// <b>조합대</b>가 목록을 거를 때 쓰는 해금 티어. SO 값과 <b>이 인스턴스가 업그레이드로 올린
+    /// 티어</b> 중 큰 쪽이다(코어 조합기).
     ///
-    /// SO 값과 <b>이 인스턴스가 업그레이드로 올린 티어</b> 중 큰 쪽이다(코어 조합기).
-    /// 일반 기계는 레코드가 0 이라 지금까지와 완전히 같다.
+    /// ⚠ <b>일반 기계의 가공에는 쓰이지 않는다</b> — 기계는 티어와 무관하게 자기 그룹을 전부 처리한다
+    /// (<see cref="SelectRecipe"/> 주석 참고). 읽는 곳은 <c>CraftingTableUI</c> 와
+    /// <see cref="TryUpgradeTier"/> 뿐이다.
     /// </summary>
     public int Tier => Mathf.Max(Info != null ? Info.tier : 0, recordTier);
 
@@ -843,7 +878,21 @@ public class MachineInstance : MonoBehaviour
     private bool CanRun(Recipe recipe)
         => RecipeSolver.CanCraft(inventory.inputSlots, recipe) && RecipeSolver.HasFluids(inputTanks, recipe);
 
-    /// <summary>입력 슬롯·탱크로 지금 만들 수 있는 첫 레시피를 고른다. 티어가 모자란 레시피는 건너뛴다.</summary>
+    /// <summary>
+    /// 입력 슬롯·탱크로 지금 만들 수 있는 첫 레시피를 고른다.
+    ///
+    /// <b>⚠ 티어로 거르지 않는다.</b> 기계는 자기 그룹의 레시피를 <b>티어와 무관하게 전부 처리</b>한다 —
+    /// 분쇄기 한 종류가 돌·마력석·운석을 다 빻고, 화로 한 종류가 모든 광석을 재련한다.
+    /// <c>tier</c> 는 <b>"코어 조합대 목록에 언제 나타나는가" 에만</b> 쓰는 값이다
+    /// (<see cref="RecipeDictionary.CollectRecipes"/> — 조합대는 <c>AutoProcess == false</c> 라
+    /// 여기까지 오지도 않는다).
+    ///
+    /// 기계를 가르는 것은 <see cref="MachineBlock.recipeGroupId"/> 다 — 예를 들어
+    /// <c>blast_steel</c>·<c>blast_titanium</c> 이 <c>Machine:BlastFurnace</c> 그룹에만 있어서
+    /// "티타늄·강철만 용광로" 가 티어 게이트 없이도 성립한다.
+    /// <b>여기에 티어 조건을 되살리면</b> "2티어 분쇄기가 없어 운석을 못 빻는다" 같은
+    /// <b>없는 문제가 다시 생긴다</b>(실제로 그랬다).
+    /// </summary>
     private Recipe SelectRecipe()
     {
         RecipeDictionary dictionary = RecipeDictionary.Instance;
@@ -853,7 +902,7 @@ public class MachineInstance : MonoBehaviour
         for (int i = 0; i < candidates.Count; i++)
         {
             Recipe recipe = candidates[i];
-            if (recipe == null || recipe.tier > Tier) continue;
+            if (recipe == null) continue;
             if (CanRun(recipe)) return recipe;
         }
         return null;

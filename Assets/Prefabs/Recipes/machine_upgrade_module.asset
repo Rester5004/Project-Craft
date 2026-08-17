@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: machine_upgrade_module
   m_EditorClassIdentifier: Assembly-CSharp::Recipe
   machine: {fileID: 11400000, guid: 9dad41642642cce4cb4672ccf639d7a3, type: 2}
-  category: {fileID: 0}
+  category: {fileID: 11400000, guid: a63365af4ccd3904a91ebf59b6456c84, type: 2}
   tier: 2
   inputs:
   - item: {fileID: 11400000, guid: 36673d165a5f895419b19e358bce9cea, type: 2}

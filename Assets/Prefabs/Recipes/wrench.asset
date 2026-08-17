@@ -21,6 +21,9 @@ MonoBehaviour:
   outputs:
   - item: {fileID: 11400000, guid: a8fe23c53b9ba6f46ac41579a41fbcfb, type: 2}
     count: 1
+  fluidInputs: []
+  fluidOutputs: []
+  chanceOutputs: []
   requiredTools: []
   craftTime: 0
   importNote: 

@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 056f01c6d6cb00749b12be602ea5941f, type: 3}
+  m_Name: tin_blade
+  m_EditorClassIdentifier: Assembly-CSharp::ToolPartItem
+  itemName: tin_blade
+  displayName: "\uC8FC\uC11D \uCE7C\uB0A0"
+  placeable: 0
+  Icon: {fileID: 5173395371469264052, guid: 8b20703c37c4f5b49961365663ce9a04, type: 3}
+  maxStack: 64
+  fluidOverlay: {fileID: 0}
+  burnEnergy: 0
+  kind: {fileID: 11400000, guid: ab10db0b2e19ef34e9f08b0fb6a33945, type: 2}
+  material: {fileID: 11400000, guid: 30eadaef84989e04db82c1bcad9e2f8c, type: 2}

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: acid_pipe
   m_EditorClassIdentifier: Assembly-CSharp::Recipe
   machine: {fileID: 11400000, guid: ea55fe72f9315554a8ffdcf795dd1b7e, type: 2}
-  category: {fileID: 11400000, guid: a63365af4ccd3904a91ebf59b6456c84, type: 2}
+  category: {fileID: 11400000, guid: e8aa8410127980c4f9bd1da1db39f486, type: 2}
   tier: 1
   inputs:
   - item: {fileID: 11400000, guid: debf6e6ebcfd7bf44b1a32a7fa77afc7, type: 2}

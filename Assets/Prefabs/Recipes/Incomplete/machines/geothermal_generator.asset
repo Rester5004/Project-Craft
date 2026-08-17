@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d1635fa976c21145835b252e45d6313, type: 3}
+  m_Name: geothermal_generator
+  m_EditorClassIdentifier: Assembly-CSharp::Recipe
+  machine: {fileID: 11400000, guid: ea55fe72f9315554a8ffdcf795dd1b7e, type: 2}
+  category: {fileID: 11400000, guid: ad974e9d9fcf5f549a933df79a03218c, type: 2}
+  tier: 1
+  inputs:
+  - item: {fileID: 11400000, guid: 52dcd68d9640d074e987d7b810605bb2, type: 2}
+    count: 4
+  - item: {fileID: 11400000, guid: c9392aeebd648724fa65fd8e7b65dcef, type: 2}
+    count: 10
+  - item: {fileID: 11400000, guid: e28e21cfbb23d8c42869f75d13aba7e5, type: 2}
+    count: 4
+  outputs:
+  - item: {fileID: 11400000, guid: 5df9e05f8ff0c0e43a18978cece00f7c, type: 2}
+    count: 1
+  fluidInputs: []
+  fluidOutputs: []
+  chanceOutputs: []
+  requiredTools: []
+  craftTime: 1
+  importNote: 

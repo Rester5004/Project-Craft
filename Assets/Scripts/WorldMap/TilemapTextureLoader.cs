@@ -47,6 +47,8 @@ public class TilemapTextureLoader : Singleton<TilemapTextureLoader>
     {
         base.Awake();
         ConfigureYSorting();
+        // 커서 윤곽선이 조명을 받지 않게 하는 Unlit 머티리얼은 <b>GameRig 프리팹의 OutLine 타일맵에
+        // 직접 지정</b>돼 있다 — 코드로 넣으면 이 Awake 가 다른 초기화보다 먼저 도는지에 기대게 된다.
     }
 
     /// <summary>

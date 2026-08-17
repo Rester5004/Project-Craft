@@ -25,6 +25,12 @@ public class ToolPartRecipe : Recipe
     [Min(1)] public int materialCost = 1;
 
     /// <summary>
+    /// 목록에는 <b>종류 이름</b>으로 뜬다(막대 · 망치 머리 · 판). <c>outputs[0]</c> 의 견본을 그대로 쓰면
+    /// "돌 망치 머리" 로 보여 <b>돌 것만 만들어지는 것처럼</b> 읽힌다 — 실제로는 넣는 재질을 따라간다.
+    /// </summary>
+    public override string ListName => kind != null ? kind.DisplayName : base.ListName;
+
+    /// <summary>
     /// 이 재료 아이템이 어느 재질인가(받을 수 없으면 null).
     /// <b>재질 판정의 정본은 <see cref="ToolMaterial.sourceItem"/> 하나</b>다 —
     /// 이름 규칙으로 추측하면 `iron_ingot` 과 `raw_iron_ore` 를 구별하지 못한다.

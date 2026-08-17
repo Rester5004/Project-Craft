@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: gas_pipe
   m_EditorClassIdentifier: Assembly-CSharp::Recipe
   machine: {fileID: 11400000, guid: ea55fe72f9315554a8ffdcf795dd1b7e, type: 2}
-  category: {fileID: 11400000, guid: a63365af4ccd3904a91ebf59b6456c84, type: 2}
+  category: {fileID: 11400000, guid: e8aa8410127980c4f9bd1da1db39f486, type: 2}
   tier: 1
   inputs:
   - item: {fileID: 11400000, guid: 956eb8dcb573269499f30f7c84b58ecb, type: 2}
@@ -21,7 +21,12 @@ MonoBehaviour:
   outputs:
   - item: {fileID: 11400000, guid: e0fc7a2b8c185e141ae02653d2c872ac, type: 2}
     count: 1
-  requiredTools: []
+  fluidInputs: []
+  fluidOutputs: []
+  chanceOutputs: []
+  requiredTools:
+  - tool: {fileID: 11400000, guid: 181786590a1056c4fbb3151a9df074fb, type: 2}
+    durabilityCost: 1
   craftTime: 1
   importNote: "[\uBCD1\uD569] Assets/Prefabs/Recipes/Incomplete/crafting/gas_pipe.asset
     \uB97C \uD761\uC218\uD568\r\n[\uBCD1\uD569] Assets/Prefabs/Recipes/Incomplete/factory/gas_pipe.asset

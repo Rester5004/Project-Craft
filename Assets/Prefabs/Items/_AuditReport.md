@@ -4,9 +4,10 @@
 
 ## 요약
 
-- 아이템 **220개**, 등록된 레시피 145개
-  - Machines 48개
-  - Placeholder 82개
+- 아이템 **226개**, 등록된 레시피 155개
+  - Items 3개
+  - Machines 49개
+  - Placeholder 84개
   - Resource1 38개
   - ToolParts 48개
   - Tools 4개
@@ -30,11 +31,8 @@
 
 | 플레이스홀더 | 겹칠 수 있는 기계 | 쓰임 |
 |---|---|---|
-| `cement` | `Machine:CementPlant` (시멘트 공장) | 2/0/0 |
-| `crude_oil` | `Machine:OilDrill` (원유 채굴기) | 0/0/0 |
-| `glass` | `Machine:GlassWorks` (유리 가공기) | 3/0/0 |
 
-**확실한 중복 0건** (①+②) · 검토 필요 3건 (③)
+**확실한 중복 0건** (①+②) · 검토 필요 0건 (③)
 
 ## 레시피·블록이 참조하지 않는 아이템
 
@@ -49,93 +47,95 @@
 
 - **Placeholder** 4종: acid_solution, crude_oil, magic_powder, petroleum
 - **Resource1** 9종: diamond, energy_crystal, osmium_ingot, raw_osmium_ore, raw_thorium_ore, ruby, sapphire, surface_powder, thorium_ingot
-- **Machines** 18종 *(이름으로 연결 — 대부분 오탐)*: CoreCrafter, Machine:CementPlant, Machine:ChemicalProcessor, Machine:ElectricFurnace, Machine:Extractor10, Machine:Extractor11, Machine:Extractor12, Machine:Extractor13, Machine:Extractor20, Machine:Extractor21, Machine:Extractor22, Machine:Extractor23, Machine:GeothermalGenerator, Machine:GlassWorks, Machine:HVElectricFurnace, Machine:NuclearPlant, Machine:OilDrill, Machine:Transformer
-- **ToolParts** 43종 *(이름으로 연결 — 대부분 오탐)*: aluminum_hammer_head, aluminum_pickaxe_head, aluminum_rod, copper_hammer_head, copper_pickaxe_head, copper_rod, gold_hammer_head, gold_pickaxe_head, gold_rod, iron_pickaxe_head, lead_hammer_head, lead_pickaxe_head, lead_rod, lithium_hammer_head, lithium_pickaxe_head, lithium_rod, nickel_hammer_head, nickel_pickaxe_head, nickel_rod, osmium_hammer_head, osmium_pickaxe_head, osmium_rod, quartz_hammer_head, quartz_pickaxe_head, quartz_rod, silver_hammer_head, silver_pickaxe_head, silver_rod, stone_pickaxe_head, stone_rod, thorium_hammer_head, thorium_pickaxe_head, thorium_rod, tin_hammer_head, tin_pickaxe_head, tin_rod, titanium_hammer_head, titanium_pickaxe_head, titanium_rod, uranium_hammer_head, uranium_pickaxe_head, uranium_rod, wood_pickaxe_head
+- **Machines** 14종 *(이름으로 연결 — 대부분 오탐)*: CoreCrafter, Machine:Extractor10, Machine:Extractor11, Machine:Extractor12, Machine:Extractor13, Machine:Extractor20, Machine:Extractor21, Machine:Extractor22, Machine:Extractor23, Machine:GeothermalGenerator, Machine:HVElectricFurnace, Machine:NuclearPlant, Machine:OilDrill, Machine:Transformer
+- **ToolParts** 43종 *(이름으로 연결 — 대부분 오탐)*: aluminum_hammer_head, aluminum_pickaxe_head, aluminum_rod, copper_hammer_head, copper_pickaxe_head, copper_rod, gold_hammer_head, gold_pickaxe_head, gold_rod, iron_hammer_head, iron_pickaxe_head, lead_hammer_head, lead_pickaxe_head, lead_rod, lithium_hammer_head, lithium_pickaxe_head, lithium_rod, nickel_hammer_head, nickel_pickaxe_head, nickel_rod, osmium_hammer_head, osmium_pickaxe_head, osmium_rod, quartz_hammer_head, quartz_pickaxe_head, quartz_rod, silver_hammer_head, silver_pickaxe_head, silver_rod, thorium_hammer_head, thorium_pickaxe_head, thorium_rod, tin_hammer_head, tin_pickaxe_head, tin_rod, titanium_hammer_head, titanium_pickaxe_head, titanium_rod, uranium_hammer_head, uranium_pickaxe_head, uranium_rod, wood_hammer_head, wood_pickaxe_head
 
 ## 승격 대기 — 정본이 없는 플레이스홀더
 
 | 아이템 | 쓰임 | 아이콘 | 배치 가능 |
 |---|---|---|---|
-| `mana_shard` | 22/0/0 | 있음 | 아니오 |
-| `stone` | 20/0/1 | 있음 | 예 |
-| `conductor_powder` | 12/0/0 | 있음 | 아니오 |
-| `iron_plate` | 11/0/0 | 있음 | 아니오 |
-| `reinforced_concrete` | 8/0/0 | 있음 | 아니오 |
-| `computer_chip` | 8/0/0 | 있음 | 아니오 |
-| `water` | 6/0/0 | 있음 | 아니오 |
+| `mana_shard` | 21/0/0 | 있음 | 아니오 |
+| `stone` | 19/0/1 | 있음 | 예 |
+| `iron_plate` | 18/0/0 | 있음 | 아니오 |
+| `conductor_powder` | 16/0/0 | 있음 | 아니오 |
+| `rebar` | 14/0/0 | 있음 | 아니오 |
+| `reinforced_concrete` | 11/0/0 | 있음 | 아니오 |
+| `computer_chip` | 9/0/0 | 있음 | 아니오 |
+| `copper_plate` | 6/0/0 | 있음 | 아니오 |
 | `sand` | 6/0/0 | 있음 | 아니오 |
 | `crank` | 5/0/0 | 있음 | 아니오 |
+| `water` | 5/0/0 | 있음 | 아니오 |
 | `brick` | 5/0/0 | 있음 | 아니오 |
-| `bucket` | 5/0/0 | 있음 | 아니오 |
 | `gravel` | 4/0/0 | 있음 | 아니오 |
-| `copper_plate` | 4/0/0 | 있음 | 아니오 |
-| `meteorite_dust` | 3/0/0 | 있음 | 아니오 |
+| `glass` | 4/0/0 | 있음 | 아니오 |
+| `silver_plate` | 3/0/0 | 있음 | 아니오 |
 | `manastone` | 2/0/1 | 있음 | 예 |
 | `manastone_dust` | 3/0/0 | 있음 | 아니오 |
 | `manastone_shard` | 3/0/0 | 있음 | 아니오 |
-| `meteorite_shard` | 3/0/0 | 있음 | 아니오 |
+| `meteorite` | 2/0/1 | 있음 | 아니오 |
+| `invar_plate` | 3/0/0 | 있음 | 아니오 |
+| `invar` | 3/0/0 | 있음 | 아니오 |
+| `gold_plate` | 3/0/0 | 있음 | 아니오 |
+| `meteorite_dust` | 3/0/0 | 있음 | 아니오 |
+| `bronze` | 3/0/0 | 있음 | 아니오 |
+| `machine_upgrade_module` | 3/0/0 | 있음 | 아니오 |
+| `reinforced_alloy` | 3/0/0 | 있음 | 아니오 |
+| `bucket` | 3/0/0 | 있음 | 아니오 |
 | `silicon_plate` | 3/0/0 | 있음 | 아니오 |
-| `glass` | 3/0/0 | 있음 | 아니오 |
-| `tree_seed` | 2/0/0 | 있음 | 아니오 |
-| `sulfur_powder` | 2/0/0 | 있음 | 아니오 |
-| `manastone_fine_dust` | 2/0/0 | 있음 | 아니오 |
-| `stone_powder` | 2/0/0 | 있음 | 아니오 |
-| `metal_plate` | 2/0/0 | 있음 | 아니오 |
-| `meteorite` | 2/0/0 | 있음 | 아니오 |
-| `silicon` | 2/0/0 | 있음 | 아니오 |
+| `special_alloy` | 3/0/0 | 있음 | 아니오 |
+| `meteorite_shard` | 3/0/0 | 있음 | 아니오 |
 | `nuclear_fuel_rod` | 0/2/0 | 있음 | 아니오 |
-| `rebar` | 2/0/0 | 있음 | 아니오 |
+| `tree_seed` | 2/0/0 | 있음 | 아니오 |
+| `manastone_fine_dust` | 2/0/0 | 있음 | 아니오 |
+| `silicon` | 2/0/0 | 있음 | 아니오 |
+| `metal_plate` | 2/0/0 | 있음 | 아니오 |
+| `solid_pipe` | 1/0/1 | 있음 | 예 |
+| `steel` | 2/0/0 | 있음 | 아니오 |
 | `stone_blade` | 2/0/0 | 있음 | 아니오 |
 | `mana_chip` | 2/0/0 | 있음 | 아니오 |
-| `steel` | 2/0/0 | 있음 | 아니오 |
-| `special_alloy` | 2/0/0 | 있음 | 아니오 |
-| `solid_pipe` | 1/0/1 | 있음 | 예 |
-| `silver_plate` | 2/0/0 | 있음 | 아니오 |
+| `stone_powder` | 2/0/0 | 있음 | 아니오 |
+| `sulfur_powder` | 2/0/0 | 있음 | 아니오 |
 | `meteorite_fine_dust` | 2/0/0 | 있음 | 아니오 |
 | `liquid_pipe` | 1/0/1 | 있음 | 예 |
-| `lime` | 2/0/0 | 있음 | 아니오 |
-| `glass_pipe` | 2/0/0 | 있음 | 아니오 |
-| `cement` | 2/0/0 | 있음 | 아니오 |
-| `item_pipe` | 1/0/1 | 있음 | 예 |
-| `lava` | 2/0/0 | 있음 | 아니오 |
-| `iron_blade` | 2/0/0 | 있음 | 아니오 |
-| `invar_plate` | 2/0/0 | 있음 | 아니오 |
-| `gold_plate` | 2/0/0 | 있음 | 아니오 |
-| `apple_tree_seed` | 2/0/0 | 있음 | 아니오 |
-| `blade` | 2/0/0 | 있음 | 아니오 |
 | `gas_pipe` | 1/0/1 | 있음 | 예 |
+| `cement` | 2/0/0 | 있음 | 아니오 |
+| `dirt` | 2/0/0 | 있음 | 아니오 |
+| `apple_tree_seed` | 2/0/0 | 있음 | 아니오 |
 | `enchanted_conductor_powder` | 2/0/0 | 있음 | 아니오 |
-| `bearing` | 1/0/0 | 있음 | 아니오 |
-| `auto_crafter` | 1/0/0 | 있음 | 아니오 |
-| `any_coal_lignite_oil_2` | 0/1/0 | 있음 | 아니오 |
-| `stone_knife` | 1/0/0 | 있음 | 아니오 |
-| `uranium_concentrate` | 1/0/0 | 있음 | 아니오 |
-| `sulfur_ore` | 1/0/0 | 있음 | 아니오 |
-| `any_coal_lignite_2` | 0/1/0 | 있음 | 아니오 |
+| `bronze_plate` | 2/0/0 | 있음 | 아니오 |
+| `glass_pipe` | 2/0/0 | 있음 | 아니오 |
+| `iron_blade` | 2/0/0 | 있음 | 아니오 |
+| `blade` | 2/0/0 | 있음 | 아니오 |
+| `item_pipe` | 1/0/1 | 있음 | 예 |
+| `lime` | 2/0/0 | 있음 | 아니오 |
 | `any_coal_lignite` | 0/1/0 | 있음 | 아니오 |
+| `sulfur_ore` | 1/0/0 | 있음 | 아니오 |
 | `turbid_uranium` | 1/0/0 | 있음 | 아니오 |
+| `any_coal_lignite_oil` | 0/1/0 | 있음 | 아니오 |
+| `stone_knife` | 1/0/0 | 있음 | 아니오 |
+| `any_coal_lignite_oil_2` | 0/1/0 | 있음 | 아니오 |
 | `upgrade_efficiency` | 1/0/0 | 있음 | 아니오 |
 | `upgrade_speed` | 1/0/0 | 있음 | 아니오 |
-| `any_coal_lignite_oil` | 0/1/0 | 있음 | 아니오 |
-| `bronze` | 1/0/0 | 있음 | 아니오 |
-| `dirt` | 1/0/0 | 있음 | 아니오 |
-| `cavity_scanner` | 1/0/0 | 있음 | 아니오 |
+| `auto_crafter` | 1/0/0 | 있음 | 아니오 |
+| `bearing` | 1/0/0 | 있음 | 아니오 |
+| `any_coal_lignite_2` | 0/1/0 | 있음 | 아니오 |
+| `uranium_concentrate` | 1/0/0 | 있음 | 아니오 |
 | `conductor_crystal` | 1/0/0 | 있음 | 아니오 |
-| `propeller` | 1/0/0 | 있음 | 아니오 |
+| `low_voltage_power` | 0/1/0 | 있음 | 아니오 |
 | `dowsing_rod` | 1/0/0 | 있음 | 아니오 |
-| `motor` | 1/0/0 | 있음 | 아니오 |
 | `dowsing_rod_t0` | 1/0/0 | 있음 | 아니오 |
+| `propeller` | 1/0/0 | 있음 | 아니오 |
+| `motor` | 1/0/0 | 있음 | 아니오 |
 | `glass_container` | 1/0/0 | 있음 | 아니오 |
+| `iron_knife` | 1/0/0 | 있음 | 아니오 |
 | `metal_ingot` | 1/0/0 | 있음 | 아니오 |
 | `metal` | 1/0/0 | 있음 | 아니오 |
-| `invar` | 1/0/0 | 있음 | 아니오 |
-| `iron_knife` | 1/0/0 | 있음 | 아니오 |
-| `low_voltage_power` | 0/1/0 | 있음 | 아니오 |
 | `knife` | 1/0/0 | 있음 | 아니오 |
-| `bronze_plate` | 1/0/0 | 있음 | 아니오 |
+| `lava` | 1/0/0 | 있음 | 아니오 |
+| `cavity_scanner` | 1/0/0 | 있음 | 아니오 |
 | `acid_pipe` | 1/0/0 | 있음 | 아니오 |
 
-合 78종. `Assets/Prefabs/Items/Placeholder` 에는 이미 정본인 것(돌·마력석·파이프)도 섞여 있으니 폴더로 판단하지 말 것.
+合 80종. `Assets/Prefabs/Items/Placeholder` 에는 이미 정본인 것(돌·마력석·파이프)도 섞여 있으니 폴더로 판단하지 말 것.
 
 ## 설계와 어긋난 곳 (사람 판단 필요)
 

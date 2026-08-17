@@ -9,12 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f0aa270e77a10f843b1b6fe8950719d0, type: 3}
+  m_Script: {fileID: 11500000, guid: 056f01c6d6cb00749b12be602ea5941f, type: 3}
   m_Name: iron_plate
-  m_EditorClassIdentifier: Assembly-CSharp::Items
+  m_EditorClassIdentifier: Assembly-CSharp::ToolPartItem
   itemName: iron_plate
   displayName: "\uCCA0\uD310"
   placeable: 0
   Icon: {fileID: 1282421466862442625, guid: a3cd26fd1d78ac546b7761073da1cd37, type: 3}
   maxStack: 64
+  fluidOverlay: {fileID: 0}
   burnEnergy: 0
+  kind: {fileID: 11400000, guid: aba0e74c69da9d94a9a16b109adf82c9, type: 2}
+  material: {fileID: 11400000, guid: bb7023b45c3baa94292d626cc6a55c16, type: 2}

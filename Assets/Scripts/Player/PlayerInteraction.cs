@@ -111,7 +111,9 @@ public class PlayerInteraction : MonoBehaviour
         //    기계 옆에 서 있는데 반대쪽 끝을 눌렀다고 안 열리면 이상하다.
         if (mapGenerator.TryGetMachineAt(targetCell, out MachineInstance machine))
         {
-            if (machineInteraction != null && machine != null
+            // 조명처럼 슬롯이 하나도 없는 장치는 빈 패널을 띄우지 않는다(MachineBlock.OpensUI).
+            bool opensUI = machine != null && (machine.Info == null || machine.Info.OpensUI);
+            if (machineInteraction != null && machine != null && opensUI
                 && IsFootprintAdjacent(machine.worldCell, FootprintFor(machine.blockId), playerCell))
                 machineInteraction.OpenMachine(machine);
             return;

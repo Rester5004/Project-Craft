@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75e53ac919a25eb46af789df6f972df5, type: 3}
+  m_Name: knife
+  m_EditorClassIdentifier: Assembly-CSharp::ToolDefinition
+  toolId: knife
+  displayName: "\uCE7C"
+  listIcon: {fileID: -1282120699985795654, guid: 8b20703c37c4f5b49961365663ce9a04, type: 3}
+  baseDurability: 80
+  slots:
+  - kind: {fileID: 11400000, guid: f1a71dd931e9b744cbb2043a0ec90e6a, type: 2}
+    filter: 0
+    curated:
+    - {fileID: 11400000, guid: 5c8ad79e1d011c0439613190e7b7277f, type: 2}
+    - {fileID: 11400000, guid: ef907b52c2503c54ea48458d97856e24, type: 2}
+    - {fileID: 11400000, guid: bb7023b45c3baa94292d626cc6a55c16, type: 2}
+    - {fileID: 11400000, guid: 291a39cc9fe389e4cbfbccc971112bf1, type: 2}
+    - {fileID: 11400000, guid: e18250cebc5822d4eb8e25317cf4da37, type: 2}
+    - {fileID: 11400000, guid: 30eadaef84989e04db82c1bcad9e2f8c, type: 2}
+    - {fileID: 11400000, guid: 5911fc6815f831f45926760150caa75a, type: 2}
+    - {fileID: 11400000, guid: 61928dca7a2f7b14eb3da7ddb35bfbee, type: 2}
+    - {fileID: 11400000, guid: a65fed94980478341bd59fc3ac452afc, type: 2}
+    - {fileID: 11400000, guid: 0081e87b21aa6a74fa9f14644f8362ec, type: 2}
+    - {fileID: 11400000, guid: 106820b75dd2aee4785de3d48700deb2, type: 2}
+    - {fileID: 11400000, guid: e1d31d14ecbac2e489c6400339f75e94, type: 2}
+    - {fileID: 11400000, guid: a225bcc9827e6544eb405b9bf4eb2b2c, type: 2}
+    - {fileID: 11400000, guid: e4fd4ba54611bd7458ea322f38f66f4e, type: 2}
+    - {fileID: 11400000, guid: b01bdd59add7cbf4f85ec6b58ec9c857, type: 2}
+    - {fileID: 11400000, guid: befc3c72f0469f445b05d5b50778521d, type: 2}
+    layerSpritePattern: '{material}_hammer'
+    tintByMaterial: 0
+  - kind: {fileID: 11400000, guid: ab10db0b2e19ef34e9f08b0fb6a33945, type: 2}
+    filter: 0
+    curated:
+    - {fileID: 11400000, guid: 5c8ad79e1d011c0439613190e7b7277f, type: 2}
+    - {fileID: 11400000, guid: ef907b52c2503c54ea48458d97856e24, type: 2}
+    - {fileID: 11400000, guid: bb7023b45c3baa94292d626cc6a55c16, type: 2}
+    - {fileID: 11400000, guid: 291a39cc9fe389e4cbfbccc971112bf1, type: 2}
+    - {fileID: 11400000, guid: e18250cebc5822d4eb8e25317cf4da37, type: 2}
+    - {fileID: 11400000, guid: 30eadaef84989e04db82c1bcad9e2f8c, type: 2}
+    - {fileID: 11400000, guid: 5911fc6815f831f45926760150caa75a, type: 2}
+    - {fileID: 11400000, guid: 61928dca7a2f7b14eb3da7ddb35bfbee, type: 2}
+    - {fileID: 11400000, guid: a65fed94980478341bd59fc3ac452afc, type: 2}
+    - {fileID: 11400000, guid: 0081e87b21aa6a74fa9f14644f8362ec, type: 2}
+    - {fileID: 11400000, guid: 106820b75dd2aee4785de3d48700deb2, type: 2}
+    - {fileID: 11400000, guid: e1d31d14ecbac2e489c6400339f75e94, type: 2}
+    - {fileID: 11400000, guid: a225bcc9827e6544eb405b9bf4eb2b2c, type: 2}
+    - {fileID: 11400000, guid: e4fd4ba54611bd7458ea322f38f66f4e, type: 2}
+    - {fileID: 11400000, guid: b01bdd59add7cbf4f85ec6b58ec9c857, type: 2}
+    - {fileID: 11400000, guid: befc3c72f0469f445b05d5b50778521d, type: 2}
+    layerSpritePattern: '{material}_blade'
+    tintByMaterial: 0
+  canMineBlocks: 0

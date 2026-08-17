@@ -25,7 +25,9 @@ public class MachineBlock : BlockBase
     public Vector2Int size = Vector2Int.one;
 
     [Header("등급 · 레시피 연결")]
-    [Tooltip("이 기계의 티어. recipe.tier 가 이 값 이하인 레시피만 처리한다.")]
+    [Tooltip("조합대가 목록을 거를 때 쓰는 해금 티어(CraftingTableBlock 전용).\n" +
+             "일반 기계는 이 값을 보지 않는다 — 기계는 자기 그룹의 레시피를 티어와 무관하게 전부 처리한다.\n" +
+             "기계를 가르는 것은 tier 가 아니라 recipeGroupId 다.")]
     [Min(0)] public int tier;
 
     [Tooltip("레시피를 공유하는 그룹 이름. 비우면 blockName 을 쓴다.\n" +
@@ -96,6 +98,18 @@ public class MachineBlock : BlockBase
     /// </summary>
     public virtual bool AutoProcess => true;
 
+    /// <summary>
+    /// 레시피 없이 그냥 켜져 있는 장치인가(조명 등).
+    /// 켜져 있는 동안 <see cref="energyUseRate"/> 를 <b>상시</b> 소비한다 —
+    /// 보통 기계는 가공하는 프레임에만 전기를 먹으므로 이것이 유일한 예외다.
+    /// </summary>
+    public virtual bool IsAlwaysOn => false;
+
+    /// <summary>
+    /// 우클릭했을 때 기계 UI 를 여는가. 슬롯이 하나도 없는 장치(조명)는 <b>빈 패널이 뜨면 안 된다</b>.
+    /// </summary>
+    public virtual bool OpensUI => true;
+
     /// <summary>연료를 태워 돌아가는 기계인가.</summary>
     public bool UsesFuel => fuelSlotCount > 0;
 
@@ -108,10 +122,15 @@ public class MachineBlock : BlockBase
     public bool IsManual => manualStepRatio > 0f;
 
     /// <summary>
-    /// 연료를 태워 전력을 만드는 발전기인가. 연료 칸이 없으면 태울 것이 없으므로 발전기가 아니다.
+    /// 전력을 만드는 발전기인가.
+    ///
+    /// ⚠ <b>예전에는 <c>fuelSlotCount > 0</c> 도 요구했다.</b> 그래서 연료가 없는 것이 정체성인
+    /// <b>지열 발전기가 발전 자체를 못 했다</b>. 연료 유무는 <see cref="UsesFuel"/> 이 따로 답하고,
+    /// <c>TickGenerator</c> 가 그것으로 "태워서 낸다 / 그냥 낸다" 를 가른다.
+    ///
     /// 발전만 안 하고 전송만 하는 중계기는 <see cref="isGenerator"/> 를 끄고 <see cref="powerRange"/> 만 준다.
     /// </summary>
-    public bool IsGenerator => isGenerator && fuelSlotCount > 0;
+    public bool IsGenerator => isGenerator;
 
     /// <summary>가동 중 초당 소비 전력. 미설정(0)이면 최대 저장량의 10% 로 폴백한다.</summary>
     public float EnergyUseRate => energyUseRate > 0f ? energyUseRate : maxEnergyAmount * 0.1f;

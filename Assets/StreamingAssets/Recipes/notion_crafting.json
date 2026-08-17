@@ -6,51 +6,24 @@
   "recipes": [
     { "id": "stick", "tier": 0, "output": "막대", "outputQty": 1,
       "inputs": [ { "item": "돌", "qty": 1 } ] },
-
-    { "id": "stone_blade", "tier": 0, "output": "돌 칼날", "outputQty": 1,
-      "inputs": [ { "item": "돌", "qty": 2 } ] },
-
     { "id": "stone_hammer_head", "tier": 0, "output": "돌 망치 머리", "outputQty": 1,
       "inputs": [ { "item": "돌", "qty": 2 } ] },
-
-    { "id": "stone_knife", "tier": 0, "output": "돌 칼", "outputQty": 1,
-      "inputs": [ { "item": "막대", "qty": 1 }, { "item": "돌 칼날", "qty": 1 } ] },
-
     { "id": "crank", "tier": 0, "output": "크랭크", "outputQty": 1,
       "inputs": [ { "item": "돌", "qty": 2 } ],
       "tools": [ "칼" ] },
 
-    { "id": "dowsing_rod_t0", "tier": 0, "output": "0티어 다우징 로드", "outputQty": 1,
+    { "id": "dowsing_rod", "tier": 0, "output": "다우징 로드", "outputQty": 1,
       "inputs": [ { "item": "돌", "qty": 5 } ],
       "tools": [ "칼", "망치" ] },
 
     { "id": "brick", "tier": 0, "output": "벽돌", "outputQty": 1,
       "inputs": [ { "item": "모래", "qty": 2 }, { "item": "물", "qty": 1 } ],
       "note": "압축기에서 만들면 고효율" },
-
-    { "id": "iron_plate", "tier": 1, "output": "철판", "outputQty": 1,
-      "inputs": [ { "item": "철 주괴", "qty": 1 } ],
-      "tools": [ "망치" ],
-      "note": "압축기보다 저효율" },
-
-    { "id": "metal_plate_by_hammer", "tier": 0, "output": "금속판", "outputQty": 1,
-      "inputs": [ { "item": "금속", "qty": 2 } ],
-      "tools": [ "망치" ],
-      "note": "망치는 소모되지 않음(내구도도 소모 X)" },
-
     { "id": "bucket", "tier": 1, "output": "양동이", "outputQty": 1,
       "inputs": [ { "item": "철판", "qty": 3 } ],
       "tools": [ "망치" ] },
-
-    { "id": "iron_blade", "tier": 1, "output": "철 칼날", "outputQty": 1,
-      "inputs": [ { "item": "철 주괴", "qty": 1 } ] },
-
     { "id": "iron_hammer_head", "tier": 1, "output": "철 망치 머리", "outputQty": 1,
       "inputs": [ { "item": "철 주괴", "qty": 1 } ] },
-
-    { "id": "iron_knife", "tier": 1, "output": "철 칼", "outputQty": 1,
-      "inputs": [ { "item": "막대", "qty": 1 }, { "item": "철 칼날", "qty": 1 } ] },
-
     { "id": "computer_chip", "tier": 1, "output": "컴퓨터 칩", "outputQty": 1,
       "inputs": [
         { "item": "실리콘 판", "qty": 10 },

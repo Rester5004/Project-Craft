@@ -28,18 +28,23 @@ Unity 6 · 2D 탑다운 오픈월드 공장 게임. 대화는 한국어, 주석�
 | 월드 스크린샷 | 임시 `Camera` + `RenderTexture` + `Render()` 가 동기라 확실하다 (UI 는 안 나온다) |
 | 스프라이트 시트 재슬라이스 | ⚠ **`TextureImporter.spritesheet` 를 쓰면 안 된다.** `SpriteMetaData` 에는 **`spriteID` 필드가 아예 없어서**(name·rect·alignment·pivot·border·customData 뿐) 다시 쓰는 순간 서브 스프라이트의 ID 가 유실되고, Unity 가 이름으로 재연결하다 **충돌한 것만 새 fileID 를 발급**한다 → 그 스프라이트를 가리키던 에셋 참조가 조용히 끊긴다(실측: 55개 중 2개). 반드시 `UnityEditor.U2D.Sprites.SpriteDataProviderFactories` → `ISpriteEditorDataProvider.GetSpriteRects()` 로 **`SpriteRect.rect` 만 고치고 `spriteID` 는 건드리지 않는다**(클래스라 그냥 대입하면 된다). 손대기 전 `.png.meta` 를 백업할 것 — 되돌리면 `ForceUpdate` 재임포트로 참조가 되살아난다 |
 
-### 세이브를 건드리기 전에
+### 세이브
 
-`WorldMap.Load` 는 **예외가 나면 세이브 파일을 지운다**(`File.Delete`). 플레이 모드 검증 전에 항상 백업:
+**세이브 검증(백업 → 해시 비교 → 복원)은 하지 않는다** — 2026-08-14 사용자 결정.
+세이브는 사용자가 직접 관리한다. 검증 중에 사용자가 플레이 모드를 만질 수도 있어
+"바이트 동일" 같은 수치는 애초에 신뢰할 수 없고, 그것을 맞추느라 쓰는 시간이 값을 못 한다.
 
 ```
 C:\Users\c\AppData\LocalLow\DefaultCompany\Project Craft\worldmap.dat
 ```
 
+여전히 사실이라 알아 둘 것(고쳐야 할 코드 함정이지 절차가 아니다):
+
+- `WorldMap.Load` 는 **예외가 나면 세이브 파일을 옆으로 치운다**(`SafeFile.Quarantine`. 예전엔 `File.Delete` 였다).
 - **에디트 모드에서 `WorldMap.Instance` 에 접근하지 말 것.** 싱글톤이 Awake 안 된 오브젝트를 만들어,
   플레이 종료 시 `OnApplicationQuit → Save()` 가 헤더만 쓰고 터져 세이브가 잘린다.
-- 플레이 모드에서 만든 테스트 배치물은 **종료 전에 반드시 치운다**(종료 시 자동 저장됨).
-  치운 뒤 남은 배치물 수를 세어 확인할 것.
+- 플레이 모드에서 만든 테스트 배치물은 **종료 전에 치운다**(종료 시 자동 저장된다).
+  월드를 어지럽히지 않기 위한 정리일 뿐, 개수를 세어 보고할 필요는 없다.
 
 ## 3. 폴더 지도
 
@@ -116,7 +121,12 @@ Assets/Scenes/UndergroundScene.unity ← GameRig + UndergroundSceneSetup 둘뿐
 
 탐지기(`dowsing_rod`)로 땅을 우클릭 → **10%** 로 그 자리에 포탈 → `E` 로 지하 씬으로 **넘어간다**.
 7×7 빈 방 중앙에 스폰하고, 바깥은 등급이 정한 벽으로 31×31 까지, 그 밖은 못 캐는 암반이다.
-**마력 파편·철 주괴의 최초 획득처**이자 마력석·운석 수급처다.
+**마력 파편·철 주괴·뼈 가루의 최초 획득처**이자 마력석·운석 수급처다.
+
+⚠ **탐지기의 정본 이름은 `dowsing_rod` 하나다.** 예전에는 만들 수 있는 것이 `dowsing_rod_t0`(별개 아이템)인데
+`UndergroundPalette.DowsingTierOf` 는 `dowsing_rod` 만 인정해서 **지하에 영영 못 들어갔고, 그것 하나로
+게임이 시작조차 되지 않았다**(2026-08-15 에 `ItemAliases` 로 흡수). `dowsing_rod_t1/t2` 자리는
+그 표에 이미 있으니 아이템·레시피만 만들면 1·2등급 방이 열린다.
 
 - **월드를 객체로 나누지 않는다.** `WorldMap` 은 그대로 두고 **청크 생성 델리게이트**(`chunkGenerator`)만
   갈아 끼운다(`EnterEphemeralWorld` / `ReturnToPersistentWorld`). 그래서 `MapGenerator`·`PlayerInteraction`·
@@ -200,15 +210,25 @@ Assets/Scenes/UndergroundScene.unity ← GameRig + UndergroundSceneSetup 둘뿐
 
 ### 기계 · 레시피
 
-#### ⚠ 티어는 두 축이고, **기계에는 티어가 없다**
-`tier` 라는 같은 이름이 서로 다른 두 가지를 가리킨다. 섞으면 없는 충돌을 만든다(실제로 그랬다).
+#### ⚠ 티어는 **한 축뿐이다** — "코어 조합대 목록에 언제 나타나는가"
+`tier` 는 **해금 시점만** 가리킨다. **기계는 자기 그룹의 레시피를 티어와 무관하게 전부 처리한다** —
+분쇄기 한 종류가 돌·마력석·운석을 다 빻고, 화로 한 종류가 모든 광석을 재련한다
+(2026-08-15 사용자 결정).
 
-| 축 | 누가 비교하나 | 뜻 |
-|---|---|---|
-| **해금** | 건설 레시피의 `Recipe.tier` vs `CoreCrafter.tier` (`RecipeDictionary.cs:79,114`) | 코어가 이 티어 이상이어야 조합 목록에 뜬다 |
-| **처리** | `MachineBlock.tier` vs 가공 레시피의 `Recipe.tier` (`MachineInstance.cs:633`) | 이 기계가 어느 레시피까지 돌리나 |
+| 누가 비교하나 | 뜻 |
+|---|---|
+| `Recipe.tier` vs 조합대의 `MachineInstance.Tier` (`RecipeDictionary.cs:79,114` ← `CraftingTableUI.cs:236,294`) | 조합대 목록에 뜨는 조건. **이것이 전부다** |
 
-- **`MachineBlock.tier` 는 "기계의 티어" 가 아니라 처리 범위다** (`MachineBlock.cs:22` 주석이 정본).
+- ⚠ **일반 기계의 가공 경로에서 `tier` 를 비교하면 안 된다.** 예전에는 `MachineInstance.SelectRecipe` 와
+  `PipeRouter.TargetSlots`·`TargetTanks` **세 곳**이 `recipe.tier > machine.Tier` 로 걸렀고, 그래서
+  **"2티어 분쇄기가 없어 운석을 못 빻는다" 같은 없는 문제**가 생겼다. 셋 다 지웠다 —
+  되살리면 파이프 쪽만 남아 *"기계는 돌릴 수 있는데 파이프가 재료를 안 넣는"* 상태가 된다.
+- **`MachineBlock.tier` 는 조합대(와 코어 업그레이드)에서만 뜻을 갖는다.** 일반 기계에서는 아무 뜻이 없다.
+  `MachineInstance.Tier` 를 읽는 곳은 `CraftingTableUI` 와 `TryUpgradeTier` 뿐이다.
+- **기계를 가르는 것은 `tier` 가 아니라 `recipeGroupId` 다.** `blast_steel`·`blast_titanium` 이
+  `Machine:BlastFurnace` 그룹에만 있어서 "티타늄·강철만 용광로" 가 티어 게이트 없이도 성립한다.
+  ⚠ 그래서 **같은 그룹의 상위 기계는 `speedMultiplier`·`energyUseRate` 로만 구별된다** —
+  값을 안 벌려 두면 "만들 이유가 없는 상위 기계" 가 된다(화로 x1 / 전기로 x2·100 per s / 고전압 전기로 x4·300 per s).
 - **`n티어 기계` 라는 것은 없다** — `n티어에서 만들 수 있다` 만 있다. 그래서
   **같은 기계가 n티어에도 m티어에도 있으면 안 된다.** 업그레이드는 `화로 → 전기로 → 고전압 전기로`
   처럼 **이름이 다른 별개 기계**로 표현한다. (이 규칙 위반이라 `2티어 합금 재련기` 와 `정유기` 를 지웠다 —
@@ -218,8 +238,9 @@ Assets/Scenes/UndergroundScene.unity ← GameRig + UndergroundSceneSetup 둘뿐
   압축기는 **입력 2칸**이어야 한다 — `compress_brick`(모래2 + 물1) 때문이고, UI 프리팹도 그래서 옛
   `RollingMill_UI`(입력2 + 업그레이드2)를 `Compressor_UI` 로 물려받았다.
   ⚠ 옛 이름은 `ItemAliases`(`Machine:RollingMill` → `Machine:Compressor`)와 `MachineAliases`(`압연기`·`벽돌 공장` → `압축기`)가 잇는다.
-- ⚠ **`Recipe.tier` 한 필드가 두 뜻을 겸한다** — 건설 레시피에선 해금, 가공 레시피에선 처리 요구.
-  지금은 가공 레시피가 조합대 목록에 안 떠서 부딪히지 않는다.
+- **가공 레시피의 `tier` 는 뜻이 없다.** 아무도 안 보므로 값이 무엇이든 동작이 같다 —
+  다만 읽는 사람이 "이 기계는 못 돌린다" 로 오해하므로 새로 만들 때는 0 으로 둔다
+  (`smelt_lead`·`smelt_nickel`·`smelt_tin`·`smelt_uranium` 을 그래서 1 → 0 으로 정리했다).
 - **코어 조합기의 해금 티어는 SO 가 아니라 `PlaceableRecord.tier` 에 산다.**
   `MachineInstance.Tier = max(Info.tier, record.tier)` 라 다른 기계 47종은 record 가 0 이어서 지금까지와 같다.
   SO 를 런타임에 고치면 에디터에서 **에셋이 영구히 바뀌고** 코어가 둘일 때 한쪽만 올릴 수도 없다.
@@ -232,8 +253,21 @@ Assets/Scenes/UndergroundScene.unity ← GameRig + UndergroundSceneSetup 둘뿐
 - 조합대 5종의 현재 값: `코어 조합기 0`(업그레이드로 2까지) · `고급 조합기 2` ·
   `초급/중급/고급 재단 0/1/2`. **재단 3종은 `CraftingTableBlock` 이고 `recipeGroupId = "Altar"` 로 목록을 공유**한다.
   고급 조합기·재단은 각자 전용 목록을 가지므로 `recipeGroupId` 를 코어와 합치지 않는다.
+- ⚠ **마법 레시피는 재단 전용이다 — 코어 조합기에 같은 것을 두지 않는다**(2026-08-15 사용자 결정).
+  예전에는 9개가 코어와 재단 양쪽에 있어 재단을 지을 이유가 없었다. 지금은 코어 쪽을 전부 지웠다:
+  **초급 재단(t0)** `물` `용암` `마력 파편 증식`(`magic_shard_duplicate`) `마법이 부여된 전도체 가루`
+  `0티어 자원 생성기` **`중급 재단`(`altar_intermediate`)** /
+  **중급 재단(t1)** `마력 결정` `마력 칩` `마법부여기` `사과 나무 씨앗` `강화 자원 생성기`.
+  ⚠ **재단을 짓는 레시피만 예외적으로 갈린다** — `초급 재단`(`altar_basic`)은 코어 조합기,
+  `중급 재단`(`altar_intermediate`)은 **초급 재단**, `고급 재단`(`advanced_altar`)은 고급 조합기다.
+  즉 재단 계열은 **자기 아래 단계에서 짓는다**(코어 → 초급 → 중급).
+  ⚠ **`마법이 부여된 전도체 가루`(코어 1차 승급 재료)가 초급 재단에만 있으므로 초급 재단이 승급의 관문**이다 —
+  코어 t0 에서 `마력 파편 5 + 돌 2` 로 지을 수 있어 잠기지는 않는다(폐쇄 검증 완료).
+  ⚠ **새 마법 레시피를 코어에 붙이지 말 것.** `StreamingAssets/Recipes/crafting.json` 의 `station` 필드는
+  임포터가 보지 않아 **적어 둬도 코어에 만들어진다** — 재단 레시피는 `notion_magic.json` 에 넣는다.
 - **제련 규칙**: 화로는 **티어와 무관하게 모든 광석을 재련한다. 티타늄·강철만 용광로.**
-  (2026-08-07 · 2026-08-10 사용자 결정. `smelt_*` 의 `Recipe.tier` 가 이 규칙과 어긋나 있다 — `TODO.md` §F)
+  (2026-08-07 · 2026-08-10 사용자 결정. **2026-08-15 에 처리 티어 게이트를 지워 코드가 이 규칙과 맞았다** —
+  전에는 `smelt_lead`·`smelt_nickel`·`smelt_tin`·`smelt_uranium` 이 tier 1 이라 화로가 거부했다)
   `blast_titanium`(티타늄 조각 4 → 티타늄 주괴) · `blast_steel`(**철 주괴 2 + 석탄 1** → 강철)이
   `Machine:BlastFurnace` 목록의 전부다. ⚠ 둘은 원래 `Furnace` 그룹에 있어 화로·전기로가 뽑고 있었고,
   `blast_steel` 은 **입력이 비어 있어 재료 없이 강철이 나왔다.**
@@ -268,11 +302,15 @@ Assets/Scenes/UndergroundScene.unity ← GameRig + UndergroundSceneSetup 둘뿐
   | 1 | **`철근 ×4`** | 철판 8 (철근 = 철판 ×2) |
   | 2 | **`철근 콘크리트 ×2`** | 철근 8 + 시멘트 40 |
 
-  ⚠ **콘크리트는 원래 1티어였다.** `철근 ×4 + 시멘트 ×20` 이고 시멘트 ← 석회 ← **뼈 가루(돌 가루 추출 1%)**
-  라 콘크리트 1개가 돌 가루 수천 개다 — 1티어가 통째로 잠겨 있었다. **한 티어 위로 올려** 2티어 관문으로 삼았다.
+  ⚠ **콘크리트는 원래 1티어였다.** `철근 ×4 + 시멘트 ×20` 이고 시멘트 ← 석회 ← **뼈 가루**라
+  콘크리트 1개가 돌 가루 수천 개다(추출 1%) — 1티어가 통째로 잠겨 있었다. **한 티어 위로 올려**
+  2티어 관문으로 삼았고(`reinforced_concrete.tier = 2`), **지하 전리품에 뼈 가루 행을 넣어**
+  추출 말고 다른 길을 냈다(2026-08-15). 실측: 등급 0 방 한 판에 뼈 가루 약 10개 = 시멘트 5 →
+  **콘크리트 1개에 지하 원정 약 4회 · 2티어 기계 1대에 약 8회.**
   새 기계를 추가할 때 이 표를 따르고, 어기면 그 티어가 조용히 잠긴다.
 - **새 기계를 늘리는 데 에디터 툴은 필요 없다.** 기존 `MachineBlock` 을 복제해
-  `recipeGroupId`(레시피 목록 공유) · `tier`(처리 범위) · `uiPrefab`(UI 공유) 세 필드만 맞추고,
+  `recipeGroupId`(레시피 목록 공유) · `speedMultiplier`·`energyUseRate`(상위 기계와의 차이) ·
+  `uiPrefab`(UI 공유) 세 자리만 맞추고,
   `itemName == blockName` 인 `Items` 를 함께 만든 뒤 `Register All Assets` 를 돌리면 된다.
   화로 3종 · 조합대 2종 · 추출기 12종이 전부 이 방식으로 붙어 있다 —
   **그래서 계열 생성 툴(`ExtractorSetup` 등)은 만들지 않는다.** 표와 에셋이 갈라져 값이 되돌아갈 뿐이다.
@@ -303,7 +341,7 @@ Assets/Scenes/UndergroundScene.unity ← GameRig + UndergroundSceneSetup 둘뿐
   보정이 없으면 2×2 기계의 절반을 뚫고 지나간다. 1×1 은 손대지 않는다(오버행이 의도된 모습).
 - ⚠ **면 상태는 방향당 하나다.** `faceModes` 는 레코드 하나에 2비트 × 4면이라, 같은 방향으로 늘어선
   여러 칸이 **한 설정을 공유**한다(2×2 의 북쪽 두 면을 따로 지정할 수 없다).
-- **설치 미리보기**(`PlacementPreview`, `MapGenerator.Start` 가 런타임 생성)는 반투명 기계 그림 +
+- **설치 미리보기**(`PlacementPreview`, 루트는 아직 `MapGenerator.Start` 가 만든다 — 이관 대상)는 반투명 기계 그림 +
   칸별 초록/빨강이다. ⚠ **판정은 `PlayerInteraction.CanPlaceFootprint` 한 곳만 한다** —
   미리보기가 따로 계산하면 "초록인데 안 놓이는" 상태가 반드시 생긴다. 그래서 `PerformUse` 의 네 분기는
   판정을 갖지 않고 "어떻게 놓는가" 만 남아 있다(칸 조건은 `CanPlaceCell` 이 종류별로 가른다).
@@ -314,7 +352,8 @@ Assets/Scenes/UndergroundScene.unity ← GameRig + UndergroundSceneSetup 둘뿐
   `CountFreeSpace`(넣어 보지 않고 여유 세기) `CountItem`.
 - **`RecipeSolver.AddItems` 는 통지하지 않는다.** 외부에서 슬롯을 건드렸으면
   `inventory.NotifyChanged()` + `instance.Flush()` 를 직접 불러야 UI 갱신·재가공이 걸린다.
-- `Recipe.tier` = 조합대 티어 요구. `MachineBlock.recipeGroupId` 로 0/1/2티어 화로가 같은 목록을 공유.
+- `Recipe.tier` = **조합대 해금 요구뿐이다**(일반 기계는 안 본다). 화로 3종은
+  `MachineBlock.recipeGroupId` 로 같은 목록을 공유하고 셋 다 전부 처리한다.
 - **가동 중 그림**: `MachineBlock.runningSprite` 가 **비어 있으면 그림을 바꾸지 않는다**(47대 중 45대가 그렇다).
   **정지 그림의 정본은 SO 가 아니라 `machinePrefab` 의 `SpriteRenderer`** — `MachineInstance.Bind` 가
   배치 시점에 기억했다가 되돌린다. 두 곳에 두면 언젠가 어긋난다.
@@ -352,7 +391,7 @@ Assets/Scenes/UndergroundScene.unity ← GameRig + UndergroundSceneSetup 둘뿐
   ⚠ **자리가 없으면 빈 그릇을 되돌린다** — 소모가 먼저라 되돌리지 않으면 그릇이 증발한다.
   **붓기(채워진 그릇 → 유체 타일)는 아직 없다** — 놓은 물을 다시 퍼면 무한 증식이라 규칙부터 정해야 한다.
 - **탱크는 유체를 다루는 것이 정체성이고 지금 유체 레시피가 있는 기계만** 준다
-  (전기 분해기 1/2 · 화학 처리기 2/1 · 마나 용해기 0/1 · 펌프 0/1 · 원유 채굴기 0/1).
+  (전기 분해기 1/2 · 화학 처리기 2/1 · 마나 용해기 0/1 · 펌프 0/1).
   화로·압축기·조합대·재단은 탱크 없이 **`물`(채워진 양동이) 아이템**을 그대로 먹는다.
   레시피가 없는 기계에 탱크를 주면 값이 안 채워지는 빈 바가 남는다(옛 `Gas[]` 뼈대가 그랬다).
 - 파이프는 아이템과 **같은 짐 방식**이다. `ParcelRecord.fluidId/amount` 로 판별만 하므로
@@ -393,10 +432,12 @@ Assets/Scenes/UndergroundScene.unity ← GameRig + UndergroundSceneSetup 둘뿐
 0티어 = **돌** · 1티어 = **마력석** · 2티어 = **운석**. 금속 산출은 `raw_*_ore`(조각), 재련하면 `*_ingot`.
 
 **분쇄 사슬 세 줄.** 분쇄기들은 `recipeGroupId = "Pulverizer"` 로 목록을 공유하므로,
-새 분쇄기는 그 값만 주면 사슬이 그대로 붙는다. 사슬 레시피의 `tier` 가 계열 번호다
-(그래서 **tier 1 인 전기 분쇄기는 운석 사슬을 못 돌린다** — 2티어 분쇄기가 아직 없다).
-분쇄기는 **`Machine:ManualPulverizer`(수동 분쇄기, tier 0, `manualStepRatio 0.05`, 무전력)** 와
-**`Machine:ElectricPulverizer`(전기 분쇄기, tier 1)** 둘이다 — 추출기의 `Extractor00`/`Extractor00Plus` 와 같은 꼴.
+새 분쇄기는 그 값만 주면 사슬이 그대로 붙는다. 사슬 레시피의 `tier` 는 계열 번호를 적어 둔 것일 뿐
+**아무도 안 본다** — **분쇄기는 한 종류이고 모든 계열을 빻는다**(2026-08-15 사용자 결정.
+전에는 처리 티어 게이트 때문에 전기 분쇄기가 운석 사슬을 못 돌렸다).
+분쇄기는 **`Machine:ManualPulverizer`(수동 분쇄기, `manualStepRatio 0.05`, 무전력)** 와
+**`Machine:ElectricPulverizer`(전기 분쇄기, 전력식)** 둘인데, 갈리는 것은 티어가 아니라 **전력 유무**다 —
+추출기의 `Extractor00`/`Extractor00Plus` 와 같은 꼴이다.
 수동판은 `돌 10 + 크랭크 1`(크랭크가 `돌 ×2`)로 만들 수 있어 **0티어 부트스트랩이 여기서 풀린다.**
 
 | 계열 | 메인자원 | 1회 | 2회 | 3회 |
@@ -538,10 +579,28 @@ Assets/Scenes/UndergroundScene.unity ← GameRig + UndergroundSceneSetup 둘뿐
 + 스택마다 붙는 `ToolInstance`(재질·내구도). 레시피는 `requiredTools` 로 요구하고 **소모가 아니라 내구도 차감**.
 생성: `Tools/Project Craft/Tool/Generate Tool Assets`.
 
-- **부품도 재질 슬롯으로 만든다** — `ToolPartRecipe : Recipe`(종류 하나당 한 개, `rod`·`hammer_head`·`pickaxe_head`).
-  조합대 도구 탭에서 재질 칸에 재료를 올리면 **그 재질의 부품**이 나온다(돌 → 돌 곡괭이 머리).
-  재질마다 레시피를 복제하면 종류 3 × 재질 16 = **48개**가 되고 재질이 늘 때마다 3개씩 또 는다.
-  값: 막대 ×1 · 망치 머리 ×2 · 곡괭이 머리 ×2.
+- **부품도 재질 슬롯으로 만든다** — `ToolPartRecipe : Recipe`(**종류 하나당 레시피 한 개**).
+  조합대에서 재질 칸에 재료를 올리면 **그 재질의 부품**이 나온다(돌 → 돌 곡괭이 머리).
+  재질마다 레시피를 복제하면 종류 5 × 재질 16 = **80개**가 되고 재질이 늘 때마다 5개씩 또 는다.
+  지금 종류 5: `rod ×1` · `hammer_head ×2` · `pickaxe_head ×2` · `blade ×2` · `plate ×1`.
+- **칼도 도구다**(2026-08-15). `칼` = `ToolDefinition`(자루 `rod` + 날 `blade`), 자루 그림은 망치·곡괭이와
+  공유하고 날만 `{material}_blade` 로 갈아 끼운다. 옛 `돌 칼`·`철 칼`·`칼날` 아이템 6종은 지웠다
+  (`ItemAliases` 가 잇는다). ⚠ **`stone_blade`·`iron_blade` 는 이름이 그대로 살아남았다** — 부품이 되면서
+  타입만 바뀌었을 뿐이라 별칭이 필요 없다.
+- ⚠ **`판`은 부품 구조를 빌렸을 뿐 자원이다.** 재질마다 하나라는 *구조*가 같아 `ToolPartItem(kind=plate)`
+  으로 만들었지만, 도구에 꽂는 물건이 아니라 **온갖 레시피가 먹는 중간재**다(철판 하나를 20개가 쓴다).
+  그래서 `RecipeCategoryAssigner` 가 **`kind == "plate"` 만 따로 자원 탭으로** 보낸다.
+  `bronze`·`invar`·`silicon`·`metal` 판은 대응 `ToolMaterial` 이 없어 일반 `Items` 로 남았고 **압축기 전용**이다.
+  ⚠ `stone_plate`·`wood_plate` 는 **그림이 없다**(돌 판은 만들 수는 있다).
+- ⚠ **기존 아이템을 부품으로 승격시킬 때는 `m_Script` 만 바꿔 guid 를 지킨다.** 판 4종
+  (`iron`·`copper`·`gold`·`silver`)이 그랬다 — 지우고 다시 만들면 **레시피 참조 44건이 통째로 끊긴다.**
+  바꾼 뒤에는 `CompilationPipeline.RequestScriptCompilation()` 으로 **도메인 리로드를 먼저** 하고
+  그다음에 `Register All Assets` 를 돌린다(§2 의 함정).
+- ⚠ **생성기의 존재 검사는 `itemName` 전역이다.** 예전에는 자기 폴더(`PartItemFolder`)만 봐서,
+  다른 폴더에 있던 `iron_plate` 를 **하나 더 만들었다**(세이브 키가 겹친다).
+- **목록에 뜨는 이름의 정본은 `Recipe.ListName`** 이다. `outputs[0]` 은 아이콘용 **견본**이라
+  그대로 보여 주면 "돌 망치 머리" 로 읽혀 돌 것만 나오는 것처럼 보인다 —
+  `ToolPartRecipe` 는 `kind`, `ToolRecipe` 는 `tool` 의 이름으로 덮는다.
 - **재료 아이템 ↔ 재질의 정본은 `ToolMaterial.sourceItem` 하나다**(`iron → iron_ingot` · `stone → stone` ·
   `quartz → quartz_crystal`). 이름 규칙으로 추측하면 `iron_ingot` 과 `raw_iron_ore` 를 구별하지 못한다.
   ⚠ **`나무`는 비어 있다** — 게임에 나무 아이템이 없어서 나무 부품은 만들 수 없다(시작 도구는 돌이다).
@@ -562,7 +621,18 @@ Assets/Scenes/UndergroundScene.unity ← GameRig + UndergroundSceneSetup 둘뿐
 ### UI
 - `UIManager` 가 이름으로 패널을 켜고 끈다(`AddUI` → `OpenUI`/`CloseUI`, `isAnyUIOpen`).
   **`AddUI` 를 열 때마다 다시 부른다** — 등록이 빠지면 `OpenUI` 가 조용히 실패해 영구히 못 연다.
-- 런타임 UI 구성이 규약(`CommandConsole` `PowerLinkMode` `ItemBrowser`) — 씬 파일을 건드리지 않기 위해.
+- ⚠ **오브젝트는 에디터(프리팹)에서 저작하는 것이 기본이다.** 코드로 `new GameObject(...)` 하는 것은
+  **개수·모양이 월드 데이터나 플레이어 행동에 달렸을 때만** 쓴다(청크별 그림자 사각형 · 배치된 기계 ·
+  풀링되는 미리보기 칸처럼). 항상 정확히 하나인 것은 프리팹에 놓고 참조는 `[SerializeField]` 로 명시한다.
+  static 홀더를 두면 "누가 언제 채우나" 라는 초기화 순서 문제가 그대로 남는다.
+  - **이유는 아래 §UI 버튼 ①과 같다** — 코드로 만든 것은 씬에서 위치·크기를 못 옮기고 인스펙터에 안 보인다.
+  - **"씬 파일을 건드리지 않으려고" 라는 옛 명분은 성립하지 않는다.** 두 씬이 `GameRig` 한 장을 쓰고
+    PrefabInstance override 가 transform·이름뿐이라, **프리팹만 고치면 두 씬에 그대로 전파된다**(실측).
+  - **이관 대상 레거시**(아직 코드로 짓는다 · `TODO.md §M-3`): `CommandConsole` · `ItemBrowser` ·
+    `TooltipUI` · `PowerLinkMode` 패널 · `DefaultMachineUI.BuildPowerLinkButton` ·
+    `PipeNetworkManager` 의 `Pipes` 타일맵 · `PowerLinkMode` 의 오버레이 타일맵 ·
+    `PlacementPreview` 루트 · `MapGenerator` 의 `Placeables`/`Drops` 컨테이너.
+    `TooltipUI` 가 `PersistAcrossScenes => false` 를 강제당하는 것도 코드로 지어서 생긴 문제다.
 - **기계 UI 프리팹은 여러 기계가 나눠 쓴다** — `DefaultMachineUI` 가 자식의 `MachineUIElement` 를 역할별로
   긁어모아 **남는 칸은 끄고 모자라면 경고 후 클램프**하므로, N칸짜리 한 장이 N칸 이하 전부를 감당한다
   (전력바도 `isUseEnergy` 가 아니면 자동으로 꺼진다). **업그레이드 칸과 유체 바만은 조용히 클램프**한다 —
@@ -675,6 +745,67 @@ Idle(FemaleNormal) ──[blink]──▶ Blink ──[Exit Time 1.0]──▶ I
 
   → **UI 레이아웃을 먼저 해상도 독립적으로 정리한 뒤에** 손대는 것이 맞다.
 
+### 조명 (URP 2D · 세계 전체가 동굴이다)
+
+**메인 맵도 설정상 지하**라 낮/밤이 없고 지상·지하를 밝기로 가르지 않는다. 전역 광원을 어둡게 깔고
+플레이어·횃불·전등이 그것을 밀어낸다.
+
+- **배선은 원래부터 다 되어 있었다** — 2D Renderer 활성, 스프라이트 **전부 `Sprite-Lit-Default`**,
+  `GameRig` 에 Global Light 2D. 흰색 intensity 1 이라 아무 효과가 없었을 뿐이다.
+  그래서 **머티리얼 마이그레이션이 필요 없었다.**
+- **밝기의 정본은 `LightingPalette`**(static 표, `ExtractionTable`·`FluidColors` 와 같은 꼴).
+  `MapLighting`(**GameRig 프리팹에 저작**, `Global Light 2D` 오브젝트에 붙어 있다)이 그 값을
+  Global Light 와 `TestPlayer/PlayerLight` 에 넣는다 —
+  ⚠ **씬에 값을 넣지 않는다.** 두 씬이 어긋나고 팔레트와 정본이 갈라진다.
+  ⚠ Global Light 는 **찾아서 값만 바꾼다**(새로 만들면 두 개가 겹쳐 두 배로 밝아진다).
+- ⚠ **월드 UI 오버레이는 조명을 받으면 안 된다.** 정렬 레이어가 `Default` 하나뿐이라 order 로는 못 뺀다 →
+  **`OverlayMaterial`(공유 Unlit) 을 지정**한다. 대상 넷: 커서 윤곽선 · 파이프 면 막대 ·
+  PowerLink 오버레이 · 설치 미리보기. 정렬 레이어를 나누는 쪽은 **모든 조명마다** Target Sorting Layers 를
+  맞춰야 해서 훨씬 비싸다. 지정하지 않으면 `Renderer2DData.m_DefaultMaterialType = Lit` 때문에
+  자동으로 Lit 이 되어 어두운 곳에서 안내 표시가 통째로 사라진다.
+- **조명 배치물은 `LightBlock : MachineBlock`**. 기계를 물려받는 것은 순전히 공짜로 얻는 것 때문이다
+  (프리팹 스폰·발자국·콜라이더·채굴·세이브·청크 수명주기·전력 링크). 새 배치물 *종류*를 만들면
+  분기를 여섯 곳에 더해야 한다. **빛 값의 정본은 SO** 고 `LightEmitter` 가 프리팹의 `Light2D` 에 베껴 넣는다.
+- ⚠ **`MachineBlock.IsAlwaysOn` 이 없으면 전등은 영원히 안 켜진다.** `Tick` 은 `activeRecipe == null` 이면
+  첫 줄에서 되돌아가 `ConsumeEnergy` 에 닿지 않는다("놀고 있는 기계는 전기를 먹지 않는다"가 의도된 규칙) —
+  상시 소비는 `Update` 의 **AutoProcess 조기 return 앞** 분기가 따로 맡는다.
+  `OpensUI` 는 슬롯 0개짜리가 빈 패널을 띄우지 않게 한다.
+- **벽 그림자 = `ChunkShadowCasters`**(**GameRig 프리팹의 `Map` 자식으로 저작**. 청크별 사각형만 런타임).
+  청크마다 벽 칸을 **그리디 메싱**해 사각형으로 묶는다 —
+  세계가 대부분 꽉 찬 돌이라 **통째로 벽인 청크는 사각형 1개**다(실측: 25청크 6400칸 → 캐스터 29개).
+  ⚠ **캐스터 오브젝트에 `SpriteRenderer` 를 붙이면 안 된다.** `ShadowCaster2D.Awake` 는
+  `shapePath` 가 비어 있으면(= `AddComponent` 로 갓 만든 것은 언제나 비어 있다)
+  **스프라이트에서 모양을 뽑는 provider 를 먼저 고르는데**, 그 provider 는 `drawMode` 가 Simple 이면
+  스프라이트 메시를 쓰고 1×1 스프라이트로는 **정점 0개짜리 빈 그림자 메시**가 나온다 —
+  캐스터는 29개 다 서 있는데 **빛이 벽을 전혀 안 막는다**(실측으로 이 함정에 걸렸다).
+  게다가 그 경로는 `#if UNITY_EDITOR` 안에만 있어 **에디터와 빌드가 다르게 동작**한다.
+  ⚠ 렌더러가 없으면 provider 가 안 잡혀 `ShapeEditor` 로 떨어지고 `Awake` 가 `Bounds(position, one)` 에서
+  **로컬 단위 사각형**을 만든다. 그래서 **배율 1 로 만들어 모양을 굳힌 뒤 `localScale = (w,h,1)` 로 늘린다**
+  (순서를 바꾸면 배율만큼 나눠져 결국 1×1 그림자가 된다). 덕분에 **풀에서 꺼내 쓸 때 위치·크기만 바꾸면 된다.**
+  청크 부모의 `CompositeShadowCaster2D` 는 이음매를 없앤다.
+  검증은 캐스터 개수가 아니라 **`ShadowCaster2D.mesh.vertexCount > 0`** 로 한다.
+  훅 셋: `RenderChunk`(생성) · `UnLoadChunk`(반납) · `RefreshTile`(그 청크만 재생성).
+
+### 공용 표시 에셋 (`Assets/Asset/Common/`)
+
+크기를 `localScale` 로 내는 표시물(설치 미리보기 · 파이프 면 막대 · 벽 그림자 · 전력 오버레이)이 함께 쓴다.
+예전에는 네 곳이 똑같은 흰 점을 각자 코드로 만들고 있었다.
+
+| 에셋 | 쓰는 곳 |
+|---|---|
+| `White1x1.png` | 미리보기 칸 · 파이프 면 막대 (⚠ **벽 그림자는 안 쓴다** — 위 조명 항목의 provider 함정) |
+| `White1x1Tile.asset` | `PowerLinkMode` 오버레이(타일맵이라 `Sprite` 가 아니라 `Tile` 이 필요하다) |
+| `OverlayUnlit.mat` | 위 셋 + 커서 윤곽선. **조명을 받지 않게** 한다 |
+
+- ⚠ **`White1x1.png` 의 PPU 는 1 이다. 프로젝트 전역 규칙(PPU 32)의 의도적 예외다.**
+  크기를 전부 `localScale` 로 내기 때문에 `1픽셀 = 1유닛` 이어야 한다 —
+  32 로 "고치면" **파이프 면 막대·설치 미리보기·벽 그림자가 한꺼번에 1/32 로 쪼그라든다.**
+- ⚠ **`Shader.Find` 로 머티리얼을 만들지 않는다.** 빌드에서 셰이더가 스트립되면 **런타임에만 조용히 깨진다.**
+  실제 `.mat` 에셋을 참조하면 셰이더가 반드시 빌드에 포함된다.
+- 참조는 전부 `[SerializeField]` 다 — `MapGenerator`(미리보기·파이프로 넘겨 준다) · `PowerLinkMode` ·
+  `ChunkShadowCasters`. 커서 윤곽선은 **`OutLine` 타일맵에 머티리얼을 직접 지정**했다
+  (그 자리만 `Awake` 라 코드로 넣으면 초기화 순서에 기대게 된다).
+
 ### 정렬 순서 (한 레이어, sortingOrder)
 
 **2026-08-13 에 배율이 `(옛값 + 10) × 10` 으로 바뀌었다.** 사이에 열 칸씩 여유를 두려는 것이므로
@@ -702,6 +833,15 @@ Tools/Project Craft/Machines/Fill Missing Machine Blocks
 Tools/Project Craft/Pipes/파이프 에셋 설정
 Tools/Project Craft/Tool/Generate Tool Assets · 렌치 에셋 설정
 Tools/Project Craft/Recipes/Import JSON Recipes · Assign Recipe Categories · Merge ...
+```
+
+⚠ **`Assign Recipe Categories` 는 카테고리의 유일한 정본이라 돌릴 때마다 전부 다시 계산한다** —
+**손으로 고친 카테고리는 덮인다.** 예전에는 "이미 있으면 건너뛴다" 였고, 그래서 JSON 임포터가 붙인 옛 값이
+영영 남아 **기계 12개·파이프 6개가 '자원' 탭에 있었다**(2026-08-15 에 뒤집었다).
+규칙: `Machine:*` → 기계 · `kind == plate` → 자원 · `ToolItem`/`ToolPartItem`/`WrenchItem` → 도구 ·
+`placeable` → 블록 · 나머지 → 자원. 규칙으로 표현 안 되는 것만 `Overrides` 표에 적는다(지금 9줄).
+
+```
 Tools/Project Craft/Font/Apply Korean Font To All
 Tools/Tiles/Build Tile Atlas · Slice Pipe Sheet · Build Pipe Atlas   (슬라이스 → 빌드 순서)
 ```
@@ -740,10 +880,9 @@ Tools/Tiles/Build Tile Atlas · Slice Pipe Sheet · Build Pipe Atlas   (슬라�
   같은 기계 안에서 이어지지 않아 파이프로 되돌리거나 유리 용기로 퍼 옮겨야 한다(설계 확인 필요).
 - **마나의 수량 스케일이 다르다** — `레시피.md` 정본이 `마나 100 = 마력결정 1` 이라 물(1000/양동이)과 자릿수가 어긋난다.
 - **고급 재단 전용 레시피가 0개**다(중급과 같은 11개만 보인다). `레시피.md` 에도 2티어 마법 레시피가 없다.
-- `강화 합금`(인바5+청동5+철5) 아이템이 아직 없다 — 정밀 세공기 산출물과 3티어가 이것을 먹는다.
-- **2계열 분쇄물은 게임 안에서 못 만든다** — 운석 사슬 레시피가 tier 2 인데 분쇄기는 `ManualPulverizer`(tier 0) ·
-  `ElectricPulverizer`(tier 1) 둘뿐이다. 2티어 분쇄기가 생기면 풀린다. 0·1계열은 정상.
-  (**운석 원석 자체는 이제 2등급 지하맵에서 캔다** — 막힌 것은 분쇄 쪽뿐이다.)
+- ~~`강화 합금` 아이템이 없다~~ → **2026-08-12 에 만들었다**(합금 재련기 · 인바5+청동5+철5 → 5).
+- ~~2계열 분쇄물을 못 만든다~~ → **2026-08-15 에 처리 티어 게이트를 지워 분쇄기가 운석도 빻는다**(실측).
+  ⚠ 다만 **운석 원석 자체를 못 얻는다** — 등급 2 지하방이 유일한 획득처인데 `dowsing_rod_t2` 가 없다.
 - ~~마력 파편·철 주괴의 최초 획득처가 없다~~ → **지하맵 전리품으로 풀렸다**(`UndergroundLootTable`).
   수동 0-0티어 추출기 · 물·용암(`양동이 + 마력파편2`) · 0티어 마법이 여기서 열린다.
   ⚠ 표에서 `mana_shard`·`iron_ingot` 행을 빼면 그대로 다시 막힌다.
@@ -752,11 +891,18 @@ Tools/Tiles/Build Tile Atlas · Slice Pipe Sheet · Build Pipe Atlas   (슬라�
 - `uranium_powder`(우라늄 가루)를 쓰는 레시피가 없다 — 0-3 추출 산출이 `turbid_uranium` 으로 바뀌면서
   `Pulverize_RawUraniumOre` 의 산출로만 남았다.
 - `magic_powder`(마법 가루)를 **쓰는 레시피가 하나도 없다** — 운석 사슬 재편으로 자리를 잃었다(아이템은 남겨 뒀다).
-- `energy_crystal`·`magic_crystal` 은 이제 2계열 추출로만 나온다(마력 결정은 제단·CoreCrafter 경로도 있다).
+- `energy_crystal`·`magic_crystal` 은 이제 2계열 추출로만 나온다.
+  (마법 레시피가 2026-08-15 부터 **재단 전용**이 된 것은 위 §기계·레시피 의 조합대 항목을 볼 것.)
 - `extract_ore`·`extract_meteorite` 는 **`machine` 이 비어 있다** — 1·2티어 자원 생성기가 아직 없어서다.
   (지형 설치형이라 추출기 9종과는 별개다.)
-- 지열 발전기는 연료 없이 발전해야 하는데 `IsGenerator` 가 `fuelSlotCount > 0` 을 요구해 **발전을 못 한다**.
-- 전력 밸런스: 화력 발전기 20/s vs 전기 화로 100/s.
+- ~~지열 발전기가 발전을 못 한다~~ → **2026-08-15 해결**. 막던 것이 셋이었다:
+  `MachineBlock.IsGenerator` 의 `fuelSlotCount > 0` · `MachineInstance.ApplyConfig` 의 "미설정" 폴백
+  (입출력·연료가 전부 0 이라 세 조건에 안 걸려 `isGenerator` 가 지워졌다 — 지금은 `|| info.IsGenerator` 를 함께 본다) ·
+  에셋의 `isGenerator = false`. **연료 없는 발전기의 발전량은 `fuelBurnRate` 를 그대로 쓴다**(연료식도
+  "태운 양 = 발전량" 이라 필드를 새로 만들면 같은 뜻이 두 곳으로 갈린다). 지열은 12/s.
+- ⚠ **변압기는 지을 수는 있는데 아무 일도 하지 않는다** — 전압 2풀이 미구현이라 가공 레시피가 0개다
+  (옛 `transformer`·`power_transformer` 는 산출이 없는 죽은 에셋이라 지웠고, 그 이름은 이제 건설 레시피다).
+- 전력 밸런스: 화력 20/s · 지열 12/s vs 전기 화로 100/s · 고전압 전기로 300/s.
 - 렌치·파이프 아이콘이 전부 `assetPlaceHolder`. 파이프 레시피가 아직 `Recipes/Incomplete` 안에 있음.
 - 아이템 목록(P)에 검색창 없음 — 223개라 있으면 좋지만 P 키가 글자로 먹히는 문제를 같이 풀어야 한다.
 

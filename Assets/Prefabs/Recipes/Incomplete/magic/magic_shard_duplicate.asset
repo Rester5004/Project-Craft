@@ -23,7 +23,12 @@ MonoBehaviour:
   outputs:
   - item: {fileID: 11400000, guid: e1648015ff586bd4f8acecff314c4abb, type: 2}
     count: 2
-  requiredTools: []
+  fluidInputs: []
+  fluidOutputs: []
+  chanceOutputs: []
+  requiredTools:
+  - tool: {fileID: 11400000, guid: 181786590a1056c4fbb3151a9df074fb, type: 2}
+    durabilityCost: 1
   craftTime: 1
   importNote: "[\uCD9C\uCC98] notion_magic.json / id=magic_shard_duplicate\r\n[\uAE30\uACC4]
     '\uCD08\uAE09 \uC7AC\uB2E8' \u2014 \uB300\uC751\uD558\uB294 MachineBlock \uC774

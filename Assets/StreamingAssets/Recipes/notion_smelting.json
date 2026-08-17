@@ -16,13 +16,13 @@
     { "id": "smelt_silver", "tier": 0, "output": "은 주괴", "outputQty": 1,
       "inputs": [ { "item": "은 조각", "qty": 4 } ] },
 
-    { "id": "smelt_lead", "tier": 1, "output": "납 주괴", "outputQty": 1,
+    { "id": "smelt_lead", "tier": 0, "output": "납 주괴", "outputQty": 1,
       "inputs": [ { "item": "납 조각", "qty": 4 } ] },
 
-    { "id": "smelt_nickel", "tier": 1, "output": "니켈 주괴", "outputQty": 1,
+    { "id": "smelt_nickel", "tier": 0, "output": "니켈 주괴", "outputQty": 1,
       "inputs": [ { "item": "니켈 조각", "qty": 4 } ] },
 
-    { "id": "smelt_tin", "tier": 1, "output": "주석 주괴", "outputQty": 1,
+    { "id": "smelt_tin", "tier": 0, "output": "주석 주괴", "outputQty": 1,
       "inputs": [ { "item": "주석 조각", "qty": 4 } ] },
 
     { "id": "smelt_titanium", "tier": 1, "output": "티타늄 주괴", "outputQty": 1,

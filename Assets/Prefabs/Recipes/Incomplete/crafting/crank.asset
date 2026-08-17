@@ -21,7 +21,12 @@ MonoBehaviour:
   outputs:
   - item: {fileID: 11400000, guid: 2c9f093c63d480e42ba97dfce9ee23a5, type: 2}
     count: 1
-  requiredTools: []
+  fluidInputs: []
+  fluidOutputs: []
+  chanceOutputs: []
+  requiredTools:
+  - tool: {fileID: 11400000, guid: 1b3c5eb96478c9443bbbbd1cebde8f40, type: 2}
+    durabilityCost: 1
   craftTime: 1
   importNote: "[\uBCD1\uD569] Assets/Prefabs/Recipes/Incomplete/crafting/crank.asset
     \uB97C \uD761\uC218\uD568\r\n[\uCD9C\uCC98] notion_crafting.json / id=crank\r\n[\uAE30\uACC4]

@@ -11,7 +11,7 @@
       "output": "물", "outputQty": 1, "fluid": true, "note": "강, 호수 등" },
 
     { "id": "extract_crude_oil", "tier": 1, "terrain": "석유 지형",
-      "output": "원유", "outputQty": 1, "fluid": true, "note": "특수 지형. 원유 채굴기도 같은 지형을 쓴다" },
+      "output": "원유", "outputQty": 1, "fluid": true, "note": "특수 지형. 펌프도 같은 지형을 쓴다" },
 
     { "id": "extract_ore", "tier": 1, "terrain": "광석 지형 (1티어 구역)",
       "output": "광석", "outputQty": 1, "note": "코어에서 멀어질수록 등장" },

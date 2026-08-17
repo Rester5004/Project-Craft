@@ -13,12 +13,17 @@ MonoBehaviour:
   m_Name: upgrade_module_efficiency
   m_EditorClassIdentifier: Assembly-CSharp::Recipe
   machine: {fileID: 11400000, guid: ea55fe72f9315554a8ffdcf795dd1b7e, type: 2}
-  category: {fileID: 11400000, guid: a63365af4ccd3904a91ebf59b6456c84, type: 2}
+  category: {fileID: 11400000, guid: ad974e9d9fcf5f549a933df79a03218c, type: 2}
   tier: 2
-  inputs: []
+  inputs:
+  - item: {fileID: 11400000, guid: 9e7305e9ba375e441b35037c04e96810, type: 2}
+    count: 200
   outputs:
   - item: {fileID: 11400000, guid: 2077ecdf737c15241ac44e20ca6ad04a, type: 2}
     count: 1
+  fluidInputs: []
+  fluidOutputs: []
+  chanceOutputs: []
   requiredTools: []
   craftTime: 1
   importNote: "[\uBCD1\uD569] Assets/Prefabs/Recipes/Incomplete/crafting/upgrade_module_efficiency.asset

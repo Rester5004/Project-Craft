@@ -16,4 +16,7 @@ public class ToolRecipe : Recipe
 
     /// <summary>결과 도구 아이템(outputs 첫 항목). 없으면 null.</summary>
     public ToolItem ToolOutput => PrimaryOutput as ToolItem;
+
+    /// <summary>목록에는 설계도 이름으로 뜬다(망치 · 곡괭이 · 칼). 재질은 부품 칸이 정한다.</summary>
+    public override string ListName => tool != null ? tool.DisplayName : base.ListName;
 }

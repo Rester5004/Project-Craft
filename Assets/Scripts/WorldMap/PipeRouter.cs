@@ -305,7 +305,10 @@ public static class PipeRouter
         for (int i = 0; i < recipes.Count; i++)
         {
             Recipe recipe = recipes[i];
-            if (recipe == null || recipe.tier > machine.Tier || recipe.inputs == null) continue;
+            // ⚠ 티어로 거르지 않는다 — 기계가 티어와 무관하게 전부 처리하므로
+            //    (MachineInstance.SelectRecipe 주석 참고) 여기서 거르면
+            //    "기계는 돌릴 수 있는데 파이프가 재료를 안 넣는" 상태가 된다.
+            if (recipe == null || recipe.inputs == null) continue;
 
             for (int j = 0; j < recipe.inputs.Count; j++)
             {
@@ -331,7 +334,8 @@ public static class PipeRouter
         for (int i = 0; i < recipes.Count; i++)
         {
             Recipe recipe = recipes[i];
-            if (recipe == null || recipe.tier > machine.Tier || recipe.fluidInputs == null) continue;
+            // 티어를 안 보는 이유는 TargetSlots 와 같다.
+            if (recipe == null || recipe.fluidInputs == null) continue;
 
             for (int j = 0; j < recipe.fluidInputs.Count; j++)
             {

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: solid_pipe
   m_EditorClassIdentifier: Assembly-CSharp::Recipe
   machine: {fileID: 11400000, guid: ea55fe72f9315554a8ffdcf795dd1b7e, type: 2}
-  category: {fileID: 11400000, guid: a63365af4ccd3904a91ebf59b6456c84, type: 2}
+  category: {fileID: 11400000, guid: e8aa8410127980c4f9bd1da1db39f486, type: 2}
   tier: 0
   inputs:
   - item: {fileID: 11400000, guid: c9392aeebd648724fa65fd8e7b65dcef, type: 2}
@@ -21,6 +21,9 @@ MonoBehaviour:
   outputs:
   - item: {fileID: 11400000, guid: cd84e72fcccf8ad4f8501ca5435b8d0e, type: 2}
     count: 1
+  fluidInputs: []
+  fluidOutputs: []
+  chanceOutputs: []
   requiredTools: []
   craftTime: 1
   importNote: "[\uCD9C\uCC98] factory.json / id=solid_pipe\r\n[\uAE30\uACC4] '\uD30C\uC774\uD504

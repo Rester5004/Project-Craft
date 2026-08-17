@@ -19,19 +19,22 @@ MonoBehaviour:
   machinePrefab: {fileID: 2613032363430261748, guid: 6540c6591b0eb1f4d818d2244239423e, type: 3}
   uiPrefab: {fileID: 0}
   runningSprite: {fileID: 0}
+  manualStepRatio: 0
+  size: {x: 1, y: 1}
   tier: 0
   recipeGroupId: Geothermal
   inputSlotCount: 0
-  outputSlotCount: 1
+  outputSlotCount: 0
   fuelSlotCount: 0
-  fuelBurnRate: 20
-  inputGasSlotCount: 0
-  outputGasSlotCount: 0
-  maxGasAmount: 0
-  maxEnergyAmount: 0
+  fuelBurnRate: 12
+  upgradeSlotCount: 2
+  inputFluidSlotCount: 0
+  outputFluidSlotCount: 0
+  maxFluidAmount: 0
+  maxEnergyAmount: 400
   isUseEnergy: 0
-  isGenerator: 0
-  powerRange: 0
+  isGenerator: 1
+  powerRange: 8
   energyUseRate: 0
   speedMultiplier: 1
   chanceMultiplier: 1
