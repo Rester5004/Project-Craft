@@ -476,21 +476,59 @@ BlockBase **56** · 씬 `recipesList` **139**(변화 없음 — 지운 것들은
 `PlaceableRecord` 새 필드 0 · 신규 파일 4개(`StorageCellInstance` `StorageNetwork`
 `NetworkContainer` `StorageTerminalUI`) · 기존 수정은 `PipeKind` 값 1개 + `MachineInstance` 훅 정도.
 
-### G-2. 구현 전에 반드시 처리할 것
+### G-2. 구현 전에 반드시 처리할 것 — **A축으로 전부 끝났다 (2026-08-17)**
 
-- [ ] `ChemicalProcessor` 출력 1 → **2** (재처리가 우라늄 농축물 + 납 주괴 둘을 낸다)
-- [ ] `PrecisionLathe` 입력 1 → **3** (핵연료봉이 재료 3종)
-- [ ] `NuclearPlant` 출력 0 → **1** (사용후 봉 자리)
-- [ ] `TickGenerator` 에 **산출 훅** — 연료를 다 태우면 사용후 봉을 내보내고, 자리가 없으면 멈춘다
-- [ ] ⚠ **3티어 신규 제작은 전부 코어 조합기에 `Recipe.tier = 3`**.
-      고급 조합기는 처리 티어가 1 이라 3티어 레시피를 두면 목록에 안 뜬다 (§F-0 의 두 축 문제)
+- [x] `ChemicalProcessor` 출력 1 → **2** (재처리가 우라늄 농축물 + 납 주괴 둘을 낸다)
+- [x] `PrecisionLathe` 입력 2 → **3** (핵연료봉이 재료 3종)
+- [x] `NuclearPlant` 출력 0 → **1** (사용후 봉 자리) · UI 는 공유 `Generator_UI` 에 출력칸을 넣었다
+- [x] **발전기 산출 훅** — `MachineBlock.spentFuelItem` + `MachineInstance.TryEjectSpentFuel`.
+      `TickGenerator` 를 레시피 경로로 끌어오지 않고 **연소 경로에만** 걸었다.
+      ⚠ 점화 직전에 **낼 몫이 없어도 자리를 미리 확인**해야 한다 — 안 그러면 출력이 꽉 찬 상태에서도
+      연료를 하나 더 태우고 찌꺼기를 `burnTotal` 에 빚으로 떠안는다(실측으로 걸렸고 고쳤다).
+      "아직 안 낸 찌꺼기" 표시는 `burnRemaining == 0 && burnTotal > 0` — 둘 다 v5 필드라 **세이브 v12 그대로**.
+- [x] ~~3티어 신규 제작은 전부 코어 조합기~~ → **한 곳만 예외다.** 승급 재료 `공명 칩` 은 **고급 재단(t2)**
+      에 둔다. 코어 3티어 목록에 두면 *3티어가 되어야 3티어로 올릴 재료를 만들 수 있어* 영원히 잠긴다.
+      (§F-0 의 "고급 조합기 처리 티어 1" 경고는 §N-0 로 무효 — `AdvancedCrafter.tier` 는 2 다)
 
-### G-3. 선행 조건 — 3티어는 2티어 위에 선다
+### G-3. 선행 조건 — **네 건 모두 해소 (2026-08-17 실측)**
 
-- [ ] **특수합금 · 강화 합금** 아이템 신설 (§F-4) — 공명 칩·저장 기판·컨트롤러·핵발전소가 전부 먹는다
-- [ ] **코어 업그레이드 1·2차 구현** (§A-5) — 3차(공명 칩)를 얹을 자리
-- [ ] **정밀 세공기 · 화학 처리기 건설 레시피** (§C-5·C-6) — 둘 다 없거나 입력 0
-- [ ] **우라늄 농축물 사슬이 실제로 도는지** (§F-3) — 전기로 건설 레시피가 없어 우라늄 주괴를 못 만든다
+- [x] **특수합금 · 강화 합금** 아이템 (§F-4) — 둘 다 존재하고 폐쇄 검증에서 도달 O
+- [x] **코어 업그레이드 1·2차** (§A-5) — 구현돼 있었다. 3차(`공명 칩 → 3`)를 표에 한 줄 더했다
+- [x] **정밀 세공기 · 화학 처리기 건설 레시피** (§C-5·C-6) — 둘 다 에셋에 입력까지 채워져 있었다
+- [x] **우라늄 농축물 사슬** (§F-3) — 도달 O. 이제 소비처(`nuclear_fuel_rod`)도 생겼다
+
+### G-2b. A축 결과 (2026-08-17)
+
+새로 만든 것: 아이템 4종(`spent_nuclear_fuel_rod` `resonance_crystal` `resonance_chip` `storage_substrate`) ·
+레시피 6개(`nuclear_fuel_rod` `chem_reprocess` `nuclear_plant` `resonance_crystal` `resonance_chip` `storage_substrate`).
+`NuclearPlant` = tier 3 · `fuelBurnRate 500` · `maxEnergyAmount 20000` · 봉 `burnEnergy 30000`(정확히 60초).
+
+⚠ **`conductor_crystal` 하나가 3티어 전체를 막고 있다** — 유일한 획득처가 `extract_shiny_powder`
+(**1-0티어 추출기**, 5%)인데 1계열 추출기 4종에 건설 레시피가 없다(사용자가 따로 정하기로 한 범위).
+분쇄 사슬은 `manastone_fine_dust` 까지 전부 도달하므로 **`Machine:Extractor10` 건설 레시피 하나면**
+공명 결정 → 공명 칩 → 코어 3차 → 3티어 전부가 함께 열린다. **핵발전소도 그때까지는 못 짓는다**
+(연료봉 제작·재처리 사슬 자체는 t2 에서도 돈다).
+
+### G-5. B축 결과 — 저장 네트워크 (2026-08-17 · 구현 완료)
+
+신규 파일 6개 — `StorageNetworkRole` `StorageNetworkBlock` `StorageNetwork` `StorageCellItem`
+`StorageCellInstance` `NetworkContainer` `StorageTerminalUI`(+ `DefaultMachineUI.RebindInputs`).
+에셋: 블록 3 · 아이템 12(장치3 + 부품4 + 셀4 + 케이블1) · 레시피 12 · `StorageTerminal_UI` 프리팹.
+**세이브 v12 그대로** — 구성은 파생 상태고 셀 내용만 `ItemInstance` 로 붙는다.
+
+실측(플레이 모드): 컨트롤러+케이블2+드라이브(4k 셀)+상자2, 케이블 북=Extract·남=Insert →
+`상자A 300 → 망 → 상자B` 가 초당 9~10개로 흐르고, 전력을 끊으면 멈추고 복구하면 다시 흐른다.
+
+**구현하며 잡은 함정 셋(전부 실측으로 걸렸다)**
+
+- ⚠ **전력을 Build 시점에 캐시하면 안 된다.** 위상은 렌치·케이블에만 반응하는데 전원은 매 프레임 바뀐다 —
+  컨트롤러가 먼저 켜지며 망을 캐시해 드라이브가 영영 `0/1` 이었다. `Status`·`Cells()` 가 매번 다시 본다.
+- ⚠ **버스 예산을 공유하면 뒤쪽 버스가 굶는다.** Extract 가 다 써서 Insert 가 한 개도 못 옮겼다 —
+  버스마다 `BusRate`(8/초)를 따로 준다.
+- ⚠ **발전기 산출과 같은 계열의 함정** — 못 넣은 몫은 되돌려야 한다(`Fill` 이 `LogError` 로 드러낸다).
+
+**남은 것**: 전용 아트가 없어 장치 3종이 `ItemStorage` 프리팹을, 데이터 케이블이 아이템 파이프 밴드를
+빌려 쓴다. 아이콘 12개가 `assetPlaceHolder` 다.
 
 ### G-4. 확정되면 할 것
 

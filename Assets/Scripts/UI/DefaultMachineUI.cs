@@ -429,6 +429,31 @@ public class DefaultMachineUI : MonoBehaviour
         Debug.LogWarning($"[DefaultMachineUI] {what} {needed}칸이 필요하지만 프리팹에는 {available}개뿐입니다. 클램프합니다.", this);
     }
 
+    /// <summary>
+    /// 입력 칸을 <b>기계 인벤토리가 아닌 다른 컨테이너</b>에 다시 붙인다.
+    ///
+    /// 저장 터미널이 쓴다 — 터미널은 자기 칸이 0개고 보여 줄 것은 <b>네트워크 전체</b>라,
+    /// <see cref="Open"/> 이 끝난 뒤 <see cref="NetworkContainer"/> 로 갈아 끼운다.
+    /// (<see cref="MachineUIRole.StorageSlot"/> 요소도 입력 구간에 담기므로 상자 프리팹을 그대로 쓸 수 있다.)
+    ///
+    /// ⚠ <b>base.Open 뒤에 불러야 한다</b> — 그 안에서 칸을 끄고 다시 바인딩하기 때문이다.
+    /// </summary>
+    protected void RebindInputs(IItemContainer container, int count)
+    {
+        if (container == null) return;
+
+        for (int i = 0; i < inputs.Count; i++)
+        {
+            bool active = i < count;
+            if (inputs[i].go != null) inputs[i].go.SetActive(active);
+            if (!active || inputs[i].slot == null) continue;
+
+            inputs[i].slot.Bind(container, i);
+            inputs[i].slot.SetInsertable(true);
+            if (!boundSlots.Contains(inputs[i].slot)) boundSlots.Add(inputs[i].slot);
+        }
+    }
+
     /// <summary>화면에 보일 기계 이름. 블록 정보가 없으면 blockId 로 폴백한다.</summary>
     protected static string MachineTitle(MachineInstance instance)
     {

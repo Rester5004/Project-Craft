@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d1635fa976c21145835b252e45d6313, type: 3}
+  m_Name: storage_controller
+  m_EditorClassIdentifier: Assembly-CSharp::Recipe
+  machine: {fileID: 11400000, guid: ea55fe72f9315554a8ffdcf795dd1b7e, type: 2}
+  category: {fileID: 11400000, guid: ad974e9d9fcf5f549a933df79a03218c, type: 2}
+  tier: 3
+  inputs:
+  - item: {fileID: 11400000, guid: 0330312b77a14f343994e156d6909149, type: 2}
+    count: 4
+  - item: {fileID: 11400000, guid: 4b4ec058345baed4fbb9e8af2ac3990b, type: 2}
+    count: 1
+  - item: {fileID: 11400000, guid: c27a38a64a192fa4b8f413a72e15f546, type: 2}
+    count: 20
+  - item: {fileID: 11400000, guid: cb5fecda99ffdb74382a0c1f5e8bef4d, type: 2}
+    count: 10
+  outputs:
+  - item: {fileID: 11400000, guid: dd28f810a16f1f24eb381dc64890f010, type: 2}
+    count: 1
+  fluidInputs: []
+  fluidOutputs: []
+  chanceOutputs: []
+  requiredTools: []
+  craftTime: 1
+  importNote: "[\uCD9C\uCC98] Notion '3\uD2F0\uC5B4 (\uC784\uC2DC)' \xA72 \xB7 3\uD2F0\uC5B4
+    \uAE30\uBCF8\uC7AC\uB294 \uCCA0\uADFC \uCF58\uD06C\uB9AC\uD2B8 x4 (\uC0AC\uC6A9\uC790
+    \uACB0\uC815 2026-08-17)"

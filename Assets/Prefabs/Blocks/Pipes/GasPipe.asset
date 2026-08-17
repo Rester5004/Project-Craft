@@ -19,6 +19,6 @@ MonoBehaviour:
   kind: 2
   tier: 0
   secondsPerCell: 0.3
-  throughput: 1000
+  throughput: 1
   atlas: {fileID: 11400000, guid: 711ee03c61a5f0d47ba4ef9c006f3a99, type: 2}
   tint: {r: 1, g: 1, b: 1, a: 1}

@@ -212,6 +212,29 @@
       ],
       "station": "고급 조합기",
       "note": "재단 3종은 조합대(CraftingTableBlock)이고 recipeGroupId 를 'Altar' 로 공유한다"
+    },
+    {
+      "id": "resonance_chip",
+      "machine": "고급 재단",
+      "tier": 2,
+      "output": "공명 칩",
+      "outputQty": 1,
+      "inputs": [
+        {
+          "item": "마력 칩",
+          "qty": 1
+        },
+        {
+          "item": "공명 결정",
+          "qty": 4
+        },
+        {
+          "item": "특수합금",
+          "qty": 2
+        }
+      ],
+      "station": "고급 재단",
+      "note": "코어 3차 승급 재료. 승급 재료는 언제나 한 티어 아래 재단에 둔다 - 코어 3티어에 두면 영원히 잠긴다"
     }
   ]
 }

@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d1635fa976c21145835b252e45d6313, type: 3}
+  m_Name: chem_reprocess
+  m_EditorClassIdentifier: Assembly-CSharp::Recipe
+  machine: {fileID: 11400000, guid: 4bc20dd296eb512488a44012e9002b24, type: 2}
+  category: {fileID: 11400000, guid: a63365af4ccd3904a91ebf59b6456c84, type: 2}
+  tier: 1
+  inputs:
+  - item: {fileID: 11400000, guid: 903ce22daa9a6f043bfc9926e3447f00, type: 2}
+    count: 1
+  outputs:
+  - item: {fileID: 11400000, guid: 6f6f8a4133118e94ba1be4e52f632bd2, type: 2}
+    count: 1
+  - item: {fileID: 11400000, guid: e65c0ebb91f3f074e9d8c5641102e8bc, type: 2}
+    count: 1
+  fluidInputs:
+  - fluid: {fileID: 11400000, guid: 5adbf19dd79e4614da6a33df7aff98d1, type: 2}
+    amount: 2000
+  fluidOutputs: []
+  chanceOutputs: []
+  requiredTools: []
+  craftTime: 4
+  importNote: "[\uCD9C\uCC98] Notion '3\uD2F0\uC5B4 (\uC784\uC2DC)' \xA76 \u2014
+    \uC0AC\uC6A9\uD6C4 \uBD09 \uC7AC\uCC98\uB9AC. \uB0A9\uC758 \uCCAB \uC18C\uBE44\uCC98\uAC00
+    \uC5EC\uAE30\uC11C \uC0DD\uAE34\uB2E4"

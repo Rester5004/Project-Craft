@@ -54,6 +54,7 @@ Assets/Scripts/
                  TileAtlas TerrainPalette
                  Underground{Session Palette World LootTable Portal SceneSetup}
                  Pipe{Block은 SO에} Atlas·Cell·Router·NetworkManager·FaceMode·FaceOverlay
+                 StorageNetwork(3티어 저장망 — 탐색·전력·버스)
                  Editor/ PipeSpriteSlicer PipeAtlasBuilder TileAtlasBuilder
   ScriptableObjects/  Items MainBlock MachineBlock CraftingTableBlock PipeBlock PipeKind
                  WrenchItem UpgradeModuleItem FluidDefine Recipe ChanceOutput ...
@@ -245,19 +246,26 @@ Assets/Scenes/UndergroundScene.unity ← GameRig + UndergroundSceneSetup 둘뿐
   `MachineInstance.Tier = max(Info.tier, record.tier)` 라 다른 기계 47종은 record 가 0 이어서 지금까지와 같다.
   SO 를 런타임에 고치면 에디터에서 **에셋이 영구히 바뀌고** 코어가 둘일 때 한쪽만 올릴 수도 없다.
   올리는 재료는 static 정본 표 **`CoreUpgradeTable`**(`ExtractionTable` 과 같은 꼴):
-  `마법이 부여된 전도체 가루 → 1` · `마력 칩 → 2`. `CraftingTableBlock.acceptsTierUpgrade` 를 켠 코어만 받는다.
+  `마법이 부여된 전도체 가루 → 1` · `마력 칩 → 2` · `공명 칩 → 3`.
+  `CraftingTableBlock.acceptsTierUpgrade` 를 켠 코어만 받는다.
+  ⚠ **승급 재료는 언제나 "한 티어 아래의 재단" 에 둔다** — 초급(t0) → 중급(t1) → **고급(t2)**.
+  코어 자신의 목록에 두면 *그 티어가 되어야 그 티어로 올릴 재료를 만들 수 있어* **영원히 잠긴다**
+  (노션 3티어 정본이 공명 칩을 "코어 조합기 3티어" 로 적어 놓았는데, 그대로 만들면 그 함정에 걸린다).
+  ⚠ `TargetTier` 는 `NormalizeName` 을 거치지 않는 **정확한 `==` 비교**다(`ExtractionTable` 과 비대칭) —
+  `itemName` 을 한 글자라도 다르게 적으면 조용히 -1 이 된다.
   ⚠ **코어를 캤다 다시 놓으면 티어가 0 으로 돌아간다**(레코드가 새로 생긴다) — 의도다.
   재료 칸은 `MachineUIRole.UpgradeSlot`, 누르는 버튼은 **`MachineUIRole.CoreUpgradeButton = 12`** 로
   **둘 다 UI 프리팹에 있다**(팩토리 "요소 추가" 에 버튼이 있다). 조합대 프리팹 한 장을 5종이 나눠 쓰지만
   칸은 `upgradeSlotCount`(재단·고급 조합기는 0)로, 버튼은 `acceptsTierUpgrade` 로 자동으로 꺼진다.
-- 조합대 5종의 현재 값: `코어 조합기 0`(업그레이드로 2까지) · `고급 조합기 2` ·
+- 조합대 5종의 현재 값: `코어 조합기 0`(업그레이드로 3까지) · `고급 조합기 2` ·
   `초급/중급/고급 재단 0/1/2`. **재단 3종은 `CraftingTableBlock` 이고 `recipeGroupId = "Altar"` 로 목록을 공유**한다.
   고급 조합기·재단은 각자 전용 목록을 가지므로 `recipeGroupId` 를 코어와 합치지 않는다.
 - ⚠ **마법 레시피는 재단 전용이다 — 코어 조합기에 같은 것을 두지 않는다**(2026-08-15 사용자 결정).
   예전에는 9개가 코어와 재단 양쪽에 있어 재단을 지을 이유가 없었다. 지금은 코어 쪽을 전부 지웠다:
   **초급 재단(t0)** `물` `용암` `마력 파편 증식`(`magic_shard_duplicate`) `마법이 부여된 전도체 가루`
   `0티어 자원 생성기` **`중급 재단`(`altar_intermediate`)** /
-  **중급 재단(t1)** `마력 결정` `마력 칩` `마법부여기` `사과 나무 씨앗` `강화 자원 생성기`.
+  **중급 재단(t1)** `마력 결정` `마력 칩` `마법부여기` `사과 나무 씨앗` `강화 자원 생성기` /
+  **고급 재단(t2)** `공명 칩`(코어 3차 승급 재료. 2026-08-17 에 생겨 고급 재단이 전용 레시피를 갖게 됐다).
   ⚠ **재단을 짓는 레시피만 예외적으로 갈린다** — `초급 재단`(`altar_basic`)은 코어 조합기,
   `중급 재단`(`altar_intermediate`)은 **초급 재단**, `고급 재단`(`advanced_altar`)은 고급 조합기다.
   즉 재단 계열은 **자기 아래 단계에서 짓는다**(코어 → 초급 → 중급).
@@ -360,6 +368,24 @@ Assets/Scenes/UndergroundScene.unity ← GameRig + UndergroundSceneSetup 둘뿐
   교체는 `SetRunning` 한 곳에서만 하고 **상태가 바뀔 때만** 대입한다(매 프레임 대입하면 배칭이 깨진다).
   가동 판정 = **그 프레임에 실제로 진행됐는가**. 재료가 있어도 연료·전력·출력자리가 없으면 정지고,
   발전기는 **연료를 실제로 태운 프레임**만 가동이라 버퍼가 차면 정지 그림이 된다.
+
+#### 발전기의 찌꺼기 산출 (`spentFuelItem`) — 핵발전소
+
+`TickGenerator` 는 **레시피를 아예 보지 않는다**(`Update` 가 `Tick` 앞에서 되돌아간다). 그래서 산출은
+레시피가 아니라 **연소 경로에 건 훅** 하나로 낸다 — `MachineBlock.spentFuelItem` 이 비어 있으면
+지금까지와 완전히 같으므로 **나머지 발전기 3종은 한 톨도 안 바뀐다**(실측).
+
+- 계약은 `MachineInstance.TryEjectSpentFuel` 하나다: **점화 직전**에 불린다.
+  ① 낼 몫이 있으면 출력 칸에 1개 넣고, ② 몫이 없어도 **자리는 미리 확인**한다.
+  ⚠ ②를 빼면 자리가 없는데 새 연료에 불을 붙여 **찌꺼기를 빚으로 떠안고**, 그 상태로 기계를 캐면
+  그 한 개가 조용히 사라진다(실측으로 이 함정에 걸렸다). ②가 있어야 "산출이 차면 발전이 멈춘다" 가
+  **연료를 한 개도 더 안 태우고** 성립한다.
+- ⚠ **"아직 안 낸 찌꺼기" 표시는 `burnRemaining == 0 && burnTotal > 0`** 이다. `burnTotal` 을
+  다 태운 순간에 0 으로 밀지 않고 남겨 두는 것이 그 표시고, **둘 다 세이브 v5 필드라 새 칸 없이**
+  저장·복원을 건너 살아남는다(그래서 이 기능이 **세이브 v12 를 그대로 둔다**).
+- `Generator_UI.prefab` 한 장을 발전기 4종이 공유하므로 **출력 칸을 거기 하나 넣어 두면** 되고,
+  `outputSlotCount == 0` 인 나머지 셋은 `DefaultMachineUI` 가 알아서 끈다.
+- 핵발전소 값: `fuelBurnRate 500` · `maxEnergyAmount 20000` · `핵연료봉.burnEnergy 30000`(= 정확히 60초).
 
 ### 유체 (액체·기체를 한 계층으로)
 
@@ -573,6 +599,50 @@ Assets/Scenes/UndergroundScene.unity ← GameRig + UndergroundSceneSetup 둘뿐
   (저장 칸이 입력 구간에 살기 때문). ⚠ **한 프리팹에 둘을 섞으면 인덱스가 겹친다** — 오류로 잡는다.
   빌딩블록은 `Prefabs/UI/Machine/StorageSlot.prefab`(`StorageSlotUI`), 팩토리 "요소 추가" 에 버튼이 있고
   `CreateNewLayout` 은 저장 블록이면 **10칸씩 줄바꿈**해 놓는다(40칸을 한 줄로 놓으면 화면 밖으로 나간다).
+
+### 저장 네트워크 (3티어 · AE2 의 ME 같은 것)
+
+**데이터 케이블로 이은 컨트롤러 1 + 드라이브 N + 터미널 N.** 셀에 담고 터미널로 꺼낸다.
+**새로 만든 개념이 거의 없다** — 연결은 `PipeKind.Data`, 서브넷 분리는 렌치 `Cut`,
+입출력 버스는 렌치 `Insert`/`Extract`, 한계는 **전력**이다(노션의 "채널 제한 대신 전력").
+
+- **저장하지 않는다.** 구성·용량은 파생 상태고 `PipeNetworkManager.TopologyVersion` 이 바뀔 때만
+  다시 계산한다(경로 캐시와 같은 규약). 셀 내용만 `StorageCellInstance : ItemInstance` 로 스택에 붙는다
+  → **세이브 v12 그대로.** `ItemInstanceSerializer` 가 어셈블리를 훑어 자동 등록한다.
+- ⚠ **전력은 캐시하면 안 된다.** 위상은 케이블·렌치를 건드릴 때만 바뀌는데 **전원은 매 프레임 바뀐다** —
+  `StorageNetwork.Status` 와 `Cells()` 는 `IsPowered` 를 **물어볼 때마다** 다시 본다.
+  Build 시점에 굳혔더니 컨트롤러가 먼저 켜지며 망을 캐시해 **드라이브가 영영 0/1** 이었다(실측).
+- **`StorageNetworkBlock : MachineBlock`** + `role`(Controller/Drive/Terminal). 기계를 물려받는 것은
+  프리팹 스폰·발자국·콜라이더·채굴·세이브·전력 링크를 공짜로 얻기 위해서다(`LightBlock` 과 같은 이유).
+  ⚠ **blockId 문자열로 판정하지 말 것** — 이름을 바꾸는 순간 조용히 망에서 빠진다.
+  `IsAlwaysOn = true` 라 조명과 같은 상시 소비 경로를 타고, **`IsRunning` 이 곧 "전기가 들어와 있는가"** 다.
+  값: 컨트롤러 40/s · 드라이브 20/s(셀 6칸) · 터미널 5/s.
+- **컨트롤러는 네트워크당 하나.** 0개면 `NoController`, 2개 이상이면 **그 망이 통째로 멈춘다.**
+- **버스는 케이블 쪽 면**이다 — 별도의 버스 기계가 없다. `Insert` = 망 → 기계, `Extract` = 기계 → 망,
+  **`Default` 는 아무 일도 안 한다**(저장 블록에서 상자 두 개가 왕복하던 것과 같은 규칙).
+- **버스를 돌리는 것은 컨트롤러뿐이다**(`MachineInstance.Update` 의 상시 소비 분기 →
+  `StorageNetwork.PumpBuses`). 망당 컨트롤러가 하나라 **프레임당 정확히 한 번** 돈다 —
+  케이블이나 드라이브에서 돌리면 개수만큼 빨라져 밸런스가 배치 모양에 좌우된다.
+  ⚠ **예산(`BusRate` 8개/초)은 버스마다 따로 준다.** 하나를 나눠 쓰면 목록에서 앞선 버스가 다 써
+  뒤쪽이 영영 굶는다(실측: Extract 가 독차지해 Insert 가 한 개도 못 옮겼다).
+- ⚠ **넣고 빼는 규칙의 정본은 `StorageNetwork.Insert`/`Remove` 하나다.** 터미널도 버스도 이것을 부른다 —
+  두 벌로 갈리면 "터미널로는 들어가는데 파이프로는 안 들어가는" 상태가 된다.
+  **이미 그 종류를 담은 셀부터** 채운다(빈 셀을 먼저 쓰면 종류 자리가 쪼개진다).
+- **셀의 한도는 인스턴스가 아니라 `StorageCellItem`(에셋)** 에 있다 — 밸런스가 바뀌면 이미 만든 셀만
+  옛 한도를 들고 다니면 안 되기 때문(`UpgradeModuleItem.valuePerUnit` 과 같은 규약).
+  `1k 8종/4,096` · `4k 16종/16,384` · `16k 32종/65,536` · `64k 64종/262,144`, **`maxStack` 은 1**
+  (`OnValidate` 로 못박았다 — 64로 두면 내용이 다른 셀 둘이 합쳐지며 한쪽이 사라진다).
+  **종류 한도가 개수 한도보다 먼저 걸린다.**
+- **터미널 UI 는 `NetworkContainer : IItemContainer`** 를 물려 `ItemSlot` 드래그앤드롭을 그대로 쓴다.
+  ⚠ **그 칸은 진짜 저장소가 아니라 사본(view)** 이다 — `OnDrop` 이 사본을 고치면 끝에 부르는
+  `NotifyChanged` 에서 **스냅샷과 비교해 셀에 되쓴다.** 교환(칸의 아이템 자체가 바뀜)도 다뤄야 하고,
+  `SlotCapacity` 가 실제 여유보다 크면 "넣었다는데 셀에 없는" 아이템이 생긴다(그때 `LogError` 가 뜬다).
+  프리팹은 `Chest_UI` 를 복사한 `StorageTerminal_UI`(40칸 = 한 페이지) 고, 페이지 버튼은
+  **방식 ②(서브클래스 + `SerializeField`)** 다. 입력 칸 재바인딩은 `DefaultMachineUI.RebindInputs`.
+- ⚠ **개체 데이터가 붙은 것은 버스로 안 들어간다**(도구·저장 셀). 셀은 `itemName` 만 세므로
+  재질·내구도·내용이 통째로 사라진다.
+- ⚠ **데이터 케이블 그림은 아이템 파이프 밴드를 임시로 공유한다**(`pipes.png` 가 3밴드로 꽉 찼다).
+  전용 시트가 오면 `PipeSetup.AtlasNameFor` 한 줄과 에셋의 `atlas` 참조만 바꾼다.
 
 ### 도구 (커스텀 조합)
 `ToolDefinition`(부품 칸 = 그림 레이어) + `ToolPartItem`(재질×종류) + `ToolItem`(완성품, maxStack 1)
@@ -873,13 +943,21 @@ Tools/Tiles/Build Tile Atlas · Slice Pipe Sheet · Build Pipe Atlas   (슬라�
 
 - `StreamingAssets/DefaultWorldmap.dat` 은 매직 도입 이전 포맷이라 매번 로드 실패 → 이제 `.corrupt` 로 치워지고 새 월드 생성.
 - 산성/유리 파이프 미구현(아이템만 있고 `PipeBlock` 에셋이 없다).
-- **증류기·핵발전소에 유체 탱크가 없다** — 증류기는 `원유 → 가스` 레시피도 가스 아이템도 없고,
-  발전기는 `TickGenerator` 가 레시피를 아예 안 본다. 지금 탱크를 주면 값이 안 채워지는 빈 바만 남는다.
-  발전기 산출 훅과 함께 3티어에서 붙인다.
+- **증류기는 탱크가 없는 게 아니라 레시피가 0개다** — 에셋은 이미 `입력 탱크 1 / 출력 탱크 5 / 1000` 이고
+  `Distiller_UI` 에 유체 바도 있다(2026-08-17 실측. "탱크가 없다" 는 옛 서술이 틀렸다).
+  `원유 → 석유·가스` 레시피와 가스 아이템이 없어서 빈 바만 보인다.
+  ~~발전기 산출 훅~~ → **2026-08-17 에 `spentFuelItem` 으로 붙였다**(위 §발전기의 찌꺼기 산출).
+  핵발전소는 고체 연료라 **탱크가 필요 없다.**
 - **`chem_acid` 는 산성 용액을 출력 탱크에 내는데 `chem_uranium` 은 입력 탱크에서 먹는다** —
   같은 기계 안에서 이어지지 않아 파이프로 되돌리거나 유리 용기로 퍼 옮겨야 한다(설계 확인 필요).
 - **마나의 수량 스케일이 다르다** — `레시피.md` 정본이 `마나 100 = 마력결정 1` 이라 물(1000/양동이)과 자릿수가 어긋난다.
-- **고급 재단 전용 레시피가 0개**다(중급과 같은 11개만 보인다). `레시피.md` 에도 2티어 마법 레시피가 없다.
+- ~~고급 재단 전용 레시피가 0개~~ → **2026-08-17 에 `공명 칩` 하나가 생겼다**(중급 11 → 고급 12).
+  코어 3차 승급 재료라 고급 재단이 곧 3티어의 관문이다. 그 밖의 2티어 마법 레시피는 아직 없다.
+- ⚠ **3티어 전체가 `conductor_crystal`(전도체 결정) 하나에 걸려 있다.** 유일한 획득처가
+  `extract_shiny_powder`(1-0티어 추출기, 5%)인데 **1계열 추출기 4종에 건설 레시피가 없다.**
+  분쇄 사슬(`manastone_fine_dust` 까지)은 전부 도달 가능하므로 **`Machine:Extractor10` 건설 레시피
+  하나만 생기면** 공명 결정 → 공명 칩 → 코어 3차 승급 → 3티어 콘텐츠 전부가 함께 열린다.
+  ⚠ 그래서 **핵발전소(건설 t3)도 실제로는 아직 못 짓는다** — 사슬(연료봉 제작·재처리)은 t2 에서도 돈다.
 - ~~`강화 합금` 아이템이 없다~~ → **2026-08-12 에 만들었다**(합금 재련기 · 인바5+청동5+철5 → 5).
 - ~~2계열 분쇄물을 못 만든다~~ → **2026-08-15 에 처리 티어 게이트를 지워 분쇄기가 운석도 빻는다**(실측).
   ⚠ 다만 **운석 원석 자체를 못 얻는다** — 등급 2 지하방이 유일한 획득처인데 `dowsing_rod_t2` 가 없다.

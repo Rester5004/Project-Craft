@@ -3,102 +3,417 @@
   "source": "Notion 기획 백로그 (1) — 6. 레시피 / 가공 레시피 (전용 공장)",
   "description": "전용 공장 레시피. 전력만 산출하는 항목(화력 발전기·변압기·핵발전소)은 아이템이 아니라 note 로만 남긴다.",
   "recipes": [
-    { "id": "compress_iron_plate", "machine": "압축기", "tier": 0, "output": "철판", "outputQty": 1,
-      "inputs": [ { "item": "철 주괴", "qty": 1 } ],
-      "note": "조합대보다 고효율" },
-
-    { "id": "compress_brick", "machine": "압축기", "tier": 0, "output": "벽돌", "outputQty": 1,
-      "inputs": [ { "item": "모래", "qty": 2 }, { "item": "물", "qty": 1 } ],
-      "note": "벽돌 공장·압연기가 압축기로 통합됨. 조합대보다 고효율" },
-
-    { "id": "compress_silicon_plate", "machine": "압축기", "tier": 0, "output": "실리콘 판", "outputQty": 1,
-      "inputs": [ { "item": "실리콘", "qty": 1 } ],
-      "note": "자원 목록 기준: 실리콘 → 압축기 → 실리콘 판" },
-
-    { "id": "cement", "machine": "코어 조합기", "tier": 1, "output": "시멘트", "outputQty": 1,
-      "inputs": [ { "item": "석회", "qty": 1 }, { "item": "자갈", "qty": null }, { "item": "물", "qty": null } ],
-      "note": "자갈·물 수량 미정. 벽돌 공장이 압축기로 통합되면서 독립 공장이 됨" },
-
-    { "id": "glass_pipe", "machine": "코어 조합기", "tier": 1, "output": "유리 파이프", "outputQty": 1,
-      "inputs": [ { "item": "유리", "qty": 2 } ],
-      "note": "산성 용액 수송용" },
-
-    { "id": "glass_container", "machine": "코어 조합기", "tier": 1, "output": "유리 용기", "outputQty": 1,
-      "inputs": [ { "item": "유리", "qty": 1 } ] },
-
-    { "id": "acid_pipe", "machine": "코어 조합기", "tier": 1, "output": "산성 파이프", "outputQty": 1,
-      "inputs": [ { "item": "유리 파이프", "qty": 1 } ],
-      "note": "산성 용액 수송 전용" },
-
-    { "id": "sulfur_powder", "machine": "화학 처리기", "tier": 1, "output": "황 가루", "outputQty": 1,
-      "inputs": [ { "item": "유황석", "qty": 2 } ] },
-
-    { "id": "acid_solution", "machine": "화학 처리기", "tier": 1, "output": "산성 용액", "outputQty": 1,
-      "inputs": [ { "item": "황 가루", "qty": 1 }, { "item": "물", "qty": 2 } ] },
-
-    { "id": "uranium_concentrate", "machine": "압축기", "tier": 1, "output": "우라늄 농축물", "outputQty": 1,
-      "inputs": [ { "item": "우라늄 주괴", "qty": 10 } ] },
-
-    { "id": "electro_aluminum", "machine": "전기 분해기", "tier": 1, "power": "고전압",
-      "output": "알루미늄 주괴", "outputQty": 1,
-      "inputs": [ { "item": "알루미늄 조각", "qty": 4 } ] },
-
-    { "id": "electro_lithium", "machine": "전기 분해기", "tier": 1, "power": "고전압",
-      "output": "리튬 주괴", "outputQty": 1,
-      "inputs": [ { "item": "리튬 조각", "qty": 4 } ] },
-
-    { "id": "electro_water", "machine": "전기 분해기", "tier": 1, "power": "고전압",
-      "inputs": [ { "item": "물", "qty": 2 } ],
+    {
+      "id": "compress_iron_plate",
+      "machine": "압축기",
+      "tier": 0,
+      "output": "철판",
+      "outputQty": 1,
+      "inputs": [
+        {
+          "item": "철 주괴",
+          "qty": 1
+        }
+      ],
+      "note": "조합대보다 고효율"
+    },
+    {
+      "id": "compress_brick",
+      "machine": "압축기",
+      "tier": 0,
+      "output": "벽돌",
+      "outputQty": 1,
+      "inputs": [
+        {
+          "item": "모래",
+          "qty": 2
+        },
+        {
+          "item": "물",
+          "qty": 1
+        }
+      ],
+      "note": "벽돌 공장·압연기가 압축기로 통합됨. 조합대보다 고효율"
+    },
+    {
+      "id": "compress_silicon_plate",
+      "machine": "압축기",
+      "tier": 0,
+      "output": "실리콘 판",
+      "outputQty": 1,
+      "inputs": [
+        {
+          "item": "실리콘",
+          "qty": 1
+        }
+      ],
+      "note": "자원 목록 기준: 실리콘 → 압축기 → 실리콘 판"
+    },
+    {
+      "id": "cement",
+      "machine": "코어 조합기",
+      "tier": 1,
+      "output": "시멘트",
+      "outputQty": 1,
+      "inputs": [
+        {
+          "item": "석회",
+          "qty": 1
+        },
+        {
+          "item": "자갈",
+          "qty": null
+        },
+        {
+          "item": "물",
+          "qty": null
+        }
+      ],
+      "note": "자갈·물 수량 미정. 벽돌 공장이 압축기로 통합되면서 독립 공장이 됨"
+    },
+    {
+      "id": "glass_pipe",
+      "machine": "코어 조합기",
+      "tier": 1,
+      "output": "유리 파이프",
+      "outputQty": 1,
+      "inputs": [
+        {
+          "item": "유리",
+          "qty": 2
+        }
+      ],
+      "note": "산성 용액 수송용"
+    },
+    {
+      "id": "glass_container",
+      "machine": "코어 조합기",
+      "tier": 1,
+      "output": "유리 용기",
+      "outputQty": 1,
+      "inputs": [
+        {
+          "item": "유리",
+          "qty": 1
+        }
+      ]
+    },
+    {
+      "id": "acid_pipe",
+      "machine": "코어 조합기",
+      "tier": 1,
+      "output": "산성 파이프",
+      "outputQty": 1,
+      "inputs": [
+        {
+          "item": "유리 파이프",
+          "qty": 1
+        }
+      ],
+      "note": "산성 용액 수송 전용"
+    },
+    {
+      "id": "sulfur_powder",
+      "machine": "화학 처리기",
+      "tier": 1,
+      "output": "황 가루",
+      "outputQty": 1,
+      "inputs": [
+        {
+          "item": "유황석",
+          "qty": 2
+        }
+      ]
+    },
+    {
+      "id": "acid_solution",
+      "machine": "화학 처리기",
+      "tier": 1,
+      "output": "산성 용액",
+      "outputQty": 1,
+      "inputs": [
+        {
+          "item": "황 가루",
+          "qty": 1
+        },
+        {
+          "item": "물",
+          "qty": 2
+        }
+      ]
+    },
+    {
+      "id": "uranium_concentrate",
+      "machine": "압축기",
+      "tier": 1,
+      "output": "우라늄 농축물",
+      "outputQty": 1,
+      "inputs": [
+        {
+          "item": "우라늄 주괴",
+          "qty": 10
+        }
+      ]
+    },
+    {
+      "id": "electro_aluminum",
+      "machine": "전기 분해기",
+      "tier": 1,
+      "power": "고전압",
+      "output": "알루미늄 주괴",
+      "outputQty": 1,
+      "inputs": [
+        {
+          "item": "알루미늄 조각",
+          "qty": 4
+        }
+      ]
+    },
+    {
+      "id": "electro_lithium",
+      "machine": "전기 분해기",
+      "tier": 1,
+      "power": "고전압",
+      "output": "리튬 주괴",
+      "outputQty": 1,
+      "inputs": [
+        {
+          "item": "리튬 조각",
+          "qty": 4
+        }
+      ]
+    },
+    {
+      "id": "electro_water",
+      "machine": "전기 분해기",
+      "tier": 1,
+      "power": "고전압",
+      "inputs": [
+        {
+          "item": "물",
+          "qty": 2
+        }
+      ],
       "outputs": [
-        { "item": "수소", "qty": 2, "fluid": true },
-        { "item": "산소", "qty": 1, "fluid": true }
+        {
+          "item": "수소",
+          "qty": 2,
+          "fluid": true
+        },
+        {
+          "item": "산소",
+          "qty": 1,
+          "fluid": true
+        }
       ],
-      "note": "수전해기가 전기 분해기로 통합됨" },
-    { "id": "alloy_bronze", "machine": "합금 재련기", "tier": 1, "output": "청동", "outputQty": 4,
-      "inputs": [ { "item": "구리", "qty": 3 }, { "item": "주석", "qty": 1 } ],
-      "note": "광석·주괴 상관 없이 투입 가능" },
-
-    { "id": "alloy_invar", "machine": "합금 재련기", "tier": 1, "output": "인바(invar)", "outputQty": 2,
-      "inputs": [ { "item": "니켈", "qty": 1 }, { "item": "철", "qty": 2 } ],
-      "note": "광석·주괴 상관 없이 투입 가능" },
-
-    { "id": "special_alloy", "machine": "합금 재련기", "tier": 1, "output": "특수합금", "outputQty": 5,
-      "inputs": [ { "item": "강철", "qty": 5 }, { "item": "알루미늄 주괴", "qty": 5 }, { "item": "마력 파편", "qty": 50 } ],
-      "note": "고급 재단·3티어 저장 장치의 기본 재료" },
-
-    { "id": "bio_soil", "machine": "유기물 배양기", "tier": 1, "output": "흙", "outputQty": 1,
-      "chance": 0.1, "inputs": [ { "item": "돌", "qty": 1 } ],
-      "note": "10% 확률로 생성" },
-
-    { "id": "laser_computer_chip", "machine": "레이저 가공기", "tier": 1, "output": "컴퓨터 칩", "outputQty": 1,
+      "note": "수전해기가 전기 분해기로 통합됨"
+    },
+    {
+      "id": "alloy_bronze",
+      "machine": "합금 재련기",
+      "tier": 1,
+      "output": "청동",
+      "outputQty": 4,
       "inputs": [
-        { "item": "실리콘 판", "qty": 1 },
-        { "item": "구리판", "qty": 1 },
-        { "item": "철판", "qty": 1 },
-        { "item": "전도체 가루", "qty": 1 }
+        {
+          "item": "구리",
+          "qty": 3
+        },
+        {
+          "item": "주석",
+          "qty": 1
+        }
       ],
-      "note": "조합대보다 고효율(재료 1/10). 루비 사용" },
-
-    { "id": "laser_cavity_scanner", "machine": "레이저 가공기", "tier": 1, "output": "공동 탐색기", "outputQty": 1,
-      "inputs": [ { "item": "컴퓨터 칩", "qty": 1 }, { "item": "다우징 로드", "qty": 1 } ] },
-
-    { "id": "laser_extractor_t2", "machine": "레이저 가공기", "tier": 1, "output": "0-2티어 추출기", "outputQty": 1,
+      "note": "광석·주괴 상관 없이 투입 가능"
+    },
+    {
+      "id": "alloy_invar",
+      "machine": "합금 재련기",
+      "tier": 1,
+      "output": "인바(invar)",
+      "outputQty": 2,
       "inputs": [
-        { "item": "컴퓨터 칩", "qty": 2 },
-        { "item": "0-1티어 추출기", "qty": 1 },
-        { "item": "니켈 주괴", "qty": 1 }
-      ] },
-
-    { "id": "mana_from_crystal", "machine": "마나 용해기", "tier": 1, "output": "마나", "outputQty": 100,
-      "outputFluid": true, "inputs": [ { "item": "마력 결정", "qty": 1 } ],
-      "note": "마나는 액체 취급" },
-
-    { "id": "mana_from_shard", "machine": "마나 용해기", "tier": 1, "output": "마나", "outputQty": 1,
-      "outputFluid": true, "inputs": [ { "item": "마력 파편", "qty": 1 } ],
-      "note": "마나는 액체 취급" },
-
-            { "id": "power_transformer", "machine": "변압기", "tier": 1,
-      "outputs": [ { "type": "power", "item": "고전압 전력", "amount": null } ],
-      "note": "저전압 소모 → 고전압 변환. 변환 손실 발생 (예: 1000W → 900W)" }
+        {
+          "item": "니켈",
+          "qty": 1
+        },
+        {
+          "item": "철",
+          "qty": 2
+        }
+      ],
+      "note": "광석·주괴 상관 없이 투입 가능"
+    },
+    {
+      "id": "special_alloy",
+      "machine": "합금 재련기",
+      "tier": 1,
+      "output": "특수합금",
+      "outputQty": 5,
+      "inputs": [
+        {
+          "item": "강철",
+          "qty": 5
+        },
+        {
+          "item": "알루미늄 주괴",
+          "qty": 5
+        },
+        {
+          "item": "마력 파편",
+          "qty": 50
+        }
+      ],
+      "note": "고급 재단·3티어 저장 장치의 기본 재료"
+    },
+    {
+      "id": "bio_soil",
+      "machine": "유기물 배양기",
+      "tier": 1,
+      "output": "흙",
+      "outputQty": 1,
+      "chance": 0.1,
+      "inputs": [
+        {
+          "item": "돌",
+          "qty": 1
+        }
+      ],
+      "note": "10% 확률로 생성"
+    },
+    {
+      "id": "laser_computer_chip",
+      "machine": "레이저 가공기",
+      "tier": 1,
+      "output": "컴퓨터 칩",
+      "outputQty": 1,
+      "inputs": [
+        {
+          "item": "실리콘 판",
+          "qty": 1
+        },
+        {
+          "item": "구리판",
+          "qty": 1
+        },
+        {
+          "item": "철판",
+          "qty": 1
+        },
+        {
+          "item": "전도체 가루",
+          "qty": 1
+        }
+      ],
+      "note": "조합대보다 고효율(재료 1/10). 루비 사용"
+    },
+    {
+      "id": "laser_cavity_scanner",
+      "machine": "레이저 가공기",
+      "tier": 1,
+      "output": "공동 탐색기",
+      "outputQty": 1,
+      "inputs": [
+        {
+          "item": "컴퓨터 칩",
+          "qty": 1
+        },
+        {
+          "item": "다우징 로드",
+          "qty": 1
+        }
+      ]
+    },
+    {
+      "id": "laser_extractor_t2",
+      "machine": "레이저 가공기",
+      "tier": 1,
+      "output": "0-2티어 추출기",
+      "outputQty": 1,
+      "inputs": [
+        {
+          "item": "컴퓨터 칩",
+          "qty": 2
+        },
+        {
+          "item": "0-1티어 추출기",
+          "qty": 1
+        },
+        {
+          "item": "니켈 주괴",
+          "qty": 1
+        }
+      ]
+    },
+    {
+      "id": "mana_from_crystal",
+      "machine": "마나 용해기",
+      "tier": 1,
+      "output": "마나",
+      "outputQty": 100,
+      "outputFluid": true,
+      "inputs": [
+        {
+          "item": "마력 결정",
+          "qty": 1
+        }
+      ],
+      "note": "마나는 액체 취급"
+    },
+    {
+      "id": "mana_from_shard",
+      "machine": "마나 용해기",
+      "tier": 1,
+      "output": "마나",
+      "outputQty": 1,
+      "outputFluid": true,
+      "inputs": [
+        {
+          "item": "마력 파편",
+          "qty": 1
+        }
+      ],
+      "note": "마나는 액체 취급"
+    },
+    {
+      "id": "power_transformer",
+      "machine": "변압기",
+      "tier": 1,
+      "outputs": [
+        {
+          "type": "power",
+          "item": "고전압 전력",
+          "amount": null
+        }
+      ],
+      "note": "저전압 소모 → 고전압 변환. 변환 손실 발생 (예: 1000W → 900W)"
+    },
+    {
+      "id": "chem_reprocess",
+      "machine": "화학 처리기",
+      "tier": 1,
+      "inputs": [
+        {
+          "item": "사용후 핵연료봉",
+          "qty": 1
+        },
+        {
+          "item": "산성 용액",
+          "qty": 2,
+          "fluid": true
+        }
+      ],
+      "outputs": [
+        {
+          "item": "우라늄 농축물",
+          "qty": 1
+        },
+        {
+          "item": "납 주괴",
+          "qty": 1
+        }
+      ],
+      "note": "사용후 봉 재처리. 납 주괴의 첫 소비처가 여기서 생긴다"
+    }
   ]
 }

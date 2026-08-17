@@ -4,11 +4,11 @@
 
 ## 아이템
 
-- 에셋 242개 중 242개 등록 대상, 새로 추가 0개
+- 에셋 258개 중 258개 등록 대상, 새로 추가 0개
 
 ## 블록
 
-- 에셋 61개 중 61개 등록 대상, 새로 추가 0개
+- 에셋 65개 중 65개 등록 대상, 새로 추가 0개
 
 ## 유체
 
@@ -16,7 +16,7 @@
 
 ## 레시피
 
-- 에셋 141개 중 **139개 등록 대상**, 새로 추가 0개
+- 에셋 159개 중 **157개 등록 대상**, 새로 추가 0개
 - 제외: 기계 미지정 2개 · 산출물 없음 0개
 
 ### ⚠ 같은 기계 · 같은 산출물이라 가려지는 레시피 1개
@@ -25,8 +25,8 @@
 
 ### 기계별 등록 수
 
-- `Altar` : 11개
-- `CoreCrafter` : 60개
+- `Altar` : 12개
+- `CoreCrafter` : 75개
 - `Extractor0` : 3개
 - `Extractor1` : 3개
 - `Extractor2` : 3개
@@ -35,12 +35,12 @@
 - `Machine:AlloySmelter` : 4개
 - `Machine:BioIncubator` : 1개
 - `Machine:BlastFurnace` : 2개
-- `Machine:ChemicalProcessor` : 3개
+- `Machine:ChemicalProcessor` : 4개
 - `Machine:Compressor` : 10개
 - `Machine:Electrolyzer` : 3개
 - `Machine:LasorProcessor` : 3개
 - `Machine:ManaDissolver` : 2개
-- `Machine:PrecisionLathe` : 4개
+- `Machine:PrecisionLathe` : 5개
 - `Pulverizer` : 12개
 - `Pump` : 2개
 - `ResourceGenerator` : 1개

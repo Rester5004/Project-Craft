@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d1635fa976c21145835b252e45d6313, type: 3}
+  m_Name: nuclear_fuel_rod
+  m_EditorClassIdentifier: Assembly-CSharp::Recipe
+  machine: {fileID: 11400000, guid: 9dad41642642cce4cb4672ccf639d7a3, type: 2}
+  category: {fileID: 11400000, guid: a63365af4ccd3904a91ebf59b6456c84, type: 2}
+  tier: 2
+  inputs:
+  - item: {fileID: 11400000, guid: 6f6f8a4133118e94ba1be4e52f632bd2, type: 2}
+    count: 4
+  - item: {fileID: 11400000, guid: e65c0ebb91f3f074e9d8c5641102e8bc, type: 2}
+    count: 2
+  - item: {fileID: 11400000, guid: 9e7305e9ba375e441b35037c04e96810, type: 2}
+    count: 1
+  outputs:
+  - item: {fileID: 11400000, guid: 3eab0d85ceb8e0749a39dbbd5b962d72, type: 2}
+    count: 1
+  fluidInputs: []
+  fluidOutputs: []
+  chanceOutputs: []
+  requiredTools: []
+  craftTime: 8
+  importNote: "[\uCD9C\uCC98] Notion '3\uD2F0\uC5B4 (\uC784\uC2DC) \u2014 \uC800\uC7A5
+    \uB124\uD2B8\uC6CC\uD06C + \uD575\uBC1C\uC804\uC18C' \xA76 \uAC00\uACF5 \uB808\uC2DC\uD53C"

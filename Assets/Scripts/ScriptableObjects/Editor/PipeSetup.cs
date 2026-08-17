@@ -32,6 +32,8 @@ public static class PipeSetup
         new PipeSpec { itemName = "solid_pipe",  assetName = "SolidPipe",  kind = PipeKind.Item,   tier = 1, secondsPerCell = 0.12f, throughput = 16, tint = new Color(1f, 0.85f, 0.55f) },
         new PipeSpec { itemName = "liquid_pipe", assetName = "LiquidPipe", kind = PipeKind.Liquid, tier = 0, secondsPerCell = 0.30f, throughput = 1,  tint = Color.white },
         new PipeSpec { itemName = "gas_pipe",    assetName = "GasPipe",    kind = PipeKind.Gas,    tier = 0, secondsPerCell = 0.30f, throughput = 1,  tint = Color.white },
+        // 데이터 케이블은 짐을 싣지 않으므로 secondsPerCell·throughput 은 아무도 안 본다(Min 을 만족시킬 최솟값).
+        new PipeSpec { itemName = "data_cable",  assetName = "DataCable",  kind = PipeKind.Data,   tier = 0, secondsPerCell = 0.01f, throughput = 1,  tint = Color.white },
     };
 
     /// <summary>경로의 모든 단계를 AssetDatabase 로 만든다(이미 있으면 그대로). 다른 툴들과 같은 방식이다.</summary>
@@ -49,14 +51,21 @@ public static class PipeSetup
         }
     }
 
-    /// <summary>PipeKind → 아틀라스 파일 이름 조각(시트의 밴드 이름과 같다).</summary>
+    /// <summary>
+    /// PipeKind → 아틀라스 파일 이름 조각(시트의 밴드 이름과 같다).
+    ///
+    /// ⚠ <b><see cref="PipeKind.Data"/> 는 아이템 밴드를 임시로 함께 쓴다</b> — `pipes.png` 가
+    /// 160×288 = 아이템·액체·기체 3밴드로 꽉 차 있어 넣을 자리가 없다(2026-08-17 사용자 결정: 전용 그림은 나중에).
+    /// 전용 시트가 오면 `Build Pipe Atlas` 로 `pipe_data_atlas` 를 만들고 <b>여기 한 줄만</b> 바꾸면 된다 —
+    /// 세이브·레시피·이미 놓인 케이블은 하나도 안 건드린다.
+    /// </summary>
     private static string AtlasNameFor(PipeKind kind)
     {
         switch (kind)
         {
             case PipeKind.Gas: return "gas";
             case PipeKind.Liquid: return "liquid";
-            default: return "item";
+            default: return "item";   // Item · Data
         }
     }
 

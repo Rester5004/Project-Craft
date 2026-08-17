@@ -157,12 +157,21 @@
         }
       ]
     },
-        {
+    {
       "id": "precision_motor",
       "machine": "정밀 세공기",
       "tier": 2,
       "output": "모터",
-      "inputs": [ { "item": "강화 합금", "qty": 10 }, { "item": "구리판", "qty": 4 } ],
+      "inputs": [
+        {
+          "item": "강화 합금",
+          "qty": 10
+        },
+        {
+          "item": "구리판",
+          "qty": 4
+        }
+      ],
       "note": "노션 기본값 강화 합금 x10 + 전자석용 구리판. 세 부품의 재료가 같으면 SelectRecipe 가 첫 것만 돌린다"
     },
     {
@@ -170,7 +179,16 @@
       "machine": "정밀 세공기",
       "tier": 2,
       "output": "베어링",
-      "inputs": [ { "item": "강화 합금", "qty": 10 }, { "item": "강철", "qty": 2 } ],
+      "inputs": [
+        {
+          "item": "강화 합금",
+          "qty": 10
+        },
+        {
+          "item": "강철",
+          "qty": 2
+        }
+      ],
       "note": "노션 기본값 강화 합금 x10 + 구름 요소용 강철"
     },
     {
@@ -178,7 +196,16 @@
       "machine": "정밀 세공기",
       "tier": 2,
       "output": "프로펠러",
-      "inputs": [ { "item": "강화 합금", "qty": 10 }, { "item": "티타늄 주괴", "qty": 2 } ],
+      "inputs": [
+        {
+          "item": "강화 합금",
+          "qty": 10
+        },
+        {
+          "item": "티타늄 주괴",
+          "qty": 2
+        }
+      ],
       "note": "노션 기본값 강화 합금 x10 + 날개용 티타늄 주괴"
     },
     {
@@ -214,6 +241,28 @@
       "output": "티타늄",
       "inputs": [],
       "note": "레시피 미정"
+    },
+    {
+      "id": "nuclear_fuel_rod",
+      "machine": "정밀 세공기",
+      "tier": 2,
+      "output": "핵연료봉",
+      "outputQty": 1,
+      "inputs": [
+        {
+          "item": "우라늄 농축물",
+          "qty": 4
+        },
+        {
+          "item": "납 주괴",
+          "qty": 2
+        },
+        {
+          "item": "강화 합금",
+          "qty": 1
+        }
+      ],
+      "note": "3티어 핵발전소의 연료. burnEnergy 30000 = 500/s 로 60초"
     }
   ]
 }

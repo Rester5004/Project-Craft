@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d1635fa976c21145835b252e45d6313, type: 3}
+  m_Name: data_cable
+  m_EditorClassIdentifier: Assembly-CSharp::Recipe
+  machine: {fileID: 11400000, guid: ea55fe72f9315554a8ffdcf795dd1b7e, type: 2}
+  category: {fileID: 11400000, guid: e8aa8410127980c4f9bd1da1db39f486, type: 2}
+  tier: 3
+  inputs:
+  - item: {fileID: 11400000, guid: bbb797acc5a779e41a96c13ea4f31a03, type: 2}
+    count: 1
+  - item: {fileID: 11400000, guid: 53a72c2de8150fb409b906d1405bc7dc, type: 2}
+    count: 1
+  - item: {fileID: 11400000, guid: e28e21cfbb23d8c42869f75d13aba7e5, type: 2}
+    count: 2
+  outputs:
+  - item: {fileID: 11400000, guid: bd22a749b50d54e48aa71d1728833db6, type: 2}
+    count: 4
+  fluidInputs: []
+  fluidOutputs: []
+  chanceOutputs: []
+  requiredTools: []
+  craftTime: 1
+  importNote: "[\uCD9C\uCC98] Notion '3\uD2F0\uC5B4 (\uC784\uC2DC)' \xA72 \u2014
+    \uC9D0\uC744 \uC2E3\uC9C0 \uC54A\uACE0 \uC989\uC2DC \uC624\uAC04\uB2E4. \uD30C\uC774\uD504\uAC00
+    \uC544\uB2C8\uB77C \uBC30\uC120\uC774\uB2E4"

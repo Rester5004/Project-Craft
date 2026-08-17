@@ -10,10 +10,18 @@ public static class CoreUpgradeTable
     /// <summary>{ 재료 itemName, 올라가는 티어 }. 티어는 결과값이지 증가량이 아니다.</summary>
     private static readonly object[,] Table =
     {
-        { "enchanted_conductor_powder", 1 },   // 마법이 부여된 전도체 가루 — 1차
-        { "mana_chip",                  2 },   // 마력 칩 — 2차
-        // 3차(공명 칩 → 3)는 3티어 기획이 확정되면 여기 한 줄 추가한다.
+        { "enchanted_conductor_powder", 1 },   // 마법이 부여된 전도체 가루 — 1차 · 초급 재단(t0)
+        { "mana_chip",                  2 },   // 마력 칩 — 2차 · 중급 재단(t1)
+        { "resonance_chip",             3 },   // 공명 칩 — 3차 · 고급 재단(t2)
     };
+
+    // ⚠ <b>승급 재료는 언제나 "한 티어 아래의 재단" 에 있어야 한다.</b>
+    //    노션 정본은 공명 칩을 코어 조합기 3티어 레시피로 적었는데, 그러면
+    //    <b>3티어가 되어야 3티어로 올릴 재료를 만들 수 있어</b> 영원히 잠긴다.
+    //    1·2차가 이미 재단에 있는 것이 우연이 아니라 이 규칙이다 — 3차도 고급 재단(recipe.tier = 2)에 둔다.
+    //
+    // ⚠ 아래 비교는 <see cref="ItemDictionary.NormalizeName"/> 을 거치지 않는 <b>정확한 == 비교</b>다
+    //    (ExtractionTable 과 비대칭이다). itemName 을 한 글자라도 다르게 적으면 조용히 -1 이 된다.
 
     /// <summary>
     /// 이 아이템을 넣으면 코어가 몇 티어가 되는가. 업그레이드 재료가 아니면 -1.

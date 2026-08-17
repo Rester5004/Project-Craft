@@ -44,6 +44,11 @@ public class MachineBlock : BlockBase
     [Tooltip("가동 중 1초에 태우는 연료 에너지. 석탄 1개(400)면 이 값으로 나눈 만큼 버틴다.")]
     [Min(0.01f)] public float fuelBurnRate = 20f;
 
+    [Tooltip("연료 하나를 다 태웠을 때 출력 칸에 내놓는 찌꺼기(핵발전소의 사용후 핵연료봉).\n" +
+             "비워 두면 아무것도 내지 않는다 — 지금 값을 가진 것은 핵발전소뿐이다.\n" +
+             "찌꺼기를 낼 자리가 없으면 다음 연료에 불을 붙이지 않는다 = 기계가 멈춘다.")]
+    public Items spentFuelItem;
+
     [Tooltip("업그레이드 모듈 칸 수. 일반 기계는 2(속도·효율), 조합대·재단은 0, 코어 조합기만 1(티어 상승용).\n" +
              "모듈은 소모되지 않고 칸에 들어 있는 개수만큼 효과가 붙는다.")]
     [Min(0)] public int upgradeSlotCount = 2;

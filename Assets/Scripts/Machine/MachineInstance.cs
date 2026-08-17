@@ -512,7 +512,15 @@ public class MachineInstance : MonoBehaviour
         if (Info != null && Info.IsAlwaysOn)
         {
             // 전력을 쓰는 조명은 전력이 있을 때만, 아닌 것(횃불)은 무조건 켜진다.
-            SetRunning(!Info.isUseEnergy || ConsumeEnergy(Time.deltaTime));
+            bool powered = !Info.isUseEnergy || ConsumeEnergy(Time.deltaTime);
+            SetRunning(powered);
+
+            // 저장 네트워크의 입출력 버스는 <b>컨트롤러만</b> 돌린다.
+            // 네트워크당 컨트롤러가 정확히 하나라, 이렇게 하면 망 하나가 프레임당 한 번만 돈다 —
+            // 케이블이나 드라이브에서 돌리면 개수만큼 빨라져 밸런스가 배치 모양에 좌우된다.
+            if (powered && Info is StorageNetworkBlock device && device.role == StorageNetworkRole.Controller)
+                StorageNetwork.PumpBuses(worldCell, Time.deltaTime);
+
             return;
         }
 
@@ -673,7 +681,15 @@ public class MachineInstance : MonoBehaviour
     private bool BurnFuel(float deltaTime, out float burned)
     {
         burned = 0f;
-        if (burnRemaining <= 0f && !Ignite()) return false;
+
+        // 불이 꺼져 있으면 다음 연료를 붙이기 <b>전에 직전 연료의 찌꺼기부터 내보낸다.</b>
+        // 순서가 뒤바뀌면 찌꺼기가 증발하거나("냈다고 치고" 다음 연료를 붙임)
+        // 출력이 차 있어도 계속 태우게 된다.
+        if (burnRemaining <= 0f)
+        {
+            if (!TryEjectSpentFuel()) return false;
+            if (!Ignite()) return false;
+        }
 
         // 배수는 <b>소비 시점</b>에 곱한다. fuelBurnRate 는 ApplyConfig 가 복사해 둔 값이라
         // 여기서 곱해야 모듈을 꽂자마자 반영된다.
@@ -689,9 +705,39 @@ public class MachineInstance : MonoBehaviour
         {
             // 이번 프레임 분은 태웠으니 진행은 허용하고, 다음 프레임에 다시 불을 붙인다.
             burnRemaining = 0f;
-            burnTotal = 0f;
+
+            // ⚠ <b>찌꺼기를 내는 기계는 burnTotal 을 남긴다</b> — "다 태웠는데 아직 안 냈다" 의 표시다.
+            //    둘 다 세이브에 있는 필드(v5)라 <b>새 세이브 칸 없이</b> 저장·복원을 건너 살아남는다.
+            //    표시로 쓰지 않으면 다 태운 순간과 내보내는 순간 사이에 저장했을 때 찌꺼기가 사라진다.
+            if (Info == null || Info.spentFuelItem == null) burnTotal = 0f;
         }
         PushFuel();
+        return true;
+    }
+
+    /// <summary>
+    /// 다 태운 연료의 찌꺼기(<see cref="MachineBlock.spentFuelItem"/>)를 출력 칸에 내놓는다.
+    /// 낼 것이 없으면 그냥 true 라 <b>기존 기계 46종의 동작은 한 톨도 바뀌지 않는다</b>(필드가 비어 있다).
+    ///
+    /// <b>자리가 없으면 false</b> — 부르는 쪽은 점화하지 않아야 한다. 찌꺼기를 버리면 핵연료 사슬이
+    /// 조용히 새고, 그렇다고 계속 태우면 "산출이 차면 발전이 멈춘다" 규칙이 성립하지 않는다.
+    /// </summary>
+    private bool TryEjectSpentFuel()
+    {
+        Items spent = Info != null ? Info.spentFuelItem : null;
+        if (spent == null) return true;
+
+        // 낼 몫이 아직 없어도 <b>자리는 미리 확인한다.</b> 자리가 없는데 새 연료에 불을 붙이면
+        // 다 태운 뒤 낼 곳이 없어 찌꺼기를 <b>빚으로 떠안고</b>(burnTotal 에만 남는다),
+        // 그 상태로 기계를 캐면 그 한 개가 조용히 사라진다.
+        // 이 줄 덕분에 "산출이 차면 발전이 멈춘다" 가 <b>연료를 한 개도 더 안 태우고</b> 성립한다.
+        if (burnTotal <= 0f) return RecipeSolver.CountFreeSpace(inventory.outputSlots, spent) > 0;
+
+        if (RecipeSolver.AddItems(inventory.outputSlots, spent, 1) <= 0) return false;
+
+        burnTotal = 0f;
+        inventory.NotifyChanged();   // AddItems 는 통지하지 않는다 — 여기서 직접 부른다
+        Flush();
         return true;
     }
 

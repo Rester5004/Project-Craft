@@ -4,52 +4,405 @@
   "machine": "조합대",
   "description": "중앙 코어(기초 조합대)와 자동 조합기가 공유하는 레시피. 코어는 수동·무전력, 자동 조합기는 저전압으로 자동화. 도구는 소모되지 않고 내구도만 소모된다.",
   "recipes": [
-    { "id": "stick", "tier": 0, "output": "막대", "outputQty": 1,
-      "inputs": [ { "item": "돌", "qty": 1 } ] },
-    { "id": "stone_hammer_head", "tier": 0, "output": "돌 망치 머리", "outputQty": 1,
-      "inputs": [ { "item": "돌", "qty": 2 } ] },
-    { "id": "crank", "tier": 0, "output": "크랭크", "outputQty": 1,
-      "inputs": [ { "item": "돌", "qty": 2 } ],
-      "tools": [ "칼" ] },
-
-    { "id": "dowsing_rod", "tier": 0, "output": "다우징 로드", "outputQty": 1,
-      "inputs": [ { "item": "돌", "qty": 5 } ],
-      "tools": [ "칼", "망치" ] },
-
-    { "id": "brick", "tier": 0, "output": "벽돌", "outputQty": 1,
-      "inputs": [ { "item": "모래", "qty": 2 }, { "item": "물", "qty": 1 } ],
-      "note": "압축기에서 만들면 고효율" },
-    { "id": "bucket", "tier": 1, "output": "양동이", "outputQty": 1,
-      "inputs": [ { "item": "철판", "qty": 3 } ],
-      "tools": [ "망치" ] },
-    { "id": "iron_hammer_head", "tier": 1, "output": "철 망치 머리", "outputQty": 1,
-      "inputs": [ { "item": "철 주괴", "qty": 1 } ] },
-    { "id": "computer_chip", "tier": 1, "output": "컴퓨터 칩", "outputQty": 1,
+    {
+      "id": "stick",
+      "tier": 0,
+      "output": "막대",
+      "outputQty": 1,
       "inputs": [
-        { "item": "실리콘 판", "qty": 10 },
-        { "item": "구리판", "qty": 10 },
-        { "item": "철판", "qty": 10 },
-        { "item": "전도체 가루", "qty": 20 }
+        {
+          "item": "돌",
+          "qty": 1
+        }
+      ]
+    },
+    {
+      "id": "stone_hammer_head",
+      "tier": 0,
+      "output": "돌 망치 머리",
+      "outputQty": 1,
+      "inputs": [
+        {
+          "item": "돌",
+          "qty": 2
+        }
+      ]
+    },
+    {
+      "id": "crank",
+      "tier": 0,
+      "output": "크랭크",
+      "outputQty": 1,
+      "inputs": [
+        {
+          "item": "돌",
+          "qty": 2
+        }
       ],
-      "note": "레이저 가공기에서 만들면 재료가 1/10" },
-
-    { "id": "rebar", "tier": 1, "output": "철근", "outputQty": 1,
-      "inputs": [ { "item": "철판", "qty": 2 } ],
-      "note": "철근 공장이 조합대로 통합됨" },
-
-    { "id": "item_pipe", "tier": 1, "output": "아이템 파이프", "outputQty": 1,
-      "inputs": [ { "item": "돌", "qty": 2 } ],
-      "tools": [ "망치" ],
-      "note": "고체 자원 수송. 파이프 공장이 조합대로 통합됨" },
-
-    { "id": "liquid_pipe", "tier": 1, "output": "액체 파이프", "outputQty": 1,
-      "inputs": [ { "item": "구리 주괴", "qty": 2 } ],
-      "tools": [ "망치" ],
-      "note": "물·용암·석유·원유 수송" },
-
-    { "id": "gas_pipe", "tier": 1, "output": "기체 파이프", "outputQty": 1,
-      "inputs": [ { "item": "철 주괴", "qty": 2 } ],
-      "tools": [ "망치" ],
-      "note": "수소·산소 등 기체 수송" }
+      "tools": [
+        "칼"
+      ]
+    },
+    {
+      "id": "dowsing_rod",
+      "tier": 0,
+      "output": "다우징 로드",
+      "outputQty": 1,
+      "inputs": [
+        {
+          "item": "돌",
+          "qty": 5
+        }
+      ],
+      "tools": [
+        "칼",
+        "망치"
+      ]
+    },
+    {
+      "id": "brick",
+      "tier": 0,
+      "output": "벽돌",
+      "outputQty": 1,
+      "inputs": [
+        {
+          "item": "모래",
+          "qty": 2
+        },
+        {
+          "item": "물",
+          "qty": 1
+        }
+      ],
+      "note": "압축기에서 만들면 고효율"
+    },
+    {
+      "id": "bucket",
+      "tier": 1,
+      "output": "양동이",
+      "outputQty": 1,
+      "inputs": [
+        {
+          "item": "철판",
+          "qty": 3
+        }
+      ],
+      "tools": [
+        "망치"
+      ]
+    },
+    {
+      "id": "iron_hammer_head",
+      "tier": 1,
+      "output": "철 망치 머리",
+      "outputQty": 1,
+      "inputs": [
+        {
+          "item": "철 주괴",
+          "qty": 1
+        }
+      ]
+    },
+    {
+      "id": "computer_chip",
+      "tier": 1,
+      "output": "컴퓨터 칩",
+      "outputQty": 1,
+      "inputs": [
+        {
+          "item": "실리콘 판",
+          "qty": 10
+        },
+        {
+          "item": "구리판",
+          "qty": 10
+        },
+        {
+          "item": "철판",
+          "qty": 10
+        },
+        {
+          "item": "전도체 가루",
+          "qty": 20
+        }
+      ],
+      "note": "레이저 가공기에서 만들면 재료가 1/10"
+    },
+    {
+      "id": "rebar",
+      "tier": 1,
+      "output": "철근",
+      "outputQty": 1,
+      "inputs": [
+        {
+          "item": "철판",
+          "qty": 2
+        }
+      ],
+      "note": "철근 공장이 조합대로 통합됨"
+    },
+    {
+      "id": "item_pipe",
+      "tier": 1,
+      "output": "아이템 파이프",
+      "outputQty": 1,
+      "inputs": [
+        {
+          "item": "돌",
+          "qty": 2
+        }
+      ],
+      "tools": [
+        "망치"
+      ],
+      "note": "고체 자원 수송. 파이프 공장이 조합대로 통합됨"
+    },
+    {
+      "id": "liquid_pipe",
+      "tier": 1,
+      "output": "액체 파이프",
+      "outputQty": 1,
+      "inputs": [
+        {
+          "item": "구리 주괴",
+          "qty": 2
+        }
+      ],
+      "tools": [
+        "망치"
+      ],
+      "note": "물·용암·석유·원유 수송"
+    },
+    {
+      "id": "gas_pipe",
+      "tier": 1,
+      "output": "기체 파이프",
+      "outputQty": 1,
+      "inputs": [
+        {
+          "item": "철 주괴",
+          "qty": 2
+        }
+      ],
+      "tools": [
+        "망치"
+      ],
+      "note": "수소·산소 등 기체 수송"
+    },
+    {
+      "id": "resonance_crystal",
+      "tier": 2,
+      "output": "공명 결정",
+      "outputQty": 2,
+      "inputs": [
+        {
+          "item": "석영 결정",
+          "qty": 1
+        },
+        {
+          "item": "전도체 결정",
+          "qty": 1
+        },
+        {
+          "item": "마력 결정",
+          "qty": 1
+        }
+      ],
+      "note": "3티어 기반재. 코어 t2 에서 만들 수 있어야 공명 칩 -> 3차 승급이 열린다"
+    },
+    {
+      "id": "storage_substrate",
+      "tier": 3,
+      "output": "저장 기판",
+      "outputQty": 2,
+      "inputs": [
+        {
+          "item": "특수합금",
+          "qty": 1
+        },
+        {
+          "item": "유리",
+          "qty": 2
+        },
+        {
+          "item": "공명 결정",
+          "qty": 1
+        }
+      ],
+      "note": "저장 셀·드라이브의 공통 재료"
+    },
+    {
+      "id": "data_cable",
+      "tier": 3,
+      "output": "데이터 케이블",
+      "outputQty": 4,
+      "inputs": [
+        {
+          "item": "유리",
+          "qty": 1
+        },
+        {
+          "item": "공명 결정",
+          "qty": 1
+        },
+        {
+          "item": "전도체 가루",
+          "qty": 2
+        }
+      ],
+      "note": "저장 네트워크 배선. 짐을 싣지 않고 연결만 한다 - 파이프와 안 섞인다"
+    },
+    {
+      "id": "storage_part_1k",
+      "tier": 3,
+      "output": "1k 저장 부품",
+      "outputQty": 1,
+      "inputs": [
+        {
+          "item": "공명 결정",
+          "qty": 1
+        },
+        {
+          "item": "석영 결정",
+          "qty": 2
+        },
+        {
+          "item": "전도체 가루",
+          "qty": 4
+        }
+      ],
+      "note": "저장 부품은 3배씩 올라간다"
+    },
+    {
+      "id": "storage_part_4k",
+      "tier": 3,
+      "output": "4k 저장 부품",
+      "outputQty": 1,
+      "inputs": [
+        {
+          "item": "1k 저장 부품",
+          "qty": 3
+        },
+        {
+          "item": "공명 결정",
+          "qty": 1
+        },
+        {
+          "item": "컴퓨터 칩",
+          "qty": 1
+        }
+      ],
+      "note": "저장 부품은 3배씩 올라간다"
+    },
+    {
+      "id": "storage_part_16k",
+      "tier": 3,
+      "output": "16k 저장 부품",
+      "outputQty": 1,
+      "inputs": [
+        {
+          "item": "4k 저장 부품",
+          "qty": 3
+        },
+        {
+          "item": "공명 결정",
+          "qty": 1
+        },
+        {
+          "item": "컴퓨터 칩",
+          "qty": 2
+        }
+      ],
+      "note": "저장 부품은 3배씩 올라간다"
+    },
+    {
+      "id": "storage_part_64k",
+      "tier": 3,
+      "output": "64k 저장 부품",
+      "outputQty": 1,
+      "inputs": [
+        {
+          "item": "16k 저장 부품",
+          "qty": 3
+        },
+        {
+          "item": "공명 결정",
+          "qty": 1
+        },
+        {
+          "item": "컴퓨터 칩",
+          "qty": 4
+        }
+      ],
+      "note": "저장 부품은 3배씩 올라간다"
+    },
+    {
+      "id": "storage_cell_1k",
+      "tier": 3,
+      "output": "1k 저장 셀",
+      "outputQty": 1,
+      "inputs": [
+        {
+          "item": "저장 기판",
+          "qty": 1
+        },
+        {
+          "item": "1k 저장 부품",
+          "qty": 1
+        }
+      ],
+      "note": "종류 한도와 총 개수 한도 둘만 있다. 내용은 셀이 들고 다닌다"
+    },
+    {
+      "id": "storage_cell_4k",
+      "tier": 3,
+      "output": "4k 저장 셀",
+      "outputQty": 1,
+      "inputs": [
+        {
+          "item": "저장 기판",
+          "qty": 1
+        },
+        {
+          "item": "4k 저장 부품",
+          "qty": 1
+        }
+      ],
+      "note": "종류 한도와 총 개수 한도 둘만 있다. 내용은 셀이 들고 다닌다"
+    },
+    {
+      "id": "storage_cell_16k",
+      "tier": 3,
+      "output": "16k 저장 셀",
+      "outputQty": 1,
+      "inputs": [
+        {
+          "item": "저장 기판",
+          "qty": 1
+        },
+        {
+          "item": "16k 저장 부품",
+          "qty": 1
+        }
+      ],
+      "note": "종류 한도와 총 개수 한도 둘만 있다. 내용은 셀이 들고 다닌다"
+    },
+    {
+      "id": "storage_cell_64k",
+      "tier": 3,
+      "output": "64k 저장 셀",
+      "outputQty": 1,
+      "inputs": [
+        {
+          "item": "저장 기판",
+          "qty": 1
+        },
+        {
+          "item": "64k 저장 부품",
+          "qty": 1
+        }
+      ],
+      "note": "종류 한도와 총 개수 한도 둘만 있다. 내용은 셀이 들고 다닌다"
+    }
   ]
 }
