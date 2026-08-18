@@ -2937,7 +2937,7 @@ MonoBehaviour:
   m_AlphaBlendOnOverlap: 0
   m_OverlapOperation: 0
   m_NormalMapDistance: 3
-  m_NormalMapQuality: 2
+  m_NormalMapQuality: 1
   m_UseNormalMap: 0
   m_ShadowsEnabled: 1
   m_ShadowIntensity: 0.75
@@ -4663,7 +4663,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ChunkShadowCasters
   reference: {fileID: 4658806104144126860}
-  whitePixel: {fileID: 21300000, guid: e73d450fb660b204ba6d0bf5084d3f26, type: 3}
 --- !u!1001 &189400344167024249
 PrefabInstance:
   m_ObjectHideFlags: 0

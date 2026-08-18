@@ -330,11 +330,11 @@ public class MapGenerator : MonoBehaviour
         MachineInstance inst = go.GetComponent<MachineInstance>();
         if (inst == null) inst = go.AddComponent<MachineInstance>();
         inst.Bind(record, worldCell);   // worldCell = 기준점. 전력 링크·거리 판정이 이걸 본다
-
+    
         SpriteRenderer sr = go.GetComponent<SpriteRenderer>();
         if (sr != null) sr.sortingOrder = 120; // 인스턴스에만 설정(공유 프리팹 오염 방지)
 
-        ApplyFootprintCollider(go, size);
+        //ApplyFootprintCollider(go, size);
 
         // <b>덮는 칸마다 같은 인스턴스를 등록한다.</b> TryGetMachineAt 이 이 사전 하나뿐이라,
         // 여기서 다 넣어야 어느 칸을 우클릭해도 UI 가 열리고 어느 칸을 캐도 회수되며
@@ -349,8 +349,8 @@ public class MapGenerator : MonoBehaviour
     }
 
     /// <summary>
+    /// *** !!!현재 사용하지 않음!!! ***
     /// 여러 칸을 차지하는 기계의 콜라이더를 발자국에 맞춘다.
-    ///
     /// ⚠ 지금 기계 프리팹의 <c>BoxCollider2D</c> 는 대부분 복붙된 <c>{0.8125, 1.09375}</c> 라,
     /// 손대지 않으면 <b>2×2 기계의 절반을 뚫고 지나간다</b>. 반대로 1×1 기계는 건드리지 않는다 —
     /// 그림이 한 칸보다 살짝 큰 것은 탑다운 오버행이라 콜라이더가 작은 것이 의도다.
@@ -361,7 +361,9 @@ public class MapGenerator : MonoBehaviour
         if (size.x <= 1 && size.y <= 1) return;
 
         BoxCollider2D box = go.GetComponent<BoxCollider2D>();
-        if (box == null) box = go.AddComponent<BoxCollider2D>();   // tmp_crafter 처럼 아예 없는 프리팹도 있다
+        CircleCollider2D circle = go.GetComponent<CircleCollider2D>();
+        CapsuleCollider2D capsule = go.GetComponent<CapsuleCollider2D>();
+        if (box == null && circle == null && capsule == null) box = go.AddComponent<BoxCollider2D>();   // tmp_crafter 처럼 아예 없는 프리팹도 있다
         box.size = new Vector2(size.x, size.y);
         box.offset = Vector2.zero;   // 오브젝트가 이미 발자국 중앙에 서 있다
     }
