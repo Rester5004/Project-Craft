@@ -1261,9 +1261,7 @@ PrefabInstance override 가 transform·이름뿐이라 **프리팹만 고치면 
 - [ ] **정밀 세공기가 `invar_plate ×50` 이 됐다** = 인바 50 = 니켈 50 + 철 50 수준. 교착이 풀린 뒤
       실제로 만들어 보고 숫자를 다시 볼 것.
 - [ ] `raw_osmium_ore`·`raw_thorium_ore` 의 제련 레시피가 없다(주괴 아이템은 있다).
-- [ ] 기계 아이템 7종이 레거시 **`Machine : Items`** 클래스를 쓴다
-      (`CoreCrafter` `AlloySmelter` `BioIncubator` `Compressor` `ElectricPulverizer` `Electrolyzer`
-      `LasorProcessor`). 동작엔 지장 없지만 클래스로 아이템을 훑는 도구가 빠뜨리기 쉽다 — 실제로 걸렸다.
+- [x] ~~기계 아이템 7종이 레거시 **`Machine : Items`** 클래스를 쓴다~~ → **2026-08-20 해소**(아래 §Z).
 
 ### U-3. 니켈 전리품으로 교착 해소 (2026-08-19, 사용자 작업)
 
@@ -1556,3 +1554,106 @@ E 철판 철주괴 1.0/s / 구리 0.8/s / 유황석 1.0/s -> 각 9,216 = 150분 
       소비보다 빨라 안 걸리지만, 구조적으로는 **기계별 입력 필터**가 있어야 없어진다.
 - [ ] 상자를 철거하면 **상자 아이템이 바닥에 떨어진다**(`RemoveMachineAt → DropSelf`). 교체 작업에서는
       내용물을 먼저 비우고, 떨어진 상자 8개를 `chunk.RemoveDrop` + `NotifyDropRemoved` + `Destroy` 로 치웠다.
+
+## Z. 레거시 `Machine : Items` 클래스 제거 (2026-08-20, 완료)
+
+기계 아이템 7종(`CoreCrafter` `AlloySmelter` `BioIncubator` `Compressor` `ElectricPulverizer`
+`Electrolyzer` `LasorProcessor`)이 `Items` 대신 `Machine : Items` 를 쓰고 있었다.
+**클래스로 아이템을 훑는 도구가 이 7종을 빠뜨렸다**(도달성 조사 §U 에서 실제로 걸렸다).
+
+### 무엇을 확인하고 지웠나
+
+```
+Machine : Items 가 더 갖던 필드   machineType · machineLevel · voltageLevel (int 3개)
+그 값                             7개 에셋 전부 0
+그 필드를 읽는 코드               0곳 (grep)
+Machine 타입을 참조하는 코드      0곳 (PlayerInteraction 의 enum MineTarget.Machine 은 남남)
+Machine.cs guid 를 쓰는 파일      에셋 7개 + 자기 .meta 뿐 (프리팹·씬 0건)
+```
+
+버릴 것이 없어서 **`m_Script` guid 만 `Items.cs` 로 바꾸고**(도구 판 4종을 부품으로 승격시킬 때와 같은 규약)
+레거시 필드 3줄을 지웠다. **guid 를 지켰으므로 레시피 참조 160개가 한 건도 안 끊겼다.**
+그다음 아무도 안 쓰게 된 `Assets/Scripts/ScriptableObjects/Machine.cs` 를 삭제했다.
+
+### 순서 (⚠ 이 순서를 지켜야 한다)
+
+1. 에셋 7개의 `m_Script` guid + `m_EditorClassIdentifier` 교체, 레거시 3줄 제거
+2. **`AssetDatabase.Refresh(ForceUpdate)` → `CompilationPipeline.RequestScriptCompilation()`**
+   — CLAUDE.md §2 대로 **도메인 리로드가 먼저**다. 건너뛰고 `Register All Assets` 를 돌리면
+   멀쩡한 레시피가 "기계 미지정" 으로 빠진다
+3. 타입이 `Items` 로 읽히는지 확인 → **그 다음에** `Machine.cs` 삭제
+4. `Register All Assets`
+
+### 검증
+
+```
+에셋 7개        전부 Items 로 로드 · itemName/한글 이름/placeable/아이콘 그대로
+레시피          160개 검사 · 끊긴 참조 0개 (alloy_smelter · compressor · pulverizer ·
+                electrolyzer · laser_processor · item_storage · extractor02 산출 확인)
+딕셔너리        아이템 260 / 블록 72 / 유체 8 / 레시피 160 · 제외 "기계 미지정 0개"
+런타임          7종 모두 GetItem · GetBlock · GetMachineInfo · 한글 이름 조회 OK
+월드            압축기·합금 재련기·전기 분쇄기·용광로가 세이브에서 그대로 살아 돌아감
+컴파일          에러 0 · 경고 0
+```
+
+## AA. 해상도별 UI 비율 고정 (2026-08-20)
+
+노트북(16:10 · 3:2)에서 UI 비율이 달라 보이던 문제. **원인은 캔버스와 카메라가 다른 기준을 보고 있던 것**이다.
+
+```
+UIs 캔버스   Scale With Screen Size · 기준 2560x1440
+             MapTest = Match Width Or Height 0.5 / UndergroundScene = Expand  ← 씬마다 달랐다
+Main Camera  orthographic size 4 = 세로 8유닛 고정 -> 월드 배율은 "화면 세로 / 8"
+```
+
+카메라가 세로만 보는데 UI 가 가로도 보니, **16:9 보다 가로가 좁은 화면에서만 UI 가 작아졌다.**
+
+**고친 것** — `GameRig.prefab` 의 `CanvasScaler` 를 `Match Width Or Height` · `Match = 1`(Height) 로 두고,
+MapTest 에 걸려 있던 `m_ScreenMatchMode` 오버라이드를 걷어 **프리팹 한 곳이 정본**이 되게 했다.
+
+**실측 (UI:월드 비 = canvas.scaleFactor ÷ (화면세로/8) × 1000)**
+
+```
+                    1920x1080  1920x1200  2256x1504  1366x768  2560x1080
+Match 0.5 (옛 지상)     5.556      5.270      5.103     5.557      6.415
+Expand    (옛 지하)     5.556      5.000      4.688     5.556      5.556
+Match 1   (지금)        5.556      5.556      5.556     5.556      5.556   <- 전부 같다
+```
+
+- [ ] 세로 기준이라 **캔버스 가로가 비율마다 변한다**(기준 단위 16:9=2560 · 16:10=2304 · 3:2=2160 ·
+      4:3=1920 · 21:9=3413). 지금 가장 넓은 고정폭 요소가 `MachineName` 1297 이라 4:3 에서도 남지만,
+      **새로 만드는 넓은 패널은 스트레치 앵커로 둘 것.**
+- [ ] **보이는 월드의 가로 범위는 여전히 비율마다 다르다**(세로 8유닛 고정). 그것까지 고정하려면
+      레터박스가 필요하고, 그 대가는 CLAUDE.md §픽셀 퍼펙트 항목에 적혀 있다.
+
+### AA-2. 요소끼리의 상대 위치도 고정 (2026-08-20)
+
+배율을 세로 기준으로 바꾸자 **캔버스 가로가 비율마다 변하는 것**이 드러났고,
+서로 다른 모서리에 매달린 요소들이 어긋났다(쓰레기통 슬롯이 대표). 앵커를 정리했다.
+
+| | 예전 | 지금 | 왜 |
+|---|---|---|---|
+| `trashCanSlot` | 패널 **왼쪽 아래** 기준 `x=+2422` | **오른쪽 아래** `(-138,550)` | 16:10(캔버스 2304)에서 **화면 밖으로 나갔다** |
+| `trashCanText` | 패널 **한가운데** 기준 `x=+1144` | **오른쪽 아래** `(-136,461)` | 슬롯과 다른 기준이라 둘이 벌어졌다 |
+| `InventoryHotBar` | 좌우 스트레치 `가로=캔버스−869` | **아래 한가운데** 고정 `1690×148` | 폭이 변해 안의 슬롯 10칸이 밀렸다 |
+| `MachinePanel` | 좌우 스트레치 `가로=캔버스−600` | **한가운데** 고정 `1960×854` | 기계 UI 내용물이 통째로 밀렸다 |
+
+`inventorySlots`(왼쪽 위 기준)·`ItemBrowser`·`CommandConsole` 은 원래부터 자기 모서리에 붙어 있어 손대지 않았다.
+**16:9(2560×1440)에서의 화면 위치는 1픽셀도 안 바뀐다** — 앵커만 바꾸고 그에 맞게 좌표를 다시 계산했다.
+
+**실측 (캔버스 가로 2160~3413, 여섯 해상도)**
+
+```
+캔버스폭  쓰레기통(오른쪽끝에서)  글씨-슬롯차  핫바1번(중앙에서)  기계패널폭  인벤1번(왼쪽에서)
+2560          138.0              2.0,-89.0       -767.0          1960         100.0
+2304          138.0              2.0,-89.0       -767.0          1960         100.0
+2160          138.0              2.0,-89.0       -767.0          1960         100.0
+3413          138.0              2.0,-89.0       -767.0          1960         100.0
+              (예전에는 글씨-슬롯차가 2.2 -> -125.8 -> -197.8 -> 428.9 로 흔들렸다)
+```
+
+- [ ] ⚠ **기계 UI 프리팹 쪽은 아직 안 봤다.** `MachinePanel` 이 고정 크기가 되어 그 안은 이제 안정적이지만,
+      팩토리가 만드는 UI 프리팹 자체가 스트레치 앵커를 쓰는지 절대 좌표인지는 확인하지 않았다.
+      **`MachineUIFactoryWindow` 로 새 UI 를 만들 때 같은 함정에 빠질 수 있다.**
+- [ ] 고정폭 요소의 상한은 **4:3 의 1920**이다. 지금 가장 넓은 것이 `MachinePanel` 1960 이라 **4:3 에서만
+      좌우 20씩 넘친다**(16:10·3:2·16:9 는 여유). 4:3 을 지원할 거면 1920 아래로 줄여야 한다.

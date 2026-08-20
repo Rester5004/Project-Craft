@@ -15,6 +15,8 @@ MonoBehaviour:
   itemName: Machine:ManualPulverizer
   displayName: "\uC218\uB3D9 \uBD84\uC1C4\uAE30"
   placeable: 1
-  Icon: {fileID: 4570791286804880453, guid: 38b4fa4239024494ca66c8bae78c4b09, type: 3}
+  Icon: {fileID: 3304421910323719730, guid: e9803741733fdc345ac0157b8e1c3aed, type: 3}
   maxStack: 64
+  fluidOverlay: {fileID: 0}
   burnEnergy: 0
+  initialDurability: 0

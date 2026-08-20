@@ -15,6 +15,8 @@ MonoBehaviour:
   itemName: turbid_uranium
   displayName: "\uD0C1\uD55C \uC6B0\uB77C\uB284"
   placeable: 0
-  Icon: {fileID: 21300000, guid: 4a4d2640fbd603542be3906e18903c59, type: 3}
+  Icon: {fileID: 21300000, guid: 88544ada6afc2f34cbac8df2ee709a82, type: 3}
   maxStack: 64
+  fluidOverlay: {fileID: 0}
   burnEnergy: 0
+  initialDurability: 0

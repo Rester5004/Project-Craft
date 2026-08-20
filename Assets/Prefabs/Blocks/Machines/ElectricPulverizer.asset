@@ -17,15 +17,17 @@ MonoBehaviour:
   dropItem: {fileID: 0}
   dropCount: 1
   machinePrefab: {fileID: 2401623937405327994, guid: 787fbed919a8b05458dfc1727af4f62a, type: 3}
-  uiPrefab: {fileID: 4270316144727211456, guid: 5ba53f04f8f8a4a47ad0285fdd003b13, type: 3}
+  uiPrefab: {fileID: 2321208976800149597, guid: 5ba53f04f8f8a4a47ad0285fdd003b13, type: 3}
   runningSprite: {fileID: 0}
   manualStepRatio: 0
+  size: {x: 1, y: 1}
   tier: 1
   recipeGroupId: Pulverizer
   inputSlotCount: 1
   outputSlotCount: 1
   fuelSlotCount: 0
   fuelBurnRate: 20
+  spentFuelItem: {fileID: 0}
   upgradeSlotCount: 2
   inputFluidSlotCount: 0
   outputFluidSlotCount: 0
