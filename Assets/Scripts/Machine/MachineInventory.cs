@@ -26,6 +26,12 @@ public class MachineInventory : IItemContainer
     /// </summary>
     public System.Func<int, Items, int> capacityOverride;
 
+    /// <summary>
+    /// "이 칸이 이 아이템을 받는가" 를 정하는 주인의 콜백. null 이면 무엇이든 받는다.
+    /// <see cref="capacityOverride"/> 와 같은 이유로 값이 아니라 함수다.
+    /// </summary>
+    public System.Func<int, Items, bool> acceptOverride;
+
     public MachineInventory(int inputCount, int outputCount) : this(inputCount, outputCount, 0, 0) { }
 
     public MachineInventory(int inputCount, int outputCount, int fuelCount) : this(inputCount, outputCount, fuelCount, 0) { }
@@ -67,4 +73,7 @@ public class MachineInventory : IItemContainer
 
     public int SlotCapacity(int index, Items item)
         => capacityOverride != null ? capacityOverride(index, item) : RecipeSolver.MaxStackOf(item);
+
+    public bool AcceptsItem(int index, Items item)
+        => acceptOverride == null || acceptOverride(index, item);
 }

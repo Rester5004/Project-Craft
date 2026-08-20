@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4cecabaf732519b4bb23d8f04e36093c, type: 3}
+  m_Name: OverlayOil
+  m_EditorClassIdentifier: Assembly-CSharp::MainBlock
+  blockName: overlay:oil
+  displayName: "\uC11D\uC720 \uC6C5\uB369\uC774"
+  dropItem: {fileID: 0}
+  dropCount: 1
+  assetPath: {fileID: 0}
+  wallAtlas: {fileID: 0}
+  floorSprite: {fileID: 4501584336579096542, guid: 0a0276d499f00184db105778c0e1e216, type: 3}
+  fluid: {fileID: 11400000, guid: 115cb7b5cbe9eb64b8f10d62b593ac7a, type: 2}

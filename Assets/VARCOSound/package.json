@@ -1,0 +1,26 @@
+{
+    "name": "com.nc-ai.varcosound",
+    "version": "1.0.1",
+    "displayName": "VARCO Sound",
+    "description": "Generate sound effects, music, voice, and creature sounds with AI, then loop and vary them, all inside the Unity Editor.",
+    "unity": "2022.3",
+    "unityRelease": "0f1",
+    "keywords": [
+        "audio",
+        "sound",
+        "music",
+        "sound-effects",
+        "voice",
+        "text-to-speech",
+        "sfx",
+        "ai",
+        "generation"
+    ],
+    "author": {
+        "name": "NC AI",
+        "email": "nc-ai@ncsoft.com",
+        "url": "https://nc-ai.com"
+    },
+    "dependencies": {},
+    "documentationUrl": "https://api.varco.ai/docs/plugin-sound-unity/"
+}

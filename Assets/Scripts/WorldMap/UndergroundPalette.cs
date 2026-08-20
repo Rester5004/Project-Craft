@@ -1,3 +1,5 @@
+using UnityEngine;
+
 /// <summary>
 /// 지하맵 지형 규칙의 <b>정본</b>. <see cref="TerrainPalette"/> 와 같은 꼴(좌표·등급을 물으면 타일 ID 를 준다)이라
 /// 규칙이 흩어지지 않는다.
@@ -37,14 +39,59 @@ public static class UndergroundPalette
         return tier >= 1 ? "floor:dirt" : "floor:stage1";
     }
 
-    /// <summary>탐지기를 한 번 써서 포탈을 찾을 확률.</summary>
+    /// <summary>
+    /// 등급 → 지하 입구 오버레이 id. 등급을 <b>id 에 넣는다</b> — 오버레이는 문자열 하나만 저장하므로
+    /// 등급을 따로 실을 자리가 없고, <see cref="WallIdFor"/> 와 같은 꼴이라 표가 흩어지지 않는다.
+    /// </summary>
+    public static string HoleIdFor(int tier) => "overlay:hole" + Mathf.Clamp(tier, 0, 2);
+
+    /// <summary>지하 입구 오버레이면 그 등급, 아니면 -1.</summary>
+    public static int TierOfHole(string overlayId)
+    {
+        if (string.IsNullOrEmpty(overlayId) || !overlayId.StartsWith("overlay:hole")) return -1;
+        return int.TryParse(overlayId.Substring("overlay:hole".Length), out int tier) ? Mathf.Clamp(tier, 0, 2) : -1;
+    }
+
+    /// <summary>석유 웅덩이 오버레이.</summary>
+    public const string OilPool = "overlay:oil";
+
+    /// <summary>지하 방에 고이는 물웅덩이 오버레이(바닥을 갈아 끼우지 않고 위에 얹는다).</summary>
+    public const string WaterPool = "overlay:water";
+
+    /// <summary>다우징 로드가 한 번에 무언가를 찾을 확률.</summary>
     public const float DiscoveryChance = 0.10f;
+
+    /// <summary>
+    /// 탐지기별 발견 확률. 표를 여기 두는 이유는 <see cref="DowsingTierOf"/> 와 같다 —
+    /// 새 탐지기가 생겨도 <c>PlayerInteraction</c> 은 손대지 않는다.
+    /// </summary>
+    public static float DiscoveryChanceFor(string itemName)
+    {
+        switch (itemName)
+        {
+            case "cavity_scanner": return 0.25f;   // 내구도 30 짜리라 한 개로 평균 7~8번 찾는다
+            default: return DiscoveryChance;
+        }
+    }
+
+    /// <summary>
+    /// 발견에 성공했을 때 <b>지하 입구 대신 석유 웅덩이</b>가 나올 확률.
+    /// 다우징 로드는 0 이라 지금까지와 완전히 같다 — 공동 탐색기만 석유를 찾아낸다.
+    /// </summary>
+    public static float OilPoolChanceFor(string itemName)
+    {
+        switch (itemName)
+        {
+            case "cavity_scanner": return 0.20f;
+            default: return 0f;
+        }
+    }
 
     /// <summary>
     /// 탐지기 아이템 → 등급. 탐지기가 아니면 -1.
     ///
     /// <b>표를 여기 두는 이유</b>: 상위 탐지기가 생겨도 <c>PlayerInteraction</c> 은 손대지 않고
-    /// 이 표에 줄만 더하면 된다. 지금은 <c>dowsing_rod</c>(0등급) 하나뿐이다.
+    /// 이 표에 줄만 더하면 된다.
     /// ⚠ <c>dowsing_rod_t0</c> 는 그림까지 같은 옛 중복이라 <b>일부러 넣지 않았다</b>(ItemAliases 로 흡수할 것).
     /// </summary>
     public static int DowsingTierOf(string itemName)
@@ -52,6 +99,7 @@ public static class UndergroundPalette
         switch (itemName)
         {
             case "dowsing_rod": return 0;
+            case "cavity_scanner": return 1;   // 레이저 가공기로 만드는 고급품 — 마력석 방이 열린다
             case "dowsing_rod_t1": return 1;
             case "dowsing_rod_t2": return 2;
             default: return -1;

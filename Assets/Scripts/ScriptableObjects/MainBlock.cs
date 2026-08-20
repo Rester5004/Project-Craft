@@ -24,6 +24,11 @@ public class MainBlock : BlockBase
     [Tooltip("바닥에 까는 그림 한 장. 바닥은 오토타일링하지 않는다.")]
     public Sprite floorSprite;
 
+    [Tooltip("이 바닥을 걸을 때 나는 소리. <b>여러 걸음이 든 루프 클립</b>이라 걷는 동안 반복 재생된다 " +
+             "(PlayerFootsteps). 비어 있으면 그 바닥은 조용하다 — 물웅덩이가 지금 그렇다. " +
+             "지형 소리의 정본은 이 필드 하나이고, 조회는 WorldMap.FootstepAt 이 한다.")]
+    public AudioClip footstepSound;
+
     [Tooltip("이 바닥이 유체 웅덩이면 그 유체. 비어 있으면 평범한 바닥이다. " +
              "빈 그릇을 들고 우클릭하면 여기서 퍼진다(PlayerInteraction.TryFillContainer) — " +
              "퍼도 타일은 줄지 않는 무한 원천이다.")]

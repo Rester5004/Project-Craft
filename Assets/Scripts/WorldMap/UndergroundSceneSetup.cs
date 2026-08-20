@@ -2,8 +2,9 @@ using UnityEngine;
 
 /// <summary>
 /// 지하 씬에서만 하는 일. 지형·전리품·물은 <see cref="UndergroundWorld"/> 가 이미 만들어 두었고
-/// 플레이어·UI·타일맵은 <c>GameRig</c> 프리팹이 들고 온다 — 여기 남은 것은 <b>둘뿐</b>이다:
-/// 플레이어를 방 한가운데로 옮기는 것과, 돌아갈 포탈을 세우는 것.
+/// 플레이어·UI·타일맵은 <c>GameRig</c> 프리팹이 들고 온다 — 여기 남은 것은 <b>하나뿐</b>이다:
+/// 플레이어를 방 한가운데로 옮기는 것. 돌아갈 출구는 <see cref="UndergroundWorld"/> 가
+/// 스폰 칸에 오버레이로 찍어 둔다(런타임 오브젝트를 만들 이유가 없어졌다).
 ///
 /// <b>Awake 에서 옮기는 이유</b>: <c>MapGenerator.Start</c> 가 곧바로 플레이어 자리를 보고 청크를 부른다.
 /// Start 에서 옮기면 엉뚱한 청크를 한 번 그린 뒤에야 따라온다.
@@ -28,10 +29,4 @@ public class UndergroundSceneSetup : MonoBehaviour
         else Debug.LogWarning("[UndergroundSceneSetup] 플레이어를 찾지 못했습니다 — GameRig 프리팹이 씬에 있는지 확인하세요.");
     }
 
-    private void Start()
-    {
-        // 포탈은 플레이어 발밑(스폰 칸)에 둔다. 놓칠 수 없는 자리이고, 방이 좁아 따로 찾아다닐 것도 없다.
-        Vector2 spawn = new(UndergroundWorld.SpawnCell.x + 0.5f, UndergroundWorld.SpawnCell.y + 0.5f);
-        UndergroundPortal.Create(spawn, UndergroundPortal.Kind.ToSurface, UndergroundSession.Tier);
-    }
 }

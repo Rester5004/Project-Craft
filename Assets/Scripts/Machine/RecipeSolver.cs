@@ -290,6 +290,12 @@ public static class RecipeSolver
     {
         if (slots == null || item == null || amount <= 0) return 0;
 
+        // 내구도를 달고 태어나는 아이템(공동 탐색기)은 <b>여기 한 곳</b>에서 개체 데이터를 붙인다 —
+        // 기계 산출·인벤토리 적재·콘솔 지급이 전부 이 함수를 지나므로 부착 지점이 흩어지지 않는다.
+        // 이미 개체를 들고 온 짐(주운 것·파이프로 온 것)은 그대로 둔다.
+        if (instance == null && item.HasDurability)
+            instance = new ToolInstance(System.Array.Empty<string>(), item.initialDurability, item.initialDurability);
+
         int remaining = amount;
         int max = perSlotCap > 0 ? perSlotCap : MaxStackOf(item);
 

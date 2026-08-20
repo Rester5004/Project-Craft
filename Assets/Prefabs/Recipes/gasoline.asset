@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d1635fa976c21145835b252e45d6313, type: 3}
+  m_Name: gasoline
+  m_EditorClassIdentifier: Assembly-CSharp::Recipe
+  machine: {fileID: 11400000, guid: 24d52979b1faaa94fa158345206b7094, type: 2}
+  category: {fileID: 11400000, guid: a63365af4ccd3904a91ebf59b6456c84, type: 2}
+  tier: 0
+  inputs: []
+  outputs: []
+  fluidInputs:
+  - fluid: {fileID: 11400000, guid: 115cb7b5cbe9eb64b8f10d62b593ac7a, type: 2}
+    amount: 1000
+  fluidOutputs:
+  - fluid: {fileID: 11400000, guid: b659546056d50a54591d7b3cb75ba16c, type: 2}
+    amount: 500
+  chanceOutputs: []
+  requiredTools: []
+  craftTime: 2
+  importNote: 

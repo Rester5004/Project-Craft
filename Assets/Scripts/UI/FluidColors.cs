@@ -24,7 +24,7 @@ public static class FluidColors
         { "water",         "#4080FF" },   // 물      파랑
         { "lava",          "#FF731A" },   // 용암    주황
         { "crude_oil",     "#261F1A" },   // 원유    검정에 가까운 갈색
-        { "petroleum",     "#8C7326" },   // 석유    탁한 황토
+        { "gasoline",      "#F2D159" },   // 가솔린  밝은 노랑
         { "acid_solution", "#BFF233" },   // 산성 용액 연두
         { "mana",          "#A659FF" },   // 마나    보라
         { "hydrogen",      "#D9E6FF" },   // 수소    아주 옅은 파랑

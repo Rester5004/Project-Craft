@@ -1,0 +1,2456 @@
+﻿{
+    "metadata":  [
+                     {
+                         "category":  "Gender",
+                         "entries":  [
+                                         {
+                                             "ko":  "남성",
+                                             "en":  "male"
+                                         },
+                                         {
+                                             "ko":  "여성",
+                                             "en":  "female"
+                                         }
+                                     ]
+                     },
+                     {
+                         "category":  "Age",
+                         "entries":  [
+                                         {
+                                             "ko":  "어린이",
+                                             "en":  "child"
+                                         },
+                                         {
+                                             "ko":  "청소년",
+                                             "en":  "teen"
+                                         },
+                                         {
+                                             "ko":  "청년",
+                                             "en":  "young_adult"
+                                         },
+                                         {
+                                             "ko":  "중년",
+                                             "en":  "middle_aged"
+                                         },
+                                         {
+                                             "ko":  "노년",
+                                             "en":  "senior"
+                                         }
+                                     ]
+                     },
+                     {
+                         "category":  "Tone",
+                         "entries":  [
+                                         {
+                                             "ko":  "고음",
+                                             "en":  "high"
+                                         },
+                                         {
+                                             "ko":  "중음",
+                                             "en":  "mid"
+                                         },
+                                         {
+                                             "ko":  "저음",
+                                             "en":  "low"
+                                         }
+                                     ]
+                     },
+                     {
+                         "category":  "Timbre",
+                         "entries":  [
+                                         {
+                                             "ko":  "얇음",
+                                             "en":  "thin"
+                                         },
+                                         {
+                                             "ko":  "맑음",
+                                             "en":  "clear"
+                                         },
+                                         {
+                                             "ko":  "거침",
+                                             "en":  "rough"
+                                         },
+                                         {
+                                             "ko":  "굵음",
+                                             "en":  "thick"
+                                         }
+                                     ]
+                     },
+                     {
+                         "category":  "Emotion",
+                         "entries":  [
+                                         {
+                                             "ko":  "중립",
+                                             "en":  "neutral"
+                                         },
+                                         {
+                                             "ko":  "행복",
+                                             "en":  "happy"
+                                         },
+                                         {
+                                             "ko":  "분노",
+                                             "en":  "angry"
+                                         },
+                                         {
+                                             "ko":  "슬픔",
+                                             "en":  "sad"
+                                         },
+                                         {
+                                             "ko":  "공포",
+                                             "en":  "fearful"
+                                         },
+                                         {
+                                             "ko":  "놀람",
+                                             "en":  "surprised"
+                                         }
+                                     ]
+                     },
+                     {
+                         "category":  "Mood",
+                         "entries":  [
+                                         {
+                                             "ko":  "중후한",
+                                             "en":  "dignified"
+                                         },
+                                         {
+                                             "ko":  "총명한",
+                                             "en":  "intelligent"
+                                         },
+                                         {
+                                             "ko":  "의젓한",
+                                             "en":  "mature"
+                                         },
+                                         {
+                                             "ko":  "우아한",
+                                             "en":  "elegant"
+                                         },
+                                         {
+                                             "ko":  "따뜻한",
+                                             "en":  "warm"
+                                         },
+                                         {
+                                             "ko":  "현명한",
+                                             "en":  "wise"
+                                         },
+                                         {
+                                             "ko":  "차분한",
+                                             "en":  "calm"
+                                         },
+                                         {
+                                             "ko":  "점잖은",
+                                             "en":  "gentle"
+                                         },
+                                         {
+                                             "ko":  "달콤한",
+                                             "en":  "sweet"
+                                         },
+                                         {
+                                             "ko":  "부드러운",
+                                             "en":  "soft"
+                                         },
+                                         {
+                                             "ko":  "구수한",
+                                             "en":  "homely"
+                                         },
+                                         {
+                                             "ko":  "수더분한",
+                                             "en":  "simple"
+                                         },
+                                         {
+                                             "ko":  "풋풋한",
+                                             "en":  "fresh"
+                                         },
+                                         {
+                                             "ko":  "순진한",
+                                             "en":  "naive"
+                                         },
+                                         {
+                                             "ko":  "덤덤한",
+                                             "en":  "casual"
+                                         },
+                                         {
+                                             "ko":  "평범한",
+                                             "en":  "ordinary"
+                                         },
+                                         {
+                                             "ko":  "활기찬",
+                                             "en":  "lively"
+                                         },
+                                         {
+                                             "ko":  "열정적인",
+                                             "en":  "passionate"
+                                         },
+                                         {
+                                             "ko":  "호탕한",
+                                             "en":  "hearty"
+                                         },
+                                         {
+                                             "ko":  "당돌한",
+                                             "en":  "bold"
+                                         },
+                                         {
+                                             "ko":  "까불거리는",
+                                             "en":  "playful"
+                                         },
+                                         {
+                                             "ko":  "해맑은",
+                                             "en":  "bright"
+                                         },
+                                         {
+                                             "ko":  "털털한",
+                                             "en":  "easygoing"
+                                         },
+                                         {
+                                             "ko":  "멋있는",
+                                             "en":  "cool"
+                                         },
+                                         {
+                                             "ko":  "잘생긴",
+                                             "en":  "handsome"
+                                         },
+                                         {
+                                             "ko":  "예쁜",
+                                             "en":  "pretty"
+                                         },
+                                         {
+                                             "ko":  "귀여운",
+                                             "en":  "cute"
+                                         },
+                                         {
+                                             "ko":  "냉정한",
+                                             "en":  "cold"
+                                         },
+                                         {
+                                             "ko":  "냉철한",
+                                             "en":  "rational"
+                                         },
+                                         {
+                                             "ko":  "단호한",
+                                             "en":  "firm"
+                                         },
+                                         {
+                                             "ko":  "고지식한",
+                                             "en":  "rigid"
+                                         },
+                                         {
+                                             "ko":  "무뚝뚝한",
+                                             "en":  "blunt"
+                                         },
+                                         {
+                                             "ko":  "엄격한",
+                                             "en":  "strict"
+                                         },
+                                         {
+                                             "ko":  "믿음직한",
+                                             "en":  "reliable"
+                                         },
+                                         {
+                                             "ko":  "용감한",
+                                             "en":  "brave"
+                                         },
+                                         {
+                                             "ko":  "강인한",
+                                             "en":  "strong"
+                                         },
+                                         {
+                                             "ko":  "신중한",
+                                             "en":  "careful"
+                                         },
+                                         {
+                                             "ko":  "정의로운",
+                                             "en":  "righteous"
+                                         },
+                                         {
+                                             "ko":  "당당한",
+                                             "en":  "confident"
+                                         },
+                                         {
+                                             "ko":  "경건한",
+                                             "en":  "solemn"
+                                         },
+                                         {
+                                             "ko":  "근엄한",
+                                             "en":  "dignified"
+                                         },
+                                         {
+                                             "ko":  "강렬한",
+                                             "en":  "intense"
+                                         },
+                                         {
+                                             "ko":  "우렁찬",
+                                             "en":  "resonant"
+                                         },
+                                         {
+                                             "ko":  "투박한",
+                                             "en":  "coarse"
+                                         },
+                                         {
+                                             "ko":  "건장한",
+                                             "en":  "robust"
+                                         },
+                                         {
+                                             "ko":  "야심찬",
+                                             "en":  "ambitious"
+                                         },
+                                         {
+                                             "ko":  "능청스러운",
+                                             "en":  "humorous"
+                                         },
+                                         {
+                                             "ko":  "노련한",
+                                             "en":  "experienced"
+                                         },
+                                         {
+                                             "ko":  "느끼한",
+                                             "en":  "cheesy"
+                                         },
+                                         {
+                                             "ko":  "느긋한",
+                                             "en":  "relaxed"
+                                         },
+                                         {
+                                             "ko":  "나른한",
+                                             "en":  "sluggish"
+                                         },
+                                         {
+                                             "ko":  "귀찮은",
+                                             "en":  "annoyed"
+                                         },
+                                         {
+                                             "ko":  "새침한",
+                                             "en":  "sassy"
+                                         },
+                                         {
+                                             "ko":  "도도한",
+                                             "en":  "haughty"
+                                         },
+                                         {
+                                             "ko":  "까칠한",
+                                             "en":  "touchy"
+                                         },
+                                         {
+                                             "ko":  "예민한",
+                                             "en":  "sensitive"
+                                         },
+                                         {
+                                             "ko":  "날카로운",
+                                             "en":  "sharp"
+                                         },
+                                         {
+                                             "ko":  "다급한",
+                                             "en":  "urgent"
+                                         },
+                                         {
+                                             "ko":  "독특한",
+                                             "en":  "unique"
+                                         },
+                                         {
+                                             "ko":  "엉뚱한",
+                                             "en":  "quirky"
+                                         },
+                                         {
+                                             "ko":  "신비한",
+                                             "en":  "mysterious"
+                                         },
+                                         {
+                                             "ko":  "위험한",
+                                             "en":  "dangerous"
+                                         },
+                                         {
+                                             "ko":  "섹시한",
+                                             "en":  "sexy"
+                                         },
+                                         {
+                                             "ko":  "기묘한",
+                                             "en":  "strange"
+                                         },
+                                         {
+                                             "ko":  "기괴한",
+                                             "en":  "bizarre"
+                                         },
+                                         {
+                                             "ko":  "거만한",
+                                             "en":  "arrogant"
+                                         },
+                                         {
+                                             "ko":  "잘난척하는",
+                                             "en":  "pretentious"
+                                         },
+                                         {
+                                             "ko":  "탐욕스러운",
+                                             "en":  "greedy"
+                                         },
+                                         {
+                                             "ko":  "고집스러운",
+                                             "en":  "stubborn"
+                                         },
+                                         {
+                                             "ko":  "심술궂은",
+                                             "en":  "spiteful"
+                                         },
+                                         {
+                                             "ko":  "음흉한",
+                                             "en":  "sly"
+                                         },
+                                         {
+                                             "ko":  "간사한",
+                                             "en":  "cunning"
+                                         },
+                                         {
+                                             "ko":  "얄미운",
+                                             "en":  "annoying"
+                                         },
+                                         {
+                                             "ko":  "가벼운",
+                                             "en":  "frivolous"
+                                         },
+                                         {
+                                             "ko":  "험악한",
+                                             "en":  "menacing"
+                                         },
+                                         {
+                                             "ko":  "고약한",
+                                             "en":  "vicious"
+                                         },
+                                         {
+                                             "ko":  "약삭빠른",
+                                             "en":  "shrewd"
+                                         },
+                                         {
+                                             "ko":  "뻔뻔한",
+                                             "en":  "shameless"
+                                         },
+                                         {
+                                             "ko":  "못된",
+                                             "en":  "wicked"
+                                         },
+                                         {
+                                             "ko":  "뻣뻣한",
+                                             "en":  "stiff"
+                                         },
+                                         {
+                                             "ko":  "멍청한",
+                                             "en":  "stupid"
+                                         },
+                                         {
+                                             "ko":  "둔한",
+                                             "en":  "dull"
+                                         },
+                                         {
+                                             "ko":  "조용한",
+                                             "en":  "quiet"
+                                         },
+                                         {
+                                             "ko":  "소심한",
+                                             "en":  "timid"
+                                         },
+                                         {
+                                             "ko":  "연약한",
+                                             "en":  "weak"
+                                         },
+                                         {
+                                             "ko":  "음산한",
+                                             "en":  "gloomy"
+                                         }
+                                     ]
+                     }
+                 ],
+    "speakerNames":  [
+                         {
+                             "ko":  "문두연(중립)",
+                             "en":  "Mun Du-yeon"
+                         },
+                         {
+                             "ko":  "이예원(중립)",
+                             "en":  "Lee Ye-won"
+                         },
+                         {
+                             "ko":  "윤형우(중립)",
+                             "en":  "Yoon Hyeong-woo"
+                         },
+                         {
+                             "ko":  "한태형(중립)",
+                             "en":  "Han Tae-hyeong"
+                         },
+                         {
+                             "ko":  "정서희(중립)",
+                             "en":  "Jang Seo-hee"
+                         },
+                         {
+                             "ko":  "노수혜(중립)",
+                             "en":  "Noh Su-hye"
+                         },
+                         {
+                             "ko":  "에노라(중립)",
+                             "en":  "Jiwoo"
+                         },
+                         {
+                             "ko":  "세리나(중립)",
+                             "en":  "Lina"
+                         },
+                         {
+                             "ko":  "카일리(중립)",
+                             "en":  "Luca"
+                         },
+                         {
+                             "ko":  "미아린(중립)",
+                             "en":  "Naria"
+                         },
+                         {
+                             "ko":  "세이아(중립)",
+                             "en":  "Irene"
+                         },
+                         {
+                             "ko":  "엘리안(중립)",
+                             "en":  "Bora"
+                         },
+                         {
+                             "ko":  "노엘라(중립)",
+                             "en":  "Noah"
+                         },
+                         {
+                             "ko":  "베라린(중립)",
+                             "en":  "Lee Ju-yeon"
+                         },
+                         {
+                             "ko":  "니마라(중립)",
+                             "en":  "Marga"
+                         },
+                         {
+                             "ko":  "미리엘(중립)",
+                             "en":  "Worshim"
+                         },
+                         {
+                             "ko":  "아스린(중립)",
+                             "en":  "Gil Hye-jeong"
+                         },
+                         {
+                             "ko":  "니라(중립)",
+                             "en":  "Sung Da-yeon"
+                         },
+                         {
+                             "ko":  "리스몬(중립)",
+                             "en":  "Yoon Su-jin"
+                         },
+                         {
+                             "ko":  "카이라(중립)",
+                             "en":  "Seo Jeong-min"
+                         },
+                         {
+                             "ko":  "비아나(중립)",
+                             "en":  "Kim Do-hyeon"
+                         },
+                         {
+                             "ko":  "릴리트(중립)",
+                             "en":  "Jeong Ye-rin"
+                         },
+                         {
+                             "ko":  "마이라(중립)",
+                             "en":  "Bang Joo-won"
+                         },
+                         {
+                             "ko":  "아마리스(중립)",
+                             "en":  "Myeong Su-yeon"
+                         },
+                         {
+                             "ko":  "레오라(중립)",
+                             "en":  "Kim Seo-yeon"
+                         },
+                         {
+                             "ko":  "다릴라(중립)",
+                             "en":  "Lee Jeong-soon"
+                         },
+                         {
+                             "ko":  "베른다(중립)",
+                             "en":  "Park Eun-young"
+                         },
+                         {
+                             "ko":  "이비아(중립)",
+                             "en":  "Choi Mi-jeong"
+                         },
+                         {
+                             "ko":  "리아나스(중립)",
+                             "en":  "Yoon Sun-ock"
+                         },
+                         {
+                             "ko":  "에밀리아(중립)",
+                             "en":  "Noh Hae-jeong"
+                         },
+                         {
+                             "ko":  "리아나(중립)",
+                             "en":  "Bang Young-ran"
+                         },
+                         {
+                             "ko":  "실메라(중립)",
+                             "en":  "Nam Su-hyeon"
+                         },
+                         {
+                             "ko":  "이사라(중립)",
+                             "en":  "Lisabelle"
+                         },
+                         {
+                             "ko":  "디아나(중립)",
+                             "en":  "Kim Do-yeon"
+                         },
+                         {
+                             "ko":  "그레이슨(중립)",
+                             "en":  "Choi Ji-eun"
+                         },
+                         {
+                             "ko":  "아리아(중립)",
+                             "en":  "Jang Ju-hyeon"
+                         },
+                         {
+                             "ko":  "티에나(중립)",
+                             "en":  "Seo Min-joo"
+                         },
+                         {
+                             "ko":  "로에나(중립)",
+                             "en":  "Song Joo-ha"
+                         },
+                         {
+                             "ko":  "페일린(중립)",
+                             "en":  "Bang Eun-hye"
+                         },
+                         {
+                             "ko":  "사에나(중립)",
+                             "en":  "Myeong Mi-ran"
+                         },
+                         {
+                             "ko":  "사리엘(중립)",
+                             "en":  "Lee Jeong-hye"
+                         },
+                         {
+                             "ko":  "카스티아(중립)",
+                             "en":  "Yoon Hye-gyeong"
+                         },
+                         {
+                             "ko":  "카밀라(중립)",
+                             "en":  "Park Hye-sook"
+                         },
+                         {
+                             "ko":  "티알라(중립)",
+                             "en":  "Yoon Jeong-hee"
+                         },
+                         {
+                             "ko":  "아젤린(중립)",
+                             "en":  "Noh Sun-hee"
+                         },
+                         {
+                             "ko":  "사미라(중립)",
+                             "en":  "Bang Mi-hyeon"
+                         },
+                         {
+                             "ko":  "벨라(중립)",
+                             "en":  "Velina"
+                         },
+                         {
+                             "ko":  "아비릴(중립)",
+                             "en":  "Han Ji-soo"
+                         },
+                         {
+                             "ko":  "로레인(중립)",
+                             "en":  "Park Yoo-mi"
+                         },
+                         {
+                             "ko":  "칼리엔(중립)",
+                             "en":  "Nuarin"
+                         },
+                         {
+                             "ko":  "비올렛(중립)",
+                             "en":  "Alteia"
+                         },
+                         {
+                             "ko":  "루시아(중립)",
+                             "en":  "So-hyeon"
+                         },
+                         {
+                             "ko":  "세라핀(중립)",
+                             "en":  "Kim Seo-na"
+                         },
+                         {
+                             "ko":  "미나릴(중립)",
+                             "en":  "Jeong Eun-a"
+                         },
+                         {
+                             "ko":  "엘린(중립)",
+                             "en":  "Wui Jeong-hwa"
+                         },
+                         {
+                             "ko":  "나레아(중립)",
+                             "en":  "Jeong Young-sook"
+                         },
+                         {
+                             "ko":  "아델린(중립)",
+                             "en":  "Gyeong-a"
+                         },
+                         {
+                             "ko":  "릴리아(중립)",
+                             "en":  "Sun-jeong"
+                         },
+                         {
+                             "ko":  "에델라(중립)",
+                             "en":  "Hye-ock"
+                         },
+                         {
+                             "ko":  "세이렌(중립)",
+                             "en":  "Soon-jeong"
+                         },
+                         {
+                             "ko":  "메이브(중립)",
+                             "en":  "Unhee"
+                         },
+                         {
+                             "ko":  "비엔(중립)",
+                             "en":  "Yoon Un-hwa"
+                         },
+                         {
+                             "ko":  "오리엘(중립)",
+                             "en":  "Noh Sun-hwa"
+                         },
+                         {
+                             "ko":  "엘로이즈(중립)",
+                             "en":  "Un-jeong"
+                         },
+                         {
+                             "ko":  "에덴(중립)",
+                             "en":  "Do-eun"
+                         },
+                         {
+                             "ko":  "루실(중립)",
+                             "en":  "Choi Hyeon-joo"
+                         },
+                         {
+                             "ko":  "실비아(중립)",
+                             "en":  "Park Min-jeong"
+                         },
+                         {
+                             "ko":  "마리스(중립)",
+                             "en":  "Park Hee-young"
+                         },
+                         {
+                             "ko":  "마리안(중립)",
+                             "en":  "Kim Yoon-jeong"
+                         },
+                         {
+                             "ko":  "칼리타(중립)",
+                             "en":  "Kim Seo-young"
+                         },
+                         {
+                             "ko":  "바이올라(중립)",
+                             "en":  "Hae-sol"
+                         },
+                         {
+                             "ko":  "루크레시아(중립)",
+                             "en":  "Park Eun-ae"
+                         },
+                         {
+                             "ko":  "세리스(중립)",
+                             "en":  "Bae Da-on"
+                         },
+                         {
+                             "ko":  "미나(중립)",
+                             "en":  "Kim Min-young"
+                         },
+                         {
+                             "ko":  "엘리노라(중립)",
+                             "en":  "Kim Young-ah"
+                         },
+                         {
+                             "ko":  "닐라(중립)",
+                             "en":  "Hong Sun-joo"
+                         },
+                         {
+                             "ko":  "애들러(중립)",
+                             "en":  "Yoon Hae-won"
+                         },
+                         {
+                             "ko":  "레아(중립)",
+                             "en":  "Yoon Seo-rim"
+                         },
+                         {
+                             "ko":  "애나(중립)",
+                             "en":  "Yang Un-hwa"
+                         },
+                         {
+                             "ko":  "알레나(중립)",
+                             "en":  "Kim Mi-sun"
+                         },
+                         {
+                             "ko":  "티엘라(중립)",
+                             "en":  "Yoon-gyeong"
+                         },
+                         {
+                             "ko":  "리사린(중립)",
+                             "en":  "Da-hee"
+                         },
+                         {
+                             "ko":  "에스텔(중립)",
+                             "en":  "Naray"
+                         },
+                         {
+                             "ko":  "나린(중립)",
+                             "en":  "Jian"
+                         },
+                         {
+                             "ko":  "하이린(중립)",
+                             "en":  "Un-sol"
+                         },
+                         {
+                             "ko":  "엘로디(중립)",
+                             "en":  "Tae-rim"
+                         },
+                         {
+                             "ko":  "조에린(중립)",
+                             "en":  "Young-mi"
+                         },
+                         {
+                             "ko":  "카렌시아(중립)",
+                             "en":  "Hye-young"
+                         },
+                         {
+                             "ko":  "비앙카(중립)",
+                             "en":  "Seo-gyeong"
+                         },
+                         {
+                             "ko":  "미에르(중립)",
+                             "en":  "Gyeong-un"
+                         },
+                         {
+                             "ko":  "로사벨(중립)",
+                             "en":  "Un-hyeong"
+                         },
+                         {
+                             "ko":  "유나리아(중립)",
+                             "en":  "Yoon-hye"
+                         },
+                         {
+                             "ko":  "리엔느(중립)",
+                             "en":  "Mi-sook"
+                         },
+                         {
+                             "ko":  "셀레나(중립)",
+                             "en":  "Mi-young"
+                         },
+                         {
+                             "ko":  "이사벨(중립)",
+                             "en":  "Myeong-hee"
+                         },
+                         {
+                             "ko":  "하니엘(중립)",
+                             "en":  "Gyeong-hye"
+                         },
+                         {
+                             "ko":  "베르시아(중립)",
+                             "en":  "Hee-gyeong"
+                         },
+                         {
+                             "ko":  "세렌(중립)",
+                             "en":  "Jeong-sun"
+                         },
+                         {
+                             "ko":  "엘리시아(중립)",
+                             "en":  "Gyeong-sook"
+                         },
+                         {
+                             "ko":  "네리아(중립)",
+                             "en":  "Jin-hwa"
+                         },
+                         {
+                             "ko":  "마리에트(중립)",
+                             "en":  "Jeong-ay"
+                         },
+                         {
+                             "ko":  "루미에(중립)",
+                             "en":  "So-yeon"
+                         },
+                         {
+                             "ko":  "이본느(중립)",
+                             "en":  "Gyeong-mi"
+                         },
+                         {
+                             "ko":  "칼리사(중립)",
+                             "en":  "Ji-hyeon"
+                         },
+                         {
+                             "ko":  "비비안(중립)",
+                             "en":  "Sang-hee"
+                         },
+                         {
+                             "ko":  "자넬라(중립)",
+                             "en":  "Lilsha"
+                         },
+                         {
+                             "ko":  "라일리(중립)",
+                             "en":  "Ehren"
+                         },
+                         {
+                             "ko":  "나디스(중립)",
+                             "en":  "Choi A-yeon"
+                         },
+                         {
+                             "ko":  "세이린(중립)",
+                             "en":  "Jang Sung-yeong"
+                         },
+                         {
+                             "ko":  "에바린(중립)",
+                             "en":  "Seo Hye-jin"
+                         },
+                         {
+                             "ko":  "라니아(중립)",
+                             "en":  "Song Hwa-young"
+                         },
+                         {
+                             "ko":  "티샤나(중립)",
+                             "en":  "Bang Hyo-gyeong"
+                         },
+                         {
+                             "ko":  "아리엘(중립)",
+                             "en":  "Myeong Ju-ran"
+                         },
+                         {
+                             "ko":  "벨리사(중립)",
+                             "en":  "Lee Jeong-ock"
+                         },
+                         {
+                             "ko":  "조엘린(중립)",
+                             "en":  "Chae Yeon-hwa"
+                         },
+                         {
+                             "ko":  "아네트(중립)",
+                             "en":  "Shin Myeong-sun"
+                         },
+                         {
+                             "ko":  "사브리나(중립)",
+                             "en":  "Yoon Gyeong-hee"
+                         },
+                         {
+                             "ko":  "나엘린(중립)",
+                             "en":  "Ha Myeong-hwa"
+                         },
+                         {
+                             "ko":  "크레아(중립)",
+                             "en":  "Bang Young-sim"
+                         },
+                         {
+                             "ko":  "에이린(중립)",
+                             "en":  "Lee Jin-a"
+                         },
+                         {
+                             "ko":  "릴리아나(중립)",
+                             "en":  "Celine"
+                         },
+                         {
+                             "ko":  "마르셀린(중립)",
+                             "en":  "Moon Eun-gyeong"
+                         },
+                         {
+                             "ko":  "에브리나(중립)",
+                             "en":  "Lavenna"
+                         },
+                         {
+                             "ko":  "실비안(중립)",
+                             "en":  "Kang Un-sul"
+                         },
+                         {
+                             "ko":  "세레스(중립)",
+                             "en":  "Kang Seo-hyeon"
+                         },
+                         {
+                             "ko":  "엘리제(중립)",
+                             "en":  "Jeong Un-sung"
+                         },
+                         {
+                             "ko":  "조안나(중립)",
+                             "en":  "Park Yoon-hee"
+                         },
+                         {
+                             "ko":  "루네아(중립)",
+                             "en":  "Park Se-jin"
+                         },
+                         {
+                             "ko":  "벨로라(중립)",
+                             "en":  "Namgung Seo-ryeon"
+                         },
+                         {
+                             "ko":  "타마린(중립)",
+                             "en":  "Jeong Un-mi"
+                         },
+                         {
+                             "ko":  "아델리아(중립)",
+                             "en":  "Lee Ji-ae"
+                         },
+                         {
+                             "ko":  "이사벨라(중립)",
+                             "en":  "Yoon Chae-rin"
+                         },
+                         {
+                             "ko":  "네브린(중립)",
+                             "en":  "Nam Jeong-yeon"
+                         },
+                         {
+                             "ko":  "아멜린(중립)",
+                             "en":  "Jang Ha-jeong"
+                         },
+                         {
+                             "ko":  "루비아(중립)",
+                             "en":  "Seo Gyeong-hwa"
+                         },
+                         {
+                             "ko":  "칼리시아(중립)",
+                             "en":  "Song Hyeon-a"
+                         },
+                         {
+                             "ko":  "엘로에(중립)",
+                             "en":  "Bang Tae-gyeong"
+                         },
+                         {
+                             "ko":  "나에리아(중립)",
+                             "en":  "Myeong Hyeon-gyeong"
+                         },
+                         {
+                             "ko":  "셀레스티나(중립)",
+                             "en":  "Lee Ji-sook"
+                         },
+                         {
+                             "ko":  "로레일(중립)",
+                             "en":  "Chae Mi-gyeong"
+                         },
+                         {
+                             "ko":  "카렌디스(중립)",
+                             "en":  "Shin Jeong-ah"
+                         },
+                         {
+                             "ko":  "메이리(중립)",
+                             "en":  "Yoon Myeong-sook"
+                         },
+                         {
+                             "ko":  "엘디나(중립)",
+                             "en":  "Ha Gyeong-ju"
+                         },
+                         {
+                             "ko":  "미렌(중립)",
+                             "en":  "Noh Myeong-ae"
+                         },
+                         {
+                             "ko":  "소렌나(중립)",
+                             "en":  "Oh Se-un"
+                         },
+                         {
+                             "ko":  "티릴(중립)",
+                             "en":  "Park Sun-jin"
+                         },
+                         {
+                             "ko":  "제니라(중립)",
+                             "en":  "Park Yeon-ju"
+                         },
+                         {
+                             "ko":  "라이엔(중립)",
+                             "en":  "Lee Se-young"
+                         },
+                         {
+                             "ko":  "케이리(중립)",
+                             "en":  "Lee Su-jeong"
+                         },
+                         {
+                             "ko":  "샤리아(중립)",
+                             "en":  "Kang Seung-ju"
+                         },
+                         {
+                             "ko":  "아리아드네(중립)",
+                             "en":  "Cha Yeon-u"
+                         },
+                         {
+                             "ko":  "탈리아(중립)",
+                             "en":  "Park Sang-un"
+                         },
+                         {
+                             "ko":  "유리아(중립)",
+                             "en":  "Park Young-hee"
+                         },
+                         {
+                             "ko":  "레일라(중립)",
+                             "en":  "Yang Kyeong-soon"
+                         },
+                         {
+                             "ko":  "페일라(중립)",
+                             "en":  "Park Jeong-im"
+                         },
+                         {
+                             "ko":  "리디아(중립)",
+                             "en":  "Jeong Ga-hyeon"
+                         },
+                         {
+                             "ko":  "에레나(중립)",
+                             "en":  "Kim Su-min"
+                         },
+                         {
+                             "ko":  "엘사리아(중립)",
+                             "en":  "Yoon Chae-hyeon"
+                         },
+                         {
+                             "ko":  "사르엘(중립)",
+                             "en":  "Yoon-sia"
+                         },
+                         {
+                             "ko":  "아델린느(중립)",
+                             "en":  "Lee Hye-on"
+                         },
+                         {
+                             "ko":  "메리에(중립)",
+                             "en":  "Noh Young-ju"
+                         },
+                         {
+                             "ko":  "칼리아(중립)",
+                             "en":  "Park Sa-young"
+                         },
+                         {
+                             "ko":  "타니엘(중립)",
+                             "en":  "Kim Han-young"
+                         },
+                         {
+                             "ko":  "리벨린(중립)",
+                             "en":  "Park Un-myeong"
+                         },
+                         {
+                             "ko":  "아멜리아(중립)",
+                             "en":  "Park Ye-jin"
+                         },
+                         {
+                             "ko":  "비올레타(중립)",
+                             "en":  "Bang Hyeon-jin"
+                         },
+                         {
+                             "ko":  "에브리엘(중립)",
+                             "en":  "Myeong Kang-hee"
+                         },
+                         {
+                             "ko":  "루미에르(중립)",
+                             "en":  "Lee Myeong-un"
+                         },
+                         {
+                             "ko":  "세리엘(중립)",
+                             "en":  "Kim Hee-sun"
+                         },
+                         {
+                             "ko":  "엘로디아(중립)",
+                             "en":  "Kim Hye-sun"
+                         },
+                         {
+                             "ko":  "이사리엘(중립)",
+                             "en":  "Kim Jyeong-mi"
+                         },
+                         {
+                             "ko":  "티아라(중립)",
+                             "en":  "Gil Sun-ja"
+                         },
+                         {
+                             "ko":  "세레피나(중립)",
+                             "en":  "Park Jeong-in"
+                         },
+                         {
+                             "ko":  "마르시아(중립)",
+                             "en":  "Kim Na-bin"
+                         },
+                         {
+                             "ko":  "카리엘(중립)",
+                             "en":  "Park Chae-yeon"
+                         },
+                         {
+                             "ko":  "올리베리아(중립)",
+                             "en":  "Park Yoo-jin"
+                         },
+                         {
+                             "ko":  "아드리엔느(중립)",
+                             "en":  "Moon Ga-rin"
+                         },
+                         {
+                             "ko":  "브리엘라(중립)",
+                             "en":  "Lee Do-gyeong"
+                         },
+                         {
+                             "ko":  "사브리엘(중립)",
+                             "en":  "Kim Hye-un"
+                         },
+                         {
+                             "ko":  "에리엔(중립)",
+                             "en":  "Kang Jin-sun"
+                         },
+                         {
+                             "ko":  "이샤엘(중립)",
+                             "en":  "Jeong Ju-gyeong"
+                         },
+                         {
+                             "ko":  "에스멜다(중립)",
+                             "en":  "Jeong Hee-un"
+                         },
+                         {
+                             "ko":  "레오닉(중립)",
+                             "en":  "Azerio"
+                         },
+                         {
+                             "ko":  "데리온(중립)",
+                             "en":  "Gong Jeong-ho"
+                         },
+                         {
+                             "ko":  "번테일(중립)",
+                             "en":  "Noh Jun-seok"
+                         },
+                         {
+                             "ko":  "리그나스(중립)",
+                             "en":  "Noh Yang-hyeon"
+                         },
+                         {
+                             "ko":  "카르벤(중립)",
+                             "en":  "Noh Jong-ho"
+                         },
+                         {
+                             "ko":  "타이렌(중립)",
+                             "en":  "Back Man-sik"
+                         },
+                         {
+                             "ko":  "카일러(중립)",
+                             "en":  "Song Bok-man"
+                         },
+                         {
+                             "ko":  "브라이스(중립)",
+                             "en":  "Noh Jong-hwa"
+                         },
+                         {
+                             "ko":  "카이던(중립)",
+                             "en":  "Noh Jong-hyeok"
+                         },
+                         {
+                             "ko":  "드레이크(중립)",
+                             "en":  "Jeong Woo-seok"
+                         },
+                         {
+                             "ko":  "마엘리스(중립)",
+                             "en":  "Seo Hyeong-mok"
+                         },
+                         {
+                             "ko":  "테이런(중립)",
+                             "en":  "Choi Ji-hyeong"
+                         },
+                         {
+                             "ko":  "로웰(중립)",
+                             "en":  "Kim Hyeon-su"
+                         },
+                         {
+                             "ko":  "탈런(중립)",
+                             "en":  "Roderick"
+                         },
+                         {
+                             "ko":  "시그문(중립)",
+                             "en":  "Kim Seong-hwa"
+                         },
+                         {
+                             "ko":  "라그니르(중립)",
+                             "en":  "Kim Do-young"
+                         },
+                         {
+                             "ko":  "베론다(중립)",
+                             "en":  "Kang Hyeong-min"
+                         },
+                         {
+                             "ko":  "에이단(중립)",
+                             "en":  "Seo Jun-ho"
+                         },
+                         {
+                             "ko":  "페리언(중립)",
+                             "en":  "Kim Jae-hyeon"
+                         },
+                         {
+                             "ko":  "제드(중립)",
+                             "en":  "Han Tae-gun"
+                         },
+                         {
+                             "ko":  "올다(중립)",
+                             "en":  "Park Young-soo"
+                         },
+                         {
+                             "ko":  "카이론(중립)",
+                             "en":  "Jeong Seong-hoon"
+                         },
+                         {
+                             "ko":  "발두르(중립)",
+                             "en":  "Yoon Seok-ho"
+                         },
+                         {
+                             "ko":  "에브론(중립)",
+                             "en":  "Sul Gang-ho"
+                         },
+                         {
+                             "ko":  "드루반(중립)",
+                             "en":  "Han Ki-seok"
+                         },
+                         {
+                             "ko":  "알드릭(중립)",
+                             "en":  "Jeong Yoon-seok"
+                         },
+                         {
+                             "ko":  "테오란(중립)",
+                             "en":  "Park Hyeon-joon"
+                         },
+                         {
+                             "ko":  "자일로(중립)",
+                             "en":  "Oh Jae-man"
+                         },
+                         {
+                             "ko":  "블랙손(중립)",
+                             "en":  "Jeong Gyu-min"
+                         },
+                         {
+                             "ko":  "다르미르(중립)",
+                             "en":  "Seo Se-hun"
+                         },
+                         {
+                             "ko":  "다레온(중립)",
+                             "en":  "Choi Seong-wook"
+                         },
+                         {
+                             "ko":  "아르민(중립)",
+                             "en":  "Do Hyeon-seong"
+                         },
+                         {
+                             "ko":  "브렌든(중립)",
+                             "en":  "Kim Jun-ha"
+                         },
+                         {
+                             "ko":  "가리온(중립)",
+                             "en":  "Kang Jae-yul"
+                         },
+                         {
+                             "ko":  "사벨(중립)",
+                             "en":  "Seo Woo-jin"
+                         },
+                         {
+                             "ko":  "사빈(중립)",
+                             "en":  "Han Tae-hwa"
+                         },
+                         {
+                             "ko":  "실라린(중립)",
+                             "en":  "Gong Hyeon-do"
+                         },
+                         {
+                             "ko":  "아르켄(중립)",
+                             "en":  "Park Min-ho"
+                         },
+                         {
+                             "ko":  "마르첼(중립)",
+                             "en":  "Jeong Min-woo"
+                         },
+                         {
+                             "ko":  "토르벡(중립)",
+                             "en":  "Kwon Seok-hwan"
+                         },
+                         {
+                             "ko":  "에릭(중립)",
+                             "en":  "Yoo Jeong-ryul"
+                         },
+                         {
+                             "ko":  "하이론(중립)",
+                             "en":  "Yoon Se-gwon"
+                         },
+                         {
+                             "ko":  "라스티언(중립)",
+                             "en":  "Sul Tae-sub"
+                         },
+                         {
+                             "ko":  "마이린(중립)",
+                             "en":  "Han Mu-hyeon"
+                         },
+                         {
+                             "ko":  "갈도르(중립)",
+                             "en":  "Back Young-gyu"
+                         },
+                         {
+                             "ko":  "가렛(중립)",
+                             "en":  "Song Gwang-hyeok"
+                         },
+                         {
+                             "ko":  "라이오넬(중립)",
+                             "en":  "Jeong Seong-min"
+                         },
+                         {
+                             "ko":  "제라드(중립)",
+                             "en":  "Park Jae-hun"
+                         },
+                         {
+                             "ko":  "에단(중립)",
+                             "en":  "Lim Min-gyu"
+                         },
+                         {
+                             "ko":  "티베론(중립)",
+                             "en":  "Kim Tae-gwon"
+                         },
+                         {
+                             "ko":  "다렌(중립)",
+                             "en":  "Lee Joon-hwa"
+                         },
+                         {
+                             "ko":  "칼릭(중립)",
+                             "en":  "Kang Tae-wook"
+                         },
+                         {
+                             "ko":  "헬릭(중립)",
+                             "en":  "Jeong Do-hoon"
+                         },
+                         {
+                             "ko":  "아르딘(중립)",
+                             "en":  "Do Hyeon-mook"
+                         },
+                         {
+                             "ko":  "가레스(중립)",
+                             "en":  "Han Seong-ho"
+                         },
+                         {
+                             "ko":  "하이로(중립)",
+                             "en":  "Gong Young-hoon"
+                         },
+                         {
+                             "ko":  "알브레히트(중립)",
+                             "en":  "Park Min-hoon"
+                         },
+                         {
+                             "ko":  "바르탄(중립)",
+                             "en":  "Jeong Jae-won"
+                         },
+                         {
+                             "ko":  "루시우스(중립)",
+                             "en":  "Yoon Seong-woo"
+                         },
+                         {
+                             "ko":  "다리우스(중립)",
+                             "en":  "Sul Tae-won"
+                         },
+                         {
+                             "ko":  "제라르(중립)",
+                             "en":  "Noh Young-hwa"
+                         },
+                         {
+                             "ko":  "테오도르(중립)",
+                             "en":  "Back Yoon-gun"
+                         },
+                         {
+                             "ko":  "세드릭(중립)",
+                             "en":  "Lim In-sub"
+                         },
+                         {
+                             "ko":  "아르놀트(중립)",
+                             "en":  "Kim Seong-gwon"
+                         },
+                         {
+                             "ko":  "브라이든(중립)",
+                             "en":  "Lee Tae-hyeon"
+                         },
+                         {
+                             "ko":  "제노비오(중립)",
+                             "en":  "Joo Jeong-joon"
+                         },
+                         {
+                             "ko":  "카이엔(중립)",
+                             "en":  "Ahn Joon-young"
+                         },
+                         {
+                             "ko":  "베르나르(중립)",
+                             "en":  "Kang Min-cheol"
+                         },
+                         {
+                             "ko":  "사무엘(중립)",
+                             "en":  "Han Ji-seok"
+                         },
+                         {
+                             "ko":  "레온하르트(중립)",
+                             "en":  "Yoon Do-yoon"
+                         },
+                         {
+                             "ko":  "크로노스(중립)",
+                             "en":  "Yeo Seong-mok"
+                         },
+                         {
+                             "ko":  "알릭스(중립)",
+                             "en":  "Tak Cheol-min"
+                         },
+                         {
+                             "ko":  "도미닉(중립)",
+                             "en":  "Kim Yoon-ho"
+                         },
+                         {
+                             "ko":  "티베리우스(중립)",
+                             "en":  "Kim Young-do"
+                         },
+                         {
+                             "ko":  "라이넬(중립)",
+                             "en":  "Kang Man-ho"
+                         },
+                         {
+                             "ko":  "올리비에(중립)",
+                             "en":  "Huh Joong-rok"
+                         },
+                         {
+                             "ko":  "로베르토(중립)",
+                             "en":  "Choo Young-ho"
+                         },
+                         {
+                             "ko":  "헥터(중립)",
+                             "en":  "Jeong Seong-joon"
+                         },
+                         {
+                             "ko":  "실바누스(중립)",
+                             "en":  "Seo Ji-hwan"
+                         },
+                         {
+                             "ko":  "게르하르트(중립)",
+                             "en":  "Choi Jin-hun"
+                         },
+                         {
+                             "ko":  "브란덴(중립)",
+                             "en":  "Kim Yoon-jae"
+                         },
+                         {
+                             "ko":  "아를론(중립)",
+                             "en":  "Do Hyeon-won"
+                         },
+                         {
+                             "ko":  "벤딕트(중립)",
+                             "en":  "Kim Seong-hwan"
+                         },
+                         {
+                             "ko":  "에드가르(중립)",
+                             "en":  "Kim Jun-seo"
+                         },
+                         {
+                             "ko":  "잭스턴(중립)",
+                             "en":  "Kang Seong-hun"
+                         },
+                         {
+                             "ko":  "아드리안(중립)",
+                             "en":  "Seo Hyeon-wook"
+                         },
+                         {
+                             "ko":  "루퍼스(중립)",
+                             "en":  "Kim Ho-hyeon"
+                         },
+                         {
+                             "ko":  "레온티우스(중립)",
+                             "en":  "Han Jae-moon"
+                         },
+                         {
+                             "ko":  "프리드리히(중립)",
+                             "en":  "Gong Jun-o"
+                         },
+                         {
+                             "ko":  "드미트리(중립)",
+                             "en":  "Park Seong-yoon"
+                         },
+                         {
+                             "ko":  "제리언(중립)",
+                             "en":  "Jeong Seok-joon"
+                         },
+                         {
+                             "ko":  "칼빈(중립)",
+                             "en":  "Gwon Se-joong"
+                         },
+                         {
+                             "ko":  "마티아스(중립)",
+                             "en":  "Yoo Jeong-hwan"
+                         },
+                         {
+                             "ko":  "파비앙(중립)",
+                             "en":  "Yoon Sang-wook"
+                         },
+                         {
+                             "ko":  "도날드(중립)",
+                             "en":  "Sul Tae-jin"
+                         },
+                         {
+                             "ko":  "이사도르(중립)",
+                             "en":  "Han Se-jong"
+                         },
+                         {
+                             "ko":  "테렌스(중립)",
+                             "en":  "Noh Gwang-seok"
+                         },
+                         {
+                             "ko":  "갈라하드(중립)",
+                             "en":  "Back Jong-ryul"
+                         },
+                         {
+                             "ko":  "니콜라스(중립)",
+                             "en":  "Song Seok-young"
+                         },
+                         {
+                             "ko":  "에드윈(중립)",
+                             "en":  "Jeong Min-joon"
+                         },
+                         {
+                             "ko":  "브래너(중립)",
+                             "en":  "Park Seung-hoon"
+                         },
+                         {
+                             "ko":  "레안드로(중립)",
+                             "en":  "Kang Jin-hyeong"
+                         },
+                         {
+                             "ko":  "레딘(중립)",
+                             "en":  "Jeong Seung-yeol"
+                         },
+                         {
+                             "ko":  "에반드로(중립)",
+                             "en":  "Seo Sang-won"
+                         },
+                         {
+                             "ko":  "사이먼(중립)",
+                             "en":  "Kim Jae-yoon"
+                         },
+                         {
+                             "ko":  "가이우스(중립)",
+                             "en":  "Leonhardt"
+                         },
+                         {
+                             "ko":  "로만(중립)",
+                             "en":  "Draven"
+                         },
+                         {
+                             "ko":  "타론(중립)",
+                             "en":  "Aldric"
+                         },
+                         {
+                             "ko":  "루카스(중립)",
+                             "en":  "Theron"
+                         },
+                         {
+                             "ko":  "알버트(중립)",
+                             "en":  "Han Woo-hyeong"
+                         },
+                         {
+                             "ko":  "루디(중립)",
+                             "en":  "Garrick"
+                         },
+                         {
+                             "ko":  "아이작(중립)",
+                             "en":  "Seok Woon-ho"
+                         },
+                         {
+                             "ko":  "요한(중립)",
+                             "en":  "Jeong Ki-beom"
+                         },
+                         {
+                             "ko":  "루크레티우스(중립)",
+                             "en":  "Gwon Sang-ho"
+                         },
+                         {
+                             "ko":  "루시앙(중립)",
+                             "en":  "Yoo Hyeon-gang"
+                         },
+                         {
+                             "ko":  "에스테반(중립)",
+                             "en":  "Yoon Jae-gwon"
+                         },
+                         {
+                             "ko":  "레오폴드(중립)",
+                             "en":  "Sul Jeong-seok"
+                         },
+                         {
+                             "ko":  "오스몬드(중립)",
+                             "en":  "Gorbein"
+                         },
+                         {
+                             "ko":  "알렉시오(중립)",
+                             "en":  "Back Joon-gang"
+                         },
+                         {
+                             "ko":  "파스칼(중립)",
+                             "en":  "Song Hak-jin"
+                         },
+                         {
+                             "ko":  "다니엘로(중립)",
+                             "en":  "Jeong Woo-bin"
+                         },
+                         {
+                             "ko":  "데미안(중립)",
+                             "en":  "Park Min-seok"
+                         },
+                         {
+                             "ko":  "제바스티안(중립)",
+                             "en":  "Ryandale"
+                         },
+                         {
+                             "ko":  "지오반니(중립)",
+                             "en":  "Kim Joon-ik"
+                         },
+                         {
+                             "ko":  "가이론(중립)",
+                             "en":  "Guyron"
+                         },
+                         {
+                             "ko":  "탈로스(중립)",
+                             "en":  "Kang Seong-cheol"
+                         },
+                         {
+                             "ko":  "네이선(중립)",
+                             "en":  "Jeong Seok-min"
+                         },
+                         {
+                             "ko":  "다리엘(중립)",
+                             "en":  "Seo Jin-won"
+                         },
+                         {
+                             "ko":  "르웰린(중립)",
+                             "en":  "Kim Sang-do"
+                         },
+                         {
+                             "ko":  "제이런(중립)",
+                             "en":  "Do Hyeon-seok"
+                         },
+                         {
+                             "ko":  "아르도(중립)",
+                             "en":  "Kim Eui-ji"
+                         },
+                         {
+                             "ko":  "카심(중립)",
+                             "en":  "Kang Seung-ho"
+                         },
+                         {
+                             "ko":  "바시르(중립)",
+                             "en":  "Seo Hoon-seo"
+                         },
+                         {
+                             "ko":  "시릴(중립)",
+                             "en":  "Han Seok-woo"
+                         },
+                         {
+                             "ko":  "드레이븐(중립)",
+                             "en":  "Gong Tae-seok"
+                         },
+                         {
+                             "ko":  "베르틸(중립)",
+                             "en":  "Park Sang-soo"
+                         },
+                         {
+                             "ko":  "티오도르(중립)",
+                             "en":  "Jeong Beom-gwon"
+                         },
+                         {
+                             "ko":  "도란(중립)",
+                             "en":  "Gwon Byeong-sik"
+                         },
+                         {
+                             "ko":  "라파엘(중립)",
+                             "en":  "Yoo Gyeong-hwan"
+                         },
+                         {
+                             "ko":  "사일러스(중립)",
+                             "en":  "Yoon Yong-geun"
+                         },
+                         {
+                             "ko":  "올버스(중립)",
+                             "en":  "Sul Dong-geun"
+                         },
+                         {
+                             "ko":  "제드리안(중립)",
+                             "en":  "Han Hee-tae"
+                         },
+                         {
+                             "ko":  "페릭(중립)",
+                             "en":  "Noh Ji-hun"
+                         },
+                         {
+                             "ko":  "다렐(중립)",
+                             "en":  "Back Jong-gil"
+                         },
+                         {
+                             "ko":  "에르난(중립)",
+                             "en":  "Song Gyeong-mok"
+                         },
+                         {
+                             "ko":  "마르셀(중립)",
+                             "en":  "Jeong Se-hwan"
+                         },
+                         {
+                             "ko":  "로이스(중립)",
+                             "en":  "Park Woo-sub"
+                         },
+                         {
+                             "ko":  "발렌틴(중립)",
+                             "en":  "Lim Seung-gwon"
+                         },
+                         {
+                             "ko":  "이그나시오(중립)",
+                             "en":  "Kim Bon-young"
+                         },
+                         {
+                             "ko":  "벤자민(중립)",
+                             "en":  "Lee Seong-hak"
+                         },
+                         {
+                             "ko":  "에르윅(중립)",
+                             "en":  "Kang Yong-myeong"
+                         },
+                         {
+                             "ko":  "레토(중립)",
+                             "en":  "Jeong Sang-gon"
+                         },
+                         {
+                             "ko":  "칼릭스(중립)",
+                             "en":  "Seo Se-yong"
+                         },
+                         {
+                             "ko":  "알테르(중립)",
+                             "en":  "Choi Chang-sub"
+                         },
+                         {
+                             "ko":  "하켄(중립)",
+                             "en":  "Kim Dae-yub"
+                         },
+                         {
+                             "ko":  "베라르(중립)",
+                             "en":  "Do Jong-sub"
+                         },
+                         {
+                             "ko":  "마르단(중립)",
+                             "en":  "Kim Jong-wook"
+                         },
+                         {
+                             "ko":  "크레이스(중립)",
+                             "en":  "Kim Young-gon"
+                         },
+                         {
+                             "ko":  "브라울(중립)",
+                             "en":  "Kang Tae-hoon"
+                         },
+                         {
+                             "ko":  "도르민(중립)",
+                             "en":  "Seo Young-wook"
+                         },
+                         {
+                             "ko":  "에라스트(중립)",
+                             "en":  "Kim Seong-chan"
+                         },
+                         {
+                             "ko":  "잔투스(중립)",
+                             "en":  "Han Young-oh"
+                         },
+                         {
+                             "ko":  "펠릭스(중립)",
+                             "en":  "Gong Joon-yeol"
+                         },
+                         {
+                             "ko":  "에이락(중립)",
+                             "en":  "Park Seung-myeong"
+                         },
+                         {
+                             "ko":  "아스몬(중립)",
+                             "en":  "Jeong Chan-wook"
+                         },
+                         {
+                             "ko":  "그레고르(중립)",
+                             "en":  "Gwon Seung-beom"
+                         },
+                         {
+                             "ko":  "잭셀(중립)",
+                             "en":  "Yoo Hyeon-tak"
+                         },
+                         {
+                             "ko":  "티오렌(중립)",
+                             "en":  "Yoon Jin-gul"
+                         },
+                         {
+                             "ko":  "마르딘(중립)",
+                             "en":  "Sul Yong-tae"
+                         },
+                         {
+                             "ko":  "브락사스(중립)",
+                             "en":  "Han Jong-bin"
+                         },
+                         {
+                             "ko":  "루키우스(중립)",
+                             "en":  "Jeong Min-hwan"
+                         },
+                         {
+                             "ko":  "소렌(중립)",
+                             "en":  "Park Ho-young"
+                         },
+                         {
+                             "ko":  "카스피안(중립)",
+                             "en":  "Lim Dong-gwon"
+                         },
+                         {
+                             "ko":  "세라딘(중립)",
+                             "en":  "Kim Jae-gang"
+                         },
+                         {
+                             "ko":  "비요른(중립)",
+                             "en":  "Lee Young-tack"
+                         },
+                         {
+                             "ko":  "레간(중립)",
+                             "en":  "Kang Dong-hwan"
+                         },
+                         {
+                             "ko":  "현서(중립)",
+                             "en":  "Hyeon-seo"
+                         },
+                         {
+                             "ko":  "은서(중립)",
+                             "en":  "Eun-seo"
+                         },
+                         {
+                             "ko":  "라푼젤(중립)",
+                             "en":  "Ellen"
+                         },
+                         {
+                             "ko":  "안나",
+                             "en":  "Marie"
+                         },
+                         {
+                             "ko":  "멜리냥",
+                             "en":  "Poppy"
+                         },
+                         {
+                             "ko":  "라라몽",
+                             "en":  "Nina"
+                         },
+                         {
+                             "ko":  "미코핀핀",
+                             "en":  "Annie"
+                         },
+                         {
+                             "ko":  "엘리뇽",
+                             "en":  "Ella"
+                         },
+                         {
+                             "ko":  "루미링",
+                             "en":  "Ibby"
+                         },
+                         {
+                             "ko":  "아리모모",
+                             "en":  "Momo"
+                         },
+                         {
+                             "ko":  "레모네(중립)",
+                             "en":  "Agatha"
+                         },
+                         {
+                             "ko":  "헤라(중립)",
+                             "en":  "Helena"
+                         },
+                         {
+                             "ko":  "유바바",
+                             "en":  "Greta"
+                         },
+                         {
+                             "ko":  "목란",
+                             "en":  "Valeria"
+                         },
+                         {
+                             "ko":  "카타리나",
+                             "en":  "Cara"
+                         },
+                         {
+                             "ko":  "세레나(중립)",
+                             "en":  "Leora"
+                         },
+                         {
+                             "ko":  "유나",
+                             "en":  "Anna"
+                         },
+                         {
+                             "ko":  "스컬리",
+                             "en":  "Jin Woon-hye"
+                         },
+                         {
+                             "ko":  "모아나",
+                             "en":  "Mary"
+                         },
+                         {
+                             "ko":  "아마조네스",
+                             "en":  "Vera"
+                         },
+                         {
+                             "ko":  "에밀리",
+                             "en":  "Pip"
+                         },
+                         {
+                             "ko":  "나미",
+                             "en":  "Sylvie"
+                         },
+                         {
+                             "ko":  "에스메랄다",
+                             "en":  "Lyris"
+                         },
+                         {
+                             "ko":  "오필리어",
+                             "en":  "Song Yeon-chae"
+                         },
+                         {
+                             "ko":  "아테나",
+                             "en":  "Regina"
+                         },
+                         {
+                             "ko":  "미요링링",
+                             "en":  "Nanami"
+                         },
+                         {
+                             "ko":  "몰리",
+                             "en":  "Borga"
+                         },
+                         {
+                             "ko":  "맹순정",
+                             "en":  "Oleine"
+                         },
+                         {
+                             "ko":  "루미아",
+                             "en":  "Suri"
+                         },
+                         {
+                             "ko":  "석재(중립)",
+                             "en":  "Nilo"
+                         },
+                         {
+                             "ko":  "토비몽",
+                             "en":  "Kibby"
+                         },
+                         {
+                             "ko":  "모리비",
+                             "en":  "Teyo"
+                         },
+                         {
+                             "ko":  "첼로비",
+                             "en":  "Timo"
+                         },
+                         {
+                             "ko":  "니콜라",
+                             "en":  "Amilo"
+                         },
+                         {
+                             "ko":  "스크루지",
+                             "en":  "Jang Man-dol"
+                         },
+                         {
+                             "ko":  "덤블도어",
+                             "en":  "Eldrin"
+                         },
+                         {
+                             "ko":  "앨더릭",
+                             "en":  "Noh Chui-jae"
+                         },
+                         {
+                             "ko":  "샤일록(중립)",
+                             "en":  "Marvick"
+                         },
+                         {
+                             "ko":  "김처선(중립)",
+                             "en":  "Jin Moo-gang"
+                         },
+                         {
+                             "ko":  "위즐리(중립)",
+                             "en":  "Sul Tae-yoon"
+                         },
+                         {
+                             "ko":  "모르딘",
+                             "en":  "Baylor"
+                         },
+                         {
+                             "ko":  "브룩(중립)",
+                             "en":  "Hoven"
+                         },
+                         {
+                             "ko":  "가렌",
+                             "en":  "Broderick"
+                         },
+                         {
+                             "ko":  "로미오",
+                             "en":  "Lucian"
+                         },
+                         {
+                             "ko":  "화타",
+                             "en":  "Corban"
+                         },
+                         {
+                             "ko":  "설리(중립)",
+                             "en":  "Targon"
+                         },
+                         {
+                             "ko":  "장비",
+                             "en":  "Bang Cheol-hun"
+                         },
+                         {
+                             "ko":  "플래시",
+                             "en":  "Ronan"
+                         },
+                         {
+                             "ko":  "멀더",
+                             "en":  "Wiram"
+                         },
+                         {
+                             "ko":  "랭던교수",
+                             "en":  "Bang Do-hyeong"
+                         },
+                         {
+                             "ko":  "깐깐이",
+                             "en":  "Zekee"
+                         },
+                         {
+                             "ko":  "그리섬반장",
+                             "en":  "Thorne"
+                         },
+                         {
+                             "ko":  "슈렉",
+                             "en":  "Dulam"
+                         },
+                         {
+                             "ko":  "켈린(중립)",
+                             "en":  "Xylen"
+                         },
+                         {
+                             "ko":  "투스티몽",
+                             "en":  "Toostimong"
+                         },
+                         {
+                             "ko":  "피노링링",
+                             "en":  "Finoringring"
+                         },
+                         {
+                             "ko":  "디아르몽",
+                             "en":  "Diarmong"
+                         },
+                         {
+                             "ko":  "오디룽",
+                             "en":  "Odirungrung"
+                         },
+                         {
+                             "ko":  "비에티티",
+                             "en":  "Vietiti"
+                         },
+                         {
+                             "ko":  "말포이",
+                             "en":  "Sah Yoon-je"
+                         },
+                         {
+                             "ko":  "홀든",
+                             "en":  "Riven"
+                         },
+                         {
+                             "ko":  "뚱별",
+                             "en":  "Tobo"
+                         },
+                         {
+                             "ko":  "겁쟁이사자",
+                             "en":  "Dalvein"
+                         },
+                         {
+                             "ko":  "마초",
+                             "en":  "Grant"
+                         },
+                         {
+                             "ko":  "단하",
+                             "en":  "Joren"
+                         },
+                         {
+                             "ko":  "한스",
+                             "en":  "Novarion"
+                         },
+                         {
+                             "ko":  "키쿄우",
+                             "en":  "Kikyo"
+                         },
+                         {
+                             "ko":  "레이카",
+                             "en":  "Reika"
+                         },
+                         {
+                             "ko":  "사오리",
+                             "en":  "Saori"
+                         },
+                         {
+                             "ko":  "히나에",
+                             "en":  "Hanae"
+                         },
+                         {
+                             "ko":  "테츠로",
+                             "en":  "Akemi"
+                         },
+                         {
+                             "ko":  "렌지",
+                             "en":  "Tsubasa"
+                         },
+                         {
+                             "ko":  "히카루",
+                             "en":  "Kaito"
+                         },
+                         {
+                             "ko":  "하루카",
+                             "en":  "Yuko"
+                         },
+                         {
+                             "ko":  "신스케",
+                             "en":  "Daisuke"
+                         },
+                         {
+                             "ko":  "린펑",
+                             "en":  "Zheng-li-feng"
+                         },
+                         {
+                             "ko":  "메이리",
+                             "en":  "Chang-mei-ling"
+                         },
+                         {
+                             "ko":  "아이린",
+                             "en":  "Ye-xin-yi"
+                         },
+                         {
+                             "ko":  "타루",
+                             "en":  "Li-zi-lu"
+                         },
+                         {
+                             "ko":  "웨이청",
+                             "en":  "Yu-wei-chen"
+                         },
+                         {
+                             "ko":  "하오런",
+                             "en":  "Wang-hao-ren"
+                         },
+                         {
+                             "ko":  "슈로",
+                             "en":  "Jiang-hao-ze"
+                         },
+                         {
+                             "ko":  "아멜리",
+                             "en":  "Emily"
+                         },
+                         {
+                             "ko":  "마지",
+                             "en":  "Margaret"
+                         },
+                         {
+                             "ko":  "마틸다",
+                             "en":  "Jack"
+                         },
+                         {
+                             "ko":  "얼",
+                             "en":  "Earl"
+                         },
+                         {
+                             "ko":  "잭슨",
+                             "en":  "Tyler"
+                         },
+                         {
+                             "ko":  "랜스",
+                             "en":  "Jeremy"
+                         },
+                         {
+                             "ko":  "셀리아",
+                             "en":  "Sally"
+                         },
+                         {
+                             "ko":  "카밀라",
+                             "en":  "Camila"
+                         },
+                         {
+                             "ko":  "델라일라",
+                             "en":  "Delilah"
+                         },
+                         {
+                             "ko":  "나타샤",
+                             "en":  "Chloe"
+                         },
+                         {
+                             "ko":  "소피아",
+                             "en":  "Eleanor"
+                         },
+                         {
+                             "ko":  "이슬라",
+                             "en":  "Mia"
+                         },
+                         {
+                             "ko":  "루나",
+                             "en":  "Naomi"
+                         },
+                         {
+                             "ko":  "클라라",
+                             "en":  "Claire"
+                         },
+                         {
+                             "ko":  "엘레나",
+                             "en":  "Hazel"
+                         },
+                         {
+                             "ko":  "비앙카",
+                             "en":  "Millie"
+                         },
+                         {
+                             "ko":  "피오나",
+                             "en":  "Alice"
+                         },
+                         {
+                             "ko":  "레나",
+                             "en":  "Natalie"
+                         },
+                         {
+                             "ko":  "세레스",
+                             "en":  "Cecilia"
+                         },
+                         {
+                             "ko":  "바이올렛",
+                             "en":  "Heather"
+                         },
+                         {
+                             "ko":  "엘라라",
+                             "en":  "Iris"
+                         },
+                         {
+                             "ko":  "미란다",
+                             "en":  "Maeve"
+                         },
+                         {
+                             "ko":  "노라",
+                             "en":  "Nora"
+                         },
+                         {
+                             "ko":  "오필리아",
+                             "en":  "Amber"
+                         },
+                         {
+                             "ko":  "비비안",
+                             "en":  "Lisa"
+                         },
+                         {
+                             "ko":  "셀레스테",
+                             "en":  "Paisley"
+                         },
+                         {
+                             "ko":  "오로라",
+                             "en":  "Sophie"
+                         },
+                         {
+                             "ko":  "탈리아",
+                             "en":  "Lucy"
+                         },
+                         {
+                             "ko":  "제이드",
+                             "en":  "Judy"
+                         },
+                         {
+                             "ko":  "라이라",
+                             "en":  "Lydia"
+                         },
+                         {
+                             "ko":  "셀레나",
+                             "en":  "Serena"
+                         },
+                         {
+                             "ko":  "레옹",
+                             "en":  "Richard"
+                         },
+                         {
+                             "ko":  "빅터",
+                             "en":  "Blake"
+                         },
+                         {
+                             "ko":  "에단",
+                             "en":  "Camden"
+                         },
+                         {
+                             "ko":  "마일즈",
+                             "en":  "Miles"
+                         },
+                         {
+                             "ko":  "세드릭",
+                             "en":  "Michael"
+                         },
+                         {
+                             "ko":  "다몬",
+                             "en":  "Mason"
+                         },
+                         {
+                             "ko":  "사일러스",
+                             "en":  "Nolan"
+                         },
+                         {
+                             "ko":  "기디온",
+                             "en":  "Andrew"
+                         },
+                         {
+                             "ko":  "줄리언",
+                             "en":  "Julian"
+                         },
+                         {
+                             "ko":  "나다니엘",
+                             "en":  "Cooper"
+                         },
+                         {
+                             "ko":  "엘리아스",
+                             "en":  "John"
+                         },
+                         {
+                             "ko":  "도리안",
+                             "en":  "Dorian"
+                         },
+                         {
+                             "ko":  "루시안",
+                             "en":  "Ken"
+                         },
+                         {
+                             "ko":  "노엘",
+                             "en":  "Tony"
+                         },
+                         {
+                             "ko":  "쏜",
+                             "en":  "Patrick"
+                         },
+                         {
+                             "ko":  "오린",
+                             "en":  "Oren"
+                         },
+                         {
+                             "ko":  "그리핀",
+                             "en":  "David"
+                         },
+                         {
+                             "ko":  "트리스탄",
+                             "en":  "Ben"
+                         },
+                         {
+                             "ko":  "로완",
+                             "en":  "Roger"
+                         },
+                         {
+                             "ko":  "카시안",
+                             "en":  "Caleb"
+                         },
+                         {
+                             "ko":  "소렌",
+                             "en":  "Scott"
+                         },
+                         {
+                             "ko":  "말릭",
+                             "en":  "Malik"
+                         },
+                         {
+                             "ko":  "에즈라",
+                             "en":  "Connor"
+                         },
+                         {
+                             "ko":  "알라릭",
+                             "en":  "Eric"
+                         },
+                         {
+                             "ko":  "다미엔",
+                             "en":  "Stephen"
+                         },
+                         {
+                             "ko":  "영훈(중립)",
+                             "en":  "Ji-hoon"
+                         },
+                         {
+                             "ko":  "지현(중립)",
+                             "en":  "Hyo-jeong"
+                         },
+                         {
+                             "ko":  "재민(중립)",
+                             "en":  "Jae-min"
+                         }
+                     ]
+}

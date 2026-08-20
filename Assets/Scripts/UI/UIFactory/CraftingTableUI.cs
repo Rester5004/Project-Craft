@@ -459,27 +459,28 @@ public class CraftingTableUI : DefaultMachineUI
         else craftButtonLabel.text = "조합";
     }
 
-    /// <summary>재질 칸의 재료를 소모하고 그 재질의 부품을 인벤토리에 넣는다.</summary>
-    private void CraftToolPart(ToolPartRecipe recipe)
+    /// <summary>재질 칸의 재료를 소모하고 그 재질의 부품을 인벤토리에 넣는다. 실제로 만들었으면 true.</summary>
+    private bool CraftToolPart(ToolPartRecipe recipe)
     {
-        if (machineInventory == null || machineInventory.InputCount == 0) return;
+        if (machineInventory == null || machineInventory.InputCount == 0) return false;
 
         ItemStack held = machineInventory.GetStack(0);
         ToolMaterial material = held != null ? recipe.MaterialOf(held.item) : null;
-        if (material == null || held.count < recipe.materialCost) return;
+        if (material == null || held.count < recipe.materialCost) return false;
 
         ToolPartItem result = ToolDictionary.Instance != null
             ? ToolDictionary.Instance.GetPart(recipe.kind, material) : null;
-        if (result == null) return;
+        if (result == null) return false;
 
         Inventory inventory = Inventory.Instance;
-        if (inventory == null || inventory.AddPartial(result, 1) <= 0) return;   // 못 넣으면 재료도 안 먹는다
+        if (inventory == null || inventory.AddPartial(result, 1) <= 0) return false;   // 못 넣으면 재료도 안 먹는다
 
         held.count -= recipe.materialCost;
         if (held.count <= 0) held.Clear();
         machineInventory.NotifyChanged();
         if (instance != null) instance.Flush();
         RefreshDetail();
+        return true;
     }
 
     // ── 도구 조립 상세 ─────────────────────────────────────────
@@ -680,35 +681,43 @@ public class CraftingTableUI : DefaultMachineUI
     private string SearchText => searchField != null ? searchField.text : null;
 
     // ── 제작 ──────────────────────────────────────────────────
-    /// <summary>조합 버튼이 눌렸을 때. 선택된 레시피를 만든다.</summary>
+    /// <summary>
+    /// 조합 버튼이 눌렸을 때. 선택된 레시피를 만든다.
+    ///
+    /// <b>조합음은 여기 한 곳에서만 낸다</b> — 세 갈래 모두 "재료 부족 · 자리 없음" 이면 조용히 되돌아가므로,
+    /// 버튼 클릭에 소리를 붙이면 <b>아무것도 안 만들어졌는데 울린다</b>. 그래서 셋이 성공 여부를 돌려준다.
+    /// </summary>
     private void CraftSelected()
     {
-        if (selectedRecipe is ToolRecipe toolRecipe) CraftTool(toolRecipe);
-        else if (selectedRecipe is ToolPartRecipe partRecipe) CraftToolPart(partRecipe);
-        else Craft(selectedRecipe);
+        bool made;
+        if (selectedRecipe is ToolRecipe toolRecipe) made = CraftTool(toolRecipe);
+        else if (selectedRecipe is ToolPartRecipe partRecipe) made = CraftToolPart(partRecipe);
+        else made = Craft(selectedRecipe);
+
+        if (made) SfxPlayer.PlayCraft();
     }
 
-    /// <summary>부품 칸의 부품으로 커스텀 도구를 조립해 플레이어 인벤토리에 넣는다.</summary>
-    private void CraftTool(ToolRecipe recipe)
+    /// <summary>부품 칸의 부품으로 커스텀 도구를 조립해 플레이어 인벤토리에 넣는다. 조립했으면 true.</summary>
+    private bool CraftTool(ToolRecipe recipe)
     {
         ToolDefinition definition = recipe != null ? recipe.tool : null;
         ToolItem output = recipe != null ? recipe.ToolOutput : null;
         Inventory inventory = Inventory.Instance;
 
         if (definition == null || output == null || machineInventory == null
-            || inventory == null || inventory.slots == null) return;
+            || inventory == null || inventory.slots == null) return false;
 
         List<ItemStack> parts = machineInventory.inputSlots;
-        if (!ToolFactory.CanAssemble(definition, parts)) return;
+        if (!ToolFactory.CanAssemble(definition, parts)) return false;
 
         ToolInstance made = ToolFactory.Create(definition, parts);
-        if (made == null) return;
+        if (made == null) return false;
 
         // 결과를 먼저 넣어 본다. 자리가 없으면 부품을 소모하지 않는다.
         if (!RecipeSolver.TryAdd(inventory.slots, output, 1, made))
         {
             Debug.LogWarning("[CraftingTableUI] 인벤토리에 자리가 없어 도구를 만들지 못했습니다.", this);
-            return;
+            return false;
         }
 
         for (int i = 0; i < definition.SlotCount; i++)
@@ -721,28 +730,30 @@ public class CraftingTableUI : DefaultMachineUI
         inventory.NotifyChanged();
         machineInventory.NotifyChanged();   // → HandlePartsChanged → 부품 칸 · 버튼 갱신
         if (instance != null) instance.Flush();
+        return true;
     }
 
-    /// <summary>인벤토리 재료를 소모해 결과물을 지급한다.</summary>
-    public void Craft(Recipe recipe)
+    /// <summary>인벤토리 재료를 소모해 결과물을 지급한다. 실제로 만들었으면 true.</summary>
+    public bool Craft(Recipe recipe)
     {
         Inventory inventory = Inventory.Instance;
-        if (recipe == null || inventory == null || inventory.slots == null) return;
+        if (recipe == null || inventory == null || inventory.slots == null) return false;
 
-        if (!RecipeSolver.CanCraft(inventory.slots, recipe)) return;
+        if (!RecipeSolver.CanCraft(inventory.slots, recipe)) return false;
 
         // 적재 가능 여부를 소모 "전에" 검사한다. 재료를 빼면 자리가 생기는 경계 상황에서
         // 보수적으로 거절할 수 있지만, 결과물이 사라지는 것보다 안전하다.
         if (!RecipeSolver.CanStoreOutputs(inventory.slots, recipe))
         {
             Debug.LogWarning("[CraftingTableUI] 인벤토리에 자리가 없어 제작하지 못했습니다.", this);
-            return;
+            return false;
         }
 
         RecipeSolver.ConsumeInputs(inventory.slots, recipe);
         RecipeSolver.ConsumeTools(inventory.slots, recipe);   // 도구는 내구도만 닳는다
         RecipeSolver.StoreOutputs(inventory.slots, recipe);
         inventory.NotifyChanged();   // → HandleInventoryChanged → 흐림 상태 재계산
+        return true;
     }
 
     // ── 검색창 포커스 중 게임 입력 차단 ─────────────────────────

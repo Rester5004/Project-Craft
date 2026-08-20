@@ -10,9 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1408258855787727391}
   - component: {fileID: 515136925446372535}
-  - component: {fileID: 2392799699955736301}
   - component: {fileID: 8108634624591457753}
   - component: {fileID: 5364749399101126194}
+  - component: {fileID: 4654138569846198575}
+  - component: {fileID: 6339447228745619610}
   m_Layer: 0
   m_Name: Torch
   m_TagString: Untagged
@@ -29,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 7766429469720968928}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.047, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -85,7 +86,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: 4a4d2640fbd603542be3906e18903c59, type: 3}
+  m_Sprite: {fileID: 7509860518518112746, guid: 9425f9c957b0f8847a6b60e076f30ba0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -95,8 +96,87 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!61 &2392799699955736301
-BoxCollider2D:
+--- !u!114 &8108634624591457753
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7766429469720968928}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bd507628be358042881ea8e86d2fb5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MachineInstance
+  blockId: 
+  worldCell: {x: 0, y: 0}
+--- !u!114 &5364749399101126194
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7766429469720968928}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7abeab2f870ee9841a1a16f009c684ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LightEmitter
+--- !u!114 &4654138569846198575
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7766429469720968928}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db70e0ea77f5ac47a8f4565a9406397, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.2D.Runtime::UnityEngine.Rendering.Universal.ShadowCaster2D
+  m_ShadowGroup: 0
+  m_Priority: 0
+  m_ComponentVersion: 5
+  m_HasRenderer: 1
+  m_UseRendererSilhouette: 1
+  m_CastsShadows: 1
+  m_SelfShadows: 0
+  m_AlphaCutoff: 0.1
+  m_ApplyToSortingLayers: 00000000
+  m_ShapePath:
+  - {x: -0.25, y: -0.4375, z: 0}
+  - {x: -0.25, y: 0.4375, z: 0}
+  - {x: 0.25, y: 0.4375, z: 0}
+  - {x: 0.25, y: -0.4375, z: 0}
+  m_ShapePathHash: 0
+  m_InstanceId: 0
+  m_ShadowShape2DComponent: {fileID: 6339447228745619610}
+  m_ShadowShape2DProvider:
+    rid: 242928732429877487
+  m_ShadowCastingSource: 2
+  m_ShadowMesh:
+    m_Mesh: {fileID: 0}
+    m_LocalBounds:
+      m_Center: {x: -0.0065612793, y: -0.07184601, z: 0}
+      m_Extent: {x: 0.08253479, y: 0.2494278, z: 0}
+    m_EdgeProcessing: 1
+    m_TrimEdge: 0.02
+    m_FlipX: 0
+    m_FlipY: 0
+    m_InitialTrim: 0
+  m_CastingOption: 1
+  m_PreviousTrimEdge: 0.02
+  m_PreviousEdgeProcessing: 1
+  m_PreviousShadowCastingSource: 2
+  m_PreviousShadowShape2DSource: {fileID: 6339447228745619610}
+  references:
+    version: 2
+    RefIds:
+    - rid: 242928732429877487
+      type: {class: ShadowShape2DProvider_Collider2D, ns: UnityEngine.Rendering.Universal, asm: Unity.RenderPipelines.Universal.2D.Runtime}
+      data: 
+--- !u!60 &6339447228745619610
+PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -125,7 +205,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -139,34 +219,27 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.8125, y: 0.8125}
-  m_EdgeRadius: 0
---- !u!114 &8108634624591457753
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7766429469720968928}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5bd507628be358042881ea8e86d2fb5e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MachineInstance
-  blockId: 
-  worldCell: {x: 0, y: 0}
---- !u!114 &5364749399101126194
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7766429469720968928}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7abeab2f870ee9841a1a16f009c684ee, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LightEmitter
+  m_Points:
+    m_Paths:
+    - - {x: 0.09873834, y: 0.15631884}
+      - {x: 0.12275858, y: 0.20847982}
+      - {x: 0.004047796, y: 0.15627275}
+      - {x: -0.12773892, y: 0.21763065}
+      - {x: -0.104013324, y: 0.16154753}
+      - {x: -0.033802032, y: 0.12420964}
+      - {x: -0.03196001, y: -0.24904689}
+      - {x: -0.064159185, y: -0.24755372}
+      - {x: -0.06545042, y: -0.27944434}
+      - {x: -0.0975149, y: -0.2791098}
+      - {x: -0.09831449, y: -0.33823326}
+      - {x: 0.09565452, y: -0.34162962}
+      - {x: 0.096140176, y: -0.28369412}
+      - {x: 0.07039091, y: -0.28257036}
+      - {x: 0.060017567, y: -0.24437277}
+      - {x: 0.033267267, y: -0.2447843}
+      - {x: 0.037362218, y: 0.110476136}
+      - {x: 0.0358572, y: 0.13054132}
+  m_UseDelaunayMesh: 1
 --- !u!1 &8062037333493644861
 GameObject:
   m_ObjectHideFlags: 0
@@ -193,7 +266,7 @@ Transform:
   m_GameObject: {fileID: 8062037333493644861}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.002, y: 0.285, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -216,7 +289,7 @@ MonoBehaviour:
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.5
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 1
+  m_Intensity: 1.5
   m_LightVolumeIntensity: 1
   m_LightVolumeEnabled: 0
   m_ApplyToSortingLayers: 00000000
@@ -235,8 +308,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 0, y: 0, z: 0}
+    m_Center: {x: 0, y: -0.00000011920929, z: 0}
+    m_Extent: {x: 0.9985302, y: 0.99853027, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0

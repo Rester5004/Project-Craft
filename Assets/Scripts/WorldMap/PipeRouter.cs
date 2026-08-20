@@ -295,8 +295,10 @@ public static class PipeRouter
         // 여기서 갈라 준다 — 방향(넣기만/빼기만)은 이미 렌치 면이 정했다(CanInsertInto).
         if (machine.IsStorage) return machine.inventory.inputSlots;
 
-        // 연료는 연료 칸으로 (발전기·화로에 석탄을 자동 공급할 수 있게)
-        if (machine.UsesFuel && item.IsFuel) return machine.inventory.fuelSlots;
+        // 연료는 연료 칸으로 (발전기·화로에 석탄을 자동 공급할 수 있게).
+        // ⚠ <b>판정은 슬롯 UI 와 같은 함수를 본다</b> — 여기서 따로 세면
+        //    "손으로는 들어가는데 파이프로는 안 들어가는"(또는 그 반대) 상태가 생긴다.
+        if (machine.AcceptsFuel(item)) return machine.inventory.fuelSlots;
 
         RecipeDictionary dictionary = RecipeDictionary.Instance;
         if (dictionary == null) return null;
@@ -326,6 +328,9 @@ public static class PipeRouter
     public static IList<FluidStack> TargetTanks(MachineInstance machine, FluidDefine fluid)
     {
         if (machine == null || fluid == null || machine.InputTanks == null || machine.InputTanks.Count == 0) return null;
+
+        // 발전기는 레시피가 없다 — 연료 표를 근거로 받는다(TargetSlots 의 연료 분기와 같은 자리).
+        if (FuelTable.AcceptsFluid(machine.blockId, fluid.fluidId)) return machine.InputTanks;
 
         RecipeDictionary dictionary = RecipeDictionary.Instance;
         if (dictionary == null) return null;

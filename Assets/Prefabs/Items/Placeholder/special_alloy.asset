@@ -15,6 +15,7 @@ MonoBehaviour:
   itemName: special_alloy
   displayName: "\uD2B9\uC218\uD569\uAE08"
   placeable: 0
-  Icon: {fileID: 6171144539048142750, guid: cbe785553f8a087429b55d8ce1e44cc7, type: 3}
+  Icon: {fileID: -1870309010048476787, guid: 1fd456dacdc7be746aaa00cb9f929340, type: 3}
   maxStack: 64
+  fluidOverlay: {fileID: 0}
   burnEnergy: 0

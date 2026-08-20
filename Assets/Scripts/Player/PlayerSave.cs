@@ -102,10 +102,12 @@ public class PlayerSave : MonoBehaviour
         // 인벤토리를 복원하면 살아 있는 Inventory 싱글톤이 들고 온 지금 내용을 디스크의 옛 내용으로 덮어쓴다.
         if (UndergroundSession.IsActive) return;
 
-        if (!File.Exists(savePath)) return;
-
         if (inventory == null) inventory = Inventory.Instance;   // Start 보다 먼저 불릴 경우 대비
         if (inventory == null || inventory.slots == null) return;
+
+        // <b>세이브가 없다 = 처음 시작한다.</b> 무엇을 주는지는 StartingInventory 가 안다.
+        // 지하에서는 위에서 이미 되돌아갔으므로 왕복하며 다시 받을 일이 없다.
+        if (!File.Exists(savePath)) { StartingInventory.Grant(inventory); return; }
 
         try
         {

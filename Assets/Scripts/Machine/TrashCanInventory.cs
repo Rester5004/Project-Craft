@@ -26,6 +26,9 @@ public class TrashCanInventory : Singleton<TrashCanInventory>,IItemContainer
         }
         return RecipeSolver.MaxStackOf(item); // Return the max stack size of the item
     }
+
+    /// <summary>쓰레기통은 무엇이든 받는다.</summary>
+    public bool AcceptsItem(int index, Items item) => true;
     void Update()
     {
 

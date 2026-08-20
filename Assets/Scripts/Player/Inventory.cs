@@ -17,6 +17,9 @@ public class Inventory : Singleton<Inventory>, IItemContainer
     /// <summary>플레이어 인벤토리는 언제나 아이템의 maxStack 을 따른다(고유 최대치가 없다).</summary>
     public int SlotCapacity(int index, Items item) => RecipeSolver.MaxStackOf(item);
 
+    /// <summary>플레이어 인벤토리는 무엇이든 받는다(연료 화이트리스트는 기계 칸에만 있다).</summary>
+    public bool AcceptsItem(int index, Items item) => true;
+
     protected override void Awake()
     {
         base.Awake();

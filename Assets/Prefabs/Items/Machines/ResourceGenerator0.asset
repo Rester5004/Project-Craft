@@ -15,6 +15,7 @@ MonoBehaviour:
   itemName: Machine:ResourceGenerator0
   displayName: "0\uD2F0\uC5B4 \uC790\uC6D0 \uC0DD\uC131\uAE30"
   placeable: 1
-  Icon: {fileID: 21300000, guid: 4a4d2640fbd603542be3906e18903c59, type: 3}
+  Icon: {fileID: -870545596, guid: 1fd456dacdc7be746aaa00cb9f929340, type: 3}
   maxStack: 64
+  fluidOverlay: {fileID: 0}
   burnEnergy: 0

@@ -32,6 +32,7 @@ public class ToolDictionary : Singleton<ToolDictionary>
 
     public IReadOnlyList<ToolMaterial> Materials => materials;
     public IReadOnlyList<ToolPartKind> PartKinds => partKinds;
+    public IReadOnlyList<ToolItem> Tools => tools;
     public ToolSpriteLibrary SpriteLibrary => spriteLibrary;
 
     protected override void Awake()

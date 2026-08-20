@@ -1,0 +1,403 @@
+fileFormatVersion: 2
+guid: 4b13f1d44c6e7dc48a8e3cd60b237d04
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 3802832714797242767
+    second: VARCOSoundLogo_White_0
+  - first:
+      213: -3701419490942617010
+    second: VARCOSoundLogo_White_1
+  - first:
+      213: -4021642709043658689
+    second: VARCOSoundLogo_White_2
+  - first:
+      213: 4364964712664034760
+    second: VARCOSoundLogo_White_3
+  - first:
+      213: 1713315139469961068
+    second: VARCOSoundLogo_White_4
+  - first:
+      213: 1771144477265550314
+    second: VARCOSoundLogo_White_5
+  - first:
+      213: -1100993207601148465
+    second: VARCOSoundLogo_White_6
+  - first:
+      213: 3377055291341021321
+    second: VARCOSoundLogo_White_7
+  - first:
+      213: 7445526320536830166
+    second: VARCOSoundLogo_White_8
+  - first:
+      213: -4534342637422843966
+    second: VARCOSoundLogo_White_9
+  - first:
+      213: -5514508732311848207
+    second: VARCOSoundLogo_White_10
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: VARCOSoundLogo_White_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 145
+        height: 108
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f8959b1b43066c430800000000000000
+      internalID: 3802832714797242767
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VARCOSoundLogo_White_1
+      rect:
+        serializedVersion: 2
+        x: 197
+        y: 9
+        width: 92
+        height: 90
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e4a78ad759ae1acc0800000000000000
+      internalID: -3701419490942617010
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VARCOSoundLogo_White_2
+      rect:
+        serializedVersion: 2
+        x: 286
+        y: 9
+        width: 92
+        height: 90
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f30c9e183414038c0800000000000000
+      internalID: -4021642709043658689
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VARCOSoundLogo_White_3
+      rect:
+        serializedVersion: 2
+        x: 389
+        y: 9
+        width: 76
+        height: 90
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8cd64739748739c30800000000000000
+      internalID: 4364964712664034760
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VARCOSoundLogo_White_4
+      rect:
+        serializedVersion: 2
+        x: 474
+        y: 8
+        width: 85
+        height: 92
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c67e764ba0be6c710800000000000000
+      internalID: 1713315139469961068
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VARCOSoundLogo_White_5
+      rect:
+        serializedVersion: 2
+        x: 571
+        y: 8
+        width: 88
+        height: 92
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aebde45a48e549810800000000000000
+      internalID: 1771144477265550314
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VARCOSoundLogo_White_6
+      rect:
+        serializedVersion: 2
+        x: 692
+        y: 12
+        width: 62
+        height: 84
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fcdc0d0d28c78b0f0800000000000000
+      internalID: -1100993207601148465
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VARCOSoundLogo_White_7
+      rect:
+        serializedVersion: 2
+        x: 762
+        y: 12
+        width: 58
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9802c3325e5bdde20800000000000000
+      internalID: 3377055291341021321
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VARCOSoundLogo_White_8
+      rect:
+        serializedVersion: 2
+        x: 831
+        y: 13
+        width: 52
+        height: 62
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6d04b6d8db2d35760800000000000000
+      internalID: 7445526320536830166
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VARCOSoundLogo_White_9
+      rect:
+        serializedVersion: 2
+        x: 896
+        y: 13
+        width: 52
+        height: 63
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2c7e08e2567c211c0800000000000000
+      internalID: -4534342637422843966
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: VARCOSoundLogo_White_10
+      rect:
+        serializedVersion: 2
+        x: 959
+        y: 12
+        width: 57
+        height: 83
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1fa33cb66878873b0800000000000000
+      internalID: -5514508732311848207
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      VARCOSoundLogo_White_0: 3802832714797242767
+      VARCOSoundLogo_White_1: -3701419490942617010
+      VARCOSoundLogo_White_10: -5514508732311848207
+      VARCOSoundLogo_White_2: -4021642709043658689
+      VARCOSoundLogo_White_3: 4364964712664034760
+      VARCOSoundLogo_White_4: 1713315139469961068
+      VARCOSoundLogo_White_5: 1771144477265550314
+      VARCOSoundLogo_White_6: -1100993207601148465
+      VARCOSoundLogo_White_7: 3377055291341021321
+      VARCOSoundLogo_White_8: 7445526320536830166
+      VARCOSoundLogo_White_9: -4534342637422843966
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9e72bd956b65294a846c4174caf0f0f, type: 3}
+  m_Name: ResourceGenerator2
+  m_EditorClassIdentifier: Assembly-CSharp::MachineBlock
+  blockName: Machine:ResourceGenerator2
+  displayName: "2\uD2F0\uC5B4 \uC790\uC6D0 \uC0DD\uC131\uAE30"
+  dropItem: {fileID: 0}
+  dropCount: 1
+  machinePrefab: {fileID: 2613032363430261748, guid: a21f529dcd031174f9717f4c57194ad3, type: 3}
+  uiPrefab: {fileID: 5552180001130679138, guid: 1e82c4b6fcf9c094695cdd565b930e2f, type: 3}
+  runningSprite: {fileID: 0}
+  manualStepRatio: 0
+  size: {x: 1, y: 1}
+  tier: 2
+  recipeGroupId: ResourceGenerator2
+  inputSlotCount: 0
+  outputSlotCount: 1
+  fuelSlotCount: 0
+  fuelBurnRate: 0
+  spentFuelItem: {fileID: 0}
+  upgradeSlotCount: 2
+  inputFluidSlotCount: 0
+  outputFluidSlotCount: 0
+  maxFluidAmount: 0
+  maxEnergyAmount: 0
+  isUseEnergy: 0
+  isGenerator: 0
+  powerRange: 0
+  energyUseRate: 0
+  speedMultiplier: 1
+  chanceMultiplier: 1

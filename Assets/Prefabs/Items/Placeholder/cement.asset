@@ -15,6 +15,7 @@ MonoBehaviour:
   itemName: cement
   displayName: "\uC2DC\uBA58\uD2B8"
   placeable: 0
-  Icon: {fileID: 21300000, guid: 4a4d2640fbd603542be3906e18903c59, type: 3}
+  Icon: {fileID: 7685052992939502548, guid: 1fd456dacdc7be746aaa00cb9f929340, type: 3}
   maxStack: 64
+  fluidOverlay: {fileID: 0}
   burnEnergy: 0

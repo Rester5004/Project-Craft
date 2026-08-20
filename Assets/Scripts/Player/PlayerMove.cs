@@ -8,6 +8,15 @@ public class PlayerMove : MonoBehaviour
     private Rigidbody2D rb;
     private Vector2 pendingInput;
 
+    /// <summary>
+    /// 이번 물리 스텝에 실제로 움직이려 하는가. <b>발소리가 이 하나를 본다</b>(<see cref="PlayerFootsteps"/>).
+    ///
+    /// <see cref="PlayerAnimation"/> 처럼 입력을 직접 읽지 않는 이유: 여기 <c>pendingInput</c> 은
+    /// UI 가 열려 있으면 이미 0 이라, <b>인벤토리를 켜 둔 채 WASD 를 눌러도 발소리가 안 난다.</b>
+    /// (애니메이션은 그 경우 제자리에서 걷는 것으로 보이는데, 그건 별건이다.)
+    /// </summary>
+    public bool IsMoving => pendingInput.sqrMagnitude > 0.01f;
+
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();

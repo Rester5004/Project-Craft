@@ -25,6 +25,7 @@ public class TilemapTextureLoader : Singleton<TilemapTextureLoader>
     [SerializeField] Tilemap wallBottomTilemap; // 벽 "앞면" 전용 - 항상 플레이어보다 뒤에 고정 정렬
     [SerializeField] Tilemap wallTopTilemap; // 벽 "윗면" 전용 - 플레이어와 같은 Order in Layer로 Y-sort
     [SerializeField] Tilemap floorTextureTilemap; // 타일맵 컴포넌트 연결
+    [SerializeField] Tilemap floorOverlayTilemap; // 바닥 '위에' 겹치는 것(입구·웅덩이). sortingOrder 115
     [SerializeField] Tilemap blocksTilemap;
     [SerializeField] Tilemap floorTilemap;
     [SerializeField] Tilemap outlineTilemap;
@@ -147,6 +148,44 @@ public class TilemapTextureLoader : Singleton<TilemapTextureLoader>
         floorTextureTilemap.SetTile((Vector3Int)pos, floorTile);
     }
 
+    /// <summary>
+    /// 바닥 <b>위에</b> 겹치는 오버레이(지하 입구 · 석유/물 웅덩이)를 그린다.
+    ///
+    /// 바닥 텍스처와 같은 기계(<see cref="MainBlock.floorSprite"/> + 스프라이트별 Tile 캐시)를 그대로 쓴다 —
+    /// 다른 것은 <b>어느 타일맵에 찍느냐</b>뿐이다. 그림의 모서리가 뚫려 있어 아래 바닥이 비쳐 보인다.
+    /// 오버레이가 없는 칸은 <b>반드시 지운다</b> — 안 그러면 입구를 써서 없앤 자리에 그림이 남는다.
+    /// </summary>
+    public void LoadFloorOverlay(Vector2Int pos)
+    {
+        if (floorOverlayTilemap == null) return;
+
+        WorldMap map = WorldMap.InstanceIfAlive;
+        string overlayId = map != null ? map.GetOverlayAt(pos) : null;
+        if (string.IsNullOrEmpty(overlayId))
+        {
+            floorOverlayTilemap.SetTile((Vector3Int)pos, null);
+            return;
+        }
+
+        MainBlock block = ItemDictionary.Instance != null
+            ? ItemDictionary.Instance.GetBlock(overlayId) as MainBlock : null;
+        if (block == null || block.floorSprite == null)
+        {
+            WarnOnce(overlayId, "오버레이 블록이 없거나 floorSprite 가 비어 있습니다");
+            floorOverlayTilemap.SetTile((Vector3Int)pos, null);
+            return;
+        }
+
+        if (!floorTileCache.TryGetValue(block.floorSprite, out Tile overlayTile))
+        {
+            overlayTile = ScriptableObject.CreateInstance<Tile>();
+            overlayTile.sprite = block.floorSprite;
+            floorTileCache[block.floorSprite] = overlayTile;
+        }
+
+        floorOverlayTilemap.SetTile((Vector3Int)pos, overlayTile);
+    }
+
     // ── 벽 ──────────────────────────────────────────────────────────────
 
     public void LoadWallTexture(Vector2Int pos)
@@ -246,6 +285,7 @@ public class TilemapTextureLoader : Singleton<TilemapTextureLoader>
     public void ClearTileTexture(Vector2Int pos)
     {
         floorTextureTilemap.SetTile((Vector3Int)pos, null);
+        if (floorOverlayTilemap != null) floorOverlayTilemap.SetTile((Vector3Int)pos, null);
         wallBottomTilemap.SetTile((Vector3Int)pos, null);
         wallTopTilemap.SetTile((Vector3Int)pos, null);
     }

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 /// <summary>
 /// 월드에 배치된 기계 하나의 런타임 인스턴스. 자기 인벤토리(<see cref="MachineInventory"/>)를 보유하며,
@@ -10,7 +11,9 @@ public class MachineInstance : MonoBehaviour
     // 기계 정보 미입력(딕셔너리 미구성) 상태에서도 현행 기계가 동작하도록 하는 폴백.
     private const int DefaultInputCount = 3;
     private const int DefaultOutputCount = 6;
-
+    private bool hasRunningImage;
+    private Sprite runningSprite;
+    private Light2D runningLight;
     private int inputSlotCount;
     private int outputSlotCount;
     private int fuelSlotCount;
@@ -73,7 +76,6 @@ public class MachineInstance : MonoBehaviour
         Flush();   // 청크 언로드·저장 사이에 잃지 않도록 즉시 레코드에 반영
         return true;
     }
-
     /// <summary>전송 대상을 끊는다.</summary>
     public bool RemoveLink(Vector2Int cell)
     {
@@ -89,7 +91,30 @@ public class MachineInstance : MonoBehaviour
     private float burnRemaining;   // 남은 에너지
     private float burnTotal;       // 이번에 넣은 연료의 총 에너지(잔량 바 기준)
 
+    /// <summary>
+    /// <b>지금 타고 있는 연료</b>의 초당 연소량. 연료가 정하므로(<see cref="FuelTable"/>) 기계 값이 아니다.
+    ///
+    /// ⚠ <b>세이브에 남겨야 한다</b>(v14) — 남은 에너지만으로는 "초당 얼마로 타는 중이었는지" 를 알 수 없어
+    /// 로드 뒤 석탄을 갈탄 속도로 태우는 일이 생긴다. <b>0 은 "모름"</b> 이고 그때는 기계 값으로 떨어진다
+    /// (= v13 세이브가 예전 그대로 이어 탄다).
+    /// </summary>
+    private float burnRate;
+
+    /// <summary>실제로 적용할 초당 연소량. 표가 없거나 옛 세이브면 기계의 <c>fuelBurnRate</c>.</summary>
+    private float ActiveBurnRate => burnRate > 0f ? burnRate : fuelBurnRate;
+
     public bool UsesFuel => fuelSlotCount > 0;
+
+    /// <summary>
+    /// <b>유체를 태우는 기계인가</b>(가스 발전기). 연료 칸이 아니라 입력 탱크에서 점화한다.
+    ///
+    /// ⚠ 이 판정이 없으면 연료 칸을 0 으로 내린 가스 발전기가
+    /// <see cref="TickGenerator"/> 의 <b>"무연료 = 무한 발전"</b> 분기(지열)로 떨어진다.
+    /// </summary>
+    public bool BurnsFluidFuel => inputTanks.Count > 0 && FuelTable.HasFluidRow(blockId);
+
+    /// <summary>연료를 태우기는 하는가(칸이든 탱크든). 연료 잔량 바를 띄울지 정한다.</summary>
+    public bool BurnsFuel => UsesFuel || BurnsFluidFuel;
     public float BurnRemaining => burnRemaining;
     public float BurnRatio => burnTotal > 0f ? Mathf.Clamp01(burnRemaining / burnTotal) : 0f;
 
@@ -204,6 +229,33 @@ public class MachineInstance : MonoBehaviour
     private int SlotCapacityFor(int index, Items item)
         => index >= 0 && index < inputSlotCount ? InputSlotCapacity(item) : RecipeSolver.MaxStackOf(item);
 
+    /// <summary>
+    /// 평면 인덱스 한 칸이 이 아이템을 받는가. <see cref="MachineInventory.acceptOverride"/> 에 꽂힌다.
+    /// <b>연료 구간만</b> 제한한다 — 나머지 칸의 규칙은 예전 그대로다.
+    /// </summary>
+    private bool AcceptsInSlot(int index, Items item)
+    {
+        int fuelBase = inputSlotCount + outputSlotCount;
+        if (index < fuelBase || index >= fuelBase + fuelSlotCount) return true;
+        return AcceptsFuel(item);
+    }
+
+    /// <summary>
+    /// 이 기계가 이 아이템을 연료로 받는가. <b>연료 화이트리스트의 정본은 이 함수 하나다.</b>
+    ///
+    /// ⚠ <b>손으로 넣는 쪽(슬롯 UI)과 파이프가 같은 함수를 봐야 한다</b> —
+    /// 표가 둘로 갈리면 "손으로는 들어가는데 파이프로는 안 들어가는" 상태가 생긴다
+    /// (저장 블록의 <see cref="PipeRouter.CanInsertInto"/> 와 같은 규약).
+    ///
+    /// <see cref="FuelTable"/> 에 이 기계의 행이 하나도 없으면 <b>예전 그대로 아무 연료나 받는다</b>(화로).
+    /// </summary>
+    public bool AcceptsFuel(Items item)
+    {
+        if (item == null || !UsesFuel) return false;
+        if (FuelTable.HasAnyRow(blockId)) return FuelTable.AcceptsItem(blockId, item.itemName);
+        return item.IsFuel;
+    }
+
     /// <summary>진행도 0~1. 진행 중이 아니면 0.</summary>
     public float ProgressRatio
     {
@@ -251,6 +303,8 @@ public class MachineInstance : MonoBehaviour
         inventory.OnChanged += HandleInventoryChanged;
         // 숫자가 아니라 함수를 꽂는다 — 저장소 최대치는 업그레이드 모듈에 따라 런타임에 바뀐다.
         inventory.capacityOverride = SlotCapacityFor;
+        // 같은 이유로 "이 칸이 이 아이템을 받는가" 도 함수로 묻는다(연료 화이트리스트).
+        inventory.acceptOverride = AcceptsInSlot;
 
         // <b>탱크는 ApplyConfig 안에서 만든다.</b> 여기(LoadFrom 다음)에서 만들면
         // 레코드에서 복원한 유체가 매번 지워진다 — 전력·진행도가 정확히 이 자리에서 사라졌던 이력이 있다.
@@ -294,8 +348,12 @@ public class MachineInstance : MonoBehaviour
         // 폴백으로 넘어가면 fuelSlotCount 까지 0 으로 덮여 발전기가 조용히 죽는다.
         // ⚠ <b>IsGenerator 도 함께 봐야 한다</b> — 지열 발전기는 연료 칸마저 0 이라 위 세 조건에
         //    하나도 안 걸리고, 폴백에서 isGenerator 가 지워져 <b>발전을 아예 안 했다</b>.
+        //    ⚠ <b>유체 탱크도 함께 봐야 한다</b> — 펌프는 입출력·연료가 전부 0 이고 출력 탱크만 있어서
+        //       세 조건에 하나도 안 걸리고, 폴백에서 3/6 으로 덮여 <b>발밑 판정 이전에 이미 죽어 있었다</b>
+        //       (지열 발전기가 IsGenerator 로 걸렸던 것과 똑같은 종류의 누락).
         if (info != null && (info.AllowsZeroSlots || info.IsGenerator
-                             || info.inputSlotCount > 0 || info.outputSlotCount > 0 || info.fuelSlotCount > 0))
+                             || info.inputSlotCount > 0 || info.outputSlotCount > 0 || info.fuelSlotCount > 0
+                             || info.inputFluidSlotCount > 0 || info.outputFluidSlotCount > 0))
         {
             inputSlotCount = info.inputSlotCount;
             outputSlotCount = info.outputSlotCount;
@@ -355,6 +413,8 @@ public class MachineInstance : MonoBehaviour
 
         burnRemaining = record.burnRemaining;
         burnTotal = record.burnTotal;
+        // 0 이면 "모름"(v13 이하 세이브)이고, ActiveBurnRate 가 기계 값으로 떨어뜨린다.
+        burnRate = record.burnRate;
 
         // 진행도는 복원만 하고 레시피는 다시 고른다. Tick 이 그때 craftTime 으로 잘라 준다
         // (레시피 선택 지점에서 progress 를 0 으로 밀지 않는 이유가 이것이다).
@@ -419,6 +479,7 @@ public class MachineInstance : MonoBehaviour
 
         record.burnRemaining = burnRemaining;
         record.burnTotal = burnTotal;
+        record.burnRate = burnRate;
 
         record.energy = currentEnergy;
         record.roundRobinCursor = roundRobinCursor;
@@ -490,7 +551,16 @@ public class MachineInstance : MonoBehaviour
 
         Sprite target = Info != null ? Info.runningSprite : null;
         if (target == null || bodyRenderer == null) return;
-
+        if(value)
+        {
+            runningLight = GetComponentInChildren<Light2D>(true);
+            if (runningLight != null) runningLight.enabled = true;
+        }
+        else
+        {
+            runningLight = GetComponentInChildren<Light2D>(true);
+            if (runningLight != null) runningLight.enabled = false;
+        }
         bodyRenderer.sprite = value ? target : idleSprite;
     }
 
@@ -498,7 +568,6 @@ public class MachineInstance : MonoBehaviour
     private void Update()
     {
         if (inventory == null) { SetRunning(false); return; }
-
         // 양동이 교환은 가공보다 먼저 한다 — 이번 프레임에 넣은 물로 바로 돌 수 있어야 한다.
         // 발전기·조합대도 탱크가 있으면 교환한다(탱크가 0개면 즉시 반환하므로 비용이 없다).
         ExchangeBuckets();
@@ -628,6 +697,10 @@ public class MachineInstance : MonoBehaviour
         RollChanceOutputs(activeRecipe);
         PushFluids();
 
+        // 완성음. <b>게이트는 boundUI 하나다</b> — "이 기계의 창이 지금 떠 있는가" 의 정본이 그것이라,
+        // 화면 밖 공장 수십 대가 한꺼번에 울지 않는다. 수동 기계도 ManualStep → Tick 으로 여기를 지난다.
+        if (boundUI != null) SfxPlayer.PlayCraft();
+
         activeRecipe = null;
         progress = 0f;
         recipeDirty = true;
@@ -697,7 +770,9 @@ public class MachineInstance : MonoBehaviour
         // 소비 기계: 효율 모듈이 연료를 덜 쓰게 한다.
         // 발전기   : 태운 양이 곧 발전량이라 소비를 줄이면 출력도 준다 — 대신 <b>속도</b> 모듈이
         //            연소를 빠르게 해 출력을 올린다(총 에너지는 그대로). 효율은 TickGenerator 가 산출 쪽에서 건다.
-        float want = fuelBurnRate * deltaTime * (isGenerator ? SpeedFactor : EfficiencyFactor);
+        // ⚠ <b>기계의 fuelBurnRate 가 아니라 지금 타는 연료의 속도</b>다(FuelTable).
+        //    표가 없는 기계(화로)에서는 ActiveBurnRate 가 fuelBurnRate 로 떨어져 예전과 같다.
+        float want = ActiveBurnRate * deltaTime * (isGenerator ? SpeedFactor : EfficiencyFactor);
         burned = Mathf.Min(want, burnRemaining);
 
         burnRemaining -= want;
@@ -767,7 +842,7 @@ public class MachineInstance : MonoBehaviour
         bool burning = false;
         if (currentEnergy < MaxEnergyAmount)
         {
-            if (Info != null && !Info.UsesFuel)
+            if (Info != null && !Info.UsesFuel && !BurnsFluidFuel)
             {
                 // <b>연료가 없는 발전기</b>(지열). 땅이 원천이라 태울 것이 없고 멈추지도 않는다.
                 // 발전량의 정본은 <see cref="MachineBlock.fuelBurnRate"/> 를 그대로 쓴다 —
@@ -849,18 +924,66 @@ public class MachineInstance : MonoBehaviour
         if (links.Count > 0) roundRobinCursor = (roundRobinCursor + 1) % links.Count;   // 다음 프레임은 다음 대상부터
     }
 
-    /// <summary>연료 칸에서 하나를 소모해 불을 붙인다. 연료가 없으면 false.</summary>
-    private bool Ignite()
+    /// <summary>
+    /// 연료 칸에서 한 묶음을 소모해 불을 붙인다. 연료가 없으면 false.
+    ///
+    /// <b>표(<see cref="FuelTable"/>)가 있으면 표가 이긴다</b> — 총 에너지도 초당 속도도 연료가 정한다.
+    /// 표에 없는 기계(화로)는 예전 그대로 <see cref="Items.burnEnergy"/> + 기계의 <c>fuelBurnRate</c> 다.
+    /// </summary>
+    private bool Ignite() => BurnsFluidFuel ? IgniteFluid() : IgniteItem();
+
+    /// <summary>
+    /// 입력 탱크에서 한 묶음을 태워 불을 붙인다(가스 발전기).
+    /// 아이템 연료와 달리 <b>표에 없는 유체는 애초에 탱크에 들어오지 못한다</b>
+    /// (<see cref="PipeRouter.TargetTanks"/> 가 같은 표를 본다) — 그래도 여기서 한 번 더 거른다.
+    /// </summary>
+    private bool IgniteFluid()
+    {
+        for (int i = 0; i < inputTanks.Count; i++)
+        {
+            FluidStack tank = inputTanks[i];
+            if (tank == null || tank.fluid == null || tank.amount <= 0) continue;
+            if (!FuelTable.TryGet(blockId, tank.fluid.fluidId, true, out FuelTable.Row row)) continue;
+
+            int take = Mathf.Max(1, row.amount);
+            if (tank.amount < take) continue;   // 한 묶음이 모자라면 아직 안 태운다
+
+            tank.amount -= take;
+            if (tank.amount <= 0) tank.Clear();
+
+            burnTotal = row.TotalEnergy;
+            burnRate = row.rate;
+            burnRemaining = burnTotal;
+            NotifyFluidChanged();
+            return true;
+        }
+        return false;
+    }
+
+    private bool IgniteItem()
     {
         for (int i = 0; i < inventory.fuelSlots.Count; i++)
         {
             ItemStack stack = inventory.fuelSlots[i];
-            if (stack.item == null || stack.count <= 0 || !stack.item.IsFuel) continue;
+            if (stack.item == null || stack.count <= 0) continue;
+            if (!AcceptsFuel(stack.item)) continue;   // 화이트리스트도 이 한 곳을 지난다
 
-            burnTotal = stack.item.burnEnergy;
+            int take = 1;
+            if (FuelTable.TryGet(blockId, stack.item.itemName, false, out FuelTable.Row row))
+            {
+                take = Mathf.Max(1, row.amount);
+                if (stack.count < take) continue;     // 한 묶음이 모자라면 이 칸은 건너뛴다
+                burnTotal = row.TotalEnergy;
+                burnRate = row.rate;
+            }
+            else
+            {
+                burnTotal = stack.item.burnEnergy;
+                burnRate = fuelBurnRate;
+            }
             burnRemaining = burnTotal;
 
-            stack.count--;
+            stack.count -= take;
             if (stack.count <= 0) stack.Clear();
             inventory.NotifyChanged();
             return true;
@@ -922,7 +1045,64 @@ public class MachineInstance : MonoBehaviour
     /// 기계가 통째로 잠긴다(<see cref="SelectRecipe"/> 는 첫 후보를 잡으면 더 안 찾는다).
     /// </summary>
     private bool CanRun(Recipe recipe)
-        => RecipeSolver.CanCraft(inventory.inputSlots, recipe) && RecipeSolver.HasFluids(inputTanks, recipe);
+    {
+        // <b>입력이 하나도 없는 레시피 = 자원 생성기.</b> RecipeSolver.HasInputs 는 이것을 false 로
+        // 돌려주는데, <b>그쪽을 고치면 안 된다</b> — 조합대의 도구 부품 레시피 6개
+        // (rod·blade·plate·hammer_head·pickaxe_head·knife)도 재료를 재질 칸에서 받느라 inputs 가
+        // 비어 있고, CraftingTableUI 가 RecipeSolver.CanCraft 를 직접 부른다. 거기를 열면
+        // <b>부품을 재료 없이 무한히 찍게 된다.</b>
+        //
+        // 그래서 예외는 <b>입력 칸이 아예 없는 기계</b>에서만 연다 — 자원 생성기의 정의 그 자체다.
+        // ⚠ SO 값이 아니라 ApplyConfig 가 채운 런타임 inputSlotCount 로 판정한다.
+        //    그래야 3/6 폴백에 걸린 기계(펌프)가 실수로 무한 생산에 끼지 않는다.
+        if (inputSlotCount == 0 && !HasAnyInput(recipe)) return StandsOnRequiredFluid(recipe);
+
+        return RecipeSolver.CanCraft(inventory.inputSlots, recipe) && RecipeSolver.HasFluids(inputTanks, recipe);
+    }
+
+    /// <summary>
+    /// <b>입력이 없고 유체만 내는 레시피는 지형에서 퍼 올리는 것이다</b>(펌프) — 발밑에 그 유체가
+    /// 고여 있을 때만 돈다. 아이템을 내는 무입력 레시피(자원 생성기)는 지형과 무관하므로 언제나 참이다.
+    ///
+    /// 이 한 줄이 세 가지를 함께 한다: 물 위에서는 <c>extract_water</c>, 석유 위에서는 <c>extract_oil</c>
+    /// 이 골라지므로 <b>한 그룹에 둘을 둬도 안 겹치고</b>(SelectRecipe 는 첫 것만 고른다),
+    /// 아무 데나 놓은 펌프는 안 돌며, 자원 생성기는 영향을 받지 않는다.
+    ///
+    /// 어느 칸에 무엇이 고여 있는지는 <see cref="WorldMap.FluidAt"/> 하나가 답한다 —
+    /// 빈 그릇으로 퍼는 쪽과 같은 함수라 둘이 어긋날 수 없다.
+    /// </summary>
+    private bool StandsOnRequiredFluid(Recipe recipe)
+    {
+        if (recipe.fluidOutputs == null || recipe.fluidOutputs.Count == 0) return true;
+
+        WorldMap map = WorldMap.InstanceIfAlive;
+        if (map == null) return false;
+
+        FluidDefine under = map.FluidAt(worldCell);
+        if (under == null) return false;
+
+        for (int i = 0; i < recipe.fluidOutputs.Count; i++)
+        {
+            FluidStack want = recipe.fluidOutputs[i];
+            if (want != null && want.fluid == under) return true;
+        }
+        return false;
+    }
+
+    /// <summary>레시피가 먹는 것이 하나라도 있는가(아이템 · 유체). 없으면 자원 생성기 레시피다.</summary>
+    private static bool HasAnyInput(Recipe recipe)
+    {
+        if (recipe == null) return false;
+        if (recipe.inputs != null)
+            for (int i = 0; i < recipe.inputs.Count; i++)
+                if (recipe.inputs[i] != null && recipe.inputs[i].item != null && recipe.inputs[i].count > 0) return true;
+
+        if (recipe.fluidInputs != null)
+            for (int i = 0; i < recipe.fluidInputs.Count; i++)
+                if (recipe.fluidInputs[i] != null && recipe.fluidInputs[i].amount > 0) return true;
+
+        return false;
+    }
 
     /// <summary>
     /// 입력 슬롯·탱크로 지금 만들 수 있는 첫 레시피를 고른다.

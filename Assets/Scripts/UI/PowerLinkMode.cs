@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using TMPro;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Tilemaps;
@@ -38,6 +39,15 @@ public class PowerLinkMode : MonoBehaviour
     [Tooltip("한 칸을 통째로 채우는 흰 타일(Assets/Asset/Common/White1x1Tile.asset). 색은 SetColor 로 입힌다.")]
     [SerializeField] private Tile solidTile;
 
+    [Tooltip("전송 모드에서 화면을 옮길 카메라. 비우면 씬에서 찾는다.")]
+    [SerializeField] private CinemachineCamera viewCamera;
+
+    [Tooltip("이동 키로 화면이 움직이는 속도(초당 칸).")]
+    [SerializeField, Min(1f)] private float panSpeed = 14f;
+
+    [Tooltip("전송 범위 바깥으로 더 볼 수 있는 여유(칸). 너무 키우면 청크가 안 불린 빈 화면이 보인다.")]
+    [SerializeField, Min(0f)] private float panMargin = 3f;
+
     public static PowerLinkMode Instance { get; private set; }
 
     /// <summary>전송 모드가 켜져 있는가. PlayerInteraction 이 커서 윤곽선·채굴을 멈추는 데 쓴다.</summary>
@@ -53,6 +63,12 @@ public class PowerLinkMode : MonoBehaviour
 
     private SpriteRenderer playerRenderer;
     private MachineInteraction machineInteraction;
+
+    // ── 화면 이동 ───────────────────────────────────────────────
+    // 발전 범위(powerRange 8~12)가 화면(세로 8칸)보다 넓어 한 번에 다 안 보인다.
+    private Transform savedFollow;   // 들어오기 전 카메라가 따라가던 대상(= 플레이어)
+    private Vector2 panCenter;       // 발전기 자리. 여기서 얼마나 벗어날 수 있는지를 잰다
+    private float panLimit;
 
     private void Awake()
     {
@@ -104,7 +120,15 @@ public class PowerLinkMode : MonoBehaviour
         // 플레이어 액션맵 전체를 끈다(이동·채굴·배치·핫바). UI 클릭은 EventSystem 이
         // 별도 액션 에셋으로 처리하므로 이 모드의 좌/우클릭은 그대로 살아 있다.
         if (InputActionManager.Instance != null)
+        {
             InputActionManager.Instance.SetPlayerInputEnabled(false);
+            // ⚠ 이동만 <b>도로 켠다</b> — 이 모드에서는 화면을 옮기는 데 쓴다.
+            //    직접 WASD 를 읽지 않는 이유: 그러면 키 재설정(StartRebind)이 여기서만 안 먹는다.
+            //    플레이어는 그래도 안 움직인다 — UIManager 에 이 모드가 열려 있어 PlayerMove 가 입력을 0 으로 만든다.
+            InputActionManager.Instance.GetAction("Move")?.Enable();
+        }
+
+        BeginPan();
 
         SetPlayerVisible(false);
         if (TilemapTextureLoader.Instance != null) TilemapTextureLoader.Instance.ClearOutline();
@@ -117,6 +141,7 @@ public class PowerLinkMode : MonoBehaviour
     {
         isOpen = false;
         ClearOverlay();
+        EndPan();
         SetPlayerVisible(true);
 
         if (InputActionManager.Instance != null)
@@ -138,7 +163,60 @@ public class PowerLinkMode : MonoBehaviour
         if (panel == null || !panel.activeInHierarchy) { Exit(); return; }
 
         UnityEngine.InputSystem.Keyboard keyboard = UnityEngine.InputSystem.Keyboard.current;
-        if (keyboard != null && keyboard.escapeKey.wasPressedThisFrame) Exit();
+        if (keyboard != null && keyboard.escapeKey.wasPressedThisFrame) { Exit(); return; }
+
+        UpdatePan(Time.unscaledDeltaTime);
+    }
+
+    // ── 화면 이동 ───────────────────────────────────────────────
+
+    /// <summary>
+    /// 카메라를 플레이어에게서 떼어 발전기 위에 세운다.
+    ///
+    /// <b>추적 대상을 null 로 두고 vcam 트랜스폼을 직접 옮긴다</b> — 따라갈 임시 오브젝트를 만들면
+    /// 그것을 만들고 지우는 수명 관리가 하나 더 늘고, 몸통 컴포넌트(OrbitalFollow)는 대상이 없으면
+    /// 아무 일도 하지 않으므로 vcam 이 놓아둔 자리에 그대로 선다.
+    /// </summary>
+    private void BeginPan()
+    {
+        if (viewCamera == null) viewCamera = FindFirstObjectByType<CinemachineCamera>();
+        if (viewCamera == null || generator == null) return;
+
+        panCenter = new Vector2(generator.worldCell.x + 0.5f, generator.worldCell.y + 0.5f);
+        panLimit = (generator.Info != null ? generator.Info.powerRange : 0) + panMargin;
+
+        savedFollow = viewCamera.Follow;
+        viewCamera.Follow = null;
+
+        Vector3 p = viewCamera.transform.position;
+        viewCamera.transform.position = new Vector3(panCenter.x, panCenter.y, p.z);
+    }
+
+    /// <summary>카메라를 원래 대상(플레이어)에게 돌려준다.</summary>
+    private void EndPan()
+    {
+        if (viewCamera == null) return;
+        viewCamera.Follow = savedFollow;
+        savedFollow = null;
+    }
+
+    /// <summary>
+    /// 이동 입력으로 화면을 민다. <b>발전기 주위 정사각형 안에 가둔다</b> —
+    /// <see cref="MachineInstance.IsInPowerRange"/> 가 체비쇼프 거리라 모양을 맞췄고,
+    /// 더 나가 봐야 청크가 안 불려 빈 화면만 보인다.
+    /// </summary>
+    private void UpdatePan(float dt)
+    {
+        if (viewCamera == null || viewCamera.Follow != null) return;   // BeginPan 이 실패했으면 아무 일도 안 한다
+        if (InputActionManager.Instance == null) return;
+
+        Vector2 move = InputActionManager.Instance.MoveValue;
+        if (move.sqrMagnitude < 0.0001f) return;
+
+        Vector3 p = viewCamera.transform.position + (Vector3)(move * (panSpeed * dt));
+        p.x = Mathf.Clamp(p.x, panCenter.x - panLimit, panCenter.x + panLimit);
+        p.y = Mathf.Clamp(p.y, panCenter.y - panLimit, panCenter.y + panLimit);
+        viewCamera.transform.position = p;
     }
 
     /// <summary>

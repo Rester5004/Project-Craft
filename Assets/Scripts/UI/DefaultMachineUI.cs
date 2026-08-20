@@ -289,7 +289,9 @@ public class DefaultMachineUI : MonoBehaviour
                 boundSlots.Add(fuels[f].slot);
             }
         }
-        if (fuelBar != null && fuelBar.go != null) fuelBar.go.SetActive(visibleFuelCount > 0);
+        // 연료 칸이 없어도 유체를 태우는 기계(가스 발전기)는 잔량 바가 보여야 한다.
+        bool showFuelBar = visibleFuelCount > 0 || (instance != null && instance.BurnsFuel);
+        if (fuelBar != null && fuelBar.go != null) fuelBar.go.SetActive(showFuelBar);
 
         // 업그레이드 슬롯: 컨테이너 평면 인덱스 [입력 + 출력 + 연료 .. ]
         int upgradeBase = containerInputCount + containerOutputCount + containerFuelCount;

@@ -104,7 +104,8 @@ public static class ItemAliases
         { "마법 가루", "magic_powder" }, { "황 가루", "sulfur_powder" },
         { "마력 파편", "mana_shard" },   { "마력 칩", "mana_chip" },
         { "물", "water" },              { "용암", "lava" },
-        { "원유", "crude_oil" },        { "석유", "petroleum" },
+        { "원유", "crude_oil" },        { "석유", "gasoline" },      // 석유 -> 가솔린 개명(2026-08-20)
+        { "petroleum", "gasoline" },    // 옛 세이브 키(산출처가 없어 실제로 쓰인 적은 없다)
         { "산성 용액", "acid_solution" }, { "저전압 전력", "low_voltage_power" },
 
         // 씨앗

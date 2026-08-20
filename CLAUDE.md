@@ -43,6 +43,12 @@ C:\Users\c\AppData\LocalLow\DefaultCompany\Project Craft\worldmap.dat
 - `WorldMap.Load` 는 **예외가 나면 세이브 파일을 옆으로 치운다**(`SafeFile.Quarantine`. 예전엔 `File.Delete` 였다).
 - **에디트 모드에서 `WorldMap.Instance` 에 접근하지 말 것.** 싱글톤이 Awake 안 된 오브젝트를 만들어,
   플레이 종료 시 `OnApplicationQuit → Save()` 가 헤더만 쓰고 터져 세이브가 잘린다.
+- ⚠ **플레이 중에 스크립트를 저장(재컴파일)하면 그 세션의 저장이 통째로 실패한다**(2026-08-20 실측).
+  도메인 리로드가 `bool isLoaded` 는 살려 오지만 `Dictionary` 인 `chunks` 는 못 살려서, `Save` 의
+  첫 줄 가드를 통과한 뒤 `chunks.Count` 에서 NRE 가 나고 `SafeFile` 이 그것을 **"기록 실패" 로만**
+  알려 준다(`ItemDictionary.EnsureIndex` 가 막는 것과 같은 함정). 지금은 `Save` 가 `chunks == null` 을
+  **명시적 에러 로그와 함께** 걸러 낸다 — 원본 파일은 손대지 않으므로 **플레이를 껐다 켜면 복구된다**.
+  ⚠ 그 세션에서 지은 것은 사라진다. **월드를 만드는 작업 중에는 스크립트를 저장하지 말 것.**
 - 플레이 모드에서 만든 테스트 배치물은 **종료 전에 치운다**(종료 시 자동 저장된다).
   월드를 어지럽히지 않기 위한 정리일 뿐, 개수를 세어 보고할 필요는 없다.
 
@@ -62,17 +68,19 @@ Assets/Scripts/
                  Editor/ PipeSetup PowerSetup FurnaceSetup MachineBlockFiller WrenchSetup
   Machine/       MachineInstance MachineInventory RecipeSolver ExtractionTable CoreUpgradeTable
   Data/          Item(ItemStack) FluidStack ItemInstance ToolInstance
-  Player/        PlayerInteraction Inventory PlayerSave
+  Player/        PlayerInteraction Inventory PlayerSave StartingInventory(첫 시작 지급) PlayerFootsteps
   ItemDictionary/ ItemDictionary RecipeDictionary ToolDictionary
                  Editor/ DictionaryRegistrar RecipeJsonImporter RecipeTreeMerger ...
   UI/            UIManager CommandConsole ItemBrowser PowerLinkMode TooltipUI
                  MachineInteraction Inventory*  Slot/ ItemSlot ItemIconView BarTooltip
                  UIFactory/ CraftingTableUI MachineUIElement ...
+  Audio/         SfxPlayer(단발 효과음 한 곳)   ※ 발소리는 Player/PlayerFootsteps
   InputActionManager.cs   Util/Singleton.cs
 Assets/Prefabs/  Blocks/{Machines,Terrain,Pipes} Items/{Placeholder,Resource1,Tools,ToolParts,Machines}
                  Fluids/  (FluidDefine 8종: water lava crude_oil petroleum acid_solution mana hydrogen oxygen)
                  Recipes/{,Tools,Category,Incomplete} Tools/{Definitions,Materials,PartKinds}
 Assets/Asset/    BlockImages ItemImages MachineImages Tiles/Atlas assetPlaceHolder.png
+                 Sound/  WalkOnStone WalkOnDirt CraftSound (아래 §사운드)
                  Player/Female/  Female.controller + 클립 6개(idle·걷기4·깜빡임)
 Assets/Prefabs/Core/GameRig.prefab   ← 지상·지하 두 씬이 공유하는 공용 rig(아래 §4 참고)
 Assets/Scenes/MapTest.unity          ← 시작 씬. 지속 싱글톤 8종이 여기에만 산다
@@ -109,9 +117,11 @@ Assets/Scenes/UndergroundScene.unity ← GameRig + UndergroundSceneSetup 둘뿐
   | 10 | 기계 가공 진행도 `progress`(초) |
   | 11 | 기계 유체 탱크(입력·출력) + 파이프가 나르는 유체 짐(`ParcelRecord.fluidId`/`amount`) |
   | 12 | 업그레이드 모듈 칸 + 인스턴스별 티어 `tier`(코어 조합기 업그레이드) |
+  | 13 | **바닥 위 오버레이**(지하 입구 · 석유/물 웅덩이) — 청크당 희소 사전 |
+  | 14 | **지금 타는 연료의 초당 연소량** `burnRate` — 연료가 정하므로 기계 값으로는 못 되살린다 |
 
-  `Chunk.Save` 순서: placeable 루프 안에 slots → burn → energy/cursor/links → parcels → faceModes → progress
-  → 유체 탱크 2개 → 업그레이드 슬롯 → tier, 루프 뒤 drops. `Chunk.Load` 는 `if (version >= N)`,
+  `Chunk.Save` 순서: placeable 루프 안에 slots → burn(잔량·총량·**연소율**) → energy/cursor/links → parcels → faceModes → progress
+  → 유체 탱크 2개 → 업그레이드 슬롯 → tier, 루프 뒤 drops → **오버레이**. `Chunk.Load` 는 `if (version >= N)`,
   **참조형은 `else` 로 빈 배열을 넣어야** 이전 세이브에서 NRE 가 안 난다(값형은 기본값이 곧 "없음"이라 불필요).
 - ⚠ **`Bind` 에서 `LoadFrom` 이 복원한 값을 다시 0 으로 밀지 말 것.** 전력이 그래서 사라졌고,
   진행도도 같은 자리에서 지워지고 있었다(`progress = 0f` 가 `LoadFrom` 일곱 줄 뒤에 있었다).
@@ -128,6 +138,20 @@ Assets/Scenes/UndergroundScene.unity ← GameRig + UndergroundSceneSetup 둘뿐
 `UndergroundPalette.DowsingTierOf` 는 `dowsing_rod` 만 인정해서 **지하에 영영 못 들어갔고, 그것 하나로
 게임이 시작조차 되지 않았다**(2026-08-15 에 `ItemAliases` 로 흡수). `dowsing_rod_t1/t2` 자리는
 그 표에 이미 있으니 아이템·레시피만 만들면 1·2등급 방이 열린다.
+
+**탐지기 두 종류.** 표 셋(`DowsingTierOf`·`DiscoveryChanceFor`·`OilPoolChanceFor`)이 전부
+`UndergroundPalette` 에 있어 새 탐지기가 생겨도 `PlayerInteraction` 은 손대지 않는다.
+
+| | 등급 | 발견 | 석유 웅덩이 | 소모 |
+|---|---|---|---|---|
+| `dowsing_rod` 다우징 로드 | 0 | 10% | — | 개수 1 (1회용) |
+| `cavity_scanner` 공동 탐색기 | 1 | 25% | 발견 중 **20%** | **내구도 1**(총 30) |
+
+⚠ **공동 탐색기의 내구도는 `Items.initialDurability` + `ToolInstance` 재사용이다** — 새 인스턴스 타입을
+만들지 않았다. `materialIds` 가 비면 이름이 그대로고 아이콘도 한 장으로 떨어진다.
+붙이는 자리는 **`RecipeSolver.AddItems` 하나**(기계 산출·인벤토리 적재·콘솔 지급이 전부 여기를 지난다)이고,
+**`maxStack` 은 1 이어야 한다** — `Items.OnValidate` 가 못박는다(`StorageCellItem` 과 같은 이유).
+닳아서 0 이 되면 `stack.Clear()` — `WearMiningTool`·`RecipeSolver.ConsumeTools` 와 **같은 규약**이다.
 
 - **월드를 객체로 나누지 않는다.** `WorldMap` 은 그대로 두고 **청크 생성 델리게이트**(`chunkGenerator`)만
   갈아 끼운다(`EnterEphemeralWorld` / `ReturnToPersistentWorld`). 그래서 `MapGenerator`·`PlayerInteraction`·
@@ -151,9 +175,14 @@ Assets/Scenes/UndergroundScene.unity ← GameRig + UndergroundSceneSetup 둘뿐
   한 번에** 정하고 `Generate` 는 나눠 담기만 한다. 청크마다 굴리면 경계에서 규칙이 갈린다.
 - **전리품은 칸마다 굴린다** — 후보 칸에서 표를 위에서부터 훑어 처음 맞은 행 하나만 놓는다(한 칸에 한 종류).
   중앙 3×3 과 물 칸은 후보에서 뺀다(스폰과 동시에 주워지면 안 된다).
-- **포탈은 세이브에 남지 않는다**(런타임 오브젝트). 찾았으면 그 자리에서 들어가야 한다.
-  지상 포탈은 한 번 쓰면 사라진다 — 남기면 탐지기 하나로 무한히 드나든다.
-- 물 타일(`floor:water`)에서 **빈 양동이로 물을 퍼낼 수 있다**(아래 "지형 유체" 참고). 다만 **통행은 막지 않는다.**
+- **입구·출구는 배치물이 아니라 바닥 위 오버레이다**(세이브 v13, `overlay:hole0/1/2`).
+  등급을 실을 자리가 따로 없어 **id 에 넣는다**(`UndergroundPalette.HoleIdFor`/`TierOfHole`).
+  판정은 `PlayerInteraction.TryUseHole` 한 곳 — 지하면 올라오고 지상이면 내려간다.
+  ⚠ **지상 입구는 들어가는 순간 지워진다** — 남기면 탐지기 하나로 무한히 드나든다.
+  세이브에 남는 뜻은 "찾아 두고 나중에 들어가기" 다. **바닥 타일은 애초에 안 건드리므로 되돌릴 것이 없다.**
+  ⚠ 옛 `UndergroundPortal` 은 **삭제했다** — 런타임 오브젝트라 저장되지 않았다.
+- 물웅덩이는 이제 **`overlay:water` 오버레이**다(바닥은 방 바닥 그대로). 빈 양동이로 퍼낼 수 있고
+  **통행은 막지 않는다**. 옛 `floor:water` 타일도 계속 읽히므로 지운 것은 아니다.
 - 디버그: 콘솔 **`/underground <등급>`** 으로 바로 내려가고, 인자 없이 다시 치면 올라온다.
 
 ### 씬 구성 — `GameRig` 프리팹 (⚠ 규칙 하나가 전부다)
@@ -170,6 +199,12 @@ Assets/Scenes/UndergroundScene.unity ← GameRig + UndergroundSceneSetup 둘뿐
 
 - **프리팹은 씬 오브젝트를 참조할 수 없다.** rig 안에서 위 8종을 가리켜야 하면 **`Instance` 로 찾는다**
   (`InventoryUI.trashCan` 이 그래서 직렬화 필드에서 빠졌다).
+- ⚠ **거꾸로도 성립한다 — 씬을 넘어 사는 오브젝트는 rig 안의 것을 `Start` 에서 한 번 찾아 두면 안 된다.**
+  rig 는 씬과 함께 죽는데 그쪽 `Start` 는 다시 불리지 않아 참조가 **유니티 가짜 null** 로 남는다.
+  `InventoryToggle`(PlayerInventory 에 붙어 있다)이 `MachineInteraction` 을 그렇게 잡고 있어서,
+  **지하를 한 번 다녀오면 i 키가 기계 UI 를 못 닫았다** — 인벤토리만 닫히고 기계 창이 남아
+  `isAnyUIOpen` 이 계속 참이라 **이동까지 잠긴다**(상자·아이템 저장소에서 발견됐지만 기계 47종 전부에 해당).
+  고치는 방식은 **캐시가 죽었을 때마다 다시 찾는 프로퍼티**다(`PowerLinkMode.machineInteraction` 과 같은 규약).
 - ⚠ **`TooltipUI` 는 `PersistAcrossScenes => false` 다.** `Awake` 에서 패널을 캔버스 아래에 짓는데 캔버스는
   씬과 함께 죽는다 — 살려 두면 싱글톤만 남고 패널이 없어 **툴팁이 영영 안 뜬다**(`Awake` 는 다시 안 불린다).
   `UIManager`·`TilemapTextureLoader` 와 같은 규약이다.
@@ -344,9 +379,15 @@ Assets/Scenes/UndergroundScene.unity ← GameRig + UndergroundSceneSetup 둘뿐
   `PowerLinkMode` 의 `AddLink`(전력 몫이 N배) · `MapGenerator.FlushAll`(한 기계를 N번 Flush).
 - **쓰기는 `WorldMap.SetPlaceableAt`/`RemovePlaceableAt`(월드 좌표) 로 모았다.** 예전에는 읽기만
   월드 좌표고 쓰기는 청크 로컬이었는데, 발자국은 **청크 경계를 넘을 수 있어** 그 비대칭을 둘 수 없다.
-- ⚠ **콜라이더는 인스턴스에만 맞춘다**(`MapGenerator.ApplyFootprintCollider`, `sortingOrder` 와 같은 규약).
-  프리팹 콜라이더는 대부분 복붙된 `0.8125 × 1.09375` 이고 `tmp_crafter`(코어)는 **아예 없다** —
-  보정이 없으면 2×2 기계의 절반을 뚫고 지나간다. 1×1 은 손대지 않는다(오버행이 의도된 모습).
+- **콜라이더와 그림자는 프리팹에 저작한다**(2026-08-18 사용자 작업). 기계 47종이 각자 알맞은
+  `Collider2D` 와 **`ShadowCaster2D`**(47/47)를 들고 있고, 런타임 보정
+  (옛 `MapGenerator.ApplyFootprintCollider`)은 **호출을 껐다**.
+  ⚠ **런타임 `AddComponent<ShadowCaster2D>()` 로는 스프라이트 실루엣 그림자를 얻을 수 없다** —
+  `Awake` 가 `ShapeProvider` 를 고르는 블록이 `#if UNITY_EDITOR` 안에만 있어(`ShadowCaster2D.cs:321-341`)
+  **에디터에서는 실루엣, 빌드에서는 사각형**이 된다. 프리팹에 저작하면 `m_ShadowCastingSource` 가
+  직렬화돼 빌드에서도 산다 — 벽 그림자가 코드로 짓는데도 괜찮은 것은 애초에 사각형이기 때문이다.
+  ⚠ **`runningSprite` 를 바꿔도 실루엣 그림자는 안 따라간다**(`ShadowShape2DProvider_SpriteRenderer` 의
+  갱신 조건이 `drawMode` 변화뿐이다) — 해당 기계 2종은 그림자가 정지 모양으로 남는다.
 - ⚠ **면 상태는 방향당 하나다.** `faceModes` 는 레코드 하나에 2비트 × 4면이라, 같은 방향으로 늘어선
   여러 칸이 **한 설정을 공유**한다(2×2 의 북쪽 두 면을 따로 지정할 수 없다).
 - **설치 미리보기**(`PlacementPreview`, 루트는 아직 `MapGenerator.Start` 가 만든다 — 이관 대상)는 반투명 기계 그림 +
@@ -368,6 +409,7 @@ Assets/Scenes/UndergroundScene.unity ← GameRig + UndergroundSceneSetup 둘뿐
   교체는 `SetRunning` 한 곳에서만 하고 **상태가 바뀔 때만** 대입한다(매 프레임 대입하면 배칭이 깨진다).
   가동 판정 = **그 프레임에 실제로 진행됐는가**. 재료가 있어도 연료·전력·출력자리가 없으면 정지고,
   발전기는 **연료를 실제로 태운 프레임**만 가동이라 버퍼가 차면 정지 그림이 된다.
+- **완성 시점에 훅이 하나 더 있다** — `boundUI != null` 이면 완성음(`SfxPlayer.PlayCraft`). 아래 §사운드.
 
 #### 발전기의 찌꺼기 산출 (`spentFuelItem`) — 핵발전소
 
@@ -412,10 +454,21 @@ Assets/Scenes/UndergroundScene.unity ← GameRig + UndergroundSceneSetup 둘뿐
   어느 바닥이 어느 유체인지는 **`MainBlock.fluid`(SO 필드) 하나**가 정하고(참조형이라 나머지 지형 7종은
   줄이 없어 자동으로 null = 유체 아님), 그릇 ↔ 내용물의 짝은 `ExchangeBuckets` 와 **같은
   `FluidDefine.emptyItem`/`bucketItem`** 을 본다 — 표가 둘로 갈리지 않는다.
+  ⚠ **"이 칸에 무엇이 고여 있나" 의 정본은 `WorldMap.FluidAt(cell)` 하나다** — 오버레이(석유·물 웅덩이)를
+  먼저 보고 없으면 바닥 타일을 본다. **빈 그릇으로 퍼는 쪽과 펌프가 같은 함수를 본다** —
+  표가 둘로 갈리면 "양동이로는 퍼지는데 펌프는 안 도는" 상태가 생긴다.
   ⚠ **이 분기만 "인접 한 칸" 이 아니라 발밑도 허용한다**(`adjacent || targetCell == playerCell`).
   물은 통행을 막지 않아 그 위에 설 수 있고, 인접만 보면 "물 위에 서 있는데 못 뜨는" 상태가 된다.
   ⚠ **자리가 없으면 빈 그릇을 되돌린다** — 소모가 먼저라 되돌리지 않으면 그릇이 증발한다.
   **붓기(채워진 그릇 → 유체 타일)는 아직 없다** — 놓은 물을 다시 퍼면 무한 증식이라 규칙부터 정해야 한다.
+- **펌프는 발밑 유체로 레시피를 고른다.** 규칙 한 줄이 `MachineInstance.CanRun` 에 있다 —
+  **입력이 없고 유체만 내는 레시피는 `WorldMap.FluidAt(worldCell)` 이 그 유체일 때만 돈다.**
+  그래서 `extract_water`·`extract_oil` 을 **한 그룹(`Pump`)에 둬도 안 겹치고**(무입력 레시피가 둘이면
+  `SelectRecipe` 는 원래 첫 것만 고른다), 아무 데나 놓은 펌프는 안 돌며,
+  **자원 생성기는 영향을 안 받는다**(그쪽은 아이템을 낸다).
+  ⚠ **`ApplyConfig` 의 "미설정" 조건에 유체 탱크를 넣어야 한다** — 펌프는 입출력·연료가 전부 0 이라
+  예전엔 3/6 폴백에 걸려 **발밑 판정 이전에 이미 죽어 있었다**(지열 발전기가 `IsGenerator` 로 걸렸던 것과 같다).
+  **웅덩이는 줄지 않는다** — 지형 유체라 무한이고, 따로 구현할 것이 없다. 펌프 40/s.
 - **탱크는 유체를 다루는 것이 정체성이고 지금 유체 레시피가 있는 기계만** 준다
   (전기 분해기 1/2 · 화학 처리기 2/1 · 마나 용해기 0/1 · 펌프 0/1).
   화로·압축기·조합대·재단은 탱크 없이 **`물`(채워진 양동이) 아이템**을 그대로 먹는다.
@@ -525,14 +578,86 @@ Assets/Scenes/UndergroundScene.unity ← GameRig + UndergroundSceneSetup 둘뿐
 - **지형에 설치해 메인자원·유체를 뽑는 것은 추출기가 아니다** — `자원 생성기`·`펌프`·`지열 발전기` 쪽이다
   (`extraction.json` 의 `terrain` 필드가 그 표시). 입력 0 / 출력 1 로 둬야 3/6 폴백에 안 걸린다.
   **위의 9칸·공유 UI 는 여기엔 적용하지 않는다.**
+
+#### 자원 생성기 (입력 없이 1초에 1개)
+
+**입력이 하나도 없는 레시피**를 도는 기계 4종. 티어가 산출을 정한다 —
+`ResourceGenerator0` 돌 · `0Plus`(강화, `speedMultiplier 2`) 돌 · `ResourceGenerator1` 마력석 ·
+`ResourceGenerator2` 운석. 레시피는 `Recipes/Incomplete/extraction/` 의
+`extract_normal`·`extract_ore`·`extract_meteorite`(전부 `craftTime 1`)다.
+
+- ⚠ **무입력 레시피의 게이트는 `MachineInstance.CanRun` 하나다. `RecipeSolver.HasInputs` 를 고치면 안 된다.**
+  그쪽은 "입력도 유체도 없으면 false" 인데, **조합대의 도구 부품 레시피 6개**
+  (`rod` `blade` `plate` `hammer_head` `pickaxe_head` `knife`)도 재료를 **재질 칸**에서 받느라
+  `inputs` 가 비어 있고 `CraftingTableUI` 가 `RecipeSolver.CanCraft` 를 **직접 부른다** —
+  열어 주면 **부품을 재료 없이 무한히 찍게 된다.** 그래서 예외는
+  **런타임 `inputSlotCount == 0` 인 기계**에서만 연다(자원 생성기의 정의 그 자체다).
+  SO 값이 아니라 `ApplyConfig` 가 채운 값을 보므로 **3/6 폴백에 걸린 기계는 자동으로 제외된다.**
+- ⚠ **그룹을 반드시 티어별로 가른다**(`ResourceGenerator0/1/2`). 입력이 없으면 `CanRun` 이 **항상 참**이라
+  한 그룹에 둘 이상 두면 `SelectRecipe` 가 **첫 것만 영원히 고른다** — 셋 다 돌이 나온다.
+  강화형은 같은 돌 레시피를 쓰므로 `ResourceGenerator0` 를 공유한다.
+- **전부 무전력**(2026-08-19 사용자 결정): `isUseEnergy 0` · `energyUseRate 0` · **`maxEnergyAmount 0`** 셋을
+  함께 넣는다. ⚠ `MachineBlock.EnergyUseRate` 가 `energyUseRate > 0 ? … : maxEnergyAmount * 0.1f` 라
+  버퍼만 남겨 두면 **100/s 가 살아 있다**(전기 화로와 같다).
+- 속도는 **업그레이드 모듈**로만 올린다 — `upgrade_speed` 0.25/개 × 8 × 2칸 → `SpeedFactor` 최대 5 =
+  **초당 5개**(강화형은 ×2 라 10개). 실측으로 확인했다.
+- UI 는 `ResourceGenerator0_UI.prefab` **한 장을 4종이 공유**한다(`BlastFurnace_UI` 에서 입력 2칸만 뺀 것).
+  전력바는 남겨 뒀지만 `isUseEnergy` 가 꺼져 있어 자동으로 안 보인다.
+- ⚠ **1·2티어 건설 레시피가 없다**(2026-08-19 보류) — 아이템 목록(`P`)·콘솔로만 얻는다.
+
 - ⚠ 생성 툴 `ExtractorSetup`(`추출기 계열 설정`) 은 **삭제했다.** 12종이 이미 다 있는데 `Spec` 표가
   `outputSlotCount` 를 조건 없이 덮어써, 손으로 맞춘 값을 되돌리는 함정이었다(실제로 표는 1, 에셋은 9였다).
   이제 **에셋이 유일한 정본**이고 설계 정본은 `자원과 그 가공방식.canvas` 다.
 
+### 연료 (`FuelTable` 이 정본)
+
+**어느 기계가 무엇을 태우고, 그것이 초당 얼마로 몇 초 타는지**를 `Assets/Scripts/Machine/FuelTable.cs`
+static 표 하나가 정한다(`ExtractionTable`·`UndergroundLootTable` 과 같은 꼴 — 값이 문자열·숫자뿐이라
+에셋을 가리킬 필요가 없다). 한 표가 넷을 함께 답한다: **허용 목록**(행이 있는가) · **초당 발전량**(`rate`) ·
+**발전 시간**(`seconds`) · **총 에너지**(둘의 곱).
+
+| 기계 | 연료 | 1단위 | 초당 | 지속 |
+|---|---|---|---|---|
+| 핵발전소 | `nuclear_fuel_rod` | 1개 | 3000 | 60s |
+| 화력 발전기 | `coal` / `brown_coal` | 1개 | 200 | 20s / 10s |
+| 가스 발전기 | `crude_oil` / `gasoline` | **1000(유체)** | 300 / 600 | 20s / 20s |
+
+⚠ **위 숫자를 에셋에서 고치면 아무 일도 일어나지 않는다**(2026-08-20 에 실제로 그랬다).
+`ThermalGenerator.fuelBurnRate` 를 20 → 200 으로, `NuclearPlant` 를 500 → 3000 으로 바꿔 놓았는데
+표가 이기므로 발전량은 그대로였다 — **표를 고쳐야** 바뀐다. 반대로 **표에 행이 없는 기계**
+(화로·지열)는 에셋 값이 정본이다.
+
+- ⚠ **표에 그 기계의 행이 하나도 없으면 지금까지와 완전히 같이 돈다** — 연료 판정은 `Items.IsFuel`,
+  총량은 `Items.burnEnergy`, 초당은 `MachineBlock.fuelBurnRate`. 그래서 **화로·지열은 한 줄도 안 바뀐다**
+  (화로는 그래서 여전히 핵연료봉도 받는다 — 막으려면 표에 두 줄만 더하면 되고 코드는 안 바뀐다).
+- ⚠ **표가 있는 기계에서는 표가 이긴다.** 에셋의 `fuelBurnRate` 는 그 기계에서 더 이상 안 쓰인다 —
+  화력·핵의 값을 바꾸려면 **에셋이 아니라 표**를 고쳐야 한다.
+- **화이트리스트의 정본은 `MachineInstance.AcceptsFuel` 하나**이고 <b>두 곳이 그것을 함께 본다</b>:
+  손으로 넣는 쪽(`IItemContainer.AcceptsItem` → `MachineInventory.acceptOverride` → `ItemSlot.Accepts`)과
+  파이프(`PipeRouter.TargetSlots`). 갈라지면 "손으로는 들어가는데 파이프로는 안 들어가는" 상태가 된다.
+  ⚠ `AcceptsItem` 은 `SlotCapacity` 와 **같은 이유로 저장소에 묻는다** — 슬롯 UI 가 저장소 종류를 보고
+  분기하면 규칙이 흩어진다. 그래서 **UI 프리팹을 한 장도 안 고치고** 기존 연료 칸 전부에 적용됐다.
+- **발전기의 세 갈래를 표가 가른다**(`TickGenerator`):
+  `BurnsFluidFuel`(표에 유체 행) → 입력 탱크에서 점화 · `UsesFuel`(연료 칸) → 칸에서 점화 · 그 외 → 무연료(지열).
+  ⚠ **가스 발전기는 연료 칸이 0 이다** — `BurnsFluidFuel` 판정이 없으면 곧바로 "무연료 = 무한 발전"으로 떨어진다.
+- ⚠ **지금 타는 연료의 연소율은 세이브에 남긴다**(v14 `burnRate`). 남은 에너지만으로는 석탄인지 갈탄인지
+  알 수 없어 로드 뒤 엉뚱한 속도로 탄다. **0 이 "모름"** 이고 그때 `ActiveBurnRate` 가 기계 값으로 떨어진다
+  (= v13 세이브가 예전 그대로 이어 탄다).
+- **가스 발전기는 파이프 전용이다** — 입출력 아이템 칸이 0 이라 `ExchangeBuckets`(양동이 교환)가 안 걸린다.
+  양동이로도 넣게 하려면 입력·출력 칸을 1씩 주면 된다.
+
 ### 전력
-- `MachineBlock`: `isGenerator` `powerRange` `energyUseRate`. 발전 = 연료 연소.
+- `MachineBlock`: `isGenerator` `powerRange` `energyUseRate`. 발전 = 연료 연소(위 §연료).
 - `MachineInstance`: `TickGenerator` → `Distribute()`(라운드로빈, 꽉 찬 곳 건너뜀, 죽은 링크 정리) → `ConsumeEnergy`.
 - `PowerLinkMode` = 전체화면 전송 설정 모드(빨강 미연결 / 초록 연결 / 파랑 발전기). 오버레이 타일맵을 런타임 생성.
+  - **이동 키로 화면을 민다**(발전 범위 8~12칸 > 화면 세로 8칸이라 한 번에 다 안 보인다).
+    `CinemachineCamera.Follow` 를 **null 로 떼고 vcam 트랜스폼을 직접 옮긴다** — 따라갈 임시 오브젝트를
+    만들면 수명 관리가 하나 더 늘고, 몸통(`OrbitalFollow`)은 대상이 없으면 아무 일도 안 해 그 자리에 선다.
+    ⚠ **`Exit` 에서 `Follow` 를 반드시 되돌린다** — 안 그러면 카메라가 플레이어를 영영 안 따라간다.
+  - ⚠ **WASD 를 직접 읽지 않는다.** 액션맵은 끄되 **`Move` 액션만 도로 켠다**(`GetAction("Move").Enable()`) —
+    직접 읽으면 키 재설정(`StartRebind`)이 이 모드에서만 안 먹는다. 플레이어는 `isAnyUIOpen` 때문에
+    어차피 안 움직인다. 화면은 발전기 중심 정사각형(`powerRange + panMargin`)에 가둔다 —
+    더 나가면 청크가 안 불려 빈 화면이 된다.
 - 값 채우기: `Tools/Project Craft/Machines/전력 기본값 채우기`.
 
 ### 파이프 (아이템 · 액체 · 기체 전부 운반한다)
@@ -550,6 +675,23 @@ Assets/Scenes/UndergroundScene.unity ← GameRig + UndergroundSceneSetup 둘뿐
 - 유체는 `TryExtractFluid`/`DeliverFluid` 가 맡고 나머지는 아이템 경로와 완전히 같다.
   ⚠ 유체 파이프의 `throughput` 은 **한 번에 싣는 양**이라 1000(=1양동이) 단위다. 1 로 두면 물 한 통에 1000번 걸린다.
 - 값 채우기: `Tools/Project Craft/Pipes/파이프 에셋 설정`.
+
+#### ⚠ 공장을 지을 때 반드시 아는 세 가지 (2026-08-20 시연 공장에서 전부 걸렸다)
+
+- **파이프는 출발 기계의 "첫 비어 있지 않은 칸" 하나만 본다**(`TryExtract` 가 그 자리에서 `break`).
+  그 아이템을 아무도 안 받으면 **뒤 칸은 영영 안 나간다** — 짐을 싣지 않으므로 교착은 아니지만
+  라인이 통째로 선다. 그래서 **한 상자에 두 종류를 넣고 번갈아 나가길 기대하면 안 된다.**
+- **여러 칸 기계는 발자국 전체가 파이프에 닿는다.** 2×2 용광로의 `(-28,8)` 칸이 한 칸 위를 지나던
+  다른 라인의 파이프에 잡혀 **강철이 엉뚱한 상자로 샜다.** 옆을 지나는 파이프는 그쪽 면을
+  **`Cut` 으로 막는다**(렌치와 같은 규약).
+- **입력이 여러 칸인 기계는 칸을 미리 선점해 둔다.** `RecipeSolver.AddItems` 는 빈 칸을 앞에서부터
+  채우므로, 재료 A 가 먼저 몰리면 **두 칸을 다 A 가 먹어** B 가 영영 못 들어간다(용광로 = 철+석탄,
+  합금 재련기 = 구리+주석). 각 칸에 1개씩 미리 넣어 두면 그 뒤로는 종류가 고정된다.
+
+**저장 네트워크는 이 셋을 전부 피한다** — `PullFrom` 은 **모든 출력 칸을 훑고**, `PushTo` 는
+`PipeRouter.TargetSlots` 로 **그 기계가 받는 것만** 민다. 즉 **망이 곧 분류기**다(광석 7종을 받아
+화로에 알아서 나눠 넣는다). 대신 **한 기계가 여러 레시피를 받으면 엉뚱한 재료가 입력칸을 채울 수 있다**
+(압축기가 `compress_brick` 때문에 모래를 받는다) — 망에 물릴 기계는 그 점을 보고 고른다.
 
 ### 렌치 (파이프 연결면)
 - `WrenchItem : Items` — 필드 없음. **타입으로 판정**하려고 만든 클래스(문자열 비교 금지).
@@ -586,6 +728,11 @@ Assets/Scenes/UndergroundScene.unity ← GameRig + UndergroundSceneSetup 둘뿐
   (`MachineInstance.SlotCapacityFor`) — 모듈 개수로 런타임에 바뀌기 때문. `SpeedFactor` 와 같은 규약이다.
   효율 모듈의 `valuePerUnit`(0.10)은 **쓰지 않는다**. 그건 전력·연료 절감률이라 개수와 단위가 다르다.
 - **모듈을 빼서 최대치가 줄어도 내용을 버리지 않는다.** 넘치는 동안 더 못 넣게만 한다.
+- ⚠ **아이템 저장소는 칸이 하나라 한 종류만 담는다.** 그래서 **재료 공급용으로는 상자보다 낫고**
+  (9,216개 = 상자 40칸의 3.6배), **여러 종류가 들어오는 산출 자리에는 못 쓴다**
+  (두 번째 종류가 통째로 거부되어 파이프가 선다). 2026-08-20 시연 공장에서 공급 상자만 바꾼 이유다.
+- **한 파이프 칸이 여러 저장소에서 번갈아 꺼낼 수 있다** — `TryExtract` 가 이웃을 N→E→S→W 로 훑기 때문이라,
+  같은 재료의 저장소를 두 칸에 붙이면 용량이 그대로 두 배가 된다(상한 9,216 을 넘기는 유일한 방법).
 - **아이템 저장소는 개체 데이터(`ItemInstance`)를 받지 않는다** — 한 칸에 수천 개인데 인스턴스는 하나뿐이라
   그것이 사라질 때 전부가 사라진다. 상자는 칸이 40개라 그대로 받는다.
   판정은 `MachineInstance.AcceptsInstanceItems` 하나, 막는 자리는 셋(`StorageSlotUI.Accepts` ·
@@ -779,10 +926,10 @@ Assets/Scenes/UndergroundScene.unity ← GameRig + UndergroundSceneSetup 둘뿐
   대각선도 조건 분기 없이 처리된다.
 
 ```
-Idle(FemaleNormal) ──[blink]──▶ Blink ──[Exit Time 1.0]──▶ Idle
-   │  ▲                                  (Blink 클립은 루프 금지)
-   └──[moving]──▶ Walk = BlendTree(SimpleDirectional2D, moveX·moveY)
-                    Leftward(-1,0) Rightward(1,0) Forward(0,1) Backward(0,-1)
+Idle = BlendTree(SimpleDirectional2D, moveX·moveY) ──[blink]──▶ Blink ──[Exit Time 1.0]──▶ Idle
+   │  ▲   Leftward(-1,0) Backward(0,-1) Forward(0,1) Rightward(1,0)   (Blink 클립은 루프 금지)
+   └──[moving]──▶ Walk = BlendTree(SimpleDirectional2D, moveX·moveY)   ← 좌표가 Idle 과 같아야 한다
+                    Leftward(-1,0) Backward(0,-1) Forward(0,1) Rightward(1,0)
 ```
 
 - **파라미터 이름은 `PlayerAnimation.cs` 와 `Female.controller` 양쪽이 정본.** 한쪽만 바꾸면
@@ -794,6 +941,18 @@ Idle(FemaleNormal) ──[blink]──▶ Blink ──[Exit Time 1.0]──▶ I
 - ⚠ `FemaleWalkBackward` 만 1.1833초로 나머지 셋(0.5167초)과 다르다. 블렌드 트리는 자식을 정규화 시간으로
   함께 재생하므로 섞이는 동안 속도가 어긋나 보인다 — 신경 쓰이면 길이를 맞춘다.
 - ⚠ `FemaleBlink.anim` 은 **빈 클립**이다(프레임 미작성). 컨트롤러 배선만 되어 있다.
+- **`Facing` 이 방향의 정본이다**(`PlayerAnimation.Facing`, **월드 방향**). 입력이 0 이 되어도
+  `moveX/moveY` 에 **0 을 쓰지 않고 마지막 방향을 남긴다** — Idle 도 블렌드 트리라 0 을 쓰면
+  네 클립이 같은 무게로 섞여 어느 쪽도 아닌 포즈가 된다. 플레이어 빛도 같은 값을 본다
+  (`PlayerLightAim`) — 두 곳에서 따로 방향을 정하면 "스프라이트는 왼쪽인데 빛은 오른쪽" 이 된다.
+  ⚠ **애니메이터에 넣을 때만 `moveY = -Facing.y` 로 뒤집는다.** 빛은 월드 방향을 그대로 쓴다.
+- ⚠ **방향별 Idle 클립 3장은 걷기 클립의 2프레임을 빌린 임시 포즈다**
+  (`FemaleIdle{Backward,Leftward,Rightward}`). 옆·뒤 정지 그림이 스프라이트 시트에 아예 없다 —
+  `Female_normal1~5` 는 정면 하나뿐이다. 전용 아트가 오면 **이 3장만 갈아 끼우면** 컨트롤러·코드는 그대로다.
+- ⚠ **Blink 트리거는 정면일 때만 쏜다**(`facing.y < -0.5f`). 깜빡임 그림이 정면 것뿐인데
+  `FemaleBlink.anim` 이 빈 클립이고 상태가 Write Defaults 라, 옆·뒤로 서 있다가 Blink 로 넘어가면
+  **스프라이트가 프리팹 기본 그림으로 튄다.** 정면 Idle 은 `FemaleNormal` 클립 자체가 5프레임으로
+  깜빡이므로 트리거가 없어도 손해가 없다(= Blink 상태는 사실상 죽어 있다).
 
 ### 카메라 · 픽셀
 - 전 스프라이트가 **PPU 32 · Point 필터 · 압축 없음**으로 통일돼 있다. **새 아트도 반드시 맞춘다** —
@@ -825,7 +984,7 @@ Idle(FemaleNormal) ──[blink]──▶ Blink ──[Exit Time 1.0]──▶ I
   그래서 **머티리얼 마이그레이션이 필요 없었다.**
 - **밝기의 정본은 `LightingPalette`**(static 표, `ExtractionTable`·`FluidColors` 와 같은 꼴).
   `MapLighting`(**GameRig 프리팹에 저작**, `Global Light 2D` 오브젝트에 붙어 있다)이 그 값을
-  Global Light 와 `TestPlayer/PlayerLight` 에 넣는다 —
+  Global Light 와 **플레이어 빛 두 개**(`TestPlayer/PlayerLight`·`PlayerAura`)에 넣는다 —
   ⚠ **씬에 값을 넣지 않는다.** 두 씬이 어긋나고 팔레트와 정본이 갈라진다.
   ⚠ Global Light 는 **찾아서 값만 바꾼다**(새로 만들면 두 개가 겹쳐 두 배로 밝아진다).
 - ⚠ **월드 UI 오버레이는 조명을 받으면 안 된다.** 정렬 레이어가 `Default` 하나뿐이라 order 로는 못 뺀다 →
@@ -840,6 +999,17 @@ Idle(FemaleNormal) ──[blink]──▶ Blink ──[Exit Time 1.0]──▶ I
   첫 줄에서 되돌아가 `ConsumeEnergy` 에 닿지 않는다("놀고 있는 기계는 전기를 먹지 않는다"가 의도된 규칙) —
   상시 소비는 `Update` 의 **AutoProcess 조기 return 앞** 분기가 따로 맡는다.
   `OpensUI` 는 슬롯 0개짜리가 빈 패널을 띄우지 않게 한다.
+- **플레이어 빛은 둘이다** — 보는 쪽으로 나가는 **원뿔 빔**(`PlayerLight`)과 발밑을 덮는
+  작은 **원형 오라**(`PlayerAura`). 빔 하나만 두면 옆·뒤가 환경광(0.18)만 남아 방향 감각을 잃고,
+  원형 하나만 두면 어디를 보든 똑같이 밝아 탐험에 방향이 안 생긴다.
+  ⚠ **콘의 중심은 광원의 로컬 +Y 다**(URP 규약 — `Light2DLookupTexture.cs:104` 가 각을 `Vector2.down`
+  기준으로 굽고 `Light2D.shader:193` 이 그것을 뒤집어 쓴다). 그래서 `PlayerLightAim` 이
+  `Atan2(f.y, f.x) - 90°` 를 쓴다. **-90 을 빼먹으면 보는 쪽의 왼쪽 90도를 비춘다.**
+  ⚠ **각도·회전을 씬이나 프리팹에서 정본으로 삼지 않는다.** 넓이·밝기는 `LightingPalette`(`Beam*`/`Aura*`),
+  방향은 `PlayerLightAim` 하나다 — 실제로 콘 설정이 **MapTest 오버라이드로만 있어 지하에서는 원형**이던 적이
+  있다. 프리팹의 각도·세기는 에디트 모드 미리보기일 뿐 `MapLighting.Apply()` 가 Start 에서 덮는다.
+  ⚠ **`normalMapQuality` 만은 프리팹에 저작해야 한다** — 읽기 전용 프로퍼티다(`Light2D.cs:334`).
+  빔 1(Fast) · 오라 2(Disabled: 부드러운 채움광이라 노멀맵으로 갈릴 방향이 없다).
 - **벽 그림자 = `ChunkShadowCasters`**(**GameRig 프리팹의 `Map` 자식으로 저작**. 청크별 사각형만 런타임).
   청크마다 벽 칸을 **그리디 메싱**해 사각형으로 묶는다 —
   세계가 대부분 꽉 찬 돌이라 **통째로 벽인 청크는 사각형 1개**다(실측: 25청크 6400칸 → 캐스터 29개).
@@ -855,6 +1025,71 @@ Idle(FemaleNormal) ──[blink]──▶ Blink ──[Exit Time 1.0]──▶ I
   청크 부모의 `CompositeShadowCaster2D` 는 이음매를 없앤다.
   검증은 캐스터 개수가 아니라 **`ShadowCaster2D.mesh.vertexCount > 0`** 로 한다.
   훅 셋: `RenderChunk`(생성) · `UnLoadChunk`(반납) · `RefreshTile`(그 청크만 재생성).
+
+#### 노멀맵 (기계에만 · Secondary Texture)
+
+기계 시트 8장이 `_NormalMap` **Secondary Texture** 를 갖고 있어, 점광원 근처에서 면이 갈려 입체감이 난다.
+
+- ⚠ **`NormalMapQuality` 는 `Disabled = 2` · `Fast = 1` · `Accurate = 0` 이다**(`Light2D.cs:69`).
+  숫자가 클수록 좋아 보이지만 **2 가 꺼짐**이다 — 예전에 프로젝트의 Light2D 4개가 전부 2 라
+  노멀맵을 붙여도 아무 효과가 없었다. 지금 1(Fast)인 것: 플레이어 빔 · 전등 · 횃불.
+- **전역광(LightType 4)에는 효과가 없다** — 위치가 없어 갈릴 방향이 없다. 그래서 2(Disabled) 그대로 둔다.
+  즉 **입체감은 플레이어·조명 근처에서만** 보이고 맨 어둠은 평평하다(의도).
+- ⚠ **시트를 재슬라이스하지 않는 유일한 길이 Secondary Texture 다.**
+  `TextureImporter.secondarySpriteTextures` 는 **텍스처 단위** 설정이라 `SpriteRect.spriteID` 를
+  건드리지 않는다(§2 의 재슬라이스 함정과 정면으로 어긋나지 않는다). 이름은 정확히 **`_NormalMap`**
+  이어야 한다 — `Sprite-Lit-Default.shader:7` 의 프로퍼티 이름이다.
+- 생성 툴 **`Tools/Project Craft/Art/기계 노멀맵 생성`** · 배선 **`… /기계 노멀맵 배선`**
+  (`Editor/NormalMapGenerator.cs`). 원본 PNG 바이트를 직접 읽어 굽기 때문에 **원본의 `isReadable` 을
+  건드리지 않는다.** 알파 경계에서 기울기가 폭발하지 않게 마스크 밖 이웃은 자기 픽셀로 클램프한다
+  (안 하면 모든 기계에 흰 테두리가 생긴다).
+- 노멀 텍스처 임포트 6개 값은 반드시: `NormalMap` · **`convertToNormalmap = false`**(이미 노멀로 구웠다) ·
+  `sRGB off` · `Point` · 무압축 · `mipmap off`.
+- **손그림으로 바꿀 때는 `Normals/{이름}_n.png` 를 덮어쓰기만 하면 된다** — 배선은 그대로다.
+
+### 사운드 (지금 3종 · `Assets/Asset/Sound/`)
+
+**재생기를 둘로 나눈다 — 루프 하나, 단발 하나.** 클립의 성질이 달라서지 계층을 나누려는 것이 아니다.
+
+| | 무엇 | 어디 | 클립 |
+|---|---|---|---|
+| **`PlayerFootsteps`** | 걷는 동안 자기 `AudioSource` 를 `loop` 로 켜고 끈다 | `GameRig/TestPlayer` | `WalkOnStone` `WalkOnDirt` |
+| **`SfxPlayer`** | 이름 붙은 단발음(`PlayOneShot`). 지금은 `craftSound` 하나 | `GameRig/SfxPlayer` | `CraftSound` |
+
+- ⚠ **걷기 클립은 한 걸음이 아니라 여러 걸음이 든 루프다**(실측: WalkOnStone 2.54초에 8걸음,
+  WalkOnDirt 2.10초에 6걸음, 사이는 무음). 걸음마다 `PlayOneShot` 하면 **8배로 겹친다** —
+  그래서 발소리만 루프 재생이다. 한 걸음짜리 클립으로 바꾸는 날에는
+  `PlayerFootsteps` 의 재생 규칙만 갈아 끼우면 되고 아래 정본 둘은 그대로다.
+- **어느 바닥이 어떤 소리인지는 `MainBlock.footstepSound` 하나가 정한다**(`MainBlock.fluid` 와 같은 자리).
+  static 표로 둘 수 없는 이유는 표에서 `AudioClip` **에셋을 가리킬 수 없어서**다(`FluidColors` 가
+  static 인 것은 값이 `Color` 라서). 참조형이라 **소리를 안 준 지형 10종은 자동으로 null = 무음**이다.
+  지금 값이 든 것은 둘뿐: `floor:stage1`(돌 바닥) → `WalkOnStone` · `floor:dirt`(흙) → `WalkOnDirt`.
+  `UndergroundPalette.FloorIdFor` 가 **같은 두 id** 를 쓰므로 지하방도 공짜로 따라온다.
+- **"이 칸의 발소리" 의 정본은 `WorldMap.FootstepAt(cell)` 하나다.**
+  ⚠ **`FluidAt` 과 한 군데가 일부러 다르다 — 오버레이가 있으면 거기서 끝난다.** 유체는
+  "오버레이에 유체가 없으면 밑의 바닥을 본다" 가 맞지만, 발소리에 같은 폴백을 두면
+  **물웅덩이를 밟을 때 흙 소리가 난다.** 웅덩이·지하 입구는 바닥을 덮고 있으니 소리도 그쪽이 정한다
+  (2026-08-19 사용자 결정: 물 위는 무음). 첨벙 소리가 생기면 `OverlayWater` 에셋에 클립만 꽂으면 된다.
+- ⚠ **`SfxPlayer` 를 부를 때 `Singleton.Instance` 를 쓰면 안 된다.** 게터는 못 찾으면 빈 `GameObject`
+  를 만들어 버려 **클립도 `AudioSource` 도 없는 유령 재생기**가 서고, 진짜 재생기가 나타나면
+  그쪽이 중복으로 지워진다. 정적 진입점 `SfxPlayer.PlayCraft()` 가 **`InstanceIfAlive`** 를 쓴다.
+- **조합음은 성공했을 때만 운다.** `CraftingTableUI` 의 제작 세 갈래(`Craft`·`CraftTool`·`CraftToolPart`)가
+  전부 **`bool` 을 돌려주고** 재생은 `CraftSelected` **한 곳**이 한다 — 셋 다 "재료 부족·자리 없음" 이면
+  조용히 되돌아가므로, 버튼 `onClick` 에 소리를 걸면 **아무것도 안 만들어졌는데 울린다.**
+- **기계 완성음의 게이트는 `MachineInstance.boundUI` 하나다**(완성 블록, 재료 소모 직후).
+  "이 기계의 창이 지금 떠 있는가" 의 정본이 그것이라 화면 밖 공장 수십 대가 함께 울지 않는다.
+  수동 기계도 `ManualStep → Tick` 으로 같은 자리를 지난다.
+  ⚠ **최소 간격은 두지 않았다**(2026-08-19 사용자 결정) — 자원 생성기 UI 를 열어 두면
+  초당 1번, 속도 모듈을 채운 강화형이면 **초당 10번** 겹친다. 거슬리면 `SfxPlayer.PlayCraft` 에
+  한 줄만 넣으면 되고 **호출부는 안 바뀐다**(그래서 재생을 한 곳에 모았다).
+- `AudioSource` 는 **`spatialBlend = 0`(2D) · `playOnAwake = false` 로 프리팹에 저작**한다 —
+  임포터의 `3D` 플래그는 새 소스의 기본값일 뿐이라 여기서 못박아야 어긋나지 않는다.
+  `AudioListener` 는 `GameRig` 의 Main Camera 에 있다.
+- 임포트: **`preloadAudioData = true`**(끄면 Vorbis 를 첫 재생 때 풀어 눈에 띄게 늦다) ·
+  DecompressOnLoad · Vorbis. 원본이 88.2kHz 인 두 개도 **Unity 가 48kHz 로 디코드**하므로
+  샘플레이트를 따로 손댈 것이 없다(실측).
+- **볼륨은 두 컴포넌트의 직렬화 필드뿐이다.** 설정 UI·마스터 볼륨·믹서는 없다 — 소리가 셋뿐이라
+  지금 만들면 쓰이지 않는 뼈대만 남는다.
 
 ### 공용 표시 에셋 (`Assets/Asset/Common/`)
 
@@ -886,7 +1121,8 @@ Idle(FemaleNormal) ──[blink]──▶ Blink ──[Exit Time 1.0]──▶ I
 |---|---|---|
 | `100` | Blocks · Floor | 씬(GameRig) |
 | `110` | FloorTexture | 씬 |
-| `120` | 기계 · 파이프 · 작물 · 포탈 · WallBottomTexture | 코드(`MapGenerator:319` `PipeNetworkManager` `CropInstance` `UndergroundPortal`) + 씬 |
+| `115` | **FloorOverlay** — 바닥 위에 겹치는 것(지하 입구 · 웅덩이) | 씬(GameRig) |
+| `120` | 기계 · 파이프 · 작물 · WallBottomTexture | 코드(`MapGenerator:319` `PipeNetworkManager` `CropInstance`) + 씬 |
 | `130`(+i) | 플레이어 · 필드 드랍(레이어마다 +1) | 씬 · `DroppedItem` |
 | `140` | 벽 윗면 | 씬 |
 | `150` | 아웃라인 · PlaceableObjects · 파이프 면 막대 | 씬 · `PipeFaceOverlay` |
@@ -943,7 +1179,12 @@ Tools/Tiles/Build Tile Atlas · Slice Pipe Sheet · Build Pipe Atlas   (슬라�
 
 - `StreamingAssets/DefaultWorldmap.dat` 은 매직 도입 이전 포맷이라 매번 로드 실패 → 이제 `.corrupt` 로 치워지고 새 월드 생성.
 - 산성/유리 파이프 미구현(아이템만 있고 `PipeBlock` 에셋이 없다).
-- **증류기는 탱크가 없는 게 아니라 레시피가 0개다** — 에셋은 이미 `입력 탱크 1 / 출력 탱크 5 / 1000` 이고
+- ~~펌프가 3/6 폴백에 걸려 안 돈다~~ → **2026-08-19 해결**(위 §유체 의 펌프 항목).
+  석유 웅덩이는 **공동 탐색기**로만 나온다 — 발견 25% 중 20%.
+- ~~증류기 레시피가 0개~~ → **2026-08-20 에 `원유 1000 → 가솔린 500`(craftTime 2)을 넣었다.**
+  옛 `petroleum`(석유)은 산출처도 소비처도 없는 죽은 유체였어서 **`gasoline`(가솔린)으로 개명**했다
+  (에셋 guid 유지 · `ItemAliases` 에 `석유`·`petroleum` 두 줄). 가솔린은 가스 발전기 연료다.
+- (옛 서술) **증류기는 탱크가 없는 게 아니라 레시피가 0개다** — 에셋은 이미 `입력 탱크 1 / 출력 탱크 5 / 1000` 이고
   `Distiller_UI` 에 유체 바도 있다(2026-08-17 실측. "탱크가 없다" 는 옛 서술이 틀렸다).
   `원유 → 석유·가스` 레시피와 가스 아이템이 없어서 빈 바만 보인다.
   ~~발전기 산출 훅~~ → **2026-08-17 에 `spentFuelItem` 으로 붙였다**(위 §발전기의 찌꺼기 산출).
@@ -958,6 +1199,16 @@ Tools/Tiles/Build Tile Atlas · Slice Pipe Sheet · Build Pipe Atlas   (슬라�
   분쇄 사슬(`manastone_fine_dust` 까지)은 전부 도달 가능하므로 **`Machine:Extractor10` 건설 레시피
   하나만 생기면** 공명 결정 → 공명 칩 → 코어 3차 승급 → 3티어 콘텐츠 전부가 함께 열린다.
   ⚠ 그래서 **핵발전소(건설 t3)도 실제로는 아직 못 짓는다** — 사슬(연료봉 제작·재처리)은 t2 에서도 돈다.
+- ~~**0-2 등급이 자기 자신에 걸린 순환 교착**~~ → **2026-08-19 해결.** `Machine:Extractor02` 재료에
+  `nickel_ingot` 이 있는데 니켈이 `ExtractionTable` 상 0-2 에서야 열려 *0-2 추출기를 지으려면
+  0-2 추출기가 있어야 하는* 상태였다(그 뒤로 정밀 세공기·업그레이드 모듈·용광로·강철·티타늄·
+  인바·합금·핵 사슬이 통째로 매달려 있었다). **두 걸음으로 끊었다:**
+  ① `laser_processor` 재료 `invar_plate` → `iron_plate`(정밀 세공기가 대신 `invar_plate ×50` 을 받는다) —
+  레이저 가공기가 고리에서 빠져 **공동 탐색기**가 열렸다.
+  ② `UndergroundLootTable` 에 **`nickel_ingot`(minTier 1)** 추가 — 공동 탐색기로 여는 1등급 방에서 나온다.
+  실측: 아이템 260개 중 만들 수 있는 것이 **113 → 190** 이 됐다.
+  ⚠ **니켈 경로는 이 두 개에 함께 걸려 있다** — 레이저 가공기 재료를 되돌리거나 전리품 행을 빼면
+  교착이 그대로 돌아온다.
 - ~~`강화 합금` 아이템이 없다~~ → **2026-08-12 에 만들었다**(합금 재련기 · 인바5+청동5+철5 → 5).
 - ~~2계열 분쇄물을 못 만든다~~ → **2026-08-15 에 처리 티어 게이트를 지워 분쇄기가 운석도 빻는다**(실측).
   ⚠ 다만 **운석 원석 자체를 못 얻는다** — 등급 2 지하방이 유일한 획득처인데 `dowsing_rod_t2` 가 없다.
@@ -971,8 +1222,10 @@ Tools/Tiles/Build Tile Atlas · Slice Pipe Sheet · Build Pipe Atlas   (슬라�
 - `magic_powder`(마법 가루)를 **쓰는 레시피가 하나도 없다** — 운석 사슬 재편으로 자리를 잃었다(아이템은 남겨 뒀다).
 - `energy_crystal`·`magic_crystal` 은 이제 2계열 추출로만 나온다.
   (마법 레시피가 2026-08-15 부터 **재단 전용**이 된 것은 위 §기계·레시피 의 조합대 항목을 볼 것.)
-- `extract_ore`·`extract_meteorite` 는 **`machine` 이 비어 있다** — 1·2티어 자원 생성기가 아직 없어서다.
-  (지형 설치형이라 추출기 9종과는 별개다.)
+- ~~`extract_ore`·`extract_meteorite` 는 `machine` 이 비어 있다~~ → **2026-08-19 해결**.
+  1·2티어 자원 생성기를 만들어 꽂았다(위 §자원 생성기). **마력석·운석의 최초 획득처**가 이것이다 —
+  전에는 지하 등급 1·2 방뿐인데 `dowsing_rod_t1/t2` 가 없어 아예 닿을 수 없었다.
+  ⚠ 다만 **1·2티어 자원 생성기의 건설 레시피가 아직 없다.**
 - ~~지열 발전기가 발전을 못 한다~~ → **2026-08-15 해결**. 막던 것이 셋이었다:
   `MachineBlock.IsGenerator` 의 `fuelSlotCount > 0` · `MachineInstance.ApplyConfig` 의 "미설정" 폴백
   (입출력·연료가 전부 0 이라 세 조건에 안 걸려 `isGenerator` 가 지워졌다 — 지금은 `|| info.IsGenerator` 를 함께 본다) ·
@@ -980,8 +1233,13 @@ Tools/Tiles/Build Tile Atlas · Slice Pipe Sheet · Build Pipe Atlas   (슬라�
   "태운 양 = 발전량" 이라 필드를 새로 만들면 같은 뜻이 두 곳으로 갈린다). 지열은 12/s.
 - ⚠ **변압기는 지을 수는 있는데 아무 일도 하지 않는다** — 전압 2풀이 미구현이라 가공 레시피가 0개다
   (옛 `transformer`·`power_transformer` 는 산출이 없는 죽은 에셋이라 지웠고, 그 이름은 이제 건설 레시피다).
-- 전력 밸런스: 화력 20/s · 지열 12/s vs 전기 화로 100/s · 고전압 전기로 300/s.
+- 전력 밸런스(2026-08-20 사용자 상향): 발전 **화력 200/s · 지열 12/s · 가스 300(원유)~600(가솔린)/s · 핵 3000/s**
+  vs 소비 전기로 100/s · 고전압 전기로 300/s · 증류기 100/s · 용광로 500/s · 추출기 100/s(폴백).
+  화력 한 대가 전기로 두 대를 감당하고, **지열만 이 사다리에서 혼자 떨어져 있다**(12/s).
+  ⚠ 발전기의 초당 값은 **`FuelTable`** 이 정한다 — 에셋의 `fuelBurnRate` 는 표에 없는 기계(지열)만 쓴다.
 - 렌치·파이프 아이콘이 전부 `assetPlaceHolder`. 파이프 레시피가 아직 `Recipes/Incomplete` 안에 있음.
+- **`강화 자원 생성기`·`화학 처리기` 는 월드에 놓으면 `No Asset` 로 보인다** — 프리팹에 스프라이트가 없다
+  (2026-08-20 시연 공장에서 7대가 그렇게 떴다). 아이템 아이콘과 달리 이쪽은 **배치물 프리팹 쪽** 문제다.
 - 아이템 목록(P)에 검색창 없음 — 223개라 있으면 좋지만 P 키가 글자로 먹히는 문제를 같이 풀어야 한다.
 
 ### 결함 조사에서 확인했으나 **일부러 남겨 둔 것** (동작 규칙부터 정해야 함)

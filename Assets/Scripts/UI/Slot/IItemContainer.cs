@@ -24,4 +24,13 @@ public interface IItemContainer
     /// 둘 다 이 값을 받아 쓴다.
     /// </summary>
     int SlotCapacity(int index, Items item);
+
+    /// <summary>
+    /// 이 칸이 이 아이템을 <b>받아 주는가</b>. 보통은 언제나 true 이고 기계의 연료 칸만 다르다
+    /// (<see cref="MachineInstance.AcceptsFuel"/> 의 화이트리스트).
+    ///
+    /// <see cref="SlotCapacity"/> 와 같은 이유로 <b>저장소에 묻는다</b> — 슬롯 UI 가 저장소 종류를
+    /// 알아내 분기하면 규칙이 저장소마다 흩어진다.
+    /// </summary>
+    bool AcceptsItem(int index, Items item);
 }

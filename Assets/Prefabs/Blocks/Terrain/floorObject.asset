@@ -19,3 +19,5 @@ MonoBehaviour:
   assetPath: {fileID: 11400000, guid: 45c12955aad162945b88ce7c6d74cd82, type: 2}
   wallAtlas: {fileID: 0}
   floorSprite: {fileID: 200298996, guid: 348522f001a05c04e94de3de4a961a41, type: 3}
+  footstepSound: {fileID: 8300000, guid: aa8df6de56eda86448a0022362c0ee75, type: 3}
+  fluid: {fileID: 0}

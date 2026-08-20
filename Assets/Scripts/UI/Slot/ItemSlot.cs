@@ -356,7 +356,9 @@ public abstract class ItemSlot : MonoBehaviour,
     /// 이 슬롯이 받아 줄 수 있는 아이템인가. 기본은 무엇이든 허용.
     /// 종류를 제한하는 슬롯(도구 부품 칸 등)이 재정의한다.
     /// </summary>
-    protected virtual bool Accepts(ItemStack source) => true;
+    protected virtual bool Accepts(ItemStack source)
+        => container == null || source == null || source.item == null
+        || container.AcceptsItem(index, source.item);
 
     /// <summary>
     /// 고유 최대치를 쓰는 칸(아이템 저장소)에만 <c>현재 / 최대</c> 를 덧붙인다.

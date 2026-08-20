@@ -172,6 +172,9 @@ public class MapGenerator : MonoBehaviour
         foreach (var pos in GetFloorTilePositions())
         {
             TilemapTextureLoader.Instance.LoadFloorTexture(pos);
+            // 바닥 위에 겹치는 것(입구·웅덩이)은 바닥 <b>다음에</b> 그린다.
+            // 오버레이가 없는 칸은 LoadFloorOverlay 가 알아서 지워 준다.
+            TilemapTextureLoader.Instance.LoadFloorOverlay(pos);
         }
 
         // 탑다운 뷰 특성을 고려하여 위(Y 최고값)에서부터 아래로 순회
@@ -673,6 +676,11 @@ public class MapGenerator : MonoBehaviour
         Vector3Int upPos = pos + Vector3Int.up;
         if (floorTilemap.GetTile(upPos) != null)
             TilemapTextureLoader.Instance.LoadFloorTexture(worldPos + Vector2Int.up);
+
+        // 오버레이는 <b>바닥 데이터가 없어도</b> 다시 그린다 — ClearTileTexture 가 방금 지웠으므로
+        // 조건을 달면 입구·웅덩이를 놓거나 치운 것이 화면에 안 반영된다.
+        TilemapTextureLoader.Instance.LoadFloorOverlay(worldPos);
+        TilemapTextureLoader.Instance.LoadFloorOverlay(worldPos + Vector2Int.up);
 
         // 영향받는 범위(자신 + 8방향 이웃)만 갱신 - LoadChunksAround와 동일하게
         // Y가 큰(위쪽) 칸부터 순서대로 다시 그려야 아래 블록의 윗면이 위 블록의 앞면을 올바르게 덮어쓴다.

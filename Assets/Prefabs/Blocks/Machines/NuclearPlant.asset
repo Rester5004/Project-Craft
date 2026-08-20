@@ -26,7 +26,7 @@ MonoBehaviour:
   inputSlotCount: 0
   outputSlotCount: 1
   fuelSlotCount: 1
-  fuelBurnRate: 500
+  fuelBurnRate: 3000
   spentFuelItem: {fileID: 11400000, guid: 903ce22daa9a6f043bfc9926e3447f00, type: 2}
   upgradeSlotCount: 2
   inputFluidSlotCount: 0

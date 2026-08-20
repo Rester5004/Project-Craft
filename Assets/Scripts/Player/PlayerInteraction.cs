@@ -74,10 +74,33 @@ public class PlayerInteraction : MonoBehaviour
             cell = loader.IsOutlined(cell + Vector2Int.down) ? cell + Vector2Int.down : cell;
         return cell;
     }
-    /// <summary>E(Interact) 에 대한 단일 판별 지점. 지금은 발밑 포탈뿐이다.</summary>
+    /// <summary>E(Interact) 에 대한 단일 판별 지점. 지금은 발밑 지하 입구뿐이다.</summary>
     private void HandleInteractPerformed()
     {
-        if (UndergroundPortal.TryUseNearest(transform)) return;
+        if (TryUseHole()) return;
+    }
+
+    /// <summary>
+    /// 발밑에 지하 입구 오버레이가 있으면 쓴다. 지하에 있으면 올라오고, 지상이면 내려간다.
+    ///
+    /// ⚠ <b>내려가기 직전에 지상 입구를 지운다</b> — 남기면 탐지기 하나로 무한히 드나들 수 있다.
+    /// 바닥 타일은 애초에 건드린 적이 없으므로 되돌릴 것이 없다(오버레이만 치우면 원래 지형이다).
+    /// 지하 쪽 출구는 지우지 않는다 — 어차피 저장되지 않고, 되돌아올 길을 없애면 갇힌다.
+    /// </summary>
+    private bool TryUseHole()
+    {
+        if (WorldMap.Instance == null || mapGenerator == null) return false;
+
+        Vector2Int cell = (Vector2Int)mapGenerator.blocksTilemap.WorldToCell(transform.position);
+        int tier = UndergroundPalette.TierOfHole(WorldMap.Instance.GetOverlayAt(cell));
+        if (tier < 0) return false;
+
+        if (UndergroundSession.IsActive) { UndergroundSession.Exit(); return true; }
+
+        WorldMap.Instance.SetOverlayAt(cell, null);
+        mapGenerator.RefreshTile(cell);
+        UndergroundSession.Enter(tier, transform.position);
+        return true;
     }
     /// <summary>입력 콜백은 "눌렸다"만 적어 둔다. 판정은 전부 <see cref="PerformUse"/> 가 한다(<see cref="usePending"/> 참고).</summary>
     private void HandleUsePerformed() => usePending = true;
@@ -305,9 +328,10 @@ public class PlayerInteraction : MonoBehaviour
     /// 탐지기 우클릭. 빈 바닥을 짚으면 탐지기를 하나 쓰고, <see cref="UndergroundPalette.DiscoveryChance"/>
     /// 확률로 그 자리에 지하 포탈이 열린다.
     ///
-    /// <b>실패해도 탐지기는 사라진다</b> — 그것이 확률의 대가다. 어느 등급인지는
+    /// <b>실패해도 탐지기는 닳는다</b> — 그것이 확률의 대가다. 어느 등급인지·확률이 얼마인지는
     /// <see cref="UndergroundPalette.DowsingTierOf"/> 한 곳이 정하므로 상위 탐지기가 생겨도 여기는 그대로다.
-    /// ⚠ 포탈은 <b>세이브에 남지 않는다</b>(런타임 오브젝트). 찾았으면 그 자리에서 들어가야 한다.
+    /// 입구는 <b>세이브에 남는다</b>(오버레이) — 찾아 두고 나중에 들어가도 된다.
+    /// 다만 <b>한 번 쓰면 사라진다</b>(<see cref="TryUseHole"/>) — 남기면 탐지기 하나로 무한히 드나든다.
     /// </summary>
     /// <returns>탐지기를 실제로 썼으면 true. false 면 호출자가 평소 동작으로 흘려보낸다.</returns>
     private bool TryDowse(ItemStack held, Vector2Int targetCell)
@@ -322,17 +346,24 @@ public class PlayerInteraction : MonoBehaviour
         if (!Chunk.IsFloor(WorldMap.Instance.GetTileId(targetCell))) return false;
         if (WorldMap.Instance.GetPlaceableAt(targetCell) != null) return false;
 
-        ConsumeSelected(held);
+        string detector = held.item.itemName;
+        WearDetector(held);
 
-        if (Random.value >= UndergroundPalette.DiscoveryChance)
+        if (Random.value >= UndergroundPalette.DiscoveryChanceFor(detector))
         {
             Debug.Log("[Dowsing] 아무것도 찾지 못했습니다.");
             return true;
         }
 
-        UndergroundPortal.Create(new Vector2(targetCell.x + 0.5f, targetCell.y + 0.5f),
-                                 UndergroundPortal.Kind.ToUnderground, tier);
-        Debug.Log($"[Dowsing] {tier}등급 지하 포탈을 찾았습니다! ({targetCell.x}, {targetCell.y}) 에서 E");
+        // 찾긴 찾았는데 그것이 지하 입구가 아니라 석유 웅덩이일 수 있다(공동 탐색기만).
+        bool oil = Random.value < UndergroundPalette.OilPoolChanceFor(detector);
+        WorldMap.Instance.SetOverlayAt(targetCell,
+            oil ? UndergroundPalette.OilPool : UndergroundPalette.HoleIdFor(tier));
+        mapGenerator.RefreshTile(targetCell);
+
+        Debug.Log(oil
+            ? $"[Dowsing] 석유 웅덩이를 찾았습니다! ({targetCell.x}, {targetCell.y}) 위에 펌프를 놓으세요"
+            : $"[Dowsing] {tier}등급 지하 입구를 찾았습니다! ({targetCell.x}, {targetCell.y}) 에서 E");
         return true;
     }
 
@@ -351,10 +382,9 @@ public class PlayerInteraction : MonoBehaviour
         if (held == null || held.item == null || held.count <= 0) return false;
         if (ItemDictionary.Instance == null || WorldMap.Instance == null) return false;
 
-        MainBlock floor = ItemDictionary.Instance.GetBlock(WorldMap.Instance.GetTileId(targetCell)) as MainBlock;
-        if (floor == null || floor.fluid == null) return false;
-
-        FluidDefine fluid = floor.fluid;
+        // 바닥이든 오버레이(석유·물 웅덩이)든 <b>WorldMap.FluidAt 하나</b>가 답한다 — 펌프도 같은 함수를 본다.
+        FluidDefine fluid = WorldMap.Instance.FluidAt(targetCell);
+        if (fluid == null) return false;
         // 그 유체를 담을 수 있는 그릇을 들고 있어야 한다. 아니면 false 로 흘려보내
         // '들고 있던 것을 물 위에 배치' 같은 평소 동작이 그대로 되게 둔다.
         if (!fluid.HasBucket || fluid.emptyItem != held.item) return false;
@@ -582,8 +612,10 @@ public class PlayerInteraction : MonoBehaviour
         }
 
         miningProgress += Time.deltaTime;
-        if (miningProgress < miningHoldDuration)
+        if (miningProgress < miningHoldDuration){
+            SfxPlayer.PlayMining();
             return;
+        }
 
         if (target == MineTarget.Machine) MineMachine(mineCell);
         else if (target == MineTarget.Pipe) mapGenerator.RemoveMachineAt(mineCell);   // 안에서 파이프로 갈라진다
@@ -617,6 +649,26 @@ public class PlayerInteraction : MonoBehaviour
         stack = held;
         tool = instance;
         return true;
+    }
+
+    /// <summary>
+    /// 탐지기를 한 번 쓴 대가를 치른다. 내구도를 가진 것(공동 탐색기)은 <b>1 깎고</b>,
+    /// 없는 것(다우징 로드)은 지금까지처럼 <b>한 개를 소모한다.</b>
+    ///
+    /// 내구도가 0 이 되면 <c>stack.Clear()</c> — <see cref="WearMiningTool"/> ·
+    /// <see cref="RecipeSolver.ConsumeTools"/> 와 <b>같은 규약</b>이라 도구가 없어지는 방식이 한 가지뿐이다.
+    /// </summary>
+    private void WearDetector(ItemStack held)
+    {
+        if (held.instance is ToolInstance tool)
+        {
+            tool.durability -= 1;
+            if (tool.durability <= 0) held.Clear();
+            inventory.NotifyChanged();
+            return;
+        }
+
+        ConsumeSelected(held);
     }
 
     /// <summary>
@@ -662,6 +714,7 @@ public class PlayerInteraction : MonoBehaviour
         isMining = false;
         miningProgress = 0f;
         miningTool = null;
+        SfxPlayer.StopMining();
     }
 
     private void OnGUI()

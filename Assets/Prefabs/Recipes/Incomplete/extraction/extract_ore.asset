@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d1635fa976c21145835b252e45d6313, type: 3}
   m_Name: extract_ore
   m_EditorClassIdentifier: Assembly-CSharp::Recipe
-  machine: {fileID: 0}
+  machine: {fileID: 11400000, guid: f79321a5dde1eb047a6ac07e3fc3133f, type: 2}
   category: {fileID: 11400000, guid: e8aa8410127980c4f9bd1da1db39f486, type: 2}
-  tier: 1
+  tier: 0
   inputs: []
   outputs:
   - item: {fileID: 11400000, guid: 3b3ecc29dd70a9d409676129a61c5bdf, type: 2}

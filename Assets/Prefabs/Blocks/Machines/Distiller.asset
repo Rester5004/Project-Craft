@@ -35,6 +35,6 @@ MonoBehaviour:
   isUseEnergy: 1
   isGenerator: 0
   powerRange: 0
-  energyUseRate: 0
+  energyUseRate: 100
   speedMultiplier: 1
   chanceMultiplier: 1

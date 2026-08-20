@@ -20,8 +20,11 @@ public class MapLighting : MonoBehaviour
     [Tooltip("씬의 Global Light 2D. 환경광(어둠의 바닥)을 여기에 넣는다.")]
     [SerializeField] private Light2D globalLight;
 
-    [Tooltip("플레이어를 따라다니는 빛(TestPlayer 자식). 어디서도 완전히 실명하지 않게 하는 최소한이다.")]
+    [Tooltip("플레이어가 보는 쪽으로 나가는 원뿔 빔(TestPlayer 자식). 방향은 PlayerLightAim 이 돌린다.")]
     [SerializeField] private Light2D playerLight;
+
+    [Tooltip("발밑을 덮는 작은 원형. 빔 하나만 두면 옆·뒤가 환경광만 남아 방향 감각을 잃는다.")]
+    [SerializeField] private Light2D playerAura;
 
     private void Awake()
     {
@@ -49,15 +52,29 @@ public class MapLighting : MonoBehaviour
             globalLight.intensity = LightingPalette.AmbientIntensity;
         }
 
-        if (playerLight == null) return;
-
-        playerLight.color = LightingPalette.PlayerLight;
-        playerLight.intensity = LightingPalette.PlayerIntensity;
-        playerLight.pointLightInnerRadius = LightingPalette.PlayerInnerRadius;
-        playerLight.pointLightOuterRadius = LightingPalette.PlayerOuterRadius;
         // 벽이 빛을 막는 것이 이 프로젝트의 규칙이라 플레이어 빛도 예외를 두지 않는다.
         // 다만 완전한 검정은 방향 감각을 잃게 하므로 그림자를 조금 남긴다.
-        playerLight.shadowsEnabled = true;
-        playerLight.shadowIntensity = 0.75f;
+        if (playerLight != null)
+        {
+            playerLight.color = LightingPalette.PlayerLight;
+            playerLight.intensity = LightingPalette.BeamIntensity;
+            playerLight.pointLightInnerRadius = LightingPalette.BeamInnerRadius;
+            playerLight.pointLightOuterRadius = LightingPalette.BeamOuterRadius;
+            // ⚠ 각도까지 여기서 넣는다. 씬·프리팹에 두면 두 씬이 갈라진다 —
+            //    실제로 MapTest 에만 콘 설정이 있어 지하에서는 원형이던 적이 있다.
+            playerLight.pointLightInnerAngle = LightingPalette.BeamInnerAngle;
+            playerLight.pointLightOuterAngle = LightingPalette.BeamOuterAngle;
+            playerLight.shadowsEnabled = true;
+            playerLight.shadowIntensity = 0.75f;
+        }
+
+        if (playerAura == null) return;
+
+        playerAura.color = LightingPalette.PlayerLight;
+        playerAura.intensity = LightingPalette.AuraIntensity;
+        playerAura.pointLightInnerRadius = LightingPalette.AuraInnerRadius;
+        playerAura.pointLightOuterRadius = LightingPalette.AuraOuterRadius;
+        playerAura.shadowsEnabled = true;
+        playerAura.shadowIntensity = 0.75f;
     }
 }

@@ -198,4 +198,7 @@ public class NetworkContainer : IItemContainer
                      + "SlotCapacity 가 실제 여유보다 크게 답하고 있습니다.");
         view[slot].count = keep + (amount - put);
     }
+
+    /// <summary>저장 터미널은 종류를 가리지 않는다 — 못 넣는 것은 개체 데이터 쪽에서 걸린다.</summary>
+    public bool AcceptsItem(int index, Items item) => true;
 }

@@ -29,6 +29,12 @@ public class PlaceableRecord
     public float burnRemaining;
     public float burnTotal;
 
+    /// <summary>
+    /// 지금 타고 있는 연료의 <b>초당 연소량</b>(세이브 v14). 연료가 정하므로 기계 값으로는 알 수 없다 —
+    /// 없으면 로드 뒤 석탄을 갈탄 속도로 태운다. <b>0 은 "모름"</b> 이고 그때는 기계 값으로 떨어진다.
+    /// </summary>
+    public float burnRate;
+
     /// <summary>보유 전력. 발전기에겐 발전 버퍼, 소비 기계에겐 남은 잔량이다.</summary>
     public float energy;
 
@@ -135,6 +141,12 @@ public class Chunk
     // 이 청크 안에 떨어져 있는 아이템들
     private readonly List<DropRecord> drops = new();
 
+    // 바닥 <b>위에</b> 겹쳐 그리는 것(지하 입구 · 석유 웅덩이 · 물웅덩이).
+    // 바닥 타일을 갈아 끼우지 않는 이유: 그림이 모서리가 뚫린 웅덩이라 지형이 비쳐 보여야 하고,
+    // 치울 때 "원래 무슨 바닥이었나" 를 기억할 필요도 없어진다.
+    // 대부분의 칸에는 없으므로 배열이 아니라 <b>희소 사전</b>이다.
+    private readonly Dictionary<Vector2Int, string> overlays = new();
+
     public Chunk()
     {
         tiles = new string[16, 16];
@@ -156,6 +168,18 @@ public class Chunk
     }
     public string GetTile(int x, int y) => tiles[y, x];
     public void SetTile(int x, int y, string tileId) => tiles[y, x] = tileId;
+
+    // ── 오버레이 접근자 ─────────────────────────────────────────────────
+    public string GetOverlay(Vector2Int local) => overlays.TryGetValue(local, out string id) ? id : null;
+
+    /// <summary>빈 문자열·null 을 주면 지운다 — "없음" 을 사전에 남겨 두면 세이브만 커진다.</summary>
+    public void SetOverlay(Vector2Int local, string overlayId)
+    {
+        if (string.IsNullOrEmpty(overlayId)) overlays.Remove(local);
+        else overlays[local] = overlayId;
+    }
+
+    public IEnumerable<KeyValuePair<Vector2Int, string>> Overlays => overlays;
 
     // ── placeable 접근자 ────────────────────────────────────────────────
     public PlaceableRecord GetPlaceable(Vector2Int local)
@@ -187,6 +211,7 @@ public class Chunk
             WriteSlotArray(writer, rec.fuelItemNames, rec.fuelCounts, rec.fuelInstances);
             writer.Write(rec.burnRemaining);
             writer.Write(rec.burnTotal);
+            writer.Write(rec.burnRate);          // v14
 
             writer.Write(rec.energy);
             writer.Write(rec.roundRobinCursor);
@@ -241,6 +266,15 @@ public class Chunk
             writer.Write(drop.itemName ?? "");
             writer.Write(drop.count);
             ItemInstanceSerializer.Write(writer, drop.instance);
+        }
+
+        // v13: 바닥 위에 겹치는 오버레이. 대부분의 청크는 0 개라 4바이트로 끝난다.
+        writer.Write(overlays.Count);
+        foreach (KeyValuePair<Vector2Int, string> kvp in overlays)
+        {
+            writer.Write(kvp.Key.x);
+            writer.Write(kvp.Key.y);
+            writer.Write(kvp.Value ?? "");
         }
     }
 
@@ -315,6 +349,8 @@ public class Chunk
                 ReadSlotArray(reader, version, out rec.fuelItemNames, out rec.fuelCounts, out rec.fuelInstances);
                 rec.burnRemaining = reader.ReadSingle();
                 rec.burnTotal = reader.ReadSingle();
+                // 값형이라 else 가 필요 없다 — 안 읽으면 0 이고, 0 이 곧 "모름"(기계 값으로 떨어진다).
+                if (version >= 14) rec.burnRate = reader.ReadSingle();
             }
             else
             {
@@ -427,6 +463,20 @@ public class Chunk
             }
         }
 
+        // v13: 오버레이. <b>else 가 필요 없다</b> — overlays 는 readonly 로 생성자에서 이미 빈 사전이라
+        // v12 이하 세이브에서도 null 이 될 수 없다(parcels·탱크와 다른 점이다).
+        if (version >= 13)
+        {
+            int overlayCount = reader.ReadInt32();
+            for (int i = 0; i < overlayCount; i++)
+            {
+                int ox = reader.ReadInt32();
+                int oy = reader.ReadInt32();
+                string id = reader.ReadString();
+                if (!string.IsNullOrEmpty(id)) chunk.overlays[new Vector2Int(ox, oy)] = id;
+            }
+        }
+
         return chunk;
     }
 }
@@ -451,7 +501,7 @@ public class WorldMap : Singleton<WorldMap>
     // v11: 기계 유체 탱크(입력·출력)와 파이프가 나르는 유체 짐(ParcelRecord.fluidId/amount).
     // v12: 업그레이드 모듈 칸과 인스턴스별 티어(코어 조합기 업그레이드).
     private const int SaveMagic = 0x50435730; // 'PCW0'
-    private const int SaveVersion = 12;
+    private const int SaveVersion = 14;
     private const int MinReadableVersion = 3;
 
     private Dictionary<Vector2Int, Chunk> chunks;
@@ -538,6 +588,73 @@ public class WorldMap : Singleton<WorldMap>
 
         Vector2Int local = Chunk.GetLocalCellPositionInChunk(pos);
         return chunk.GetTile(local.x, local.y);
+    }
+
+    /// <summary>
+    /// 해당 월드 셀에 겹쳐 있는 오버레이 ID(지하 입구 · 웅덩이). 없으면 null.
+    /// <see cref="GetTileId"/> 와 같은 규약으로 <b>청크를 만들지 않는다.</b>
+    /// </summary>
+    public string GetOverlayAt(Vector2Int worldCell)
+    {
+        Vector3 pos = new Vector3(worldCell.x, worldCell.y, 0f);
+        if (!chunks.TryGetValue(Chunk.GetChunkId(pos), out Chunk chunk)) return null;
+
+        return chunk.GetOverlay(Chunk.GetLocalCellPositionInChunk(pos));
+    }
+
+    /// <summary>
+    /// 이 칸에 고여 있는 유체. <b>지형 유체의 정본은 이 함수 하나다.</b>
+    /// 오버레이(석유·물 웅덩이)를 먼저 보고, 없으면 바닥 타일(옛 <c>floor:water</c>)을 본다.
+    ///
+    /// ⚠ <b>빈 그릇으로 퍼는 쪽(<c>PlayerInteraction.TryFillContainer</c>)과 펌프가 같은 함수를 봐야 한다</b> —
+    /// 표가 둘로 갈리면 "양동이로는 퍼지는데 펌프는 안 도는" 상태가 생긴다.
+    /// 어느 블록이 어느 유체인지는 여전히 <see cref="MainBlock.fluid"/> 하나가 정한다.
+    /// </summary>
+    public FluidDefine FluidAt(Vector2Int worldCell)
+    {
+        ItemDictionary dictionary = ItemDictionary.Instance;
+        if (dictionary == null) return null;
+
+        MainBlock overlay = dictionary.GetBlock(GetOverlayAt(worldCell)) as MainBlock;
+        if (overlay != null && overlay.fluid != null) return overlay.fluid;
+
+        MainBlock floor = dictionary.GetBlock(GetTileId(worldCell)) as MainBlock;
+        return floor != null ? floor.fluid : null;
+    }
+
+    /// <summary>
+    /// 이 칸을 걸을 때 나는 소리. <b>발소리의 정본은 이 함수 하나다.</b>
+    /// 소리를 배정하지 않은 칸은 <b>조용한 것이 규칙</b>이다.
+    ///
+    /// ⚠ <b><see cref="FluidAt"/> 과 한 군데가 일부러 다르다 — 오버레이가 있으면 거기서 끝난다.</b>
+    /// 유체는 "이 오버레이에 유체가 없으면 밑의 바닥을 본다" 가 맞지만, 발소리에서 같은 폴백을 두면
+    /// <b>물웅덩이를 밟을 때 흙 소리가 난다.</b> 웅덩이·지하 입구는 바닥을 덮고 있으니
+    /// 소리도 그쪽이 정한다(2026-08-19 사용자 결정: 물 위는 무음).
+    /// 첨벙 소리가 생기면 <c>OverlayWater</c> 에셋에 클립만 꽂으면 되고 여기는 안 바뀐다.
+    /// </summary>
+    public AudioClip FootstepAt(Vector2Int worldCell)
+    {
+        ItemDictionary dictionary = ItemDictionary.Instance;
+        if (dictionary == null) return null;
+
+        MainBlock overlay = dictionary.GetBlock(GetOverlayAt(worldCell)) as MainBlock;
+        if (overlay != null) return overlay.footstepSound;   // 비어 있으면 그 칸은 무음이다
+
+        MainBlock floor = dictionary.GetBlock(GetTileId(worldCell)) as MainBlock;
+        return floor != null ? floor.footstepSound : null;
+    }
+
+    /// <summary>
+    /// 오버레이를 놓거나(null·빈 문자열이면) 치운다. <b>바닥 타일은 건드리지 않는다.</b>
+    ///
+    /// ⚠ 쓰기는 <see cref="SetPlaceableAt"/> 과 같은 이유로 월드 좌표 한 곳으로 모은다 —
+    /// 읽기만 월드 좌표고 쓰기가 청크 로컬이면 호출부마다 좌표 변환이 흩어진다.
+    /// 그리기는 호출부가 <c>MapGenerator.RefreshTile</c> 로 따로 시킨다(타일 변경과 같은 규약).
+    /// </summary>
+    public void SetOverlayAt(Vector2Int worldCell, string overlayId)
+    {
+        Vector3 pos = new Vector3(worldCell.x, worldCell.y, 0f);
+        GetOrCreateChunk(Chunk.GetChunkId(pos)).SetOverlay(Chunk.GetLocalCellPositionInChunk(pos), overlayId);
     }
 
     /// <summary>
@@ -802,6 +919,19 @@ public class WorldMap : Singleton<WorldMap>
     public void Save(string path)
     {
         if (!isLoaded) return;
+
+        // ⚠ <b>플레이 중에 스크립트를 재컴파일하면 여기가 null 이 된다.</b> 도메인 리로드는 MonoBehaviour 의
+        //    직렬화 가능한 필드(<c>bool isLoaded</c>)는 살려 오지만 <c>Dictionary</c> 는 못 살려서,
+        //    "로드는 됐다는데 청크가 하나도 없는" 상태가 된다(ItemDictionary.EnsureIndex 와 같은 함정).
+        //    막지 않으면 <c>chunks.Count</c> 에서 NRE 가 나고 SafeFile 이 그것을 "기록 실패" 로만 알려 줘
+        //    원인을 찾기 어렵다. <b>조용히 넘어가지 않고 반드시 로그를 남긴다</b> —
+        //    아래 Load 의 isLoaded 주석과 같은 이유로, 저장이 소리 없이 무시되는 상태가 제일 나쁘다.
+        if (chunks == null)
+        {
+            Debug.LogError("[WorldMap] 도메인 리로드로 청크가 사라져 저장을 건너뜁니다(플레이 중 스크립트 재컴파일). " +
+                           "디스크의 세이브는 그대로입니다 — 플레이를 껐다 켜면 정상으로 돌아옵니다.");
+            return;
+        }
         // 지하맵은 디스크에 닿지 않는다. 여기 한 줄이 MapGenerator 의 10초 자동 저장 ·
         // OnApplicationQuit · OnApplicationPause 를 <b>한꺼번에</b> 막는다 — 호출부마다 가드를 두면
         // 언젠가 한 곳이 빠져 지하 청크가 지상 세이브를 덮어쓴다.

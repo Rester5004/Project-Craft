@@ -1,0 +1,4822 @@
+﻿[
+    {
+        "speaker_uuid":  "2f913b73-11c5-5ef2-9965-498336644ffe",
+        "speaker_name":  "Jeong Hee-un",
+        "description":  "Female, Middle Aged, Mid, Thin, Calm",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Thin",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "0c25a08c-638f-59ed-9905-07f517227a0d",
+        "speaker_name":  "Yoon Jae-gwon",
+        "description":  "Male, Middle Aged, Low, Clear, Casual",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Casual"
+    },
+    {
+        "speaker_uuid":  "1c5aa7a0-c691-5e57-809b-1b44c58b65c8",
+        "speaker_name":  "Naray",
+        "description":  "Female, Young Adult, High, Thin, Intelligent",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "High",
+        "timbre":  "Thin",
+        "mood":  "Intelligent"
+    },
+    {
+        "speaker_uuid":  "54935960-c2cb-57a9-8f80-1ad581ccdd66",
+        "speaker_name":  "Lyris",
+        "description":  "Female, Young Adult, High, Thin, Sexy",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "High",
+        "timbre":  "Thin",
+        "mood":  "Sexy"
+    },
+    {
+        "speaker_uuid":  "c1738b82-c299-58c6-93ee-383535b3fcf3",
+        "speaker_name":  "Sul Gang-ho",
+        "description":  "Male, Middle Aged, Mid, Thick, Strong",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Thick",
+        "mood":  "Strong"
+    },
+    {
+        "speaker_uuid":  "de4276d5-0d46-5804-aaa4-36e1a127f133",
+        "speaker_name":  "Lavenna",
+        "description":  "Female, Young Adult, Low, Rough, Cold",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Rough",
+        "mood":  "Cold"
+    },
+    {
+        "speaker_uuid":  "798913f4-d522-5bc3-bb14-23fa37b73232",
+        "speaker_name":  "Myeong Kang-hee",
+        "description":  "Female, Middle Aged, High, Thin, Passionate",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "High",
+        "timbre":  "Thin",
+        "mood":  "Passionate"
+    },
+    {
+        "speaker_uuid":  "db9eaf43-01b4-5f2d-9f24-e27c118532c8",
+        "speaker_name":  "Seo Jun-ho",
+        "description":  "Male, Young Adult, Low, Thick, Calm",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "f18c4924-8369-5454-af50-793b102fe454",
+        "speaker_name":  "Iris",
+        "description":  "Female, Middle Aged, Mid, Rough, Firm",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Firm"
+    },
+    {
+        "speaker_uuid":  "e8aa3565-f8cb-5f70-8c56-13d7718e50d0",
+        "speaker_name":  "Hazel",
+        "description":  "Female, Young Adult, Mid, Clear, Calm",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "1c1ca4df-de38-5dc7-bab8-cb06f340b9eb",
+        "speaker_name":  "Tae-rim",
+        "description":  "Female, Young Adult, Mid, Thick, Easygoing",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thick",
+        "mood":  "Easygoing"
+    },
+    {
+        "speaker_uuid":  "bbc0d78e-9e09-5a9f-b11a-69c2476889db",
+        "speaker_name":  "Ha Gyeong-ju",
+        "description":  "Female, Middle Aged, Low, Thick, Blunt",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Blunt"
+    },
+    {
+        "speaker_uuid":  "6dd0a22d-401b-567d-ab76-22fa1a1c4da6",
+        "speaker_name":  "Park Seung-myeong",
+        "description":  "Male, Young Adult, Mid, Thin, Careful",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thin",
+        "mood":  "Careful"
+    },
+    {
+        "speaker_uuid":  "daa3b634-00fa-5ef8-b867-27ab853b0c1b",
+        "speaker_name":  "Lee Jin-a",
+        "description":  "Female, Young Adult, Mid, Thick, Simple",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thick",
+        "mood":  "Simple"
+    },
+    {
+        "speaker_uuid":  "0850eaa8-452b-5e15-b0d6-a467f6386b1c",
+        "speaker_name":  "Connor",
+        "description":  "Male, Young Adult, Mid, Rough, Ordinary",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Ordinary"
+    },
+    {
+        "speaker_uuid":  "2d7afa53-e1d7-5967-b415-070f4589e290",
+        "speaker_name":  "Jeong Min-joon",
+        "description":  "Male, Young Adult, Mid, Clear, Fresh",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Fresh"
+    },
+    {
+        "speaker_uuid":  "77964861-9b41-5c85-9a22-d0e9c2bc150e",
+        "speaker_name":  "Kim Seong-chan",
+        "description":  "Male, Young Adult, Mid, Rough, Passionate",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Passionate"
+    },
+    {
+        "speaker_uuid":  "75905961-f96b-5f97-9072-e5a781e37782",
+        "speaker_name":  "Kim Su-min",
+        "description":  "Female, Young Adult, Mid, Thick, Ordinary",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thick",
+        "mood":  "Ordinary"
+    },
+    {
+        "speaker_uuid":  "fd79a826-5d4a-5af9-ab33-69482cef963f",
+        "speaker_name":  "Kim Jun-seo",
+        "description":  "Male, Young Adult, Mid, Thick, Blunt",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thick",
+        "mood":  "Blunt"
+    },
+    {
+        "speaker_uuid":  "2f635baf-e7b8-5460-a1bc-cb7fbe9fe74c",
+        "speaker_name":  "Lim Min-gyu",
+        "description":  "Male, Young Adult, Mid, Clear, Soft",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Soft"
+    },
+    {
+        "speaker_uuid":  "aa42825f-1a51-523a-b287-c87ec33473de",
+        "speaker_name":  "Do-eun",
+        "description":  "Female, Young Adult, Mid, Clear, Easygoing",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Easygoing"
+    },
+    {
+        "speaker_uuid":  "ca00750d-1157-5523-a9bd-cbd56c9bc94b",
+        "speaker_name":  "Hye-ock",
+        "description":  "Female, Middle Aged, Mid, Thin, Fresh",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Thin",
+        "mood":  "Fresh"
+    },
+    {
+        "speaker_uuid":  "4e370d74-b819-52ca-a3bc-05aa482077bc",
+        "speaker_name":  "Song Gyeong-mok",
+        "description":  "Male, Middle Aged, Low, Thick, Calm",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "c5383e19-b184-59b8-9359-be012ed1bf5b",
+        "speaker_name":  "Noh Hae-jeong",
+        "description":  "Female, Middle Aged, Low, Thick, Reliable",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Reliable"
+    },
+    {
+        "speaker_uuid":  "686bb9ed-6370-567a-9abb-cbd752dc2075",
+        "speaker_name":  "Seo Hye-jin",
+        "description":  "Female, Young Adult, Mid, Clear, Blunt",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Blunt"
+    },
+    {
+        "speaker_uuid":  "912d03fd-ddc2-58a0-b657-0216b198e44d",
+        "speaker_name":  "Seo Sang-won",
+        "description":  "Male, Young Adult, Mid, Thin, Casual",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thin",
+        "mood":  "Casual"
+    },
+    {
+        "speaker_uuid":  "2b29029b-f209-516d-85e0-6dc874b1cd3a",
+        "speaker_name":  "Pip",
+        "description":  "Female, Child, Mid, Thin, Passionate",
+        "gender":  "Female",
+        "age":  "Child",
+        "tone":  "Mid",
+        "timbre":  "Thin",
+        "mood":  "Passionate"
+    },
+    {
+        "speaker_uuid":  "09f8faac-c522-51c2-8bd9-37c733b5251b",
+        "speaker_name":  "Kang Yong-myeong",
+        "description":  "Male, Middle Aged, Low, Clear, Careful",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Careful"
+    },
+    {
+        "speaker_uuid":  "fd2fddcf-f04a-58fe-acd8-495f3863a712",
+        "speaker_name":  "Kang Jin-sun",
+        "description":  "Female, Young Adult, Low, Thick, Careful",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Careful"
+    },
+    {
+        "speaker_uuid":  "d0992e96-c975-513e-bc1e-e664b44ed152",
+        "speaker_name":  "Yoo Jeong-ryul",
+        "description":  "Male, Middle Aged, Mid, Thick, Gentle",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Thick",
+        "mood":  "Gentle"
+    },
+    {
+        "speaker_uuid":  "236f5883-1420-53bd-be8d-890cb7218c49",
+        "speaker_name":  "Park Young-soo",
+        "description":  "Male, Middle Aged, Mid, Thick, Dignified",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Thick",
+        "mood":  "Dignified"
+    },
+    {
+        "speaker_uuid":  "8b1b95f8-206e-5ead-a58c-4346ce6d9a17",
+        "speaker_name":  "Park Yoo-jin",
+        "description":  "Female, Young Adult, High, Clear, Soft",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "High",
+        "timbre":  "Clear",
+        "mood":  "Soft"
+    },
+    {
+        "speaker_uuid":  "59662624-2596-5780-af1c-4360dc3ab970",
+        "speaker_name":  "Huh Joong-rok",
+        "description":  "Male, Middle Aged, Mid, Thick, Reliable",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Thick",
+        "mood":  "Reliable"
+    },
+    {
+        "speaker_uuid":  "734e5402-205c-5093-845e-0350f5ba521f",
+        "speaker_name":  "Song Yeon-chae",
+        "description":  "Female, Young Adult, High, Clear, Warm",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "High",
+        "timbre":  "Clear",
+        "mood":  "Warm"
+    },
+    {
+        "speaker_uuid":  "3a79180a-cd58-5018-bb9c-3f62496d2fb7",
+        "speaker_name":  "Oren",
+        "description":  "Male, Middle Aged, High, Rough, Casual",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "High",
+        "timbre":  "Rough",
+        "mood":  "Casual"
+    },
+    {
+        "speaker_uuid":  "4429e05b-d28a-55f5-9f95-818ef7d529bf",
+        "speaker_name":  "Gorbein",
+        "description":  "Male, Middle Aged, Low, Clear, Strong",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Strong"
+    },
+    {
+        "speaker_uuid":  "bfbed355-6bdc-5a10-b689-97fc9279fb4f",
+        "speaker_name":  "Amber",
+        "description":  "Female, Middle Aged, Low, Clear, Careful",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Careful"
+    },
+    {
+        "speaker_uuid":  "6ce5a82d-d235-58d8-97bc-921976c3f74c",
+        "speaker_name":  "Sul Dong-geun",
+        "description":  "Male, Middle Aged, Mid, Rough, Careful",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Careful"
+    },
+    {
+        "speaker_uuid":  "f8972160-46ee-556a-9574-dc039357bcc3",
+        "speaker_name":  "Yoon-hye",
+        "description":  "Female, Middle Aged, Mid, Thin, Calm",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Thin",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "3d6e3eae-c715-5713-a98b-5e3378140f16",
+        "speaker_name":  "Park Young-hee",
+        "description":  "Female, Middle Aged, Mid, Thin, Blunt",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Thin",
+        "mood":  "Blunt"
+    },
+    {
+        "speaker_uuid":  "7cb83e30-d712-597c-9501-b444615ba4a4",
+        "speaker_name":  "Greta",
+        "description":  "Female, Senior, Low, Rough, Stubborn",
+        "gender":  "Female",
+        "age":  "Senior",
+        "tone":  "Low",
+        "timbre":  "Rough",
+        "mood":  "Stubborn"
+    },
+    {
+        "speaker_uuid":  "bf7405f7-3291-50aa-9545-9e31a1da09bc",
+        "speaker_name":  "Anna",
+        "description":  "Female, Young Adult, Mid, Clear, Calm",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "d986324d-e9be-5186-a854-800d7b3c5a69",
+        "speaker_name":  "Jeong Ki-beom",
+        "description":  "Male, Middle Aged, Low, Clear, Casual",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Casual"
+    },
+    {
+        "speaker_uuid":  "64b71f84-f2f5-58af-a986-63d302477fd9",
+        "speaker_name":  "Yu-wei-chen",
+        "description":  "Male, Young Adult, Mid, Thin, Cunning",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thin",
+        "mood":  "Cunning"
+    },
+    {
+        "speaker_uuid":  "9c2d86a7-026e-5cba-bb18-03f21f89b895",
+        "speaker_name":  "Sul Tae-yoon",
+        "description":  "Male, Young Adult, Mid, Thin, Intelligent",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thin",
+        "mood":  "Intelligent"
+    },
+    {
+        "speaker_uuid":  "82780fd0-1035-5bdc-8417-ca87dc3ca369",
+        "speaker_name":  "Ella",
+        "description":  "Female, Child, Mid, Clear, Calm",
+        "gender":  "Female",
+        "age":  "Child",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "5723ed35-d31c-5489-9e01-e7dfcf8794af",
+        "speaker_name":  "Gyeong-sook",
+        "description":  "Female, Middle Aged, Mid, Thick, Gentle",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Thick",
+        "mood":  "Gentle"
+    },
+    {
+        "speaker_uuid":  "9690dad4-9997-52be-980b-f2473ee2a525",
+        "speaker_name":  "John",
+        "description":  "Male, Middle Aged, Low, Clear, Calm",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "add68158-f7ed-546d-86a5-b88a536337ab",
+        "speaker_name":  "Kim Young-ah",
+        "description":  "Female, Middle Aged, Low, Thick, Casual",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Casual"
+    },
+    {
+        "speaker_uuid":  "48377711-1a85-5a9c-a58e-de2b9f34514b",
+        "speaker_name":  "Kim Hye-sun",
+        "description":  "Female, Middle Aged, Mid, Thin, Experienced",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Thin",
+        "mood":  "Experienced"
+    },
+    {
+        "speaker_uuid":  "eead3eb1-1b2f-502a-8602-5459de1360d9",
+        "speaker_name":  "Bang Tae-gyeong",
+        "description":  "Female, Young Adult, Low, Clear, Blunt",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Blunt"
+    },
+    {
+        "speaker_uuid":  "f4209e47-96eb-5195-9d07-1a91c76f6d61",
+        "speaker_name":  "Un-jeong",
+        "description":  "Female, Young Adult, High, Thin, Calm",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "High",
+        "timbre":  "Thin",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "a7bcf0d8-f057-5def-8555-2a37fab4d678",
+        "speaker_name":  "Bora",
+        "description":  "Female, Child, High, Thin, Calm",
+        "gender":  "Female",
+        "age":  "Child",
+        "tone":  "High",
+        "timbre":  "Thin",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "9e437015-1df1-599a-946e-55a0da2cc6fc",
+        "speaker_name":  "Odirungrung",
+        "description":  "Male, Young Adult, High, Thin, Ordinary",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "High",
+        "timbre":  "Thin",
+        "mood":  "Ordinary"
+    },
+    {
+        "speaker_uuid":  "324ea081-c000-5c6f-a463-a2f35be749d8",
+        "speaker_name":  "Sophie",
+        "description":  "Female, Young Adult, Mid, Thin, Stubborn",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thin",
+        "mood":  "Stubborn"
+    },
+    {
+        "speaker_uuid":  "7fdcd543-429d-5f02-951c-435c3019da67",
+        "speaker_name":  "Noh Sun-hwa",
+        "description":  "Female, Middle Aged, Mid, Rough, Warm",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Warm"
+    },
+    {
+        "speaker_uuid":  "39251bb8-8cea-59f1-9f3b-e4f255b8875b",
+        "speaker_name":  "Ji-hoon",
+        "description":  "Male, Young Adult, Mid, Clear, Calm",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "ae10927c-a552-5e2f-8340-9ccf62292b0a",
+        "speaker_name":  "Jeong Un-sung",
+        "description":  "Female, Young Adult, Low, Clear, Calm",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "a38e7559-9fd6-5fca-9c11-804e87500e64",
+        "speaker_name":  "Wui Jeong-hwa",
+        "description":  "Female, Middle Aged, Mid, Thin, Casual",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Thin",
+        "mood":  "Casual"
+    },
+    {
+        "speaker_uuid":  "cca9f6ad-2882-5e8c-ab6e-efa1a2c405e7",
+        "speaker_name":  "Yoon Chae-hyeon",
+        "description":  "Female, Young Adult, Mid, Thin, Passionate",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thin",
+        "mood":  "Passionate"
+    },
+    {
+        "speaker_uuid":  "601fd3eb-c5d3-59c1-b70e-c626902f7838",
+        "speaker_name":  "Lee Ji-ae",
+        "description":  "Female, Young Adult, Mid, Clear, Reliable",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Reliable"
+    },
+    {
+        "speaker_uuid":  "a766ef6b-06e7-5b74-829e-0e9cef70e70a",
+        "speaker_name":  "Gyeong-a",
+        "description":  "Female, Middle Aged, Mid, Clear, Calm",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "25f8c156-12e8-5662-a4ea-e4b6de4e5283",
+        "speaker_name":  "Lee Hye-on",
+        "description":  "Female, Young Adult, Mid, Clear, Careful",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Careful"
+    },
+    {
+        "speaker_uuid":  "1b794c2b-dfc5-5e10-9c0c-9dddfb0e8ed6",
+        "speaker_name":  "Shin Myeong-sun",
+        "description":  "Female, Middle Aged, Low, Clear, Strong",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Strong"
+    },
+    {
+        "speaker_uuid":  "d69c1b78-31d4-50cb-ad97-42fd5e791970",
+        "speaker_name":  "Park Min-jeong",
+        "description":  "Female, Young Adult, Mid, Clear, Calm",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "d6cee9e5-fe47-5cd6-b655-58e770723f68",
+        "speaker_name":  "Kang Un-sul",
+        "description":  "Female, Young Adult, Mid, Clear, Easygoing",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Easygoing"
+    },
+    {
+        "speaker_uuid":  "25bd2c68-4ed2-59ce-a4a5-e35ac3c21ea0",
+        "speaker_name":  "Patrick",
+        "description":  "Male, Middle Aged, Low, Rough, Gentle",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Rough",
+        "mood":  "Gentle"
+    },
+    {
+        "speaker_uuid":  "f774c1b8-9ab4-556a-902f-b58d906ff69c",
+        "speaker_name":  "Seo Hyeon-wook",
+        "description":  "Male, Young Adult, Low, Clear, Calm",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "74ebaa39-8eef-5fbd-ae68-f73bf88ca75d",
+        "speaker_name":  "Do Hyeon-seong",
+        "description":  "Male, Young Adult, Low, Clear, Calm",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "f5757d3c-8923-5cd0-a8f8-124a303d8908",
+        "speaker_name":  "Park Min-ho",
+        "description":  "Male, Young Adult, Low, Thick, Calm",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "ea90c41b-024d-58c2-9f5c-645e249d2904",
+        "speaker_name":  "Do Hyeon-won",
+        "description":  "Male, Young Adult, Low, Clear, Soft",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Soft"
+    },
+    {
+        "speaker_uuid":  "19860fdc-317c-53dc-84f6-ff632c1de5c0",
+        "speaker_name":  "Do Hyeon-mook",
+        "description":  "Male, Young Adult, Low, Clear, Warm",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Warm"
+    },
+    {
+        "speaker_uuid":  "ece7c77b-4960-51b3-b531-857b63d8d974",
+        "speaker_name":  "Moon Ga-rin",
+        "description":  "Female, Young Adult, Mid, Rough, Strong",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Strong"
+    },
+    {
+        "speaker_uuid":  "0f47f337-5cd1-578a-810c-921e9d7b7a6e",
+        "speaker_name":  "Kim Seong-gwon",
+        "description":  "Male, Middle Aged, Mid, Thick, Calm",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Thick",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "ce78ca7b-831a-5985-b96d-0a20ca787b98",
+        "speaker_name":  "Kim Eui-ji",
+        "description":  "Male, Young Adult, Mid, Thin, Simple",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thin",
+        "mood":  "Simple"
+    },
+    {
+        "speaker_uuid":  "f0e95289-537d-5ada-92a6-2d27d048e776",
+        "speaker_name":  "Eleanor",
+        "description":  "Female, Young Adult, Mid, Clear, Casual",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Casual"
+    },
+    {
+        "speaker_uuid":  "d3b0434c-a816-5866-bee2-172368268fb8",
+        "speaker_name":  "Dulam",
+        "description":  "Male, Young Adult, Mid, Thick, Dull",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thick",
+        "mood":  "Dull"
+    },
+    {
+        "speaker_uuid":  "29837bcc-c835-523f-9796-370990507e8b",
+        "speaker_name":  "Jiang-hao-ze",
+        "description":  "Male, Young Adult, Mid, Clear, Robust",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Robust"
+    },
+    {
+        "speaker_uuid":  "9d658d1f-6c01-5171-800c-e55dc14f6a56",
+        "speaker_name":  "Oh Se-un",
+        "description":  "Female, Young Adult, Mid, Clear, Intelligent",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Intelligent"
+    },
+    {
+        "speaker_uuid":  "9a546b88-bb17-5afb-bde8-f525c74fd6cf",
+        "speaker_name":  "Lee Ji-sook",
+        "description":  "Female, Middle Aged, Mid, Thick, Calm",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Thick",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "c5d2e74a-d4d3-5a85-b18a-f45a60ea66e0",
+        "speaker_name":  "Sally",
+        "description":  "Female, Young Adult, Mid, Thin, Calm",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thin",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "2fd1bbfa-a9ef-5e97-b623-e6fdff7d1b38",
+        "speaker_name":  "Park Ho-young",
+        "description":  "Male, Young Adult, High, Thin, Careful",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "High",
+        "timbre":  "Thin",
+        "mood":  "Careful"
+    },
+    {
+        "speaker_uuid":  "40ccbba7-706a-5a23-ac58-9e822e7585ae",
+        "speaker_name":  "Jin Woon-hye",
+        "description":  "Female, Middle Aged, Mid, Clear, Elegant",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Elegant"
+    },
+    {
+        "speaker_uuid":  "d7da3489-245d-5691-8f55-7f5552b0431e",
+        "speaker_name":  "Gong Hyeon-do",
+        "description":  "Male, Senior, High, Rough, Experienced",
+        "gender":  "Male",
+        "age":  "Senior",
+        "tone":  "High",
+        "timbre":  "Rough",
+        "mood":  "Experienced"
+    },
+    {
+        "speaker_uuid":  "b7d64732-b1fd-584f-9088-08351711f0f0",
+        "speaker_name":  "Nam Su-hyeon",
+        "description":  "Female, Young Adult, Mid, Clear, Careful",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Careful"
+    },
+    {
+        "speaker_uuid":  "3c5f6239-517f-5d54-a851-2ceea06b5a9a",
+        "speaker_name":  "Seo Ji-hwan",
+        "description":  "Male, Young Adult, Mid, Rough, Calm",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "2de44705-b477-5138-a5fe-5ac866e18332",
+        "speaker_name":  "Daisuke",
+        "description":  "Male, Young Adult, Low, Rough, Ordinary",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Rough",
+        "mood":  "Ordinary"
+    },
+    {
+        "speaker_uuid":  "83c6ffb9-58a6-559a-8d82-8f49a118c8fd",
+        "speaker_name":  "Jang Man-dol",
+        "description":  "Male, Senior, Low, Rough, Stubborn",
+        "gender":  "Male",
+        "age":  "Senior",
+        "tone":  "Low",
+        "timbre":  "Rough",
+        "mood":  "Stubborn"
+    },
+    {
+        "speaker_uuid":  "526cd7cf-2836-58d1-b7b5-7c90e2349e61",
+        "speaker_name":  "Kim Seong-hwa",
+        "description":  "Male, Young Adult, Low, Thick, Calm",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "715d36c6-458e-502d-9590-a98d38221542",
+        "speaker_name":  "Han Seok-woo",
+        "description":  "Male, Middle Aged, Low, Thick, Wise",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Wise"
+    },
+    {
+        "speaker_uuid":  "4442bc32-18e5-5e78-9b73-d401dbc6300e",
+        "speaker_name":  "Kim Mi-sun",
+        "description":  "Female, Middle Aged, Mid, Clear, Soft",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Soft"
+    },
+    {
+        "speaker_uuid":  "57ae5c2f-fcc3-52c2-b233-b564de4a7dc9",
+        "speaker_name":  "Back Joon-gang",
+        "description":  "Male, Middle Aged, Mid, Rough, Experienced",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Experienced"
+    },
+    {
+        "speaker_uuid":  "e5102306-062d-5881-a8fb-a20089d5c01c",
+        "speaker_name":  "Tak Cheol-min",
+        "description":  "Male, Middle Aged, Mid, Rough, Simple",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Simple"
+    },
+    {
+        "speaker_uuid":  "813a21ec-4189-526a-a4bf-9a157330c30a",
+        "speaker_name":  "Eric",
+        "description":  "Male, Young Adult, Mid, Clear, Ordinary",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Ordinary"
+    },
+    {
+        "speaker_uuid":  "c7d54b77-d2f7-5d80-b287-0fd2109dc864",
+        "speaker_name":  "Regina",
+        "description":  "Female, Young Adult, Low, Clear, Reliable",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Reliable"
+    },
+    {
+        "speaker_uuid":  "bbba350f-af1c-5302-85aa-3127d49bf8f8",
+        "speaker_name":  "Marie",
+        "description":  "Female, Teen, High, Thin, Intelligent",
+        "gender":  "Female",
+        "age":  "Teen",
+        "tone":  "High",
+        "timbre":  "Thin",
+        "mood":  "Intelligent"
+    },
+    {
+        "speaker_uuid":  "ca9a3c40-7c51-511d-9c36-b6efb5dad365",
+        "speaker_name":  "Jeong Yoon-seok",
+        "description":  "Male, Young Adult, Mid, Thick, Calm",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thick",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "f47b9261-77d5-5df2-8775-449a1b6123ec",
+        "speaker_name":  "Han Woo-hyeong",
+        "description":  "Male, Middle Aged, Low, Clear, Warm",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Warm"
+    },
+    {
+        "speaker_uuid":  "0f1848d1-3bb2-524b-a788-d6c2ecc3298d",
+        "speaker_name":  "Noh Chui-jae",
+        "description":  "Male, Senior, Mid, Thin, Stubborn",
+        "gender":  "Male",
+        "age":  "Senior",
+        "tone":  "Mid",
+        "timbre":  "Thin",
+        "mood":  "Stubborn"
+    },
+    {
+        "speaker_uuid":  "baf90b19-1998-5927-b1e6-785268fa0e55",
+        "speaker_name":  "Earl",
+        "description":  "Male, Middle Aged, High, Rough, Relaxed",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "High",
+        "timbre":  "Rough",
+        "mood":  "Relaxed"
+    },
+    {
+        "speaker_uuid":  "9c357ae5-e653-57a4-80ca-537e2582a5df",
+        "speaker_name":  "Jiwoo",
+        "description":  "Female, Child, Mid, Thin, Bright",
+        "gender":  "Female",
+        "age":  "Child",
+        "tone":  "Mid",
+        "timbre":  "Thin",
+        "mood":  "Bright"
+    },
+    {
+        "speaker_uuid":  "567b27d1-ba12-507c-ba96-e8a2a678e72c",
+        "speaker_name":  "Yoon Hae-won",
+        "description":  "Female, Young Adult, Mid, Clear, Calm",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "f59ea709-6f35-5b8f-8992-bd8da43fe8b6",
+        "speaker_name":  "Park Min-hoon",
+        "description":  "Male, Young Adult, Low, Thin, Fresh",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Thin",
+        "mood":  "Fresh"
+    },
+    {
+        "speaker_uuid":  "ce692e71-bebf-561b-914f-d1e92e984aa2",
+        "speaker_name":  "Choi Chang-sub",
+        "description":  "Male, Young Adult, Mid, Thick, Strong",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thick",
+        "mood":  "Strong"
+    },
+    {
+        "speaker_uuid":  "2808cdfd-f045-531d-aae5-9cae82bb0ba3",
+        "speaker_name":  "Yang Un-hwa",
+        "description":  "Female, Middle Aged, Mid, Thin, Elegant",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Thin",
+        "mood":  "Elegant"
+    },
+    {
+        "speaker_uuid":  "e0028ad0-4b9a-5aeb-bf11-f4036037aa5d",
+        "speaker_name":  "Myeong Su-yeon",
+        "description":  "Female, Middle Aged, Mid, Clear, Elegant",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Elegant"
+    },
+    {
+        "speaker_uuid":  "9559a5c8-6df5-5312-82d5-c7c81a0357d7",
+        "speaker_name":  "Vera",
+        "description":  "Female, Young Adult, Mid, Rough, Blunt",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Blunt"
+    },
+    {
+        "speaker_uuid":  "745b3929-9f4a-54ac-a59f-1ba2b493eaaa",
+        "speaker_name":  "Emily",
+        "description":  "Female, Child, High, Thin, Bold",
+        "gender":  "Female",
+        "age":  "Child",
+        "tone":  "High",
+        "timbre":  "Thin",
+        "mood":  "Bold"
+    },
+    {
+        "speaker_uuid":  "374bf90f-b2a6-52ca-b142-07e610668f32",
+        "speaker_name":  "Myeong Ju-ran",
+        "description":  "Female, Middle Aged, Mid, Clear, Rational",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Rational"
+    },
+    {
+        "speaker_uuid":  "6d22bea1-2ca7-5225-9b51-7e7cc1d928c1",
+        "speaker_name":  "Momo",
+        "description":  "Female, Child, Mid, Thin, Relaxed",
+        "gender":  "Female",
+        "age":  "Child",
+        "tone":  "Mid",
+        "timbre":  "Thin",
+        "mood":  "Relaxed"
+    },
+    {
+        "speaker_uuid":  "17f6c446-9ccb-5304-891d-37cbef035ffc",
+        "speaker_name":  "Jang Ju-hyeon",
+        "description":  "Female, Young Adult, Low, Clear, Strong",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Strong"
+    },
+    {
+        "speaker_uuid":  "e7e2a028-6c36-55d1-b7e0-caa38c4817e7",
+        "speaker_name":  "Cha Yeon-u",
+        "description":  "Female, Young Adult, Low, Clear, Careful",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Careful"
+    },
+    {
+        "speaker_uuid":  "e9a63d61-e729-5bbc-9fe8-337c762c3492",
+        "speaker_name":  "Park Ye-jin",
+        "description":  "Female, Young Adult, High, Rough, Easygoing",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "High",
+        "timbre":  "Rough",
+        "mood":  "Easygoing"
+    },
+    {
+        "speaker_uuid":  "8feec62d-a865-537e-a990-3446d9d51ed9",
+        "speaker_name":  "Ye-xin-yi",
+        "description":  "Female, Young Adult, Mid, Clear, Bright",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Bright"
+    },
+    {
+        "speaker_uuid":  "d8f33dc0-a41c-5d54-a23e-23b22bf561ba",
+        "speaker_name":  "Seok Woon-ho",
+        "description":  "Male, Young Adult, Low, Clear, Soft",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Soft"
+    },
+    {
+        "speaker_uuid":  "2ea50c7e-a165-5a53-aa29-11d3f7c35af3",
+        "speaker_name":  "Noh Sun-hee",
+        "description":  "Female, Middle Aged, Low, Rough, Experienced",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Rough",
+        "mood":  "Experienced"
+    },
+    {
+        "speaker_uuid":  "6dd51e4d-a695-578e-8580-ce4a785dbba0",
+        "speaker_name":  "Jeong Chan-wook",
+        "description":  "Male, Middle Aged, Mid, Rough, Hearty",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Hearty"
+    },
+    {
+        "speaker_uuid":  "bbd8b880-89f7-51c3-bfc1-a14f7a1e17e7",
+        "speaker_name":  "Jang Ha-jeong",
+        "description":  "Female, Young Adult, Low, Clear, Reliable",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Reliable"
+    },
+    {
+        "speaker_uuid":  "0388a6de-911d-515e-8ac9-470430415dd1",
+        "speaker_name":  "Han Ji-soo",
+        "description":  "Female, Young Adult, Mid, Thin, Strong",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thin",
+        "mood":  "Strong"
+    },
+    {
+        "speaker_uuid":  "32f824eb-3a9b-5964-b48f-c926d4b835ab",
+        "speaker_name":  "Gil Hye-jeong",
+        "description":  "Female, Senior, Mid, Rough, Calm",
+        "gender":  "Female",
+        "age":  "Senior",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "9132bcc1-eb30-5a02-8910-338d6128d34d",
+        "speaker_name":  "Eun-seo",
+        "description":  "Female, Young Adult, Mid, Clear, Warm",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Warm"
+    },
+    {
+        "speaker_uuid":  "e1141d8e-c9d3-547e-9c2b-716f68977e83",
+        "speaker_name":  "Kwon Seok-hwan",
+        "description":  "Male, Middle Aged, Low, Thick, Soft",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Soft"
+    },
+    {
+        "speaker_uuid":  "7c7d6ce7-94f2-5b3a-be9f-d5aa591157b8",
+        "speaker_name":  "Kibby",
+        "description":  "Male, Child, Mid, Rough, Easygoing",
+        "gender":  "Male",
+        "age":  "Child",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Easygoing"
+    },
+    {
+        "speaker_uuid":  "5e350181-f225-50ae-a4a0-127e05739968",
+        "speaker_name":  "Toostimong",
+        "description":  "Male, Young Adult, High, Thin, Quirky",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "High",
+        "timbre":  "Thin",
+        "mood":  "Quirky"
+    },
+    {
+        "speaker_uuid":  "4003858a-c9b6-5fe0-9f9e-ffb09e6345f1",
+        "speaker_name":  "Akemi",
+        "description":  "Female, Young Adult, Low, Rough, Gentle",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Rough",
+        "mood":  "Gentle"
+    },
+    {
+        "speaker_uuid":  "40f4ce41-6143-5b6f-bbaf-8baa3d384d8d",
+        "speaker_name":  "Back Yoon-gun",
+        "description":  "Male, Middle Aged, Low, Thick, Experienced",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Experienced"
+    },
+    {
+        "speaker_uuid":  "4718a477-9f19-572a-98f8-e7f684021495",
+        "speaker_name":  "Park Hyeon-joon",
+        "description":  "Male, Young Adult, Mid, Thick, Calm",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thick",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "796e96c8-40ec-5f8a-9a4c-7981c9604d59",
+        "speaker_name":  "Choi Ji-hyeong",
+        "description":  "Male, Young Adult, Mid, Thick, Blunt",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thick",
+        "mood":  "Blunt"
+    },
+    {
+        "speaker_uuid":  "e805aaa9-a29d-5e01-9020-4c72d4530c4a",
+        "speaker_name":  "Ben",
+        "description":  "Male, Young Adult, Low, Clear, Calm",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "32e995ae-1326-5b88-89c1-908c0714d898",
+        "speaker_name":  "Gil Sun-ja",
+        "description":  "Female, Middle Aged, Mid, Rough, Passionate",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Passionate"
+    },
+    {
+        "speaker_uuid":  "5775b416-5aaf-511d-ba90-802027564c73",
+        "speaker_name":  "Yoon Jeong-hee",
+        "description":  "Female, Middle Aged, Low, Rough, Gentle",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Rough",
+        "mood":  "Gentle"
+    },
+    {
+        "speaker_uuid":  "71090aa3-e03b-5465-8326-b97daa6f8142",
+        "speaker_name":  "Seo Min-joo",
+        "description":  "Female, Young Adult, Mid, Rough, Wise",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Wise"
+    },
+    {
+        "speaker_uuid":  "a7f0a9a8-e6f6-5df2-b05e-f3da1a89e7ed",
+        "speaker_name":  "Bang Hyo-gyeong",
+        "description":  "Female, Young Adult, Low, Clear, Rigid",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Rigid"
+    },
+    {
+        "speaker_uuid":  "e5be7e3d-87f1-57bf-86a0-447b26254eb3",
+        "speaker_name":  "Park Sun-jin",
+        "description":  "Female, Young Adult, Mid, Thin, Calm",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thin",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "191985ef-49bf-5d31-b5ce-9589d0c7bac3",
+        "speaker_name":  "Kim Tae-gwon",
+        "description":  "Male, Middle Aged, Mid, Thick, Easygoing",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Thick",
+        "mood":  "Easygoing"
+    },
+    {
+        "speaker_uuid":  "a90d1c67-f61a-5537-817e-ef388c1f0d4a",
+        "speaker_name":  "Kim Young-do",
+        "description":  "Male, Young Adult, Mid, Clear, Righteous",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Righteous"
+    },
+    {
+        "speaker_uuid":  "6033fd26-abd6-537b-a0d5-fd1b99a93255",
+        "speaker_name":  "Claire",
+        "description":  "Female, Middle Aged, Mid, Rough, Reliable",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Reliable"
+    },
+    {
+        "speaker_uuid":  "a5bd9aeb-2f2b-5053-881a-b9ef9f18b2bb",
+        "speaker_name":  "Kikyo",
+        "description":  "Female, Young Adult, Mid, Clear, Calm",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "c3623382-7da9-575a-a1c0-dcd8570ae8e4",
+        "speaker_name":  "Kim Han-young",
+        "description":  "Female, Middle Aged, Mid, Thin, Calm",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Thin",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "30d09ac1-0e54-5dd3-ad9b-8fddcb3feb20",
+        "speaker_name":  "Yeo Seong-mok",
+        "description":  "Male, Middle Aged, Low, Thick, Calm",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "60aecefb-d4f3-54fd-a7d7-481149b9fe5b",
+        "speaker_name":  "Xylen",
+        "description":  "Male, Young Adult, Mid, Thin, Lively",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thin",
+        "mood":  "Lively"
+    },
+    {
+        "speaker_uuid":  "4bfec834-1de3-5827-8100-e2a09577f459",
+        "speaker_name":  "Bang Young-sim",
+        "description":  "Female, Middle Aged, Low, Thick, Blunt",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Blunt"
+    },
+    {
+        "speaker_uuid":  "46a8953f-cc2b-558b-bd9f-8c41cbad3a3a",
+        "speaker_name":  "Kim Young-gon",
+        "description":  "Male, Young Adult, Mid, Thick, Gentle",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thick",
+        "mood":  "Gentle"
+    },
+    {
+        "speaker_uuid":  "ed3c5cda-0634-597d-ae89-393a70198e3c",
+        "speaker_name":  "Aldric",
+        "description":  "Male, Young Adult, Mid, Thick, Casual",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thick",
+        "mood":  "Casual"
+    },
+    {
+        "speaker_uuid":  "8c503fc9-8656-5a94-884e-11bcf7a5ea96",
+        "speaker_name":  "Kang Seong-cheol",
+        "description":  "Male, Middle Aged, Low, Clear, Casual",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Casual"
+    },
+    {
+        "speaker_uuid":  "4395565d-9a46-5e11-ae74-955a68d0b91a",
+        "speaker_name":  "Park Sang-un",
+        "description":  "Female, Middle Aged, Low, Clear, Calm",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "27e100ce-255e-5268-abcc-ffc8990f7152",
+        "speaker_name":  "Noh Gwang-seok",
+        "description":  "Male, Middle Aged, Mid, Rough, Soft",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Soft"
+    },
+    {
+        "speaker_uuid":  "ba062e2e-38de-503f-abf0-942344b1b5b7",
+        "speaker_name":  "Roderick",
+        "description":  "Male, Young Adult, Low, Thick, Dignified",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Dignified"
+    },
+    {
+        "speaker_uuid":  "d500aecd-b783-5527-80f1-e4a1403c2886",
+        "speaker_name":  "Li-zi-lu",
+        "description":  "Male, Young Adult, Mid, Clear, Calm",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "138185f5-6c76-558c-a5df-eccc5ce60b24",
+        "speaker_name":  "Jeong Un-mi",
+        "description":  "Female, Middle Aged, Mid, Thin, Fresh",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Thin",
+        "mood":  "Fresh"
+    },
+    {
+        "speaker_uuid":  "2f02592d-bf78-5b42-921c-7ef5f59c2057",
+        "speaker_name":  "Back Man-sik",
+        "description":  "Male, Senior, Mid, Rough, Experienced",
+        "gender":  "Male",
+        "age":  "Senior",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Experienced"
+    },
+    {
+        "speaker_uuid":  "c2ac621e-360e-58d0-91a5-8aedf94368de",
+        "speaker_name":  "Un-sol",
+        "description":  "Female, Young Adult, Mid, Clear, Calm",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "33b8e3df-71df-5690-9327-5675574c8c75",
+        "speaker_name":  "Kim Dae-yub",
+        "description":  "Male, Young Adult, Mid, Clear, Careful",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Careful"
+    },
+    {
+        "speaker_uuid":  "3da3a789-ed89-59b1-8d40-904f8060aaf2",
+        "speaker_name":  "Novarion",
+        "description":  "Male, Young Adult, Mid, Clear, Righteous",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Righteous"
+    },
+    {
+        "speaker_uuid":  "f8e6c89c-e485-5ec6-997f-9c9bc12b3932",
+        "speaker_name":  "Yoon Se-gwon",
+        "description":  "Male, Middle Aged, Low, Clear, Blunt",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Blunt"
+    },
+    {
+        "speaker_uuid":  "834d5ba2-c485-5dad-a2a8-b070e88ebbd9",
+        "speaker_name":  "Yuko",
+        "description":  "Female, Young Adult, High, Clear, Intelligent",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "High",
+        "timbre":  "Clear",
+        "mood":  "Intelligent"
+    },
+    {
+        "speaker_uuid":  "a89fcfa2-747e-5362-bdf4-9854f4c53b58",
+        "speaker_name":  "Wang-hao-ren",
+        "description":  "Male, Young Adult, Mid, Thin, Ordinary",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thin",
+        "mood":  "Ordinary"
+    },
+    {
+        "speaker_uuid":  "ac6c822d-c9c7-5788-9a87-1755d8379512",
+        "speaker_name":  "Gong Young-hoon",
+        "description":  "Male, Middle Aged, High, Rough, Experienced",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "High",
+        "timbre":  "Rough",
+        "mood":  "Experienced"
+    },
+    {
+        "speaker_uuid":  "bc95a0d0-27ed-568e-8255-0182dfc99a27",
+        "speaker_name":  "Helena",
+        "description":  "Female, Middle Aged, Mid, Clear, Elegant",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Elegant"
+    },
+    {
+        "speaker_uuid":  "d303cf12-0140-5a94-8840-2de54444016e",
+        "speaker_name":  "Corban",
+        "description":  "Male, Middle Aged, Low, Thick, Coarse",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Coarse"
+    },
+    {
+        "speaker_uuid":  "731d8fa8-9d57-57fb-a461-23cc627bd78d",
+        "speaker_name":  "Hanae",
+        "description":  "Female, Young Adult, Mid, Thin, Simple",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thin",
+        "mood":  "Simple"
+    },
+    {
+        "speaker_uuid":  "ae2fc575-bc46-540e-83dd-b03b40490786",
+        "speaker_name":  "Kaito",
+        "description":  "Male, Young Adult, High, Clear, Warm",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "High",
+        "timbre":  "Clear",
+        "mood":  "Warm"
+    },
+    {
+        "speaker_uuid":  "6704830e-a74c-542e-b36f-65c331d00391",
+        "speaker_name":  "Riven",
+        "description":  "Male, Young Adult, Mid, Clear, Intelligent",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Intelligent"
+    },
+    {
+        "speaker_uuid":  "d02110d1-a46a-5070-abea-3aa432374d09",
+        "speaker_name":  "Jeong Seong-joon",
+        "description":  "Male, Young Adult, Low, Clear, Calm",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "ea85d319-7a67-54c7-9a1e-62d0e9d9a195",
+        "speaker_name":  "Jeong Do-hoon",
+        "description":  "Male, Young Adult, Low, Clear, Gentle",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Gentle"
+    },
+    {
+        "speaker_uuid":  "180ba5af-0c20-53b5-8aed-7e1ac1f6af11",
+        "speaker_name":  "Hyeon-seo",
+        "description":  "Male, Young Adult, Mid, Clear, Warm",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Warm"
+    },
+    {
+        "speaker_uuid":  "106c9c93-1729-55af-a556-3298f5631d0d",
+        "speaker_name":  "Song Hak-jin",
+        "description":  "Male, Middle Aged, Low, Clear, Careful",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Careful"
+    },
+    {
+        "speaker_uuid":  "b9744a85-0f77-50b0-a4cf-a985856cf2ef",
+        "speaker_name":  "Kim Jae-hyeon",
+        "description":  "Male, Young Adult, Low, Clear, Reliable",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Reliable"
+    },
+    {
+        "speaker_uuid":  "f975c2ab-4f8b-5ee2-8890-d0007186567e",
+        "speaker_name":  "Noh Ji-hun",
+        "description":  "Male, Middle Aged, Low, Thick, Soft",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Soft"
+    },
+    {
+        "speaker_uuid":  "4329c724-f831-5242-b7c7-9cfe20b5b2c9",
+        "speaker_name":  "Yoon Sang-wook",
+        "description":  "Male, Middle Aged, Mid, Thick, Blunt",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Thick",
+        "mood":  "Blunt"
+    },
+    {
+        "speaker_uuid":  "5fc5b563-280d-510b-b9e5-22987835749b",
+        "speaker_name":  "Yoon-gyeong",
+        "description":  "Female, Young Adult, Low, Clear, Blunt",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Blunt"
+    },
+    {
+        "speaker_uuid":  "34a58f06-2876-5227-a581-583e85f57e82",
+        "speaker_name":  "Jeong Beom-gwon",
+        "description":  "Male, Middle Aged, Low, Clear, Calm",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "7ddc8d9c-89d4-5ac5-a4b5-ca289b7806ad",
+        "speaker_name":  "Yoon Jin-gul",
+        "description":  "Male, Middle Aged, Mid, Rough, Careful",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Careful"
+    },
+    {
+        "speaker_uuid":  "99a54260-9e87-5e91-95d3-c781b0bc66b0",
+        "speaker_name":  "Park Jeong-im",
+        "description":  "Female, Middle Aged, Mid, Thin, Blunt",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Thin",
+        "mood":  "Blunt"
+    },
+    {
+        "speaker_uuid":  "016ac8a9-a423-56c9-887b-c72aff6758a3",
+        "speaker_name":  "Finoringring",
+        "description":  "Male, Middle Aged, Mid, Rough, Experienced",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Experienced"
+    },
+    {
+        "speaker_uuid":  "3513f374-94b4-5a97-8944-a423319a84af",
+        "speaker_name":  "Alice",
+        "description":  "Female, Young Adult, Mid, Thin, Ordinary",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thin",
+        "mood":  "Ordinary"
+    },
+    {
+        "speaker_uuid":  "872c9c41-b5cb-5059-a745-02e482e23673",
+        "speaker_name":  "Gyeong-hye",
+        "description":  "Female, Middle Aged, Mid, Clear, Blunt",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Blunt"
+    },
+    {
+        "speaker_uuid":  "d66cee85-43d6-5897-bf96-0d80d3fdb6e1",
+        "speaker_name":  "Ronan",
+        "description":  "Male, Young Adult, Mid, Clear, Reliable",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Reliable"
+    },
+    {
+        "speaker_uuid":  "01f5a956-6fe9-5313-b545-36339960507f",
+        "speaker_name":  "Bang Eun-hye",
+        "description":  "Female, Young Adult, Low, Clear, Blunt",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Blunt"
+    },
+    {
+        "speaker_uuid":  "65bb6725-ac82-5cee-87ba-2fb47008adfa",
+        "speaker_name":  "Gong Joon-yeol",
+        "description":  "Male, Middle Aged, High, Rough, Experienced",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "High",
+        "timbre":  "Rough",
+        "mood":  "Experienced"
+    },
+    {
+        "speaker_uuid":  "2dcec678-9ac3-5e1e-b2db-2aac95cf3254",
+        "speaker_name":  "Gong Jun-o",
+        "description":  "Male, Middle Aged, High, Rough, Experienced",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "High",
+        "timbre":  "Rough",
+        "mood":  "Experienced"
+    },
+    {
+        "speaker_uuid":  "69e03f4f-5bfc-5a0c-a150-7b09a8488cc4",
+        "speaker_name":  "Park Yeon-ju",
+        "description":  "Female, Young Adult, Mid, Clear, Blunt",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Blunt"
+    },
+    {
+        "speaker_uuid":  "560cca1c-ad9c-5f8b-b8b8-58d89e87bebd",
+        "speaker_name":  "Han Tae-gun",
+        "description":  "Male, Middle Aged, Low, Thick, Dignified",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Dignified"
+    },
+    {
+        "speaker_uuid":  "4c908355-17e9-59d1-853f-de8aaa31c1ce",
+        "speaker_name":  "Han Hee-tae",
+        "description":  "Male, Middle Aged, Mid, Thick, Righteous",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Thick",
+        "mood":  "Righteous"
+    },
+    {
+        "speaker_uuid":  "b38b8440-e312-567b-a763-b52c02f76fb9",
+        "speaker_name":  "Joo Jeong-joon",
+        "description":  "Male, Young Adult, Low, Clear, Soft",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Soft"
+    },
+    {
+        "speaker_uuid":  "91f7639c-91c9-5f0c-9a26-83bf6190812f",
+        "speaker_name":  "Yoo Hyeon-tak",
+        "description":  "Male, Middle Aged, Mid, Thin, Hearty",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Thin",
+        "mood":  "Hearty"
+    },
+    {
+        "speaker_uuid":  "71134dce-2d2b-5733-ab02-878c3536c3cf",
+        "speaker_name":  "Kang Seong-hun",
+        "description":  "Male, Young Adult, Mid, Thick, Reliable",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thick",
+        "mood":  "Reliable"
+    },
+    {
+        "speaker_uuid":  "99eb48d3-5167-5680-9929-2573626f4702",
+        "speaker_name":  "Tyler",
+        "description":  "Male, Young Adult, Mid, Thin, Playful",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thin",
+        "mood":  "Playful"
+    },
+    {
+        "speaker_uuid":  "09e4d87d-9e02-5cb1-9d6f-27bfb4df8251",
+        "speaker_name":  "Park Jae-hun",
+        "description":  "Male, Young Adult, Mid, Rough, Ordinary",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Ordinary"
+    },
+    {
+        "speaker_uuid":  "2b0d2a63-6c2d-5989-a4ba-56f47e883533",
+        "speaker_name":  "Do Hyeon-seok",
+        "description":  "Male, Middle Aged, Low, Clear, Reliable",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Reliable"
+    },
+    {
+        "speaker_uuid":  "03eda3b5-30cc-5e66-8aef-b2df0f335650",
+        "speaker_name":  "Park Yoon-hee",
+        "description":  "Female, Young Adult, Low, Thick, Quiet",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Quiet"
+    },
+    {
+        "speaker_uuid":  "d7e32387-35aa-5629-af88-e404cc4aedbe",
+        "speaker_name":  "Young-mi",
+        "description":  "Female, Middle Aged, Mid, Thick, Blunt",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Thick",
+        "mood":  "Blunt"
+    },
+    {
+        "speaker_uuid":  "6bdf41e8-63fe-59d1-9c31-84d8da2e6e21",
+        "speaker_name":  "Judy",
+        "description":  "Female, Middle Aged, Mid, Rough, Dignified",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Dignified"
+    },
+    {
+        "speaker_uuid":  "9685fc19-39b5-590d-9bc6-0e136022d6a5",
+        "speaker_name":  "Noh Young-hwa",
+        "description":  "Male, Middle Aged, Low, Thick, Experienced",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Experienced"
+    },
+    {
+        "speaker_uuid":  "0e9bbdbb-79a9-52dd-b3aa-88827189256a",
+        "speaker_name":  "Jeong Seok-joon",
+        "description":  "Male, Middle Aged, Low, Thick, Confident",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Confident"
+    },
+    {
+        "speaker_uuid":  "003450ce-37b2-5954-a096-ab0209e62e42",
+        "speaker_name":  "Ryandale",
+        "description":  "Male, Young Adult, Mid, Thick, Strong",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thick",
+        "mood":  "Strong"
+    },
+    {
+        "speaker_uuid":  "f6f7caaa-9a63-5ef8-a7de-bb5f61653a1c",
+        "speaker_name":  "Lisabelle",
+        "description":  "Female, Young Adult, High, Thin, Elegant",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "High",
+        "timbre":  "Thin",
+        "mood":  "Elegant"
+    },
+    {
+        "speaker_uuid":  "02323b47-fd17-5bb4-a03d-82a6a0643b9d",
+        "speaker_name":  "Kim Jyeong-mi",
+        "description":  "Female, Middle Aged, Mid, Rough, Calm",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "0331ce02-f75b-5971-966b-96bb60c9e9e5",
+        "speaker_name":  "Myeong-hee",
+        "description":  "Female, Middle Aged, Mid, Clear, Blunt",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Blunt"
+    },
+    {
+        "speaker_uuid":  "ec6ffff5-ba7f-551d-9b5d-97d9a2cb64a2",
+        "speaker_name":  "Han Se-jong",
+        "description":  "Male, Middle Aged, Low, Thick, Intelligent",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Intelligent"
+    },
+    {
+        "speaker_uuid":  "11c41173-3694-5af6-bd5b-7e7088f3dcdc",
+        "speaker_name":  "Kim Bon-young",
+        "description":  "Male, Middle Aged, Mid, Rough, Calm",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "26366b84-2abc-599d-9a80-88d9bf31e167",
+        "speaker_name":  "Gyeong-mi",
+        "description":  "Female, Young Adult, Mid, Rough, Blunt",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Blunt"
+    },
+    {
+        "speaker_uuid":  "ced908f6-6d28-50ec-8eb0-0ffcf5c5a3d5",
+        "speaker_name":  "Choi Mi-jeong",
+        "description":  "Female, Middle Aged, Mid, Thin, Reliable",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Thin",
+        "mood":  "Reliable"
+    },
+    {
+        "speaker_uuid":  "d400c374-4138-5824-8ab9-cc919999ec91",
+        "speaker_name":  "Yoon Chae-rin",
+        "description":  "Female, Young Adult, High, Clear, Calm",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "High",
+        "timbre":  "Clear",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "5caf1bf8-f59f-5d1a-bebe-9daf1bab329a",
+        "speaker_name":  "Han Young-oh",
+        "description":  "Male, Middle Aged, Mid, Thick, Hearty",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Thick",
+        "mood":  "Hearty"
+    },
+    {
+        "speaker_uuid":  "55b2fbd3-338b-5f42-a000-0e8c374cc767",
+        "speaker_name":  "Bang Cheol-hun",
+        "description":  "Male, Middle Aged, Low, Thick, Stubborn",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Stubborn"
+    },
+    {
+        "speaker_uuid":  "000de3f2-209b-5d64-9710-9bdf473cc050",
+        "speaker_name":  "Jae-min",
+        "description":  "Male, Young Adult, Mid, Thin, Calm",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thin",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "32ee0631-9476-5d2f-ab6b-90d555ed56ad",
+        "speaker_name":  "Oh Jae-man",
+        "description":  "Male, Middle Aged, Mid, Rough, Blunt",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Blunt"
+    },
+    {
+        "speaker_uuid":  "cb8c6298-ddd6-5d8f-8893-de1138114d50",
+        "speaker_name":  "Jeong Ju-gyeong",
+        "description":  "Female, Young Adult, Low, Clear, Careful",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Careful"
+    },
+    {
+        "speaker_uuid":  "edbc8d96-e7fb-588d-8dbd-96dc63d00233",
+        "speaker_name":  "Mia",
+        "description":  "Female, Middle Aged, Mid, Rough, Experienced",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Experienced"
+    },
+    {
+        "speaker_uuid":  "86bbd30f-a8c7-5e57-9b3d-bbcbe010ec0e",
+        "speaker_name":  "Lilsha",
+        "description":  "Female, Young Adult, High, Thin, Cold",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "High",
+        "timbre":  "Thin",
+        "mood":  "Cold"
+    },
+    {
+        "speaker_uuid":  "f84e3a1a-d7c2-5d8c-b608-c90d5b06c9e5",
+        "speaker_name":  "Luca",
+        "description":  "Male, Child, Mid, Clear, Confident",
+        "gender":  "Male",
+        "age":  "Child",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Confident"
+    },
+    {
+        "speaker_uuid":  "dad5e4d6-ab95-52f5-a80f-6ba0a993ee06",
+        "speaker_name":  "Cara",
+        "description":  "Female, Young Adult, Mid, Rough, Reliable",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Reliable"
+    },
+    {
+        "speaker_uuid":  "6ebe5404-5723-5a5f-beb0-cb5ee0900146",
+        "speaker_name":  "Ji-hyeon",
+        "description":  "Female, Young Adult, High, Thin, Blunt",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "High",
+        "timbre":  "Thin",
+        "mood":  "Blunt"
+    },
+    {
+        "speaker_uuid":  "8705409f-271a-5ec7-a3a8-dac4160fb94a",
+        "speaker_name":  "Song Bok-man",
+        "description":  "Male, Senior, Mid, Thick, Gentle",
+        "gender":  "Male",
+        "age":  "Senior",
+        "tone":  "Mid",
+        "timbre":  "Thick",
+        "mood":  "Gentle"
+    },
+    {
+        "speaker_uuid":  "c71e285f-557c-5194-a01c-b83fdb25ead8",
+        "speaker_name":  "Seo Jeong-min",
+        "description":  "Female, Young Adult, Mid, Clear, Calm",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "27dc968d-6df9-5732-bef9-6bf05a8b3a3b",
+        "speaker_name":  "Jeong Seong-hoon",
+        "description":  "Male, Middle Aged, Low, Thick, Calm",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "9fa50e75-dff6-5794-bad0-b14e172ad5c9",
+        "speaker_name":  "Ahn Joon-young",
+        "description":  "Male, Young Adult, Mid, Rough, Simple",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Simple"
+    },
+    {
+        "speaker_uuid":  "92ef2238-f90e-5d17-9fa4-67f8ae15a6e5",
+        "speaker_name":  "Song Hyeon-a",
+        "description":  "Female, Young Adult, Mid, Clear, Soft",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Soft"
+    },
+    {
+        "speaker_uuid":  "aeda3b25-1700-542c-8eae-bfac4e5c39d1",
+        "speaker_name":  "Seo Se-yong",
+        "description":  "Male, Young Adult, Mid, Thin, Passionate",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thin",
+        "mood":  "Passionate"
+    },
+    {
+        "speaker_uuid":  "c17f12e3-8395-53cf-857b-42026f2cbb0d",
+        "speaker_name":  "Gwon Se-joong",
+        "description":  "Male, Middle Aged, Low, Thick, Wise",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Wise"
+    },
+    {
+        "speaker_uuid":  "aab3a8b2-0cab-5ab4-93d5-9b93e17321af",
+        "speaker_name":  "Lee Su-jeong",
+        "description":  "Female, Young Adult, Mid, Clear, Calm",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "dee39e1f-7dd3-5767-b49d-ab749654849b",
+        "speaker_name":  "Kang Tae-wook",
+        "description":  "Male, Middle Aged, Mid, Thick, Calm",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Thick",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "a3fd68f3-d1ae-5a24-8d89-d536687ffe3d",
+        "speaker_name":  "Park Sa-young",
+        "description":  "Female, Young Adult, Mid, Thick, Easygoing",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thick",
+        "mood":  "Easygoing"
+    },
+    {
+        "speaker_uuid":  "b2aa9154-5785-5711-928b-4b64b78da67b",
+        "speaker_name":  "Nuarin",
+        "description":  "Female, Young Adult, Mid, Rough, Blunt",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Blunt"
+    },
+    {
+        "speaker_uuid":  "5293e00c-8fad-591f-84b3-8706b13e6707",
+        "speaker_name":  "Kim Seo-young",
+        "description":  "Female, Young Adult, Mid, Rough, Simple",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Simple"
+    },
+    {
+        "speaker_uuid":  "6d531a15-2cdd-54fe-a0a0-eb961cfa765c",
+        "speaker_name":  "Timo",
+        "description":  "Male, Child, Mid, Rough, Playful",
+        "gender":  "Male",
+        "age":  "Child",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Playful"
+    },
+    {
+        "speaker_uuid":  "b8b94248-5c66-55d8-8dcb-eacf4bf96ba5",
+        "speaker_name":  "Shin Jeong-ah",
+        "description":  "Female, Middle Aged, Mid, Clear, Blunt",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Blunt"
+    },
+    {
+        "speaker_uuid":  "dc48972c-984c-566e-b0e7-8784b7f1d719",
+        "speaker_name":  "Hye-young",
+        "description":  "Female, Young Adult, Low, Thick, Blunt",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Blunt"
+    },
+    {
+        "speaker_uuid":  "8fa6862b-3a42-523f-8db0-64d6c539f751",
+        "speaker_name":  "Hyo-jeong",
+        "description":  "Female, Young Adult, Mid, Clear, Warm",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Warm"
+    },
+    {
+        "speaker_uuid":  "0b146dbd-e3e2-574e-b8c3-e520fd9cc89a",
+        "speaker_name":  "Chae Yeon-hwa",
+        "description":  "Female, Middle Aged, Mid, Rough, Cold",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Cold"
+    },
+    {
+        "speaker_uuid":  "72db61e0-5aef-5f9d-b992-e67aeda3ff93",
+        "speaker_name":  "Julian",
+        "description":  "Male, Young Adult, Mid, Clear, Casual",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Casual"
+    },
+    {
+        "speaker_uuid":  "c00c8b80-7bfc-59ab-ad29-48b5e3bca37c",
+        "speaker_name":  "Kim Joon-ik",
+        "description":  "Male, Young Adult, Low, Thick, Gentle",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Gentle"
+    },
+    {
+        "speaker_uuid":  "619e9f2e-e832-5a3b-9b82-76ecda83ac2c",
+        "speaker_name":  "Noh Jong-ho",
+        "description":  "Male, Senior, Low, Clear, Soft",
+        "gender":  "Male",
+        "age":  "Senior",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Soft"
+    },
+    {
+        "speaker_uuid":  "371b5a57-0995-52a1-a67f-4e8588229366",
+        "speaker_name":  "Caleb",
+        "description":  "Male, Middle Aged, Low, Rough, Calm",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Rough",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "c6b0f030-e20c-513c-ae4c-1d4f8e554c9f",
+        "speaker_name":  "Kang Seung-ho",
+        "description":  "Male, Young Adult, Mid, Thin, Calm",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thin",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "b4acb3fd-31ff-5a3a-acbd-829bbe878ca3",
+        "speaker_name":  "Noh Jong-hyeok",
+        "description":  "Male, Senior, Low, Clear, Dignified",
+        "gender":  "Male",
+        "age":  "Senior",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Dignified"
+    },
+    {
+        "speaker_uuid":  "ca766da0-8837-5214-baf7-438ce26fe645",
+        "speaker_name":  "Lim Dong-gwon",
+        "description":  "Male, Young Adult, Mid, Rough, Calm",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "0618ba9c-1a48-5e67-955f-619117fcfc65",
+        "speaker_name":  "Park Chae-yeon",
+        "description":  "Female, Young Adult, Mid, Rough, Hearty",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Hearty"
+    },
+    {
+        "speaker_uuid":  "365b78b7-f9e3-59f5-808d-0035b911af96",
+        "speaker_name":  "Park Hye-sook",
+        "description":  "Female, Middle Aged, Low, Clear, Wise",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Wise"
+    },
+    {
+        "speaker_uuid":  "df4de493-7292-5702-bdb3-84371a7eb132",
+        "speaker_name":  "Yoon Hye-gyeong",
+        "description":  "Female, Middle Aged, Mid, Rough, Rational",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Rational"
+    },
+    {
+        "speaker_uuid":  "ef9fc5bb-1070-532f-ac68-b0598c1fe215",
+        "speaker_name":  "Agatha",
+        "description":  "Female, Senior, Mid, Thick, Wise",
+        "gender":  "Female",
+        "age":  "Senior",
+        "tone":  "Mid",
+        "timbre":  "Thick",
+        "mood":  "Wise"
+    },
+    {
+        "speaker_uuid":  "3dc19988-dd4b-5d31-98c2-6aa6e3dc13c1",
+        "speaker_name":  "Yoon Seo-rim",
+        "description":  "Female, Young Adult, Mid, Thin, Casual",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thin",
+        "mood":  "Casual"
+    },
+    {
+        "speaker_uuid":  "e94f3cb6-74bb-552f-a7e5-ac8071620326",
+        "speaker_name":  "Kang Jin-hyeong",
+        "description":  "Male, Middle Aged, Low, Clear, Gentle",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Gentle"
+    },
+    {
+        "speaker_uuid":  "d82c703a-e735-53d6-9563-481791cd31c8",
+        "speaker_name":  "Jeong Seung-yeol",
+        "description":  "Male, Young Adult, Mid, Clear, Soft",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Soft"
+    },
+    {
+        "speaker_uuid":  "4f211a88-e2ee-5321-bc26-9e44938b470c",
+        "speaker_name":  "Bang Do-hyeong",
+        "description":  "Male, Middle Aged, Mid, Thick, Rigid",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Thick",
+        "mood":  "Rigid"
+    },
+    {
+        "speaker_uuid":  "55b0994a-124d-5277-9b89-abd76dc04799",
+        "speaker_name":  "Kang Dong-hwan",
+        "description":  "Male, Middle Aged, Mid, Rough, Careful",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Careful"
+    },
+    {
+        "speaker_uuid":  "ffecdf81-2856-57d0-90ca-225a18b46750",
+        "speaker_name":  "Natalie",
+        "description":  "Female, Middle Aged, Mid, Thin, Calm",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Thin",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "5f048834-265d-5586-8dfd-34a08f39c1cd",
+        "speaker_name":  "Azerio",
+        "description":  "Male, Child, Mid, Clear, Gentle",
+        "gender":  "Male",
+        "age":  "Child",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Gentle"
+    },
+    {
+        "speaker_uuid":  "a3332144-af6a-506a-8066-501a0a615805",
+        "speaker_name":  "Richard",
+        "description":  "Male, Middle Aged, Low, Rough, Careful",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Rough",
+        "mood":  "Careful"
+    },
+    {
+        "speaker_uuid":  "0da0d32f-eb2f-5e32-a45a-c139b01a4edf",
+        "speaker_name":  "Reika",
+        "description":  "Female, Young Adult, Mid, Clear, Reliable",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Reliable"
+    },
+    {
+        "speaker_uuid":  "8c02e41a-0e48-5187-801d-3a9dcd9f13c7",
+        "speaker_name":  "Yang Kyeong-soon",
+        "description":  "Female, Middle Aged, Low, Thin, Calm",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Thin",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "de2a1b5e-5fc1-5a4e-9c02-2cbba7b68e99",
+        "speaker_name":  "Yoon Do-yoon",
+        "description":  "Male, Young Adult, Mid, Thick, Calm",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thick",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "ae5e9d8a-2129-548e-af7b-19a76dd9ad08",
+        "speaker_name":  "Kim Seo-yeon",
+        "description":  "Female, Young Adult, Mid, Rough, Calm",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "205f7a51-8cba-5d21-a31a-88645f296afa",
+        "speaker_name":  "Sul Jeong-seok",
+        "description":  "Male, Middle Aged, Mid, Thick, Soft",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Thick",
+        "mood":  "Soft"
+    },
+    {
+        "speaker_uuid":  "9a401d89-5689-56d7-9f91-f98ab21e03ca",
+        "speaker_name":  "Han Jae-moon",
+        "description":  "Male, Middle Aged, Mid, Thick, Reliable",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Thick",
+        "mood":  "Reliable"
+    },
+    {
+        "speaker_uuid":  "b9688b92-732c-5f1b-8c50-0ccd1f8225be",
+        "speaker_name":  "Song Hwa-young",
+        "description":  "Female, Young Adult, Low, Clear, Calm",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "3c3d7d75-0ea4-5538-bcad-7482f11ec269",
+        "speaker_name":  "Nina",
+        "description":  "Female, Child, Mid, Thin, Sassy",
+        "gender":  "Female",
+        "age":  "Child",
+        "tone":  "Mid",
+        "timbre":  "Thin",
+        "mood":  "Sassy"
+    },
+    {
+        "speaker_uuid":  "af2b1602-5294-571b-a60c-08e66af0c7a0",
+        "speaker_name":  "Sul Tae-sub",
+        "description":  "Male, Middle Aged, Low, Thick, Strong",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Strong"
+    },
+    {
+        "speaker_uuid":  "e412f48f-10d7-5dae-8014-edcfc486a763",
+        "speaker_name":  "Kim Do-young",
+        "description":  "Male, Young Adult, Low, Clear, Blunt",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Blunt"
+    },
+    {
+        "speaker_uuid":  "5e3de181-6903-5892-a6aa-b3855c4f9226",
+        "speaker_name":  "Kim Do-yeon",
+        "description":  "Female, Young Adult, Mid, Clear, Intelligent",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Intelligent"
+    },
+    {
+        "speaker_uuid":  "ca70dc11-6912-57f9-8d25-b556bc612bc7",
+        "speaker_name":  "Diarmong",
+        "description":  "Male, Middle Aged, Mid, Clear, Cheesy",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Cheesy"
+    },
+    {
+        "speaker_uuid":  "bb5c1c92-caab-51fc-9063-c32f2df1b35b",
+        "speaker_name":  "Tobo",
+        "description":  "Male, Young Adult, Low, Clear, Stupid",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Stupid"
+    },
+    {
+        "speaker_uuid":  "7c1204c5-1bcc-5473-a58a-a3fad8b502b0",
+        "speaker_name":  "Kang Man-ho",
+        "description":  "Male, Middle Aged, Low, Thick, Coarse",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Coarse"
+    },
+    {
+        "speaker_uuid":  "03e92a99-b888-55ac-9629-8dcc2ffdc649",
+        "speaker_name":  "Yoo Gyeong-hwan",
+        "description":  "Male, Middle Aged, Low, Thick, Careful",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Careful"
+    },
+    {
+        "speaker_uuid":  "75f0b100-f0f5-5aa6-9efa-c30c044b4090",
+        "speaker_name":  "Ellen",
+        "description":  "Female, Teen, High, Clear, Cute",
+        "gender":  "Female",
+        "age":  "Teen",
+        "tone":  "High",
+        "timbre":  "Clear",
+        "mood":  "Cute"
+    },
+    {
+        "speaker_uuid":  "ed34e9db-d5a1-53bd-9e25-1c5b3f527f9e",
+        "speaker_name":  "Jeremy",
+        "description":  "Male, Young Adult, High, Thin, Greedy",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "High",
+        "timbre":  "Thin",
+        "mood":  "Greedy"
+    },
+    {
+        "speaker_uuid":  "b64f61c2-071d-548d-8477-210090ddac77",
+        "speaker_name":  "Ehren",
+        "description":  "Female, Young Adult, Low, Clear, Blunt",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Blunt"
+    },
+    {
+        "speaker_uuid":  "4170c550-05ec-5c1b-ba74-33c754a1002a",
+        "speaker_name":  "Lydia",
+        "description":  "Female, Young Adult, High, Thin, Experienced",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "High",
+        "timbre":  "Thin",
+        "mood":  "Experienced"
+    },
+    {
+        "speaker_uuid":  "6a9d2c6d-ae42-5b97-8300-5abc3f1a9675",
+        "speaker_name":  "Lee Se-young",
+        "description":  "Female, Young Adult, Mid, Thick, Righteous",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thick",
+        "mood":  "Righteous"
+    },
+    {
+        "speaker_uuid":  "3f72e4e7-5dc9-5742-a80a-804b9e3ac1a1",
+        "speaker_name":  "Jeong Seong-min",
+        "description":  "Male, Young Adult, Mid, Thick, Mature",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thick",
+        "mood":  "Mature"
+    },
+    {
+        "speaker_uuid":  "593c2443-1dee-5740-b490-c6917d3ba5f9",
+        "speaker_name":  "Seo Gyeong-hwa",
+        "description":  "Female, Middle Aged, Mid, Thin, Calm",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Thin",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "be883391-c36b-571f-88f7-64088c169059",
+        "speaker_name":  "So-hyeon",
+        "description":  "Female, Young Adult, Low, Clear, Righteous",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Righteous"
+    },
+    {
+        "speaker_uuid":  "8bf18b4b-7557-56c5-a288-654b74b24364",
+        "speaker_name":  "Ken",
+        "description":  "Male, Young Adult, Mid, Rough, Ordinary",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Ordinary"
+    },
+    {
+        "speaker_uuid":  "55dd1911-0025-5fdb-9f1e-ff3f2ecfc214",
+        "speaker_name":  "Lee Myeong-un",
+        "description":  "Female, Middle Aged, High, Rough, Passionate",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "High",
+        "timbre":  "Rough",
+        "mood":  "Passionate"
+    },
+    {
+        "speaker_uuid":  "b2417d46-2fd2-5f09-9151-bd77e7f7eaf0",
+        "speaker_name":  "Ibby",
+        "description":  "Female, Child, High, Clear, Pretty",
+        "gender":  "Female",
+        "age":  "Child",
+        "tone":  "High",
+        "timbre":  "Clear",
+        "mood":  "Pretty"
+    },
+    {
+        "speaker_uuid":  "f438a83c-83c2-5bdc-a10d-fa0f7791d9d4",
+        "speaker_name":  "Suri",
+        "description":  "Female, Child, Mid, Rough, Intelligent",
+        "gender":  "Female",
+        "age":  "Child",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Intelligent"
+    },
+    {
+        "speaker_uuid":  "ce151428-ff58-50c8-ac7a-e33c87401894",
+        "speaker_name":  "So-yeon",
+        "description":  "Female, Young Adult, High, Thin, Calm",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "High",
+        "timbre":  "Thin",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "f62f7d02-cb12-5848-b90f-659394e06327",
+        "speaker_name":  "Yoo Hyeon-gang",
+        "description":  "Male, Young Adult, Low, Clear, Cold",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Cold"
+    },
+    {
+        "speaker_uuid":  "0bb08aa9-1b92-5d60-b662-3e601b44d233",
+        "speaker_name":  "Gwon Sang-ho",
+        "description":  "Male, Middle Aged, Low, Clear, Soft",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Soft"
+    },
+    {
+        "speaker_uuid":  "35f6d996-d90f-58d7-ad40-ed6d02f58a38",
+        "speaker_name":  "Jeong Min-hwan",
+        "description":  "Male, Young Adult, High, Rough, Passionate",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "High",
+        "timbre":  "Rough",
+        "mood":  "Passionate"
+    },
+    {
+        "speaker_uuid":  "55434c1f-0a93-55cd-b1ef-3116a7bd04b0",
+        "speaker_name":  "Kim Ho-hyeon",
+        "description":  "Male, Young Adult, Low, Thick, Calm",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "60a94fa3-b0d6-524e-a022-75618fdb01e5",
+        "speaker_name":  "Park Eun-ae",
+        "description":  "Female, Middle Aged, Low, Thick, Ordinary",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Ordinary"
+    },
+    {
+        "speaker_uuid":  "f4d9d07e-2778-5cf6-b09a-c99e41df3a7a",
+        "speaker_name":  "Yoon Seong-woo",
+        "description":  "Male, Middle Aged, Low, Thick, Reliable",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Reliable"
+    },
+    {
+        "speaker_uuid":  "f866e6c9-d1d5-5aeb-a5f2-322aa8fd59f3",
+        "speaker_name":  "Choi Hyeon-joo",
+        "description":  "Female, Young Adult, Low, Clear, Reliable",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Reliable"
+    },
+    {
+        "speaker_uuid":  "d0ce44e4-2940-5e53-943b-3c65e992ea88",
+        "speaker_name":  "Theron",
+        "description":  "Male, Young Adult, Low, Clear, Soft",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Soft"
+    },
+    {
+        "speaker_uuid":  "c0b59f07-82c7-5c23-9284-267baca80e99",
+        "speaker_name":  "Draven",
+        "description":  "Male, Young Adult, Low, Thick, Casual",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Casual"
+    },
+    {
+        "speaker_uuid":  "5e2216fc-fd9e-54bd-96d2-7567b53ced45",
+        "speaker_name":  "Lucian",
+        "description":  "Male, Young Adult, Mid, Clear, Elegant",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Elegant"
+    },
+    {
+        "speaker_uuid":  "b58b15b0-55b2-5561-8e63-cf672f48f206",
+        "speaker_name":  "Choo Young-ho",
+        "description":  "Male, Middle Aged, Low, Rough, Experienced",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Rough",
+        "mood":  "Experienced"
+    },
+    {
+        "speaker_uuid":  "ae9829f0-6a36-5a6e-a908-eddf59d71f76",
+        "speaker_name":  "Chae Mi-gyeong",
+        "description":  "Female, Middle Aged, Mid, Rough, Careful",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Careful"
+    },
+    {
+        "speaker_uuid":  "59a36574-7b18-5a5d-bbab-9f1848d0429c",
+        "speaker_name":  "Jeong Sang-gon",
+        "description":  "Male, Young Adult, High, Thin, Passionate",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "High",
+        "timbre":  "Thin",
+        "mood":  "Passionate"
+    },
+    {
+        "speaker_uuid":  "ab9e5f18-6321-53b0-9ac3-9b46c5f0b214",
+        "speaker_name":  "Tsubasa",
+        "description":  "Male, Young Adult, High, Clear, Soft",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "High",
+        "timbre":  "Clear",
+        "mood":  "Soft"
+    },
+    {
+        "speaker_uuid":  "d862fa67-b7ba-5025-950c-feae8e2bcc66",
+        "speaker_name":  "Park Yoo-mi",
+        "description":  "Female, Young Adult, Mid, Clear, Blunt",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Blunt"
+    },
+    {
+        "speaker_uuid":  "22ce3fbc-aaa4-54c2-b4e0-0557377c342c",
+        "speaker_name":  "Un-hyeong",
+        "description":  "Female, Young Adult, Low, Thick, Reliable",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Reliable"
+    },
+    {
+        "speaker_uuid":  "546f0f34-6bc1-5ef9-84dd-f0404f0c41ca",
+        "speaker_name":  "Naomi",
+        "description":  "Female, Middle Aged, Mid, Rough, Calm",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "39bf5e7d-eec7-5a6e-b858-3429076236a8",
+        "speaker_name":  "Park Se-jin",
+        "description":  "Female, Young Adult, Mid, Clear, Blunt",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Blunt"
+    },
+    {
+        "speaker_uuid":  "c67e794f-0a47-5706-b0fd-1fdcaaa9e62e",
+        "speaker_name":  "Garrick",
+        "description":  "Male, Middle Aged, Mid, Rough, Experienced",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Experienced"
+    },
+    {
+        "speaker_uuid":  "204e374f-01e4-55b4-a35a-18eba8bca7ff",
+        "speaker_name":  "Park Woo-sub",
+        "description":  "Male, Young Adult, Mid, Rough, Calm",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "14764f08-67ca-5201-95d2-ca324aee2933",
+        "speaker_name":  "Song Joo-ha",
+        "description":  "Female, Young Adult, Mid, Clear, Elegant",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Elegant"
+    },
+    {
+        "speaker_uuid":  "23855d2f-6ccf-5806-9da6-fc06d64ba7f8",
+        "speaker_name":  "Roger",
+        "description":  "Male, Middle Aged, Mid, Rough, Relaxed",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Relaxed"
+    },
+    {
+        "speaker_uuid":  "8e389222-de9b-5cf2-80b2-de0b67c1c608",
+        "speaker_name":  "Kim Hyeon-su",
+        "description":  "Male, Young Adult, Low, Clear, Casual",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Casual"
+    },
+    {
+        "speaker_uuid":  "c3aeb546-82b0-50f8-b20c-82e3193818e9",
+        "speaker_name":  "Jeong Young-sook",
+        "description":  "Female, Middle Aged, Low, Thin, Casual",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Thin",
+        "mood":  "Casual"
+    },
+    {
+        "speaker_uuid":  "727b44ed-bead-5fb0-8e19-424b3ec9c24c",
+        "speaker_name":  "Jian",
+        "description":  "Female, Young Adult, Mid, Clear, Reliable",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Reliable"
+    },
+    {
+        "speaker_uuid":  "66e0dc49-639a-521d-b185-4bdaf8ff0601",
+        "speaker_name":  "Sylvie",
+        "description":  "Female, Young Adult, High, Thin, Warm",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "High",
+        "timbre":  "Thin",
+        "mood":  "Warm"
+    },
+    {
+        "speaker_uuid":  "adfc2330-3a22-501b-897d-313d7472f2d8",
+        "speaker_name":  "Choi A-yeon",
+        "description":  "Female, Young Adult, High, Clear, Calm",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "High",
+        "timbre":  "Clear",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "8f62c6e6-e0c1-518e-9793-0a09ebbdf4f2",
+        "speaker_name":  "Jin Moo-gang",
+        "description":  "Male, Middle Aged, Mid, Rough, Wise",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Wise"
+    },
+    {
+        "speaker_uuid":  "9e7d201d-a18a-5343-8e05-057a78e6d432",
+        "speaker_name":  "Zekee",
+        "description":  "Male, Young Adult, High, Thin, Humorous",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "High",
+        "timbre":  "Thin",
+        "mood":  "Humorous"
+    },
+    {
+        "speaker_uuid":  "537cb554-f5ed-53e3-93a1-9d26c918356e",
+        "speaker_name":  "Cooper",
+        "description":  "Male, Young Adult, Mid, Thin, Ordinary",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thin",
+        "mood":  "Ordinary"
+    },
+    {
+        "speaker_uuid":  "9bef32c9-7221-501f-a8f9-84f3cbeae614",
+        "speaker_name":  "Myeong Hyeon-gyeong",
+        "description":  "Female, Middle Aged, Mid, Rough, Calm",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "23dab5b2-6017-5044-80f4-68a02ead33b7",
+        "speaker_name":  "Jeong Seok-min",
+        "description":  "Male, Young Adult, Low, Clear, Reliable",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Reliable"
+    },
+    {
+        "speaker_uuid":  "b5d72bb3-ef1d-5fb6-8ec2-850dccf84de4",
+        "speaker_name":  "Nora",
+        "description":  "Female, Young Adult, Mid, Clear, Careful",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Careful"
+    },
+    {
+        "speaker_uuid":  "18963d1f-b767-553f-85ce-622d9a630d77",
+        "speaker_name":  "Tony",
+        "description":  "Male, Young Adult, Mid, Thin, Relaxed",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thin",
+        "mood":  "Relaxed"
+    },
+    {
+        "speaker_uuid":  "0e329907-11a4-5b88-abda-cafa94b9dab9",
+        "speaker_name":  "Nam Jeong-yeon",
+        "description":  "Female, Young Adult, Mid, Clear, Soft",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Soft"
+    },
+    {
+        "speaker_uuid":  "78f25ef6-caf5-53b9-9e0b-fa5ebf3fceae",
+        "speaker_name":  "Ha Myeong-hwa",
+        "description":  "Female, Middle Aged, Low, Thick, Solemn",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Solemn"
+    },
+    {
+        "speaker_uuid":  "fa12433e-ddf9-5ae4-b5d8-35082024a61f",
+        "speaker_name":  "Chloe",
+        "description":  "Female, Young Adult, Mid, Thin, Careful",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thin",
+        "mood":  "Careful"
+    },
+    {
+        "speaker_uuid":  "26d18ec7-4725-5ea5-9e44-faf20cb8d24c",
+        "speaker_name":  "Jin-hwa",
+        "description":  "Female, Middle Aged, Low, Clear, Careful",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Careful"
+    },
+    {
+        "speaker_uuid":  "da97a589-ddf5-545d-a29d-de31d33b1846",
+        "speaker_name":  "Guyron",
+        "description":  "Male, Young Adult, Low, Thick, Calm",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "800589ab-9a12-5603-a045-d3c275326673",
+        "speaker_name":  "Leonhardt",
+        "description":  "Male, Young Adult, Low, Clear, Careful",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Careful"
+    },
+    {
+        "speaker_uuid":  "1249e39f-317f-5a2e-96f6-82489348b4fd",
+        "speaker_name":  "Back Young-gyu",
+        "description":  "Male, Senior, Mid, Rough, Experienced",
+        "gender":  "Male",
+        "age":  "Senior",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Experienced"
+    },
+    {
+        "speaker_uuid":  "7c34ecc2-3665-57f6-9a31-902d4549c1ad",
+        "speaker_name":  "Kang Jae-yul",
+        "description":  "Male, Young Adult, Low, Clear, Sluggish",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Sluggish"
+    },
+    {
+        "speaker_uuid":  "297d6972-b87d-57dc-86e0-70534b924ef5",
+        "speaker_name":  "Han Seong-ho",
+        "description":  "Male, Middle Aged, Low, Clear, Warm",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Warm"
+    },
+    {
+        "speaker_uuid":  "56f1c6c3-f1aa-5e20-8a14-3f5128617f8e",
+        "speaker_name":  "Broderick",
+        "description":  "Male, Middle Aged, Mid, Thick, Passionate",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Thick",
+        "mood":  "Passionate"
+    },
+    {
+        "speaker_uuid":  "74dcea6a-29b3-5d92-82d0-3c03225d79e4",
+        "speaker_name":  "Song Gwang-hyeok",
+        "description":  "Male, Middle Aged, Low, Thick, Strong",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Strong"
+    },
+    {
+        "speaker_uuid":  "485ad8b2-4789-5717-8895-a11d25d5db53",
+        "speaker_name":  "Back Jong-ryul",
+        "description":  "Male, Senior, Mid, Rough, Experienced",
+        "gender":  "Male",
+        "age":  "Senior",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Experienced"
+    },
+    {
+        "speaker_uuid":  "ca403509-c175-5a14-a4a5-3bfa5efabe0f",
+        "speaker_name":  "Thorne",
+        "description":  "Male, Young Adult, Low, Thick, Strong",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Strong"
+    },
+    {
+        "speaker_uuid":  "ed410f69-37fc-5da0-844d-42c9fe2e10a7",
+        "speaker_name":  "David",
+        "description":  "Male, Middle Aged, Mid, Rough, Ordinary",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Ordinary"
+    },
+    {
+        "speaker_uuid":  "69f56f63-cc2e-5489-8c0f-951642f49d8b",
+        "speaker_name":  "Andrew",
+        "description":  "Male, Middle Aged, Low, Rough, Careful",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Rough",
+        "mood":  "Careful"
+    },
+    {
+        "speaker_uuid":  "4ff4d1e9-e3c4-52e1-9299-8d1a6f935faf",
+        "speaker_name":  "Choi Ji-eun",
+        "description":  "Female, Young Adult, Mid, Clear, Calm",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "93ef2b38-bb32-5dfe-8b66-5fe48876b55e",
+        "speaker_name":  "Dalvein",
+        "description":  "Male, Young Adult, Low, Clear, Dull",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Dull"
+    },
+    {
+        "speaker_uuid":  "a28f7906-178b-59a5-8971-9c9db5ed8d6c",
+        "speaker_name":  "Choi Jin-hun",
+        "description":  "Male, Young Adult, Low, Thick, Calm",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "6d2593af-f0e0-5d34-bb37-d5a4a5f42d83",
+        "speaker_name":  "Gwon Seung-beom",
+        "description":  "Male, Middle Aged, Low, Thick, Reliable",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Reliable"
+    },
+    {
+        "speaker_uuid":  "79b7aa08-770c-5e34-aabd-760909ec2f3f",
+        "speaker_name":  "Park Min-seok",
+        "description":  "Male, Young Adult, Low, Thick, Calm",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "c11ec04f-3981-5f44-b8ba-e34d32404b6f",
+        "speaker_name":  "Delilah",
+        "description":  "Female, Young Adult, Low, Rough, Careful",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Rough",
+        "mood":  "Careful"
+    },
+    {
+        "speaker_uuid":  "e121a57d-7ab9-55e7-ba3d-ce19b5e88af8",
+        "speaker_name":  "Sul Tae-jin",
+        "description":  "Male, Middle Aged, Mid, Thick, Simple",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Thick",
+        "mood":  "Simple"
+    },
+    {
+        "speaker_uuid":  "b0b40c2b-6b39-544f-baf3-74eedbaf30b8",
+        "speaker_name":  "Gong Jeong-ho",
+        "description":  "Male, Senior, Mid, Rough, Experienced",
+        "gender":  "Male",
+        "age":  "Senior",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Experienced"
+    },
+    {
+        "speaker_uuid":  "2c4d0b20-b1fd-5110-98d0-5db74a1ea2d6",
+        "speaker_name":  "Stephen",
+        "description":  "Male, Young Adult, Low, Thick, Sluggish",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Sluggish"
+    },
+    {
+        "speaker_uuid":  "cc473933-f303-5de0-82ea-e9c6a298caf5",
+        "speaker_name":  "Joren",
+        "description":  "Male, Young Adult, High, Thin, Passionate",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "High",
+        "timbre":  "Thin",
+        "mood":  "Passionate"
+    },
+    {
+        "speaker_uuid":  "478e210d-f53c-5680-b61a-bc5350cb0550",
+        "speaker_name":  "Eldrin",
+        "description":  "Male, Senior, Mid, Thick, Wise",
+        "gender":  "Male",
+        "age":  "Senior",
+        "tone":  "Mid",
+        "timbre":  "Thick",
+        "mood":  "Wise"
+    },
+    {
+        "speaker_uuid":  "70f2223c-eac3-502a-ab79-48b67eecdffd",
+        "speaker_name":  "Gwon Byeong-sik",
+        "description":  "Male, Middle Aged, Low, Clear, Careful",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Careful"
+    },
+    {
+        "speaker_uuid":  "234f6524-93e9-58e9-bdd1-51056f75f70c",
+        "speaker_name":  "Jeong Woo-seok",
+        "description":  "Male, Young Adult, Low, Thick, Blunt",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Blunt"
+    },
+    {
+        "speaker_uuid":  "4a9b0159-37dd-5a34-b029-ffbb526038bd",
+        "speaker_name":  "Han Ki-seok",
+        "description":  "Male, Middle Aged, Low, Thick, Casual",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Casual"
+    },
+    {
+        "speaker_uuid":  "06506c44-d750-5e01-9485-1574decff61e",
+        "speaker_name":  "Park Seong-yoon",
+        "description":  "Male, Young Adult, Mid, Rough, Simple",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Simple"
+    },
+    {
+        "speaker_uuid":  "e1cf0764-c940-560c-b856-da81e2811555",
+        "speaker_name":  "Gong Tae-seok",
+        "description":  "Male, Middle Aged, High, Rough, Experienced",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "High",
+        "timbre":  "Rough",
+        "mood":  "Experienced"
+    },
+    {
+        "speaker_uuid":  "bda8f6a0-1691-54fb-8f4c-06f4d487f385",
+        "speaker_name":  "Seo Young-wook",
+        "description":  "Male, Young Adult, Mid, Rough, Righteous",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Righteous"
+    },
+    {
+        "speaker_uuid":  "aad03387-8faa-5cc0-b439-9979a41321a2",
+        "speaker_name":  "Dorian",
+        "description":  "Male, Young Adult, Mid, Rough, Calm",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "32238bdf-2185-5873-bdda-37e4f049da19",
+        "speaker_name":  "Kim Yoon-ho",
+        "description":  "Male, Young Adult, High, Rough, Fresh",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "High",
+        "timbre":  "Rough",
+        "mood":  "Fresh"
+    },
+    {
+        "speaker_uuid":  "97db6f8c-5918-5a9f-be76-d9fb545f999a",
+        "speaker_name":  "Song Seok-young",
+        "description":  "Male, Middle Aged, Low, Thick, Calm",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "e2a4a9fc-64b3-5fe6-80cd-8b5be2c44d34",
+        "speaker_name":  "Hong Sun-joo",
+        "description":  "Female, Middle Aged, High, Rough, Calm",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "High",
+        "timbre":  "Rough",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "a080af17-4d5f-5738-af06-0582c96b2684",
+        "speaker_name":  "Jeong Woo-bin",
+        "description":  "Male, Young Adult, Low, Thick, Calm",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "c26c1641-85f8-5b6e-bf16-abee3cc2c89f",
+        "speaker_name":  "Amilo",
+        "description":  "Male, Child, High, Thin, Cute",
+        "gender":  "Male",
+        "age":  "Child",
+        "tone":  "High",
+        "timbre":  "Thin",
+        "mood":  "Cute"
+    },
+    {
+        "speaker_uuid":  "3aa817b3-b871-5b97-bf78-759c40b830c4",
+        "speaker_name":  "Noah",
+        "description":  "Female, Teen, Mid, Thin, Easygoing",
+        "gender":  "Female",
+        "age":  "Teen",
+        "tone":  "Mid",
+        "timbre":  "Thin",
+        "mood":  "Easygoing"
+    },
+    {
+        "speaker_uuid":  "b937935d-c0be-5f81-a14e-78188625e861",
+        "speaker_name":  "Sung Da-yeon",
+        "description":  "Female, Young Adult, Mid, Clear, Calm",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "0b89f11b-1bbe-516c-9734-9b258ea0e83f",
+        "speaker_name":  "Marga",
+        "description":  "Female, Senior, Mid, Clear, Blunt",
+        "gender":  "Female",
+        "age":  "Senior",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Blunt"
+    },
+    {
+        "speaker_uuid":  "c380d11c-ba8b-5210-a0e3-ef65f1f3e67e",
+        "speaker_name":  "Choi Seong-wook",
+        "description":  "Male, Young Adult, Low, Thick, Calm",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "cdd75ee7-4a59-519f-b563-57b678e77436",
+        "speaker_name":  "Sul Tae-won",
+        "description":  "Male, Middle Aged, Mid, Thick, Reliable",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Thick",
+        "mood":  "Reliable"
+    },
+    {
+        "speaker_uuid":  "8685436f-8bf2-5667-ade0-36ed477b355f",
+        "speaker_name":  "Lee Jeong-soon",
+        "description":  "Female, Middle Aged, Mid, Clear, Calm",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "1ae45976-cf9d-5a4b-9e69-6cf6a36e6519",
+        "speaker_name":  "Mason",
+        "description":  "Male, Young Adult, High, Rough, Ordinary",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "High",
+        "timbre":  "Rough",
+        "mood":  "Ordinary"
+    },
+    {
+        "speaker_uuid":  "90cfe270-02fb-5d0c-89ae-02db41abded0",
+        "speaker_name":  "Seo Jin-won",
+        "description":  "Male, Young Adult, Mid, Rough, Calm",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "87f1ed0b-aa78-522a-a758-80109b67e9d3",
+        "speaker_name":  "Lee Joon-hwa",
+        "description":  "Male, Young Adult, Low, Thick, Calm",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "a8b7be50-3ed6-5f09-bcf9-464302314c05",
+        "speaker_name":  "Back Jong-gil",
+        "description":  "Male, Middle Aged, High, Rough, Experienced",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "High",
+        "timbre":  "Rough",
+        "mood":  "Experienced"
+    },
+    {
+        "speaker_uuid":  "ced628cb-f95f-5f92-8239-e2f2e6dafa8f",
+        "speaker_name":  "Seo Se-hun",
+        "description":  "Male, Young Adult, Mid, Rough, Calm",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "dd880496-d5f3-55d3-8576-d19917d0fced",
+        "speaker_name":  "Kim Sang-do",
+        "description":  "Male, Young Adult, Mid, Thin, Ordinary",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thin",
+        "mood":  "Ordinary"
+    },
+    {
+        "speaker_uuid":  "868b4df3-787e-5b66-b675-92a544902990",
+        "speaker_name":  "Jeong Gyu-min",
+        "description":  "Male, Young Adult, Low, Clear, Gentle",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Gentle"
+    },
+    {
+        "speaker_uuid":  "dbc3747f-c07e-5c46-a94d-549c1690ecef",
+        "speaker_name":  "Sang-hee",
+        "description":  "Female, Young Adult, Low, Thick, Calm",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "a13584b1-ddfb-5303-9e1f-2037a9864254",
+        "speaker_name":  "Kim Do-hyeon",
+        "description":  "Female, Young Adult, Low, Clear, Confident",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Confident"
+    },
+    {
+        "speaker_uuid":  "57fe97d4-f63b-57fa-b0fb-0d4dcd47dce7",
+        "speaker_name":  "Lee Do-gyeong",
+        "description":  "Female, Young Adult, Mid, Thick, Strong",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thick",
+        "mood":  "Strong"
+    },
+    {
+        "speaker_uuid":  "88c9fb7a-da3b-5b23-8c0c-f5f3cb6480c3",
+        "speaker_name":  "Park Seung-hoon",
+        "description":  "Male, Young Adult, Mid, Thick, Calm",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thick",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "27b590f9-951f-58b6-9b57-541cc5fc26ae",
+        "speaker_name":  "Kim Jun-ha",
+        "description":  "Male, Young Adult, Low, Clear, Calm",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "9d13c174-823a-5697-8e87-f6b6d519869d",
+        "speaker_name":  "Hoven",
+        "description":  "Male, Young Adult, Mid, Clear, Dull",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Dull"
+    },
+    {
+        "speaker_uuid":  "014b6487-a8a3-5256-b827-9b27f323bb43",
+        "speaker_name":  "Seo-gyeong",
+        "description":  "Female, Young Adult, Low, Clear, Blunt",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Blunt"
+    },
+    {
+        "speaker_uuid":  "a1d68b0e-dd11-5882-803b-b25bd9c9e399",
+        "speaker_name":  "Lee Young-tack",
+        "description":  "Male, Young Adult, Mid, Thick, Calm",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thick",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "73295b9f-10f0-540a-be04-c20969fe8c92",
+        "speaker_name":  "Blake",
+        "description":  "Male, Young Adult, Mid, Thin, Ordinary",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thin",
+        "mood":  "Ordinary"
+    },
+    {
+        "speaker_uuid":  "f3a52b7d-dd0a-5043-bb99-126fe07c64cb",
+        "speaker_name":  "Yoon-sia",
+        "description":  "Female, Young Adult, High, Thin, Calm",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "High",
+        "timbre":  "Thin",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "413dbef6-f30a-5119-91a9-210a859427ff",
+        "speaker_name":  "Alteia",
+        "description":  "Female, Young Adult, Low, Clear, Reliable",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Reliable"
+    },
+    {
+        "speaker_uuid":  "42a762b1-9521-565c-a2af-51f275aa05ed",
+        "speaker_name":  "Vietiti",
+        "description":  "Male, Young Adult, Mid, Thick, Stupid",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thick",
+        "mood":  "Stupid"
+    },
+    {
+        "speaker_uuid":  "d5f36800-bfe0-5e4d-9b5a-9db223432129",
+        "speaker_name":  "Yoon Un-hwa",
+        "description":  "Female, Middle Aged, Low, Clear, Gentle",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Gentle"
+    },
+    {
+        "speaker_uuid":  "0439f792-1960-569c-b7f9-2ceb8a044ca8",
+        "speaker_name":  "Bang Hyeon-jin",
+        "description":  "Female, Young Adult, Mid, Thick, Careful",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thick",
+        "mood":  "Careful"
+    },
+    {
+        "speaker_uuid":  "2cd005d2-2bf3-5718-ad4f-3dda9c936698",
+        "speaker_name":  "Park Eun-young",
+        "description":  "Female, Middle Aged, Mid, Clear, Intelligent",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Intelligent"
+    },
+    {
+        "speaker_uuid":  "1b736626-1370-52f6-a04e-43d1f0510c55",
+        "speaker_name":  "Kim Seong-hwan",
+        "description":  "Male, Young Adult, Mid, Thin, Blunt",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thin",
+        "mood":  "Blunt"
+    },
+    {
+        "speaker_uuid":  "75f0cfe9-e83a-5f4c-b2f1-3c380ddd3de4",
+        "speaker_name":  "Lee Seong-hak",
+        "description":  "Male, Young Adult, Mid, Thin, Calm",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thin",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "825d649d-6a56-5730-98df-22625ef50b9c",
+        "speaker_name":  "Park Sang-soo",
+        "description":  "Male, Young Adult, Mid, Thick, Calm",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thick",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "bfa067c8-3aea-572e-a9e3-39162d8be32a",
+        "speaker_name":  "Kang Hyeong-min",
+        "description":  "Male, Young Adult, High, Thin, Easygoing",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "High",
+        "timbre":  "Thin",
+        "mood":  "Easygoing"
+    },
+    {
+        "speaker_uuid":  "02dfa33d-efec-54fb-9164-80ad9f532194",
+        "speaker_name":  "Kang Min-cheol",
+        "description":  "Male, Young Adult, Mid, Rough, Fresh",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Fresh"
+    },
+    {
+        "speaker_uuid":  "78047920-ce8f-592c-ad91-f24d8fa20ea5",
+        "speaker_name":  "Hee-gyeong",
+        "description":  "Female, Middle Aged, Low, Clear, Reliable",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Reliable"
+    },
+    {
+        "speaker_uuid":  "30f6bf76-1a48-5f4b-aaae-1ba82c0cd2e7",
+        "speaker_name":  "Velina",
+        "description":  "Female, Young Adult, High, Thin, Strong",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "High",
+        "timbre":  "Thin",
+        "mood":  "Strong"
+    },
+    {
+        "speaker_uuid":  "29fce6e1-26d8-5530-a4c1-f5a7ef8f29f4",
+        "speaker_name":  "Noh Jong-hwa",
+        "description":  "Male, Senior, Low, Clear, Gentle",
+        "gender":  "Male",
+        "age":  "Senior",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Gentle"
+    },
+    {
+        "speaker_uuid":  "6b1942c8-f44e-5380-aea6-6e6b2da8ac52",
+        "speaker_name":  "Han Jong-bin",
+        "description":  "Male, Middle Aged, Mid, Rough, Calm",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "9be1e097-f607-55cc-833f-81c4bcbe94d4",
+        "speaker_name":  "Kim Yoon-jae",
+        "description":  "Male, Young Adult, Low, Thick, Simple",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Simple"
+    },
+    {
+        "speaker_uuid":  "a2c1f544-ba1b-5e29-9687-d425207f3c21",
+        "speaker_name":  "Lee Tae-hyeon",
+        "description":  "Male, Young Adult, Low, Thick, Soft",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Soft"
+    },
+    {
+        "speaker_uuid":  "20887695-b254-54d4-ada8-e9b2aaece809",
+        "speaker_name":  "Namgung Seo-ryeon",
+        "description":  "Female, Middle Aged, Low, Clear, Rational",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Rational"
+    },
+    {
+        "speaker_uuid":  "26404a3a-c6c7-5ff3-9878-42a698b0b472",
+        "speaker_name":  "Lee Jeong-ock",
+        "description":  "Female, Middle Aged, Mid, Clear, Blunt",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Blunt"
+    },
+    {
+        "speaker_uuid":  "2186dbb3-281f-5fec-be67-94445af400c2",
+        "speaker_name":  "Kang Tae-hoon",
+        "description":  "Male, Young Adult, High, Thick, Passionate",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "High",
+        "timbre":  "Thick",
+        "mood":  "Passionate"
+    },
+    {
+        "speaker_uuid":  "27656db4-c62d-5055-ab34-153233b92f5d",
+        "speaker_name":  "Kang Seo-hyeon",
+        "description":  "Female, Young Adult, Low, Thick, Blunt",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Blunt"
+    },
+    {
+        "speaker_uuid":  "5fd34ebe-8c82-514e-bd99-63e8b875b107",
+        "speaker_name":  "Park Jeong-in",
+        "description":  "Female, Middle Aged, Mid, Thin, Careful",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Thin",
+        "mood":  "Careful"
+    },
+    {
+        "speaker_uuid":  "f51d82f5-e0b0-54f9-a9a2-4fb0f09be070",
+        "speaker_name":  "Jeong-sun",
+        "description":  "Female, Middle Aged, Low, Clear, Blunt",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Blunt"
+    },
+    {
+        "speaker_uuid":  "6e8a5f35-67aa-5cc2-8db9-a4e97c3db805",
+        "speaker_name":  "Leora",
+        "description":  "Female, Young Adult, Mid, Clear, Bright",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Bright"
+    },
+    {
+        "speaker_uuid":  "e90bb5dd-ce64-5187-86b6-973313f5319d",
+        "speaker_name":  "Lim In-sub",
+        "description":  "Male, Young Adult, Mid, Clear, Soft",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Soft"
+    },
+    {
+        "speaker_uuid":  "4620d2be-961a-5ce3-887e-17ec00c08643",
+        "speaker_name":  "Kim Jae-gang",
+        "description":  "Male, Middle Aged, Mid, Rough, Passionate",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Passionate"
+    },
+    {
+        "speaker_uuid":  "4e8fd22d-1510-5c41-9917-327dc5a6650d",
+        "speaker_name":  "Kim Seo-na",
+        "description":  "Female, Young Adult, Mid, Clear, Casual",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Casual"
+    },
+    {
+        "speaker_uuid":  "b79bcd89-7282-5799-a8ff-8e095aa53fb7",
+        "speaker_name":  "Lina",
+        "description":  "Female, Child, High, Thin, Cute",
+        "gender":  "Female",
+        "age":  "Child",
+        "tone":  "High",
+        "timbre":  "Thin",
+        "mood":  "Cute"
+    },
+    {
+        "speaker_uuid":  "0c7cef8a-2d3d-5d2e-96c9-41cff18636aa",
+        "speaker_name":  "Irene",
+        "description":  "Female, Teen, Mid, Thin, Mature",
+        "gender":  "Female",
+        "age":  "Teen",
+        "tone":  "Mid",
+        "timbre":  "Thin",
+        "mood":  "Mature"
+    },
+    {
+        "speaker_uuid":  "88f48260-0f98-5ea0-b374-923673459171",
+        "speaker_name":  "Mi-young",
+        "description":  "Female, Young Adult, Mid, Thin, Ordinary",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thin",
+        "mood":  "Ordinary"
+    },
+    {
+        "speaker_uuid":  "e191b5c2-7127-5c3f-9de0-f6488f2fb024",
+        "speaker_name":  "Paisley",
+        "description":  "Female, Young Adult, Mid, Rough, Timid",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Timid"
+    },
+    {
+        "speaker_uuid":  "c794cc91-7f4d-545a-8051-bdaa1296671a",
+        "speaker_name":  "Jang Sung-yeong",
+        "description":  "Female, Young Adult, Low, Clear, Calm",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "53880e50-ca1e-59fb-ae6a-f3cd46aa25f0",
+        "speaker_name":  "Bae Da-on",
+        "description":  "Female, Young Adult, Mid, Thin, Calm",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thin",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "ad74bfa0-2a9f-55d3-9083-eef028e77d68",
+        "speaker_name":  "Kim Hee-sun",
+        "description":  "Female, Middle Aged, High, Thin, Calm",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "High",
+        "timbre":  "Thin",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "c4dd75b6-ecf9-581e-b55c-b0f040b96923",
+        "speaker_name":  "Soon-jeong",
+        "description":  "Female, Middle Aged, Low, Rough, Warm",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Rough",
+        "mood":  "Warm"
+    },
+    {
+        "speaker_uuid":  "79cdec55-ef40-50b8-9754-419f8321b396",
+        "speaker_name":  "Yoon Gyeong-hee",
+        "description":  "Female, Middle Aged, Low, Thick, Relaxed",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Relaxed"
+    },
+    {
+        "speaker_uuid":  "de3080ec-76d2-5f71-a8c3-e3b24b4ec956",
+        "speaker_name":  "Kim Hye-un",
+        "description":  "Female, Young Adult, Mid, Thick, Blunt",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thick",
+        "mood":  "Blunt"
+    },
+    {
+        "speaker_uuid":  "e7488779-95cb-5a78-9e27-9758d1b1bb3a",
+        "speaker_name":  "Han Tae-hwa",
+        "description":  "Male, Middle Aged, Low, Clear, Gentle",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Gentle"
+    },
+    {
+        "speaker_uuid":  "7443e8e6-2856-59cc-a89d-f88a77d6465b",
+        "speaker_name":  "Seo Woo-jin",
+        "description":  "Male, Young Adult, Low, Clear, Calm",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "c2e7ad52-e5bb-54e5-9c92-677737b8d293",
+        "speaker_name":  "Lee Jeong-hye",
+        "description":  "Female, Middle Aged, Mid, Rough, Calm",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "ca03bc58-fd35-53f0-bdc1-2ceb2473b31f",
+        "speaker_name":  "Han Ji-seok",
+        "description":  "Male, Middle Aged, Low, Thick, Gentle",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Gentle"
+    },
+    {
+        "speaker_uuid":  "2da0033f-35a8-5cf7-8f1a-ae8cc81e896f",
+        "speaker_name":  "Bang Mi-hyeon",
+        "description":  "Female, Middle Aged, Mid, Clear, Calm",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "b3c53ef1-5261-50f3-8310-ed87dd163a8c",
+        "speaker_name":  "Myeong Mi-ran",
+        "description":  "Female, Middle Aged, Low, Clear, Blunt",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Blunt"
+    },
+    {
+        "speaker_uuid":  "c78ee1d5-a3ab-5b48-9e63-e36427c80417",
+        "speaker_name":  "Marvick",
+        "description":  "Male, Middle Aged, High, Thin, Cunning",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "High",
+        "timbre":  "Thin",
+        "mood":  "Cunning"
+    },
+    {
+        "speaker_uuid":  "3bfcf7ca-7dd2-54a4-a618-ebd847287072",
+        "speaker_name":  "Nilo",
+        "description":  "Male, Child, Mid, Thin, Intelligent",
+        "gender":  "Male",
+        "age":  "Child",
+        "tone":  "Mid",
+        "timbre":  "Thin",
+        "mood":  "Intelligent"
+    },
+    {
+        "speaker_uuid":  "caa79e7f-1813-57cd-ac25-6c3dcb05527a",
+        "speaker_name":  "Targon",
+        "description":  "Male, Young Adult, Mid, Thick, Coarse",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thick",
+        "mood":  "Coarse"
+    },
+    {
+        "speaker_uuid":  "2dca078e-5b06-5d1b-bf2a-bb4bc712195a",
+        "speaker_name":  "Kang Seung-ju",
+        "description":  "Female, Young Adult, Low, Thick, Reliable",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Reliable"
+    },
+    {
+        "speaker_uuid":  "1257b8f8-3a2e-59da-8331-a15d30fb8cd3",
+        "speaker_name":  "Saori",
+        "description":  "Female, Young Adult, Low, Thick, Quiet",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Quiet"
+    },
+    {
+        "speaker_uuid":  "4c3a11da-2676-5527-8ca9-24d2a834155b",
+        "speaker_name":  "Kim Jae-yoon",
+        "description":  "Male, Young Adult, Mid, Clear, Calm",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "08aa7eea-2ded-5bb5-9c72-eae46afc3019",
+        "speaker_name":  "Yoon Yong-geun",
+        "description":  "Male, Middle Aged, Low, Clear, Reliable",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Reliable"
+    },
+    {
+        "speaker_uuid":  "5345c008-c3f1-5fa8-b230-de542e1c1111",
+        "speaker_name":  "Kim Yoon-jeong",
+        "description":  "Female, Young Adult, Mid, Thin, Casual",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thin",
+        "mood":  "Casual"
+    },
+    {
+        "speaker_uuid":  "5cabac2f-51b5-53b3-8c38-161beade8130",
+        "speaker_name":  "Jeong-ay",
+        "description":  "Female, Middle Aged, Low, Rough, Righteous",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Rough",
+        "mood":  "Righteous"
+    },
+    {
+        "speaker_uuid":  "5dd5e19f-0d90-562d-9312-57df8443ef2c",
+        "speaker_name":  "Seo Hyeong-mok",
+        "description":  "Male, Young Adult, Mid, Thick, Calm",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thick",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "739d3480-8d7a-570d-be56-dfd0279a2492",
+        "speaker_name":  "Park Hee-young",
+        "description":  "Female, Middle Aged, Low, Thick, Casual",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Casual"
+    },
+    {
+        "speaker_uuid":  "4e1a0253-2c79-5d61-92fd-c7195fd7e5aa",
+        "speaker_name":  "Moon Eun-gyeong",
+        "description":  "Female, Young Adult, Mid, Clear, Calm",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "228ca3eb-25e2-5213-8c7b-42cf0fa3208a",
+        "speaker_name":  "Kim Na-bin",
+        "description":  "Female, Young Adult, High, Thin, Resonant",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "High",
+        "timbre":  "Thin",
+        "mood":  "Resonant"
+    },
+    {
+        "speaker_uuid":  "ba05f184-50ce-528f-b2ec-db16bb4dc707",
+        "speaker_name":  "Jeong Min-woo",
+        "description":  "Male, Young Adult, Low, Clear, Careful",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Careful"
+    },
+    {
+        "speaker_uuid":  "93c7270f-3174-5007-bf99-bd1333608076",
+        "speaker_name":  "Bang Joo-won",
+        "description":  "Female, Young Adult, Mid, Clear, Warm",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Warm"
+    },
+    {
+        "speaker_uuid":  "bf8ec214-eab6-5e38-823b-44bcec74faf4",
+        "speaker_name":  "Yoo Jeong-hwan",
+        "description":  "Male, Middle Aged, Low, Clear, Soft",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Soft"
+    },
+    {
+        "speaker_uuid":  "5a20c4d2-8609-5bb7-9280-e6f4df7e2e21",
+        "speaker_name":  "Jack",
+        "description":  "Male, Child, Mid, Thin, Bright",
+        "gender":  "Male",
+        "age":  "Child",
+        "tone":  "Mid",
+        "timbre":  "Thin",
+        "mood":  "Bright"
+    },
+    {
+        "speaker_uuid":  "9ebd7060-8e2a-5ced-9e1d-30d1bc9fc01f",
+        "speaker_name":  "Malik",
+        "description":  "Male, Middle Aged, Low, Thick, Strong",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Strong"
+    },
+    {
+        "speaker_uuid":  "388ec154-c807-580e-bc20-9ef0e0bf2161",
+        "speaker_name":  "Grant",
+        "description":  "Male, Middle Aged, Low, Thick, Blunt",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Blunt"
+    },
+    {
+        "speaker_uuid":  "c46b8ae6-ac73-5226-9b47-abf795e4df07",
+        "speaker_name":  "Han Mu-hyeon",
+        "description":  "Male, Middle Aged, Low, Thick, Calm",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "811d024e-f76b-5bba-8828-5111822a5ec5",
+        "speaker_name":  "Miles",
+        "description":  "Male, Young Adult, Mid, Thick, Blunt",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thick",
+        "mood":  "Blunt"
+    },
+    {
+        "speaker_uuid":  "cd828241-1ea5-5c03-bc07-e80dfec6de08",
+        "speaker_name":  "Margaret",
+        "description":  "Female, Middle Aged, Mid, Rough, Shameless",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Shameless"
+    },
+    {
+        "speaker_uuid":  "63ab41b5-4c9f-5748-bcda-c91b7fdf8c30",
+        "speaker_name":  "Yoon Su-jin",
+        "description":  "Female, Young Adult, Mid, Clear, Warm",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Warm"
+    },
+    {
+        "speaker_uuid":  "7fbc77e9-176e-5378-b5d0-b69590f4903d",
+        "speaker_name":  "Bang Young-ran",
+        "description":  "Female, Middle Aged, Low, Clear, Gentle",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Gentle"
+    },
+    {
+        "speaker_uuid":  "c776446f-6a7b-5b70-ae46-72d4410304c9",
+        "speaker_name":  "Yoon Sun-ock",
+        "description":  "Female, Middle Aged, Low, Thick, Gentle",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Gentle"
+    },
+    {
+        "speaker_uuid":  "90ae9f1d-3ac6-5735-bab5-5cd7b124165a",
+        "speaker_name":  "Da-hee",
+        "description":  "Female, Young Adult, Mid, Thick, Calm",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thick",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "735568b5-ad7b-57d9-9a23-738030f57a8b",
+        "speaker_name":  "Noh Yang-hyeon",
+        "description":  "Male, Senior, Low, Clear, Gentle",
+        "gender":  "Male",
+        "age":  "Senior",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Gentle"
+    },
+    {
+        "speaker_uuid":  "a214f479-ff00-588f-b4c8-171dc80fefef",
+        "speaker_name":  "Jeong Ga-hyeon",
+        "description":  "Female, Young Adult, Mid, Rough, Casual",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Casual"
+    },
+    {
+        "speaker_uuid":  "a7d70c18-b4db-5fbf-abaa-b08a71de0d13",
+        "speaker_name":  "Park Un-myeong",
+        "description":  "Female, Young Adult, Mid, Thick, Calm",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thick",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "af9b1d15-f482-5e57-b318-2ba69c5b982d",
+        "speaker_name":  "Mi-sook",
+        "description":  "Female, Middle Aged, Mid, Thin, Ordinary",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Thin",
+        "mood":  "Ordinary"
+    },
+    {
+        "speaker_uuid":  "ce1b0246-3e74-5cfc-bcac-4dae660719d3",
+        "speaker_name":  "Kim Jong-wook",
+        "description":  "Male, Young Adult, Mid, Thick, Calm",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thick",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "4818be19-f0f0-5b89-995a-37cf1a4b0482",
+        "speaker_name":  "Sul Yong-tae",
+        "description":  "Male, Middle Aged, Mid, Thin, Careful",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Thin",
+        "mood":  "Careful"
+    },
+    {
+        "speaker_uuid":  "c43952f0-807f-5b0b-b7e9-9bd750f8d367",
+        "speaker_name":  "Jeong Se-hwan",
+        "description":  "Male, Young Adult, Mid, Thin, Calm",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thin",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "c96db30b-9c3c-572a-a60c-05fe0da772d5",
+        "speaker_name":  "Jeong Ye-rin",
+        "description":  "Female, Young Adult, Mid, Clear, Calm",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "b7edbf3b-6fb5-5041-a4e1-9de78d60a794",
+        "speaker_name":  "Zheng-li-feng",
+        "description":  "Female, Senior, Low, Rough, Warm",
+        "gender":  "Female",
+        "age":  "Senior",
+        "tone":  "Low",
+        "timbre":  "Rough",
+        "mood":  "Warm"
+    },
+    {
+        "speaker_uuid":  "936b742d-4d2a-5677-92d8-428217abefe0",
+        "speaker_name":  "Sun-jeong",
+        "description":  "Female, Middle Aged, Mid, Rough, Calm",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "c7c3ad74-5242-5647-9fef-896ce3b0cb50",
+        "speaker_name":  "Celine",
+        "description":  "Female, Young Adult, Mid, Thick, Reliable",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thick",
+        "mood":  "Reliable"
+    },
+    {
+        "speaker_uuid":  "1e4410f1-b49e-5a3b-a58f-47da485a57f2",
+        "speaker_name":  "Nanami",
+        "description":  "Female, Child, Mid, Thin, Intelligent",
+        "gender":  "Female",
+        "age":  "Child",
+        "tone":  "Mid",
+        "timbre":  "Thin",
+        "mood":  "Intelligent"
+    },
+    {
+        "speaker_uuid":  "9ae8d86a-87e5-5a87-aaa6-bc60b41f5732",
+        "speaker_name":  "Annie",
+        "description":  "Female, Child, Mid, Thin, Easygoing",
+        "gender":  "Female",
+        "age":  "Child",
+        "tone":  "Mid",
+        "timbre":  "Thin",
+        "mood":  "Easygoing"
+    },
+    {
+        "speaker_uuid":  "5a96adf0-6112-5597-955b-5c940d84a8f2",
+        "speaker_name":  "Jeong Jae-won",
+        "description":  "Male, Middle Aged, Low, Clear, Homely",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Homely"
+    },
+    {
+        "speaker_uuid":  "81658554-dd76-593f-9737-53eb7c09387c",
+        "speaker_name":  "Gyeong-un",
+        "description":  "Female, Young Adult, Mid, Thick, Reliable",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thick",
+        "mood":  "Reliable"
+    },
+    {
+        "speaker_uuid":  "cc4d24c2-d994-5dab-bce4-36115c229f93",
+        "speaker_name":  "Noh Myeong-ae",
+        "description":  "Female, Middle Aged, Mid, Rough, Experienced",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Experienced"
+    },
+    {
+        "speaker_uuid":  "35491d60-89ae-5b9b-9500-1bba53dd9c7a",
+        "speaker_name":  "Worshim",
+        "description":  "Female, Senior, Mid, Rough, Blunt",
+        "gender":  "Female",
+        "age":  "Senior",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Blunt"
+    },
+    {
+        "speaker_uuid":  "51e0814d-74f1-540e-a297-1350bc65f48a",
+        "speaker_name":  "Naria",
+        "description":  "Female, Child, High, Clear, Calm",
+        "gender":  "Female",
+        "age":  "Child",
+        "tone":  "High",
+        "timbre":  "Clear",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "e56a8157-4537-5596-a67f-fe81429115f4",
+        "speaker_name":  "Seo Hoon-seo",
+        "description":  "Male, Young Adult, Mid, Thick, Reliable",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thick",
+        "mood":  "Reliable"
+    },
+    {
+        "speaker_uuid":  "01c8b19d-4848-52da-bc6b-e0e470641aab",
+        "speaker_name":  "Noh Jun-seok",
+        "description":  "Male, Senior, Mid, Thick, Gentle",
+        "gender":  "Male",
+        "age":  "Senior",
+        "tone":  "Mid",
+        "timbre":  "Thick",
+        "mood":  "Gentle"
+    },
+    {
+        "speaker_uuid":  "bba5eff9-0e00-5ccf-a95b-71355925ce56",
+        "speaker_name":  "Do Jong-sub",
+        "description":  "Male, Young Adult, Low, Rough, Passionate",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Rough",
+        "mood":  "Passionate"
+    },
+    {
+        "speaker_uuid":  "9676e08c-c14d-54c5-803a-a704661fcaff",
+        "speaker_name":  "Lee Ju-yeon",
+        "description":  "Female, Teen, Low, Clear, Reliable",
+        "gender":  "Female",
+        "age":  "Teen",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Reliable"
+    },
+    {
+        "speaker_uuid":  "ea73cffa-5027-5b61-be29-470f2602dabb",
+        "speaker_name":  "Lim Seung-gwon",
+        "description":  "Male, Young Adult, Mid, Clear, Careful",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Careful"
+    },
+    {
+        "speaker_uuid":  "5a754fd7-1156-5ec8-bfec-ad35c760dad8",
+        "speaker_name":  "Hae-sol",
+        "description":  "Female, Young Adult, Low, Clear, Easygoing",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Easygoing"
+    },
+    {
+        "speaker_uuid":  "b8b53172-0c5e-5ce3-9e04-314b50ccdd96",
+        "speaker_name":  "Heather",
+        "description":  "Female, Young Adult, High, Clear, Calm",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "High",
+        "timbre":  "Clear",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "268d25dc-a742-5d67-a49b-45b657e3286b",
+        "speaker_name":  "Yoon Seok-ho",
+        "description":  "Male, Middle Aged, Low, Clear, Careful",
+        "gender":  "Male",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Careful"
+    },
+    {
+        "speaker_uuid":  "9bc461dc-a588-5ee1-b641-b855c5dcad1c",
+        "speaker_name":  "Yoon Myeong-sook",
+        "description":  "Female, Middle Aged, Low, Thick, Experienced",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Low",
+        "timbre":  "Thick",
+        "mood":  "Experienced"
+    },
+    {
+        "speaker_uuid":  "41867ce7-5f09-5e4a-b52c-cea489337f88",
+        "speaker_name":  "Unhee",
+        "description":  "Female, Middle Aged, Mid, Clear, Calm",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "b6a66f65-e5f8-5aed-a6ab-7d270758043e",
+        "speaker_name":  "Poppy",
+        "description":  "Female, Child, High, Thin, Cute",
+        "gender":  "Female",
+        "age":  "Child",
+        "tone":  "High",
+        "timbre":  "Thin",
+        "mood":  "Cute"
+    },
+    {
+        "speaker_uuid":  "c85a9acf-f1bb-5f67-ace7-5b410ff58f68",
+        "speaker_name":  "Noh Young-ju",
+        "description":  "Female, Young Adult, Mid, Rough, Careful",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Careful"
+    },
+    {
+        "speaker_uuid":  "b0960321-765d-5fa5-aece-bf2645680f68",
+        "speaker_name":  "Sah Yoon-je",
+        "description":  "Male, Young Adult, Mid, Thin, Sly",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thin",
+        "mood":  "Sly"
+    },
+    {
+        "speaker_uuid":  "d185effb-e306-5231-b164-307f606e8e84",
+        "speaker_name":  "Oleine",
+        "description":  "Female, Young Adult, Mid, Rough, Gloomy",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Rough",
+        "mood":  "Gloomy"
+    },
+    {
+        "speaker_uuid":  "f2e821a5-69b3-5451-8390-130143fdde63",
+        "speaker_name":  "Wiram",
+        "description":  "Male, Young Adult, Low, Clear, Cold",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Cold"
+    },
+    {
+        "speaker_uuid":  "240ad851-ab52-5f1b-8cc8-358bbb3c8301",
+        "speaker_name":  "Baylor",
+        "description":  "Male, Young Adult, Low, Clear, Sly",
+        "gender":  "Male",
+        "age":  "Young Adult",
+        "tone":  "Low",
+        "timbre":  "Clear",
+        "mood":  "Sly"
+    },
+    {
+        "speaker_uuid":  "cbd32a31-229b-5274-b4db-ada01389cf9b",
+        "speaker_name":  "Kim Min-young",
+        "description":  "Female, Young Adult, Mid, Clear, Soft",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Soft"
+    },
+    {
+        "speaker_uuid":  "7fb6e15b-c719-5066-9b15-4e6c284834a9",
+        "speaker_name":  "Jeong Eun-a",
+        "description":  "Female, Young Adult, Mid, Thin, Resonant",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Thin",
+        "mood":  "Resonant"
+    },
+    {
+        "speaker_uuid":  "a64009d9-b26c-5d34-bbe4-257a8fc9ce13",
+        "speaker_name":  "Maeve",
+        "description":  "Female, Young Adult, High, Rough, Rigid",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "High",
+        "timbre":  "Rough",
+        "mood":  "Rigid"
+    },
+    {
+        "speaker_uuid":  "be642f76-0e65-5bc4-95d9-eb2d28f465fe",
+        "speaker_name":  "Borga",
+        "description":  "Female, Middle Aged, High, Rough, Humorous",
+        "gender":  "Female",
+        "age":  "Middle Aged",
+        "tone":  "High",
+        "timbre":  "Rough",
+        "mood":  "Humorous"
+    },
+    {
+        "speaker_uuid":  "18ba28d2-ae38-59e8-b95b-407da28aa899",
+        "speaker_name":  "Teyo",
+        "description":  "Male, Child, Mid, Clear, Easygoing",
+        "gender":  "Male",
+        "age":  "Child",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Easygoing"
+    },
+    {
+        "speaker_uuid":  "d15a4c09-364a-5291-a60e-af3ae6ea2a0c",
+        "speaker_name":  "Mary",
+        "description":  "Female, Young Adult, Mid, Clear, Calm",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Calm"
+    },
+    {
+        "speaker_uuid":  "c939cdcd-1244-5e50-a9d8-e73fa29aea45",
+        "speaker_name":  "Valeria",
+        "description":  "Female, Young Adult, Mid, Clear, Reliable",
+        "gender":  "Female",
+        "age":  "Young Adult",
+        "tone":  "Mid",
+        "timbre":  "Clear",
+        "mood":  "Reliable"
+    }
+]

@@ -102,6 +102,16 @@ public class UndergroundWorld
                 Vector2Int cell = new(chunkId.x * size + tx, chunkId.y * size + ty);
                 chunk.SetTile(tx, ty, TileAt(cell));
 
+                // 물웅덩이는 <b>바닥을 갈아 끼우지 않고 위에 얹는다</b> — 그림의 모서리가 뚫려 있어
+                // 방 바닥이 그대로 비쳐 보여야 한다(지상의 석유 웅덩이와 같은 방식).
+                if (waterCells.Contains(cell))
+                    chunk.SetOverlay(new Vector2Int(tx, ty), UndergroundPalette.WaterPool);
+
+                // 돌아갈 출구. 런타임 오브젝트를 만들지 않고 오버레이 한 칸으로 끝난다 —
+                // 지하는 저장되지 않으므로 이 오버레이도 디스크에 닿지 않는다.
+                if (cell == SpawnCell)
+                    chunk.SetOverlay(new Vector2Int(tx, ty), UndergroundPalette.HoleIdFor(0));
+
                 if (loot.TryGetValue(cell, out DropRecord drop)) chunk.AddDrop(drop);
             }
         }
@@ -114,7 +124,8 @@ public class UndergroundWorld
 
         if (ring > UndergroundPalette.DigRadius) return UndergroundPalette.BoundaryWall;
         if (ring > UndergroundPalette.RoomRadius) return wallId;
-        return waterCells.Contains(cell) ? UndergroundPalette.WaterFloor : floorId;
+        // 물은 이제 바닥이 아니라 오버레이다(Generate 참고) — 바닥은 언제나 방 바닥이다.
+        return floorId;
     }
 
     /// <summary>검증·디버그용 집계(생성 결과를 밖에서 세어 볼 수 있게).</summary>

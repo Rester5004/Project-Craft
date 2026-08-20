@@ -20,9 +20,26 @@ public class Items : ScriptableObject
     [Tooltip("연료로 태웠을 때 나오는 에너지. 0 이면 연료가 아니다. (갈탄 200 / 석탄 400 / 수소 1000)")]
     [Min(0f)] public float burnEnergy;
 
+    [Tooltip("만들어질 때 붙는 내구도. 0 이면 평범한 소모품이다(공동 탐색기만 값을 갖는다). "
+           + "개체 데이터가 붙으므로 maxStack 은 1 이어야 한다 — OnValidate 가 못박는다.")]
+    [Min(0)] public int initialDurability;
+
+    /// <summary>쓸 때마다 닳는 물건인가(개체 데이터 <see cref="ToolInstance"/> 를 달고 태어난다).</summary>
+    public bool HasDurability => initialDurability > 0;
+
     /// <summary>화로·발전기의 연료로 쓸 수 있는가.</summary>
     public bool IsFuel => burnEnergy > 0f;
 
     /// <summary>UI 표시용 이름. displayName 이 비어 있으면 ID 로 폴백한다.</summary>
     public string DisplayName => string.IsNullOrEmpty(displayName) ? itemName : displayName;
+
+    /// <summary>
+    /// ⚠ <b>내구도가 있는 아이템은 한 칸에 하나뿐이어야 한다.</b> 개체 데이터는 스택당 하나라,
+    /// 여러 개를 겹쳐 두면 그 하나가 닳아 없어질 때 <c>stack.Clear()</c> 로 전부가 함께 사라진다
+    /// (<see cref="StorageCellItem"/> 이 같은 이유로 1 을 못박았다).
+    /// </summary>
+    private void OnValidate()
+    {
+        if (HasDurability && maxStack != 1) maxStack = 1;
+    }
 }

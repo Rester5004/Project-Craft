@@ -16,6 +16,7 @@ MonoBehaviour:
   displayName: "\uACF5\uB3D9 \uD0D0\uC0C9\uAE30"
   placeable: 0
   Icon: {fileID: -2027595699768001626, guid: 6a29383e051cd9d488dc890bd32a0a40, type: 3}
-  maxStack: 64
+  maxStack: 1
   fluidOverlay: {fileID: 0}
   burnEnergy: 0
+  initialDurability: 30
